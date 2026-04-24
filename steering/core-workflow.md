@@ -331,7 +331,8 @@ AI 模型根据以下因素智能评估需要哪些阶段：
 
 **后端代码**：
 1. 加载 `common-tech-backend.md`（后端编码规范）
-2. 根据代码类型调用 MCP skill：
+2. 加载 `common-tech-backend-annotations.md`（框架注解与工具类速查）
+3. 根据代码类型调用 MCP skill：
    - CRUD 模块 → `get_skill_summary("loeyae-crud")`
    - 认证授权 → `get_skill_summary("loeyae-auth")`
    - 参数校验 → `get_skill_summary("loeyae-validation")`
@@ -347,10 +348,12 @@ AI 模型根据以下因素智能评估需要哪些阶段：
    - 数据安全 → `get_skill_summary("loeyae-data-security")`
    - 测试 → `get_skill_summary("loeyae-test")`
    - 不确定时 → `search_skill("关键词")`
-3. 加载 `common-tech-security.md`（安全编码规范）
-4. 加载 `common-database-design.md`（数据库设计规范）
-5. 读取项目 `.kiro/steering/structure.md`（项目结构，如存在）
-6. 读取项目 `.kiro/steering/tech.md`（技术栈版本，如存在）
+4. 加载 `common-tech-security.md`（安全编码规范）
+5. 加载 `common-database-design.md`（数据库设计规范）
+6. 读取项目 `.kiro/steering/structure.md`（项目结构，如存在）
+7. 读取项目 `.kiro/steering/tech.md`（技术栈版本，如存在）
+8. 新模块初始化时 → 加载 `common-tech-backend-modules.md`（模块依赖组合）
+9. 需要最佳实践参考时 → 加载 `common-tech-backend-practices.md`（最佳实践与快速开始）
 
 **前端代码**：
 1. 加载 `common-tech-frontend.md`（前端编码规范）
