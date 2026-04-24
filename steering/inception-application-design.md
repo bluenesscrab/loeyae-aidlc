@@ -20,7 +20,7 @@
 ## 逐步执行
 
 ### 1. 分析上下文
-- 读取 `aidlc-docs/inception/requirements/requirements.md` 和 `aidlc-docs/inception/user-stories/stories.md`
+- 读取 `docs/aidlc/inception/requirements/requirements.md` 和 `docs/aidlc/inception/user-stories/stories.md`
 - 识别关键业务能力和功能领域
 - 确定设计范围和复杂度
 
@@ -73,7 +73,7 @@
 - **状态管理策略** — 仅当 Store 划分或状态管理方式不清楚时
 
 ### 5. 保存应用设计计划
-- 保存为 `aidlc-docs/inception/plans/application-design-plan.md`
+- 保存为 `docs/aidlc/inception/plans/application-design-plan.md`
 - 包含所有 [回答]: 标签供用户输入
 - 确保计划覆盖所有设计方面
 
@@ -107,44 +107,44 @@
 
 ### 10. 生成应用设计产物
 - 执行批准的计划生成设计产物
-- 创建 `aidlc-docs/inception/application-design/components.md`，包含：
+- 创建 `docs/aidlc/inception/application-design/components.md`，包含：
   - 组件名称和用途
   - 组件职责
   - 组件接口
-- 创建 `aidlc-docs/inception/application-design/component-methods.md`，包含：
+- 创建 `docs/aidlc/inception/application-design/component-methods.md`，包含：
   - 每个组件的方法签名
   - 每个方法的高层用途
   - 输入/输出类型
   - 注意：详细业务规则将在功能设计中定义（按单元，CONSTRUCTION 阶段）
-- 创建 `aidlc-docs/inception/application-design/services.md`，包含：
+- 创建 `docs/aidlc/inception/application-design/services.md`，包含：
   - 服务定义
   - 服务职责
   - 服务交互和编排
-- 创建 `aidlc-docs/inception/application-design/component-dependency.md`，包含：
+- 创建 `docs/aidlc/inception/application-design/component-dependency.md`，包含：
   - 显示关系的依赖矩阵
   - 组件间通信模式
   - 数据流图
 
 **前端设计产物**（如项目包含前端）：
-- 创建 `aidlc-docs/inception/application-design/frontend-components.md`，包含：
+- 创建 `docs/aidlc/inception/application-design/frontend-components.md`，包含：
   - 页面组件拆分方案
   - 组件层级关系图
   - 公共组件复用策略
-- 创建 `aidlc-docs/inception/application-design/frontend-routes.md`，包含：
+- 创建 `docs/aidlc/inception/application-design/frontend-routes.md`，包含：
   - 路由结构设计
   - 路由守卫配置
   - 动态路由方案
-- 创建 `aidlc-docs/inception/application-design/api-contracts.md`，包含：
+- 创建 `docs/aidlc/inception/application-design/api-contracts.md`，包含：
   - 前后端接口契约定义
   - 请求/响应数据结构
   - 错误码和状态码约定
-- 创建 `aidlc-docs/inception/application-design/state-management.md`，包含：
+- 创建 `docs/aidlc/inception/application-design/state-management.md`，包含：
   - Pinia Store 划分方案
   - 状态管理模式
   - Store 间依赖关系
 
 ### 11. 记录审批
-- 在 `aidlc-docs/audit.md` 中记录审批提示及时间戳
+- 在 `docs/aidlc/audit.md` 中记录审批提示及时间戳
 - 包含完整的审批提示文本
 - 使用 ISO 8601 时间戳格式
 
@@ -156,7 +156,7 @@
 [AI 生成的应用设计产物摘要，使用要点列表]
 
 > **📋 <u>**需要审查：**</u>**
-> 请检查应用设计产物：`aidlc-docs/inception/application-design/`
+> 请检查应用设计产物：`docs/aidlc/inception/application-design/`
 
 > **🚀 <u>**下一步？**</u>**
 >
@@ -174,11 +174,11 @@
 - 如用户请求修改，更新设计并重复审批流程
 
 ### 14. 记录审批回复
-- 在 `aidlc-docs/audit.md` 中记录用户的审批回复及时间戳
+- 在 `docs/aidlc/audit.md` 中记录用户的审批回复及时间戳
 - 包含用户的确切回复文本
 - 清晰标记审批状态
 
 ### 15. 更新进度
-- 在 `aidlc-docs/aidlc-state.md` 中标记应用设计阶段完成
+- 在 `docs/aidlc/state.md` 中标记应用设计阶段完成
 - 更新"当前状态"部分
 - 准备过渡到下一阶段

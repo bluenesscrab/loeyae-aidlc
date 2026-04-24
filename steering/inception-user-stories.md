@@ -81,7 +81,7 @@
    - 确认这不是应跳过的简单情况
 
 3. **记录评估决策**：
-   - 创建 `aidlc-docs/inception/plans/user-stories-assessment.md`
+   - 创建 `docs/aidlc/inception/plans/user-stories-assessment.md`
    - 包含用户故事对此请求有价值的原因
    - 引用适用的具体评估标准
    - 说明预期收益（清晰度、测试、干系人对齐）
@@ -168,7 +168,7 @@
 - 允许混合方式，并提供清晰的决策标准
 
 ## 步骤 6：保存故事计划
-- 将包含嵌入问题的完整故事计划保存到 `aidlc-docs/inception/plans/` 目录
+- 将包含嵌入问题的完整故事计划保存到 `docs/aidlc/inception/plans/` 目录
 - 文件名：`story-generation-plan.md`
 - 包含所有 [回答]: 标签供用户输入
 - 确保计划全面覆盖所有故事开发方面
@@ -215,7 +215,7 @@
 - 保持聚焦于故事结构和格式决策
 
 ## 步骤 12：记录审批提示
-- 在请求审批前，在 `aidlc-docs/audit.md` 中记录提示及时间戳
+- 在请求审批前，在 `docs/aidlc/audit.md` 中记录提示及时间戳
 - 包含完整的审批提示文本
 - 使用 ISO 8601 时间戳格式
 
@@ -225,7 +225,7 @@
 - 如用户请求修改，更新计划并重复审批流程
 
 ## 步骤 14：记录审批回复
-- 在 `aidlc-docs/audit.md` 中记录用户的审批回复及时间戳
+- 在 `docs/aidlc/audit.md` 中记录用户的审批回复及时间戳
 - 包含用户的确切回复文本
 - 清晰标记审批状态
 
@@ -234,7 +234,7 @@
 # 第二部分：生成
 
 ## 步骤 15：加载故事生成计划
-- [ ] 从 `aidlc-docs/inception/plans/story-generation-plan.md` 读取完整故事计划
+- [ ] 从 `docs/aidlc/inception/plans/story-generation-plan.md` 读取完整故事计划
 - [ ] 识别下一个未完成的步骤（第一个 [ ] 复选框）
 - [ ] 加载该步骤的上下文和需求
 
@@ -246,7 +246,7 @@
 
 ## 步骤 17：更新进度
 - [ ] 在故事生成计划中将已完成步骤标记为 [x]
-- [ ] 更新 `aidlc-docs/aidlc-state.md` 当前状态
+- [ ] 更新 `docs/aidlc/state.md` 当前状态
 - [ ] 保存所有生成的产物
 
 ## 步骤 18：继续或完成生成
@@ -255,7 +255,7 @@
 - [ ] 确保所有强制产物已生成
 
 ## 步骤 19：记录审批提示
-- 在请求审批前，在 `aidlc-docs/audit.md` 中记录提示及时间戳
+- 在请求审批前，在 `docs/aidlc/audit.md` 中记录提示及时间戳
 - 包含完整的审批提示文本
 - 使用 ISO 8601 时间戳格式
 
@@ -278,7 +278,7 @@
 
 ```markdown
 > **📋 <u>**需要审查：**</u>**
-> 请检查用户故事和画像：`aidlc-docs/inception/user-stories/stories.md` 和 `aidlc-docs/inception/user-stories/personas.md`
+> 请检查用户故事和画像：`docs/aidlc/inception/user-stories/stories.md` 和 `docs/aidlc/inception/user-stories/personas.md`
 
 
 
@@ -298,12 +298,12 @@
 - 如用户请求修改，更新故事并重复审批流程
 
 ## 步骤 22：记录审批回复
-- 在 `aidlc-docs/audit.md` 中记录用户的审批回复及时间戳
+- 在 `docs/aidlc/audit.md` 中记录用户的审批回复及时间戳
 - 包含用户的确切回复文本
 - 清晰标记审批状态
 
 ## 步骤 23：更新进度
-- 在 `aidlc-state.md` 中标记用户故事阶段完成
+- 在 `state.md` 中标记用户故事阶段完成
 - 更新"当前状态"部分
 - 准备过渡到下一阶段
 

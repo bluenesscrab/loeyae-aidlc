@@ -111,7 +111,7 @@ Inception（规划） → Construction（实现）
 在 `core-workflow.md` 的目录结构中添加：
 
 ```text
-aidlc-docs/
+docs/aidlc/
 ├── inception/
 ├── construction/
 └── operations/          ← 新增

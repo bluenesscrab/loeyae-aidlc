@@ -11,7 +11,7 @@
 ## 执行步骤
 
 ### 步骤 1：分析功能设计
-- 从 `aidlc-docs/construction/{unit-name}/functional-design/` 读取功能设计产物
+- 从 `docs/aidlc/construction/{unit-name}/functional-design/` 读取功能设计产物
 - 理解业务逻辑复杂度和需求
 
 ### 步骤 2：创建 NFR 需求计划
@@ -46,7 +46,7 @@
 - **国际化需求** — 多语言支持、RTL 布局、日期/数字格式
 
 ### 步骤 4：保存计划
-- 保存为 `aidlc-docs/construction/plans/{unit-name}-nfr-requirements-plan.md`
+- 保存为 `docs/aidlc/construction/plans/{unit-name}-nfr-requirements-plan.md`
 - 包含所有 [回答]: 标签供用户输入
 
 ### 步骤 5：收集和分析答案
@@ -58,8 +58,8 @@
 - **在所有歧义解决前不得继续**
 
 ### 步骤 6：生成 NFR 需求产物
-- 创建 `aidlc-docs/construction/{unit-name}/nfr-requirements/nfr-requirements.md`
-- 创建 `aidlc-docs/construction/{unit-name}/nfr-requirements/tech-stack-decisions.md`
+- 创建 `docs/aidlc/construction/{unit-name}/nfr-requirements/nfr-requirements.md`
+- 创建 `docs/aidlc/construction/{unit-name}/nfr-requirements/tech-stack-decisions.md`
 
 ### 步骤 7：展示完成消息
 - 按以下结构展示完成消息：
@@ -80,7 +80,7 @@
 
 ```markdown
 > **📋 <u>**需要审查：**</u>**
-> 请检查 NFR 需求：`aidlc-docs/construction/[unit-name]/nfr-requirements/`
+> 请检查 NFR 需求：`docs/aidlc/construction/[unit-name]/nfr-requirements/`
 
 
 
@@ -102,4 +102,4 @@
 ### 步骤 9：记录审批并更新进度
 - 在 audit.md 中记录审批及时间戳
 - 记录用户的审批回复及时间戳
-- 在 aidlc-state.md 中标记 NFR 需求阶段完成
+- 在 state.md 中标记 NFR 需求阶段完成

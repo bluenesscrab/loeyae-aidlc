@@ -89,7 +89,7 @@ AI 模型根据以下因素智能评估需要哪些阶段：
 1. **必须**：在 audit.md 中记录初始用户请求的完整原始输入
 2. 加载 `inception-workspace-detection.md` 的所有步骤
 3. 执行工作区检测：
-   - 检查是否存在 aidlc-state.md（如存在则恢复）
+   - 检查是否存在 state.md（如存在则恢复）
    - 扫描工作区中的现有代码（包括前端文件：.vue、.ts、.tsx、.jsx）
    - 判断是存量项目还是全新项目
    - 检查是否存在逆向工程产物
@@ -398,7 +398,7 @@ AI 模型根据以下因素智能评估需要哪些阶段：
 - **自适应执行**：仅执行有价值的阶段
 - **透明规划**：开始前始终展示执行计划
 - **用户控制**：用户可以请求包含/排除阶段
-- **进度跟踪**：在 aidlc-state.md 中更新已执行和已跳过的阶段
+- **进度跟踪**：在 state.md 中更新已执行和已跳过的阶段
 - **完整审计**：在 audit.md 中记录所有用户输入和 AI 响应（含时间戳）
   - **关键**：捕获用户的完整原始输入
   - **关键**：不要总结或改述用户输入
@@ -417,7 +417,7 @@ AI 模型根据以下因素智能评估需要哪些阶段：
 
 ### 两级复选框跟踪系统
 - **计划级**：跟踪每个阶段内的详细执行进度
-- **阶段级**：在 aidlc-state.md 中跟踪整体工作流进度
+- **阶段级**：在 state.md 中跟踪整体工作流进度
 - **立即更新**：所有进度更新在完成工作的同一交互中完成
 
 ## 提示日志要求
@@ -456,27 +456,34 @@ AI 模型根据以下因素智能评估需要哪些阶段：
 <工作区根目录>/                      # ⚠️ 应用代码在这里
 ├── [项目特定结构]                   # 因项目而异（参见 code-generation.md）
 │
-├── aidlc-docs/                     # 📄 仅文档
-│   ├── inception/                  # 🔵 INCEPTION 阶段
-│   │   ├── plans/
-│   │   ├── reverse-engineering/    # 仅存量项目
-│   │   ├── requirements/
-│   │   ├── user-stories/
-│   │   └── application-design/
-│   ├── construction/               # 🟢 CONSTRUCTION 阶段
-│   │   ├── plans/
-│   │   ├── {unit-name}/
-│   │   │   ├── functional-design/
-│   │   │   ├── nfr-requirements/
-│   │   │   ├── nfr-design/
-│   │   │   ├── infrastructure-design/
-│   │   │   └── code/               # 仅 Markdown 摘要
-│   │   └── build-and-test/
-│   ├── aidlc-state.md
-│   └── audit.md
+├── docs/                           # 📄 文档根目录（三版本共享）
+│   ├── specs/                      # 设计文档（cc-aidlc/oc-aidlc 共享）
+│   │   └── YYYY-MM-DD-<topic>-design.md
+│   ├── plans/                      # 实现计划（superpowers 写入）
+│   │   └── YYYY-MM-DD-<feature>.md
+│   └── aidlc/                      # AIDLC 过程文档
+│       ├── inception/              # 🔵 INCEPTION 阶段
+│       │   ├── plans/
+│       │   ├── reverse-engineering/  # 仅存量项目
+│       │   ├── requirements/
+│       │   ├── user-stories/
+│       │   └── application-design/
+│       ├── construction/           # 🟢 CONSTRUCTION 阶段
+│       │   ├── plans/
+│       │   ├── {unit-name}/
+│       │   │   ├── functional-design/
+│       │   │   ├── nfr-requirements/
+│       │   │   ├── nfr-design/
+│       │   │   ├── infrastructure-design/
+│       │   │   └── code/           # 仅 Markdown 摘要
+│       │   └── build-and-test/
+│       ├── state.md
+│       └── audit.md
 ```
 
 **关键规则**：
-- 应用代码：工作区根目录（绝不放在 aidlc-docs/ 中）
-- 文档：仅放在 aidlc-docs/
+- 应用代码：工作区根目录（绝不放在 docs/ 中）
+- AIDLC 过程文档：仅放在 docs/aidlc/
+- 设计文档：docs/specs/（与 cc-aidlc、oc-aidlc 共享）
+- 实现计划：docs/plans/（superpowers 写入）或 .sisyphus/plans/（Sisyphus 写入）
 - 项目结构：参见 code-generation.md 了解各项目类型的模式

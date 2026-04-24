@@ -11,7 +11,7 @@
 ## 执行步骤
 
 ### 步骤 1：分析 NFR 需求
-- 从 `aidlc-docs/construction/{unit-name}/nfr-requirements/` 读取 NFR 需求
+- 从 `docs/aidlc/construction/{unit-name}/nfr-requirements/` 读取 NFR 需求
 - 理解可扩展性、性能、可用性、安全需求
 
 ### 步骤 2：创建 NFR 设计计划
@@ -40,7 +40,7 @@
 - **缓存策略** — API 响应缓存、组件缓存（keep-alive）、Store 持久化
 
 ### 步骤 4：保存计划
-- 保存为 `aidlc-docs/construction/plans/{unit-name}-nfr-design-plan.md`
+- 保存为 `docs/aidlc/construction/plans/{unit-name}-nfr-design-plan.md`
 - 包含所有 [回答]: 标签供用户输入
 
 ### 步骤 5：收集和分析答案
@@ -49,11 +49,11 @@
 - 如需要则添加后续问题
 
 ### 步骤 6：生成 NFR 设计产物
-- 创建 `aidlc-docs/construction/{unit-name}/nfr-design/nfr-design-patterns.md`
-- 创建 `aidlc-docs/construction/{unit-name}/nfr-design/logical-components.md`
+- 创建 `docs/aidlc/construction/{unit-name}/nfr-design/nfr-design-patterns.md`
+- 创建 `docs/aidlc/construction/{unit-name}/nfr-design/logical-components.md`
 
 **前端 NFR 设计产物**（如为前端单元）：
-- 创建 `aidlc-docs/construction/{unit-name}/nfr-design/frontend-performance-patterns.md`（前端性能模式）
+- 创建 `docs/aidlc/construction/{unit-name}/nfr-design/frontend-performance-patterns.md`（前端性能模式）
 
 ### 步骤 7：展示完成消息
 - 按以下结构展示完成消息：
@@ -74,7 +74,7 @@
 
 ```markdown
 > **📋 <u>**需要审查：**</u>**
-> 请检查 NFR 设计：`aidlc-docs/construction/[unit-name]/nfr-design/`
+> 请检查 NFR 设计：`docs/aidlc/construction/[unit-name]/nfr-design/`
 
 
 
@@ -96,4 +96,4 @@
 ### 步骤 9：记录审批并更新进度
 - 在 audit.md 中记录审批及时间戳
 - 记录用户的审批回复及时间戳
-- 在 aidlc-state.md 中标记 NFR 设计阶段完成
+- 在 state.md 中标记 NFR 设计阶段完成
