@@ -1,206 +1,224 @@
-# Workflow Planning
+# 工作流规划
 
-**Purpose**: Determine which phases to execute and create comprehensive execution plan
+**目的**：确定需要执行的阶段，创建全面的执行计划
 
-**Always Execute**: This phase always runs after understanding requirements and scope
+**始终执行**：在理解需求和范围后，此阶段始终运行
 
-## Step 1: Load All Prior Context
+## 步骤 1：加载所有先前上下文
 
-### 1.1 Load Reverse Engineering Artifacts (if brownfield)
+### 1.1 加载逆向工程产物（如为存量项目）
 - architecture.md
 - component-inventory.md
 - technology-stack.md
 - dependencies.md
+- frontend-architecture.md（如存在）
 
-### 1.2 Load Requirements Analysis
-- requirements.md (includes intent analysis)
-- requirement-verification-questions.md (with answers)
+### 1.2 加载需求分析
+- requirements.md（包含意图分析）
+- requirement-verification-questions.md（含答案）
 
-### 1.3 Load User Stories (if executed)
+### 1.3 加载用户故事（如已执行）
 - stories.md
 - personas.md
 
-## Step 2: Detailed Scope and Impact Analysis
+## 步骤 2：详细范围和影响分析
 
-**Now that we have complete context (requirements + stories), perform detailed analysis:**
+**现在我们有了完整上下文（需求 + 故事），执行详细分析：**
 
-### 2.1 Transformation Scope Detection (Brownfield Only)
+### 2.1 变更范围检测（仅存量项目）
 
-**IF brownfield project**, analyze transformation scope:
+**如果是存量项目**，分析变更范围：
 
-#### Architectural Transformation
-- **Single component change** vs **architectural transformation**
-- **Infrastructure changes** vs **application changes**
-- **Deployment model changes** (Lambda→Container, EC2→Serverless, etc.)
+#### 架构变更
+- **单组件变更** vs **架构变更**
+- **基础设施变更** vs **应用变更**
+- **部署模型变更**（Lambda→容器, EC2→Serverless 等）
 
-#### Related Component Identification
-For transformations, identify:
-- **Infrastructure code** that needs updates
-- **CDK stacks** requiring changes
-- **API Gateway** configurations
-- **Load balancer** requirements
-- **Networking** changes needed
-- **Monitoring/logging** adaptations
+#### 关联组件识别
+对于变更，识别：
+- 需要更新的**基础设施代码**
+- 需要变更的 **CDK 栈**
+- **API 网关**配置
+- **负载均衡器**需求
+- **网络**变更需求
+- **监控/日志**适配
 
-#### Cross-Package Impact
-- **CDK infrastructure** packages requiring updates
-- **Shared models** needing version updates
-- **Client libraries** requiring endpoint changes
-- **Test packages** needing new test scenarios
+#### 跨包影响
+- 需要更新的 **CDK 基础设施**包
+- 需要版本更新的**共享模型**
+- 需要端点变更的**客户端库**
+- 需要新测试场景的**测试包**
 
-### 2.2 Change Impact Assessment
+### 2.2 变更影响评估
 
-#### Impact Areas
-1. **User-facing changes**: Does this affect user experience?
-2. **Structural changes**: Does this change system architecture?
-3. **Data model changes**: Does this affect database schemas or data structures?
-4. **API changes**: Does this affect interfaces or contracts?
-5. **NFR impact**: Does this affect performance, security, or scalability?
+#### 影响领域
+1. **用户可见变更**：是否影响用户体验？
+2. **结构变更**：是否改变系统架构？
+3. **数据模型变更**：是否影响数据库 schema 或数据结构？
+4. **API 变更**：是否影响接口或契约？
+5. **NFR 影响**：是否影响性能、安全或可扩展性？
 
-#### Application Layer Impact (if applicable)
-- **Code changes**: New entry points, adapters, configurations
-- **Dependencies**: New libraries, framework changes
-- **Configuration**: Environment variables, config files
-- **Testing**: Unit tests, integration tests
+#### 应用层影响（如适用）
+- **代码变更**：新入口点、适配器、配置
+- **依赖**：新库、框架变更
+- **配置**：环境变量、配置文件
+- **测试**：单元测试、集成测试
 
-#### Infrastructure Layer Impact (if applicable)
-- **Deployment model**: Lambda→ECS, EC2→Fargate, etc.
-- **Networking**: VPC, security groups, load balancers
-- **Storage**: Persistent volumes, shared storage
-- **Scaling**: Auto-scaling policies, capacity planning
+#### 基础设施层影响（如适用）
+- **部署模型**：Lambda→ECS, EC2→Fargate 等
+- **网络**：VPC、安全组、负载均衡器
+- **存储**：持久卷、共享存储
+- **扩展**：自动扩展策略、容量规划
 
-#### Operations Layer Impact (if applicable)
-- **Monitoring**: CloudWatch, custom metrics, dashboards
-- **Logging**: Log aggregation, structured logging
-- **Alerting**: Alarm configurations, notification channels
-- **Deployment**: CI/CD pipeline changes, rollback strategies
+### 2.3 组件关系映射（仅存量项目）
 
-### 2.3 Component Relationship Mapping (Brownfield Only)
-
-**IF brownfield project**, create component dependency graph:
+**如果是存量项目**，创建组件依赖图：
 
 ```markdown
-## Component Relationships
-- **Primary Component**: [Package being changed]
-- **Infrastructure Components**: [CDK/Terraform packages]
-- **Shared Components**: [Models, utilities, clients]
-- **Dependent Components**: [Services that call this component]
-- **Supporting Components**: [Monitoring, logging, deployment]
+## 组件关系
+- **主要组件**：[被变更的包]
+- **基础设施组件**：[CDK/Terraform 包]
+- **共享组件**：[模型、工具、客户端]
+- **依赖组件**：[调用此组件的服务]
+- **支撑组件**：[监控、日志、部署]
 ```
 
-For each related component:
-- **Change Type**: Major, Minor, Configuration-only
-- **Change Reason**: Direct dependency, deployment model, networking
-- **Change Priority**: Critical, Important, Optional
+对每个关联组件：
+- **变更类型**：重大、次要、仅配置
+- **变更原因**：直接依赖、部署模型、网络
+- **变更优先级**：关键、重要、可选
 
-### 2.4 Risk Assessment
+### 2.4 风险评估
 
-Evaluate risk level:
-1. **Low**: Isolated change, easy rollback, well-understood
-2. **Medium**: Multiple components, moderate rollback, some unknowns
-3. **High**: System-wide impact, complex rollback, significant unknowns
-4. **Critical**: Production-critical, difficult rollback, high uncertainty
+评估风险级别：
+1. **低**：隔离变更，易回滚，充分理解
+2. **中**：多组件，中等回滚难度，部分未知
+3. **高**：系统级影响，复杂回滚，显著未知
+4. **关键**：生产关键，困难回滚，高不确定性
 
-## Step 3: Phase Determination
+## 步骤 3：阶段确定
 
-### 3.1 User Stories - Already Executed or Skip?
-**Already executed**: Move to next determination
-**Not executed - Execute IF**:
-- Multiple user personas
-- User experience impact
-- Acceptance criteria needed
-- Team collaboration required
+### 3.1 用户故事 — 已执行还是跳过？
+**已执行**：进入下一个确定
+**未执行 — 执行条件**：
+- 多用户角色
+- 用户体验影响
+- 需要验收标准
+- 需要团队协作
 
-**Skip IF**:
-- Internal refactoring
-- Bug fix with clear reproduction
-- Technical debt reduction
-- Infrastructure changes
+**跳过条件**：
+- 内部重构
+- 有明确复现步骤的 Bug 修复
+- 技术债务减少
+- 基础设施变更
 
-### 3.2 Application Design - Execute IF:
-- New components or services needed
-- Component methods and business rules need definition
-- Service layer design required
-- Component dependencies need clarification
+### 3.2 应用设计 — 执行条件：
+- 需要新组件或服务
+- 需要定义组件方法和业务规则
+- 需要服务层设计
+- 需要澄清组件依赖
 
-**Skip IF**:
-- Changes within existing component boundaries
-- No new components or methods
-- Pure implementation changes
+**跳过条件**：
+- 在现有组件边界内的变更
+- 无新组件或方法
+- 纯实现变更
 
-### 3.3 Design (Units Planning/Generation) - Execute IF:
-- New data models or schemas
-- API changes or new endpoints
-- Complex algorithms or business logic
-- State management changes
-- Multiple packages require changes
-- Infrastructure-as-code updates needed
+### 3.3 设计（单元规划/生成）— 执行条件：
+- 新数据模型或 schema
+- API 变更或新端点
+- 复杂算法或业务逻辑
+- 状态管理变更
+- 多个包需要变更
+- 需要基础设施即代码更新
 
-**Skip IF**:
-- Simple logic changes
-- UI-only changes
-- Configuration updates
-- Straightforward implementations
+**跳过条件**：
+- 简单逻辑变更
+- 仅 UI 变更
+- 配置更新
+- 直接的实现
 
-### 3.4 NFR Implementation - Execute IF:
-- Performance requirements
-- Security considerations
-- Scalability concerns
-- Monitoring/observability needed
+### 3.4 NFR 实现 — 执行条件：
+- 性能需求
+- 安全考虑
+- 可扩展性关注
+- 需要监控/可观测性
 
-**Skip IF**:
-- Existing NFR setup sufficient
-- No new NFR requirements
-- Simple changes with no NFR impact
+**跳过条件**：
+- 现有 NFR 设置足够
+- 无新 NFR 需求
+- 简单变更无 NFR 影响
 
-## Step 4: Note Adaptive Detail
+## 步骤 4：注意自适应详细度
 
-**See [depth-levels.md](common-depth-levels.md) for adaptive depth explanation**
+**参见 [depth-levels.md](common-depth-levels.md) 了解自适应深度说明**
 
-For each stage that will execute:
-- All defined artifacts will be created
-- Detail level within artifacts adapts to problem complexity
-- Model determines appropriate detail based on problem characteristics
+对每个将执行的阶段：
+- 所有定义的产物将被创建
+- 产物内的详细程度根据问题复杂度自适应
+- 模型根据问题特征确定适当的详细程度
 
-## Step 5: Multi-Module Coordination Analysis (Brownfield Only)
+## 步骤 5：多模块协调分析（仅存量项目）
 
-**IF brownfield with multiple modules/packages**, analyze dependencies and determine optimal update strategy:
+**如果存量项目有多个模块/包**，分析依赖并确定最优更新策略：
 
-### 5.1 Analyze Module Dependencies
-- Examine build system dependencies and dependency manifests
-- Identify build-time vs runtime dependencies
-- Map API contracts and shared interfaces between modules
+### 5.1 分析模块依赖
+- 检查构建系统依赖和依赖清单
+- 识别构建时 vs 运行时依赖
+- 映射模块间的 API 契约和共享接口
 
-### 5.2 Determine Update Strategy
-Based on dependency analysis, decide:
-- **Update sequence**: Which modules must be updated first due to dependencies
-- **Parallelization opportunities**: Which modules can be updated simultaneously
-- **Coordination requirements**: Version compatibility, API contracts, deployment order
-- **Testing strategy**: Per-module vs integrated testing approach
-- **Rollback strategy**: Recovery plan if mid-sequence failures occur
+### 5.2 确定更新策略
+基于依赖分析，决定：
+- **更新顺序**：哪些模块因依赖必须先更新
+- **并行机会**：哪些模块可以同时更新
+- **协调需求**：版本兼容性、API 契约、部署顺序
+- **测试策略**：按模块 vs 集成测试方式
+- **回滚策略**：中途失败的恢复计划
 
-### 5.3 Document Coordination Plan
+### 5.3 前后端并行开发规划
+
+**如果项目包含前端和后端**，规划并行开发策略：
+
+#### API 契约优先
+- 先定义前后端接口契约（API 路径、请求/响应格式、状态码）
+- 前端可基于契约使用 Mock 数据并行开发
+- 后端按契约实现接口
+
+#### 并行开发顺序
+```
+后端：数据模型 → Service → Controller → 接口测试
+前端：类型定义 → API 接口 → Store → 页面组件 → 联调
+         ↑                                    ↓
+         └──────── API 契约 ────────────────────┘
+```
+
+#### 联调检查点
+- 后端接口完成后进行前后端联调
+- 验证接口契约一致性
+- 处理边界情况和错误场景
+
+### 5.4 记录协调计划
 ```markdown
-## Module Update Strategy
-- **Update Approach**: [Sequential/Parallel/Hybrid]
-- **Critical Path**: [Modules that block other updates]
-- **Coordination Points**: [Shared APIs, infrastructure, data contracts]
-- **Testing Checkpoints**: [When to validate integration]
+## 模块更新策略
+- **更新方式**：[顺序/并行/混合]
+- **关键路径**：[阻塞其他更新的模块]
+- **协调点**：[共享 API、基础设施、数据契约]
+- **测试检查点**：[何时验证集成]
+- **前后端并行**：[是否采用并行开发，API 契约定义时机]
 ```
 
-Identify for each affected module:
-- **Update priority**: Must-update-first vs can-update-later
-- **Dependency constraints**: What it depends on, what depends on it
-- **Change scope**: Major (breaking), Minor (compatible), Patch (fixes)
+对每个受影响的模块识别：
+- **更新优先级**：必须先更新 vs 可以后更新
+- **依赖约束**：依赖什么，什么依赖它
+- **变更范围**：重大（破坏性）、次要（兼容）、补丁（修复）
 
-## Step 6: Generate Workflow Visualization
+## 步骤 6：生成工作流可视化
 
-Create Mermaid flowchart showing:
-- All phases in sequence
-- EXECUTE or SKIP decision for each conditional phase
-- Proper styling for each phase state
+创建 Mermaid 流程图展示：
+- 所有阶段按顺序排列
+- 每个条件阶段的执行或跳过决策
+- 每个阶段状态的适当样式
 
-**Styling rules** (add after flowchart):
+**样式规则**（添加在流程图之后）：
 ```
 style WD fill:#4CAF50,stroke:#1B5E20,stroke-width:3px,color:#fff
 style CP fill:#4CAF50,stroke:#1B5E20,stroke-width:3px,color:#fff
@@ -213,71 +231,67 @@ style End fill:#CE93D8,stroke:#6A1B9A,stroke-width:3px,color:#000
 linkStyle default stroke:#333,stroke-width:2px
 ```
 
-**Style Guidelines**:
-- Completed/Always execute: `fill:#4CAF50,stroke:#1B5E20,stroke-width:3px,color:#fff` (Material Green with white text)
-- Conditional EXECUTE: `fill:#FFA726,stroke:#E65100,stroke-width:3px,stroke-dasharray: 5 5,color:#000` (Material Orange with black text)
-- Conditional SKIP: `fill:#BDBDBD,stroke:#424242,stroke-width:2px,stroke-dasharray: 5 5,color:#000` (Material Gray with black text)
-- Start/End: `fill:#CE93D8,stroke:#6A1B9A,stroke-width:3px,color:#000` (Material Purple with black text)
-- Phase containers: Use lighter Material colors (INCEPTION: #BBDEFB, CONSTRUCTION: #C8E6C9, OPERATIONS: #FFF59D)
+**样式指南**：
+- 已完成/始终执行：`fill:#4CAF50,stroke:#1B5E20,stroke-width:3px,color:#fff`（Material 绿色白字）
+- 条件执行：`fill:#FFA726,stroke:#E65100,stroke-width:3px,stroke-dasharray: 5 5,color:#000`（Material 橙色黑字）
+- 条件跳过：`fill:#BDBDBD,stroke:#424242,stroke-width:2px,stroke-dasharray: 5 5,color:#000`（Material 灰色黑字）
+- 开始/结束：`fill:#CE93D8,stroke:#6A1B9A,stroke-width:3px,color:#000`（Material 紫色黑字）
+- 阶段容器：使用较浅的 Material 颜色（INCEPTION: #BBDEFB, CONSTRUCTION: #C8E6C9）
 
-## Step 7: Create Execution Plan Document
+## 步骤 7：创建执行计划文档
 
-Create `aidlc-docs/inception/plans/execution-plan.md`:
+创建 `aidlc-docs/inception/plans/execution-plan.md`：
 
 ```markdown
-# Execution Plan
+# 执行计划
 
-## Detailed Analysis Summary
+## 详细分析摘要
 
-### Transformation Scope (Brownfield Only)
-- **Transformation Type**: [Single component/Architectural/Infrastructure]
-- **Primary Changes**: [Description]
-- **Related Components**: [List]
+### 变更范围（仅存量项目）
+- **变更类型**：[单组件/架构级/基础设施]
+- **主要变更**：[描述]
+- **关联组件**：[列表]
 
-### Change Impact Assessment
-- **User-facing changes**: [Yes/No - Description]
-- **Structural changes**: [Yes/No - Description]
-- **Data model changes**: [Yes/No - Description]
-- **API changes**: [Yes/No - Description]
-- **NFR impact**: [Yes/No - Description]
+### 变更影响评估
+- **用户可见变更**：[是/否 - 描述]
+- **结构变更**：[是/否 - 描述]
+- **数据模型变更**：[是/否 - 描述]
+- **API 变更**：[是/否 - 描述]
+- **NFR 影响**：[是/否 - 描述]
 
-### Component Relationships (Brownfield Only)
-[Component dependency graph]
+### 组件关系（仅存量项目）
+[组件依赖图]
 
-### Risk Assessment
-- **Risk Level**: [Low/Medium/High/Critical]
-- **Rollback Complexity**: [Easy/Moderate/Difficult]
-- **Testing Complexity**: [Simple/Moderate/Complex]
+### 风险评估
+- **风险级别**：[低/中/高/关键]
+- **回滚复杂度**：[简单/中等/困难]
+- **测试复杂度**：[简单/中等/复杂]
 
-## Workflow Visualization
+## 工作流可视化
 
 ```mermaid
 flowchart TD
-    Start(["User Request"])
+    Start(["用户请求"])
     
-    subgraph INCEPTION["🔵 INCEPTION PHASE"]
-        WD["Workspace Detection<br/><b>STATUS</b>"]
-        RE["Reverse Engineering<br/><b>STATUS</b>"]
-        RA["Requirements Analysis<br/><b>STATUS</b>"]
-        US["User Stories<br/><b>STATUS</b>"]
-        WP["Workflow Planning<br/><b>STATUS</b>"]
-        AD["Application Design<br/><b>STATUS</b>"]
-        UP["Units Planning<br/><b>STATUS</b>"]
-        UG["Units Generation<br/><b>STATUS</b>"]
+    subgraph INCEPTION["🔵 INCEPTION 阶段"]
+        WD["工作区检测<br/><b>状态</b>"]
+        RE["逆向工程<br/><b>状态</b>"]
+        RA["需求分析<br/><b>状态</b>"]
+        US["用户故事<br/><b>状态</b>"]
+        WP["工作流规划<br/><b>状态</b>"]
+        AD["应用设计<br/><b>状态</b>"]
+        UP["单元规划<br/><b>状态</b>"]
+        UG["单元生成<br/><b>状态</b>"]
     end
     
-    subgraph CONSTRUCTION["🟢 CONSTRUCTION PHASE"]
-        FD["Functional Design<br/><b>STATUS</b>"]
-        NFRA["NFR Requirements<br/><b>STATUS</b>"]
-        NFRD["NFR Design<br/><b>STATUS</b>"]
-        ID["Infrastructure Design<br/><b>STATUS</b>"]
-        CP["Code Planning<br/><b>EXECUTE</b>"]
-        CG["Code Generation<br/><b>EXECUTE</b>"]
-        BT["Build and Test<br/><b>EXECUTE</b>"]
-    end
-    
-    subgraph OPERATIONS["🟡 OPERATIONS PHASE"]
-        OPS["Operations<br/><b>PLACEHOLDER</b>"]
+    subgraph CONSTRUCTION["🟢 CONSTRUCTION 阶段"]
+        FD["功能设计<br/><b>状态</b>"]
+        NFRA["NFR 需求<br/><b>状态</b>"]
+        NFRD["NFR 设计<br/><b>状态</b>"]
+        ID["基础设施设计<br/><b>状态</b>"]
+        CP["代码规划<br/><b>执行</b>"]
+        CG["代码生成<br/><b>执行</b>"]
+        BT["构建和测试<br/><b>执行</b>"]
     end
     
     Start --> WD
@@ -286,194 +300,189 @@ flowchart TD
     WP --> CP
     CP --> CG
     CG --> BT
-    BT --> End(["Complete"])
+    BT --> End(["完成"])
     
-    %% Replace STATUS with COMPLETED, SKIP, EXECUTE as appropriate
-    %% Apply styling based on status
+    %% 将"状态"替换为实际阶段状态（已完成/跳过/执行）并应用相应样式
 ```
 
-**Note**: Replace STATUS placeholders with actual phase status (COMPLETED/SKIP/EXECUTE) and apply appropriate styling
+**注意**：将"状态"占位符替换为实际阶段状态（已完成/跳过/执行）并应用相应样式
 
-## Phases to Execute
+## 待执行阶段
 
-### 🔵 INCEPTION PHASE
-- [x] Workspace Detection (COMPLETED)
-- [x] Reverse Engineering (COMPLETED/SKIPPED)
-- [x] Requirements Elaboration (COMPLETED)
-- [x] User Stories (COMPLETED/SKIPPED)
-- [x] Execution Plan (IN PROGRESS)
-- [ ] Application Design - [EXECUTE/SKIP]
-  - **Rationale**: [Why executing or skipping]
-- [ ] Units Planning - [EXECUTE/SKIP]
-  - **Rationale**: [Why executing or skipping]
-- [ ] Units Generation - [EXECUTE/SKIP]
-  - **Rationale**: [Why executing or skipping]
+### 🔵 INCEPTION 阶段
+- [x] 工作区检测（已完成）
+- [x] 逆向工程（已完成/已跳过）
+- [x] 需求分析（已完成）
+- [x] 用户故事（已完成/已跳过）
+- [x] 执行计划（进行中）
+- [ ] 应用设计 - [执行/跳过]
+  - **理由**：[执行或跳过的原因]
+- [ ] 单元规划 - [执行/跳过]
+  - **理由**：[执行或跳过的原因]
+- [ ] 单元生成 - [执行/跳过]
+  - **理由**：[执行或跳过的原因]
 
-### 🟢 CONSTRUCTION PHASE
-- [ ] Functional Design - [EXECUTE/SKIP]
-  - **Rationale**: [Why executing or skipping]
-- [ ] NFR Requirements - [EXECUTE/SKIP]
-  - **Rationale**: [Why executing or skipping]
-- [ ] NFR Design - [EXECUTE/SKIP]
-  - **Rationale**: [Why executing or skipping]
-- [ ] Infrastructure Design - [EXECUTE/SKIP]
-  - **Rationale**: [Why executing or skipping]
-- [ ] Code Planning - EXECUTE (ALWAYS)
-  - **Rationale**: Implementation approach needed
-- [ ] Code Generation - EXECUTE (ALWAYS)
-  - **Rationale**: Code implementation needed
-- [ ] Build and Test - EXECUTE (ALWAYS)
-  - **Rationale**: Build, test, and verification needed
+### 🟢 CONSTRUCTION 阶段
+- [ ] 功能设计 - [执行/跳过]
+  - **理由**：[执行或跳过的原因]
+- [ ] NFR 需求 - [执行/跳过]
+  - **理由**：[执行或跳过的原因]
+- [ ] NFR 设计 - [执行/跳过]
+  - **理由**：[执行或跳过的原因]
+- [ ] 基础设施设计 - [执行/跳过]
+  - **理由**：[执行或跳过的原因]
+- [ ] 代码规划 - 执行（始终）
+  - **理由**：需要实现方案
+- [ ] 代码生成 - 执行（始终）
+  - **理由**：需要代码实现
+- [ ] 构建和测试 - 执行（始终）
+  - **理由**：需要构建、测试和验证
 
-### 🟡 OPERATIONS PHASE
-- [ ] Operations - PLACEHOLDER
-  - **Rationale**: Future deployment and monitoring workflows
+## 包变更顺序（仅存量项目）
+[如适用，列出包更新顺序及依赖]
 
-## Package Change Sequence (Brownfield Only)
-[If applicable, list package update sequence with dependencies]
+## 前后端并行计划（如适用）
+- **API 契约定义时机**：[在哪个阶段完成]
+- **前端可开始时机**：[API 契约确定后]
+- **联调检查点**：[后端接口完成后]
 
-## Estimated Timeline
-- **Total Phases**: [Number]
-- **Estimated Duration**: [Time estimate]
+## 预估时间线
+- **总阶段数**：[数量]
+- **预估时长**：[时间估计]
 
-## Success Criteria
-- **Primary Goal**: [Main objective]
-- **Key Deliverables**: [List]
-- **Quality Gates**: [List]
+## 成功标准
+- **主要目标**：[主要目的]
+- **关键交付物**：[列表]
+- **质量门禁**：[列表]
 
-[IF brownfield]
-- **Integration Testing**: All components working together
-- **Operational Readiness**: Monitoring, logging, alerting working
+[如为存量项目]
+- **集成测试**：所有组件协同工作
+- **运维就绪**：监控、日志、告警正常工作
 ```
 
-## Step 8: Initialize State Tracking
+## 步骤 8：初始化状态跟踪
 
-Update `aidlc-docs/aidlc-state.md`:
+更新 `aidlc-docs/aidlc-state.md`：
 
 ```markdown
-# AI-DLC State Tracking
+# AI-DLC 状态跟踪
 
-## Project Information
-- **Project Type**: [Greenfield/Brownfield]
-- **Start Date**: [ISO timestamp]
-- **Current Stage**: INCEPTION - Workflow Planning
+## 项目信息
+- **项目类型**：[全新项目/存量项目]
+- **开始日期**：[ISO 时间戳]
+- **当前步骤**：INCEPTION - 工作流规划
 
-## Execution Plan Summary
-- **Total Stages**: [Number]
-- **Stages to Execute**: [List]
-- **Stages to Skip**: [List with reasons]
+## 执行计划摘要
+- **总阶段数**：[数量]
+- **待执行阶段**：[列表]
+- **跳过阶段**：[列表及原因]
 
-## Stage Progress
+## 阶段进度
 
-### 🔵 INCEPTION PHASE
-- [x] Workspace Detection
-- [x] Reverse Engineering (if applicable)
-- [x] Requirements Analysis
-- [x] User Stories (if applicable)
-- [x] Workflow Planning
-- [ ] Application Design - [EXECUTE/SKIP]
-- [ ] Units Planning - [EXECUTE/SKIP]
-- [ ] Units Generation - [EXECUTE/SKIP]
+### 🔵 INCEPTION 阶段
+- [x] 工作区检测
+- [x] 逆向工程（如适用）
+- [x] 需求分析
+- [x] 用户故事（如适用）
+- [x] 工作流规划
+- [ ] 应用设计 - [执行/跳过]
+- [ ] 单元规划 - [执行/跳过]
+- [ ] 单元生成 - [执行/跳过]
 
-### 🟢 CONSTRUCTION PHASE
-- [ ] Functional Design - [EXECUTE/SKIP]
-- [ ] NFR Requirements - [EXECUTE/SKIP]
-- [ ] NFR Design - [EXECUTE/SKIP]
-- [ ] Infrastructure Design - [EXECUTE/SKIP]
-- [ ] Code Planning - EXECUTE
-- [ ] Code Generation - EXECUTE
-- [ ] Build and Test - EXECUTE
+### 🟢 CONSTRUCTION 阶段
+- [ ] 功能设计 - [执行/跳过]
+- [ ] NFR 需求 - [执行/跳过]
+- [ ] NFR 设计 - [执行/跳过]
+- [ ] 基础设施设计 - [执行/跳过]
+- [ ] 代码规划 - 执行
+- [ ] 代码生成 - 执行
+- [ ] 构建和测试 - 执行
 
-### 🟡 OPERATIONS PHASE
-- [ ] Operations - PLACEHOLDER
-
-## Current Status
-- **Lifecycle Phase**: INCEPTION
-- **Current Stage**: Workflow Planning Complete
-- **Next Stage**: [Next stage to execute]
-- **Status**: Ready to proceed
+## 当前状态
+- **生命周期阶段**：INCEPTION
+- **当前步骤**：工作流规划完成
+- **下一步骤**：[下一个待执行步骤]
+- **状态**：准备继续
 ```
 
-## Step 9: Present Plan to User
+## 步骤 9：向用户展示计划
 
 ```markdown
-# 📋 Workflow Planning Complete
+# 📋 工作流规划完成
 
-I've created a comprehensive execution plan based on:
-- Your request: [Summary]
-- Existing system: [Summary if brownfield]
-- Requirements: [Summary if executed]
-- User stories: [Summary if executed]
+基于以下内容创建了全面的执行计划：
+- 你的请求：[摘要]
+- 现有系统：[摘要（如为存量项目）]
+- 需求：[摘要（如已执行）]
+- 用户故事：[摘要（如已执行）]
 
-**Detailed Analysis**:
-- Risk level: [Level]
-- Impact: [Summary of key impacts]
-- Components affected: [List]
+**详细分析**：
+- 风险级别：[级别]
+- 影响：[关键影响摘要]
+- 受影响组件：[列表]
 
-**Recommended Execution Plan**:
+**推荐执行计划**：
 
-I recommend executing [X] stages:
+推荐执行 [X] 个阶段：
 
-🔵 **INCEPTION PHASE:**
-1. [Stage name] - *Rationale:* [Why executing]
-2. [Stage name] - *Rationale:* [Why executing]
+🔵 **INCEPTION 阶段：**
+1. [阶段名称] - *理由：* [执行原因]
+2. [阶段名称] - *理由：* [执行原因]
 ...
 
-🟢 **CONSTRUCTION PHASE:**
-3. [Stage name] - *Rationale:* [Why executing]
-4. [Stage name] - *Rationale:* [Why executing]
+🟢 **CONSTRUCTION 阶段：**
+3. [阶段名称] - *理由：* [执行原因]
+4. [阶段名称] - *理由：* [执行原因]
 ...
 
-I recommend skipping [Y] stages:
+推荐跳过 [Y] 个阶段：
 
-🔵 **INCEPTION PHASE:**
-1. [Stage name] - *Rationale:* [Why skipping]
-2. [Stage name] - *Rationale:* [Why skipping]
+🔵 **INCEPTION 阶段：**
+1. [阶段名称] - *理由：* [跳过原因]
 ...
 
-🟢 **CONSTRUCTION PHASE:**
-3. [Stage name] - *Rationale:* [Why skipping]
-4. [Stage name] - *Rationale:* [Why skipping]
+🟢 **CONSTRUCTION 阶段：**
+2. [阶段名称] - *理由：* [跳过原因]
 ...
 
-[IF brownfield with multiple packages]
-**Recommended Package Update Sequence**:
-1. [Package] - [Reason]
-2. [Package] - [Reason]
+[如为存量项目且有多个包]
+**推荐包更新顺序**：
+1. [包] - [原因]
+2. [包] - [原因]
 ...
 
-**Estimated Timeline**: [Duration]
+**预估时间线**：[时长]
 
-> **📋 <u>**REVIEW REQUIRED:**</u>**  
-> Please examine the execution plan at: `aidlc-docs/inception/plans/execution-plan.md`
+> **📋 <u>**需要审查：**</u>**
+> 请检查执行计划：`aidlc-docs/inception/plans/execution-plan.md`
 
-> **🚀 <u>**WHAT'S NEXT?**</u>**
+> **🚀 <u>**下一步？**</u>**
 >
-> **You may:**
+> **你可以：**
 >
-> 🔧 **Request Changes** - Ask for modifications to the execution plan if required
-> [IF any stages are skipped:]
-> 📝 **Add Skipped Stages** - Choose to include stages currently marked as SKIP
-> ✅ **Approve & Continue** - Approve plan and proceed to **[Next Stage Name]**
+> 🔧 **请求修改** - 要求修改执行计划
+> [如有阶段被跳过：]
+> 📝 **添加跳过的阶段** - 选择包含当前标记为跳过的阶段
+> ✅ **确认并继续** - 确认计划，进入**[下一阶段名称]**
 ```
 
-## Step 10: Handle User Response
+## 步骤 10：处理用户回复
 
-- **If approved**: Proceed to next stage in execution plan
-- **If changes requested**: Update execution plan and re-confirm
-- **If user wants to force include/exclude stages**: Update plan accordingly
+- **如果确认**：进入执行计划中的下一阶段
+- **如果请求修改**：更新执行计划并重新确认
+- **如果用户要求强制包含/排除阶段**：相应更新计划
 
-## Step 11: Log Interaction
+## 步骤 11：记录交互
 
-Log in `aidlc-docs/audit.md`:
+在 `aidlc-docs/audit.md` 中记录：
 
 ```markdown
-## Workflow Planning - Approval
-**Timestamp**: [ISO timestamp]
-**AI Prompt**: "Ready to proceed with this plan?"
-**User Response**: "[User's COMPLETE RAW response]"
-**Status**: [Approved/Changes Requested]
-**Context**: Workflow plan created with [X] stages to execute
+## 工作流规划 - 审批
+**时间戳**：[ISO 时间戳]
+**AI 提示**："准备按此计划继续？"
+**用户回复**："[用户的完整原始回复]"
+**状态**：[已确认/请求修改]
+**上下文**：创建了包含 [X] 个待执行阶段的工作流计划
 
 ---
 ```

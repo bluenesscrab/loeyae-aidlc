@@ -1,183 +1,198 @@
-# Units Generation - Detailed Steps
+# 单元生成 - 详细步骤
 
-## Overview
-This stage decomposes the system into manageable units of work through two integrated parts:
-- **Part 1 - Planning**: Create decomposition plan with questions, collect answers, analyze for ambiguities, get approval
-- **Part 2 - Generation**: Execute approved plan to generate unit artifacts
+## 概述
+此阶段通过两个集成部分将系统分解为可管理的工作单元：
+- **第一部分 - 规划**：创建分解计划并提出问题，收集答案，分析歧义，获取审批
+- **第二部分 - 生成**：执行批准的计划生成单元产物
 
-**DEFINITION**: A unit of work is a logical grouping of stories for development purposes. For microservices, each unit becomes an independently deployable service. For monoliths, the single unit represents the entire application with logical modules.
+**定义**：工作单元是为开发目的对故事进行的逻辑分组。对于微服务，每个单元成为独立可部署的服务。对于单体应用，单个单元代表整个应用及其逻辑模块。
 
-**Terminology**: Use "Service" for independently deployable components, "Module" for logical groupings within a service, "Unit of Work" for planning context.
+**术语**：使用"服务"表示独立可部署的组件，"模块"表示服务内的逻辑分组，"工作单元"用于规划上下文。
 
-## Prerequisites
-- Context Assessment must be complete
-- Requirements Assessment recommended (provides functional scope)
-- Story Development recommended (stories map to units)
-- Application Design phase REQUIRED (determines components, methods, and services)
-- Execution plan must indicate Design phase should execute
-
----
-
-# PART 1: PLANNING
-
-## Step 1: Create Unit of Work Plan
-- Generate plan with checkboxes [] for decomposing system into units of work
-- Focus on breaking down the system into manageable development units
-- Each step and sub-step should have a checkbox []
-
-## Step 2: Include Mandatory Unit Artifacts in Plan
-**ALWAYS** include these mandatory artifacts in the unit plan:
-- [ ] Generate `aidlc-docs/inception/application-design/unit-of-work.md` with unit definitions and responsibilities
-- [ ] Generate `aidlc-docs/inception/application-design/unit-of-work-dependency.md` with dependency matrix
-- [ ] Generate `aidlc-docs/inception/application-design/unit-of-work-story-map.md` mapping stories to units
-- [ ] **Greenfield only**: Document code organization strategy in `unit-of-work.md` (see code-generation.md for structure patterns)
-- [ ] Validate unit boundaries and dependencies
-- [ ] Ensure all stories are assigned to units
-
-## Step 3: Generate Context-Appropriate Questions
-**DIRECTIVE**: Analyze the requirements, stories, and application design to generate ONLY questions relevant to THIS specific decomposition problem. Use the categories below as inspiration, NOT as a mandatory checklist. Skip entire categories if not applicable.
-
-- EMBED questions using [Answer]: tag format
-- Focus on ambiguities and missing information specific to this context
-- Generate questions only where user input is needed for decision-making
-
-**Example question categories** (adapt as needed):
-- **Story Grouping** - Only if multiple stories exist and grouping strategy is unclear
-- **Dependencies** - Only if multiple units likely and integration approach is ambiguous
-- **Team Alignment** - Only if team structure or ownership is unclear
-- **Technical Considerations** - Only if scalability/deployment requirements differ across units
-- **Business Domain** - Only if domain boundaries or bounded contexts are unclear
-- **Code Organization (Greenfield multi-unit only)** - Ask deployment model and directory structure preferences
-
-## Step 4: Store UOW Plan
-- Save as `aidlc-docs/inception/plans/unit-of-work-plan.md`
-- Include all [Answer]: tags for user input
-- Ensure plan covers all aspects of system decomposition
-
-## Step 5: Request User Input
-- Ask user to fill [Answer]: tags directly in the plan document
-- Emphasize importance of decomposition decisions
-- Provide clear instructions on completing the [Answer]: tags
-
-## Step 6: Collect Answers
-- Wait for user to provide answers to all questions using [Answer]: tags in the document
-- Do not proceed until ALL [Answer]: tags are completed
-- Review the document to ensure no [Answer]: tags are left blank
-
-## Step 7: ANALYZE ANSWERS (MANDATORY)
-Before proceeding, you MUST carefully review all user answers for:
-- **Vague or ambiguous responses**: "mix of", "somewhere between", "not sure", "depends"
-- **Undefined criteria or terms**: References to concepts without clear definitions
-- **Contradictory answers**: Responses that conflict with each other
-- **Missing generation details**: Answers that lack specific guidance
-- **Answers that combine options**: Responses that merge different approaches without clear decision rules
-
-## Step 8: MANDATORY Follow-up Questions
-If the analysis in step 7 reveals ANY ambiguous answers, you MUST:
-- Add specific follow-up questions to the plan document using [Answer]: tags
-- DO NOT proceed to approval until all ambiguities are resolved
-- Examples of required follow-ups:
-  - "You mentioned 'mix of A and B' - what specific criteria should determine when to use A vs B?"
-  - "You said 'somewhere between A and B' - can you define the exact middle ground approach?"
-  - "You indicated 'not sure' - what additional information would help you decide?"
-  - "You mentioned 'depends on complexity' - how do you define complexity levels?"
-
-## Step 9: Request Approval
-- Ask: "**Unit of work plan complete. Review the plan in aidlc-docs/inception/plans/unit-of-work-plan.md. Ready to proceed to generation?**"
-- DO NOT PROCEED until user confirms
-
-## Step 10: Log Approval
-- Log prompt and response in audit.md with timestamp
-- Use ISO 8601 timestamp format
-- Include complete approval prompt text
-
-## Step 11: Update Progress
-- Mark Units Planning complete in aidlc-state.md
-- Update the "Current Status" section
-- Prepare for transition to Units Generation
+## 前置条件
+- 上下文评估必须完成
+- 建议完成需求评估（提供功能范围）
+- 建议完成故事开发（故事映射到单元）
+- 应用设计阶段**必须完成**（确定组件、方法和服务）
+- 执行计划必须指示设计阶段应执行
 
 ---
 
-# PART 2: GENERATION
+# 第一部分：规划
 
-## Step 12: Load Unit of Work Plan
-- [ ] Read the complete plan from `aidlc-docs/inception/plans/unit-of-work-plan.md`
-- [ ] Identify the next uncompleted step (first [ ] checkbox)
-- [ ] Load the context and requirements for that step
+## 步骤 1：创建工作单元计划
+- 生成包含复选框 [] 的系统分解计划
+- 聚焦将系统拆分为可管理的开发单元
+- 每个步骤和子步骤应有复选框 []
 
-## Step 13: Execute Current Step
-- [ ] Perform exactly what the current step describes
-- [ ] Generate unit artifacts as specified in the plan
-- [ ] Follow the approved decomposition approach from Planning
-- [ ] Use the criteria and boundaries specified in the plan
+## 步骤 2：在计划中包含强制单元产物
+**始终**在单元计划中包含这些强制产物：
+- [ ] 生成 `aidlc-docs/inception/application-design/unit-of-work.md`，包含单元定义和职责
+- [ ] 生成 `aidlc-docs/inception/application-design/unit-of-work-dependency.md`，包含依赖矩阵
+- [ ] 生成 `aidlc-docs/inception/application-design/unit-of-work-story-map.md`，映射故事到单元
+- [ ] **仅全新项目**：在 `unit-of-work.md` 中记录代码组织策略（参见 code-generation.md 的结构模式）
+- [ ] 验证单元边界和依赖
+- [ ] 确保所有故事已分配到单元
 
-## Step 14: Update Progress
-- [ ] Mark the completed step as [x] in the unit of work plan
-- [ ] Update `aidlc-docs/aidlc-state.md` current status
-- [ ] Save all generated artifacts
+**前后端分离的单元拆分**（如项目包含前端）：
+- [ ] 后端单元按业务模块拆分：
+  - 每个业务模块作为一个后端单元
+  - 包含：Entity、DAO、Service、Controller
+  - 单元间通过 Service 接口通信
+- [ ] 前端单元按页面模块拆分：
+  - 每个页面模块作为一个前端单元
+  - 包含：types/、api/、store/、views/、components/
+  - 单元间通过路由和 Store 通信
+- [ ] 前后端单元的依赖关系（API 契约）：
+  - 明确每个前端单元依赖哪些后端单元的 API
+  - 定义 API 契约作为前后端单元的连接点
+  - 标注联调顺序和优先级
 
-## Step 15: Continue or Complete
-- [ ] If more steps remain, return to Step 12
-- [ ] If all steps complete, verify units are ready for design stages
-- [ ] Mark Units Generation stage as complete
+## 步骤 3：生成上下文相关的问题
+**指令**：分析需求、故事和应用设计，仅生成与此特定分解问题相关的问题。使用以下类别作为灵感，而非强制清单。如不适用则跳过整个类别。
 
-## Step 16: Present Completion Message
+- 使用 [回答]: 标签格式嵌入问题
+- 聚焦此上下文特有的歧义和缺失信息
+- 仅在需要用户输入进行决策时生成问题
+
+**示例问题类别**（按需调整）：
+- **故事分组** — 仅当存在多个故事且分组策略不清楚时
+- **依赖关系** — 仅当可能有多个单元且集成方式含糊时
+- **团队对齐** — 仅当团队结构或所有权不清楚时
+- **技术考虑** — 仅当不同单元的可扩展性/部署需求不同时
+- **业务领域** — 仅当领域边界或限界上下文不清楚时
+- **代码组织（仅全新多单元项目）** — 询问部署模型和目录结构偏好
+- **前后端拆分策略** — 仅当前后端单元的划分粒度不清楚时
+
+## 步骤 4：保存工作单元计划
+- 保存为 `aidlc-docs/inception/plans/unit-of-work-plan.md`
+- 包含所有 [回答]: 标签供用户输入
+- 确保计划覆盖系统分解的所有方面
+
+## 步骤 5：请求用户输入
+- 请用户直接在计划文档中填写 [回答]: 标签
+- 强调分解决策的重要性
+- 提供完成 [回答]: 标签的清晰说明
+
+## 步骤 6：收集答案
+- 等待用户使用文档中的 [回答]: 标签提供所有问题的答案
+- 在所有 [回答]: 标签完成前不得继续
+- 审查文档确保没有 [回答]: 标签留空
+
+## 步骤 7：分析答案（强制）
+在继续之前，必须仔细审查所有用户答案：
+- **模糊或含糊的回复**："混合"、"介于之间"、"不确定"、"取决于"
+- **未定义的标准或术语**：引用未明确定义的概念
+- **矛盾的答案**：相互冲突的回复
+- **缺失的生成细节**：缺乏具体指导的答案
+- **合并选项的答案**：混合不同方式但无清晰决策规则的回复
+
+## 步骤 8：强制后续问题
+如果步骤 7 的分析发现任何含糊答案，必须：
+- 使用 [回答]: 标签在计划文档中添加具体的后续问题
+- 在所有歧义解决前不得继续审批
+- 需要后续问题的示例：
+  - "你提到'混合 A 和 B' — 什么具体标准决定何时使用 A vs B？"
+  - "你说'介于 A 和 B 之间' — 能定义确切的中间方式吗？"
+  - "你表示'不确定' — 什么额外信息能帮助你决定？"
+  - "你提到'取决于复杂度' — 如何定义复杂度级别？"
+
+## 步骤 9：请求审批
+- 询问："**工作单元计划完成。请审查 aidlc-docs/inception/plans/unit-of-work-plan.md 中的计划。准备好进入生成了吗？**"
+- 在用户确认前不得继续
+
+## 步骤 10：记录审批
+- 在 audit.md 中记录提示和回复及时间戳
+- 使用 ISO 8601 时间戳格式
+- 包含完整的审批提示文本
+
+## 步骤 11：更新进度
+- 在 aidlc-state.md 中标记单元规划完成
+- 更新"当前状态"部分
+- 准备过渡到单元生成
+
+---
+
+# 第二部分：生成
+
+## 步骤 12：加载工作单元计划
+- [ ] 从 `aidlc-docs/inception/plans/unit-of-work-plan.md` 读取完整计划
+- [ ] 识别下一个未完成的步骤（第一个 [ ] 复选框）
+- [ ] 加载该步骤的上下文和需求
+
+## 步骤 13：执行当前步骤
+- [ ] 精确执行当前步骤描述的内容
+- [ ] 按计划中指定的方式生成单元产物
+- [ ] 遵循规划阶段批准的分解方式
+- [ ] 使用计划中指定的标准和边界
+
+## 步骤 14：更新进度
+- [ ] 在工作单元计划中将已完成步骤标记为 [x]
+- [ ] 更新 `aidlc-docs/aidlc-state.md` 当前状态
+- [ ] 保存所有生成的产物
+
+## 步骤 15：继续或完成
+- [ ] 如果还有步骤，返回步骤 12
+- [ ] 如果所有步骤完成，验证单元已准备好进入设计阶段
+- [ ] 标记单元生成阶段完成
+
+## 步骤 16：展示完成消息
 
 ```markdown
-# 🔧 Units Generation Complete
+# 🔧 单元生成完成
 
-[AI-generated summary of units and decomposition created in bullet points]
+[AI 生成的单元和分解摘要，使用要点列表]
 
-> **📋 <u>**REVIEW REQUIRED:**</u>**  
-> Please examine the units generation artifacts at: `aidlc-docs/inception/application-design/`
+> **📋 <u>**需要审查：**</u>**
+> 请检查单元生成产物：`aidlc-docs/inception/application-design/`
 
-> **🚀 <u>**WHAT'S NEXT?**</u>**
+> **🚀 <u>**下一步？**</u>**
 >
-> **You may:**
+> **你可以：**
 >
-> 🔧 **Request Changes** - Ask for modifications to the units generation if required
-> ✅ **Approve & Continue** - Approve units and proceed to **CONSTRUCTION PHASE**
+> 🔧 **请求修改** - 要求修改单元生成
+> ✅ **确认并继续** - 确认单元，进入 **CONSTRUCTION 阶段**
 ```
 
-## Step 17: Wait for Explicit Approval
-- Do not proceed until the user explicitly approves the units generation
-- Approval must be clear and unambiguous
-- If user requests changes, update the units and repeat the approval process
+## 步骤 17：等待明确审批
+- 在用户明确审批前不得继续
+- 审批必须清晰且无歧义
+- 如用户请求修改，更新单元并重复审批流程
 
-## Step 18: Record Approval Response
-- Log the user's approval response with timestamp in `aidlc-docs/audit.md`
-- Include the exact user response text
-- Mark the approval status clearly
+## 步骤 18：记录审批回复
+- 在 `aidlc-docs/audit.md` 中记录用户的审批回复及时间戳
+- 包含用户的确切回复文本
+- 清晰标记审批状态
 
-## Step 19: Update Progress
-- Mark Units Generation stage complete in `aidlc-docs/aidlc-state.md`
-- Update the "Current Status" section
-- Prepare for transition to CONSTRUCTION PHASE
+## 步骤 19：更新进度
+- 在 `aidlc-docs/aidlc-state.md` 中标记单元生成阶段完成
+- 更新"当前状态"部分
+- 准备过渡到 CONSTRUCTION 阶段
 
 ---
 
-## Critical Rules
+## 关键规则
 
-### Planning Phase Rules
-- Generate ONLY context-relevant questions
-- Use [Answer]: tag format for all questions
-- Analyze all answers for ambiguities before proceeding
-- Resolve ALL ambiguities with follow-up questions
-- Get explicit user approval before generation
+### 规划阶段规则
+- 仅生成上下文相关的问题
+- 所有问题使用 [回答]: 标签格式
+- 在继续前分析所有答案中的歧义
+- 用后续问题解决所有歧义
+- 在生成前获取用户明确审批
 
-### Generation Phase Rules
-- **NO HARDCODED LOGIC**: Only execute what's written in the unit of work plan
-- **FOLLOW PLAN EXACTLY**: Do not deviate from the step sequence
-- **UPDATE CHECKBOXES**: Mark [x] immediately after completing each step
-- **USE APPROVED APPROACH**: Follow the decomposition methodology from Planning
-- **VERIFY COMPLETION**: Ensure all unit artifacts are complete before proceeding
+### 生成阶段规则
+- **无硬编码逻辑**：仅执行工作单元计划中写的内容
+- **严格遵循计划**：不偏离步骤顺序
+- **更新复选框**：完成每个步骤后立即标记 [x]
+- **使用批准的方式**：遵循规划阶段的分解方法论
+- **验证完成**：在继续前确保所有单元产物完整
 
-## Completion Criteria
-- All planning questions answered and ambiguities resolved
-- User approval obtained for the plan
-- All steps in unit of work plan marked [x]
-- All unit artifacts generated according to plan:
-  - `unit-of-work.md` with unit definitions
-  - `unit-of-work-dependency.md` with dependency matrix
-  - `unit-of-work-story-map.md` with story mappings
-- Units verified and ready for per-unit design stages
+## 完成标准
+- 所有规划问题已回答且歧义已解决
+- 已获取用户对计划的审批
+- 工作单元计划中所有步骤已标记 [x]
+- 所有单元产物已按计划生成：
+  - `unit-of-work.md` 包含单元定义
+  - `unit-of-work-dependency.md` 包含依赖矩阵
+  - `unit-of-work-story-map.md` 包含故事映射
+- 单元已验证并准备好进入按单元设计阶段

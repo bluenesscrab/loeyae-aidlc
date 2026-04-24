@@ -1,169 +1,176 @@
-# Requirements Analysis (Adaptive)
+# 需求分析（自适应）
 
-**Assume the role** of a product owner
+**角色**：产品负责人
 
-**Adaptive Phase**: Always executes. Detail level adapts to problem complexity.
+**自适应阶段**：始终执行。详细程度根据问题复杂度自适应调整。
 
-**See [depth-levels.md](common-depth-levels.md) for adaptive depth explanation**
+**参见 [depth-levels.md](common-depth-levels.md) 了解自适应深度说明**
 
-## Prerequisites
-- Workspace Detection must be complete
-- Reverse Engineering must be complete (if brownfield)
+## 前置条件
+- 工作区检测必须完成
+- 逆向工程必须完成（如为存量项目）
 
-## Execution Steps
+## 执行步骤
 
-### Step 1: Load Reverse Engineering Context (if available)
+### 步骤 1：加载逆向工程上下文（如可用）
 
-**IF brownfield project**:
-- Load `aidlc-docs/inception/reverse-engineering/architecture.md`
-- Load `aidlc-docs/inception/reverse-engineering/component-inventory.md`
-- Load `aidlc-docs/inception/reverse-engineering/technology-stack.md`
-- Use these to understand existing system when analyzing request
+**如果是存量项目**：
+- 加载 `aidlc-docs/inception/reverse-engineering/architecture.md`
+- 加载 `aidlc-docs/inception/reverse-engineering/component-inventory.md`
+- 加载 `aidlc-docs/inception/reverse-engineering/technology-stack.md`
+- 加载 `aidlc-docs/inception/reverse-engineering/frontend-architecture.md`（如存在）
+- 利用这些信息在分析请求时理解现有系统
 
-### Step 2: Analyze User Request (Intent Analysis)
+### 步骤 2：分析用户请求（意图分析）
 
-#### 2.1 Request Clarity
-- **Clear**: Specific, well-defined, actionable
-- **Vague**: General, ambiguous, needs clarification
-- **Incomplete**: Missing key information
+#### 2.1 请求清晰度
+- **清晰**：具体、明确、可操作
+- **模糊**：笼统、含糊、需要澄清
+- **不完整**：缺少关键信息
 
-#### 2.2 Request Type
-- **New Feature**: Adding new functionality
-- **Bug Fix**: Fixing existing issue
-- **Refactoring**: Improving code structure
-- **Upgrade**: Updating dependencies or frameworks
-- **Migration**: Moving to different technology
-- **Enhancement**: Improving existing feature
-- **New Project**: Starting from scratch
+#### 2.2 请求类型
+- **新功能**：添加新功能
+- **Bug 修复**：修复现有问题
+- **重构**：改善代码结构
+- **升级**：更新依赖或框架
+- **迁移**：迁移到不同技术
+- **增强**：改进现有功能
+- **新项目**：从零开始
 
-#### 2.3 Initial Scope Estimate
-- **Single File**: Changes to one file
-- **Single Component**: Changes to one component/package
-- **Multiple Components**: Changes across multiple components
-- **System-wide**: Changes affecting entire system
-- **Cross-system**: Changes affecting multiple systems
+#### 2.3 初始范围估计
+- **单文件**：修改一个文件
+- **单组件**：修改一个组件/包
+- **多组件**：跨多个组件修改
+- **系统级**：影响整个系统的修改
+- **跨系统**：影响多个系统的修改
 
-#### 2.4 Initial Complexity Estimate
-- **Trivial**: Simple, straightforward change
-- **Simple**: Clear implementation path
-- **Moderate**: Some complexity, multiple considerations
-- **Complex**: Significant complexity, many considerations
+#### 2.4 初始复杂度估计
+- **微小**：简单、直接的修改
+- **简单**：实现路径清晰
+- **中等**：有一定复杂度，需多方面考虑
+- **复杂**：显著复杂度，需大量考虑
 
-### Step 3: Determine Requirements Depth
+### 步骤 3：确定需求深度
 
-**Based on request analysis, determine depth:**
+**根据请求分析确定深度：**
 
-**Minimal Depth** - Use when:
-- Request is clear and simple
-- No detailed requirements needed
-- Just document the basic understanding
+**最小深度** — 适用于：
+- 请求清晰且简单
+- 不需要详细需求
+- 仅记录基本理解
 
-**Standard Depth** - Use when:
-- Request needs clarification
-- Functional and non-functional requirements needed
-- Normal complexity
+**标准深度** — 适用于：
+- 请求需要澄清
+- 需要功能和非功能需求
+- 正常复杂度
 
-**Comprehensive Depth** - Use when:
-- Complex project with multiple stakeholders
-- High risk or critical system
-- Detailed requirements with traceability needed
+**全面深度** — 适用于：
+- 涉及多方干系人的复杂项目
+- 高风险或关键系统
+- 需要详细需求和可追溯性
 
-### Step 4: Assess Current Requirements
+### 步骤 4：评估当前需求
 
-Analyze whatever the user has provided:
-   - Intent statements or descriptions (already logged in audit.md)
-   - Existing requirements documents (search workspace if mentioned)
-   - Pasted content or file references
-   - Convert any non-markdown documents to markdown format 
+分析用户提供的所有内容：
+   - 意图声明或描述（已记录在 audit.md 中）
+   - 现有需求文档（如提及则搜索工作区）
+   - 粘贴的内容或文件引用
+   - 将任何非 markdown 文档转换为 markdown 格式
 
-### Step 5: Thorough Completeness Analysis
+### 步骤 5：全面完整性分析
 
-**CRITICAL**: Use comprehensive analysis to evaluate requirements completeness. Default to asking questions when there is ANY ambiguity or missing detail.
+**关键**：使用全面分析评估需求完整性。有任何歧义或缺失细节时，默认提出问题。
 
-**MANDATORY**: Evaluate ALL of these areas and ask questions for ANY that are unclear:
-- **Functional Requirements**: Core features, user interactions, system behaviors
-- **Non-Functional Requirements**: Performance, security, scalability, usability
-- **User Scenarios**: Use cases, user journeys, edge cases, error scenarios
-- **Business Context**: Goals, constraints, success criteria, stakeholder needs
-- **Technical Context**: Integration points, data requirements, system boundaries
-- **Quality Attributes**: Reliability, maintainability, testability, accessibility
+**强制**：评估以下所有领域，对任何不清楚的领域提出问题：
+- **功能需求**：核心功能、用户交互、系统行为
+- **非功能需求**：性能、安全、可扩展性、可用性
+- **用户场景**：用例、用户旅程、边界情况、错误场景
+- **业务上下文**：目标、约束、成功标准、干系人需求
+- **技术上下文**：集成点、数据需求、系统边界
+- **质量属性**：可靠性、可维护性、可测试性、可访问性
 
-**When in doubt, ask questions** - incomplete requirements lead to poor implementations.
+**前端维度**（如项目包含前端）：
+- **页面需求**：需要哪些页面、页面间导航关系
+- **交互需求**：表单、列表、弹窗、拖拽等交互方式
+- **状态管理需求**：哪些数据需要全局状态管理
+- **设计稿需求**：是否有 Figma 设计稿、设计规范
 
-### Step 6: Generate Clarifying Questions (PROACTIVE APPROACH)
-   - **ALWAYS** create `aidlc-docs/inception/requirements/requirement-verification-questions.md` unless requirements are exceptionally clear and complete
-   - Ask questions about ANY missing, unclear, or ambiguous areas
-   - Focus on functional requirements, non-functional requirements, user scenarios, and business context
-   - Request user to fill in all [Answer]: tags directly in the questions document
-   - If presenting multiple-choice options for answers:
-     - Label the options as A, B, C, D etc.
-     - Ensure options are mutually exclusive and don't overlap
-     - ALWAYS include option for custom response: "X) Other (please describe after [Answer]: tag below)"
-   - Wait for user answers in the document
-   - **MANDATORY**: Analyze ALL answers for ambiguities and create follow-up questions if needed
-   - **MANDATORY**: Keep asking questions until ALL ambiguities are resolved OR user explicitly asks to proceed
+**有疑问就提问** — 不完整的需求会导致糟糕的实现。
 
-### Step 7: Generate Requirements Document
-   - Create `aidlc-docs/inception/requirements/requirements.md`
-   - Include intent analysis summary at the top:
-     - User request
-     - Request type
-     - Scope estimate
-     - Complexity estimate
-   - Include both functional and non-functional requirements
-   - Incorporate user's answers to clarifying questions
-   - Provide brief summary of key requirements
+### 步骤 6：生成澄清问题（主动方式）
+   - **始终**创建 `aidlc-docs/inception/requirements/requirement-verification-questions.md`，除非需求异常清晰完整
+   - 对任何缺失、不清楚或含糊的领域提出问题
+   - 聚焦功能需求、非功能需求、用户场景和业务上下文
+   - 请求用户直接在问题文档中填写所有 [回答]: 标签
+   - 如果提供多选项答案：
+     - 选项标记为 A、B、C、D 等
+     - 确保选项互斥且不重叠
+     - **始终**包含自定义回复选项："X) 其他（请在下方 [回答]: 标签后描述）"
+   - 等待用户在文档中回答
+   - **强制**：分析所有答案中的歧义，如需要则创建后续问题
+   - **强制**：持续提问直到所有歧义解决或用户明确要求继续
 
-### Step 8: Update State Tracking
+### 步骤 7：生成需求文档
+   - 创建 `aidlc-docs/inception/requirements/requirements.md`
+   - 顶部包含意图分析摘要：
+     - 用户请求
+     - 请求类型
+     - 范围估计
+     - 复杂度估计
+   - 包含功能和非功能需求
+   - 纳入用户对澄清问题的回答
+   - 提供关键需求的简要摘要
 
-Update `aidlc-docs/aidlc-state.md`:
+### 步骤 8：更新状态跟踪
+
+更新 `aidlc-docs/aidlc-state.md`：
 
 ```markdown
-## Stage Progress
-### 🔵 INCEPTION PHASE
-- [x] Workspace Detection
-- [x] Reverse Engineering (if applicable)
-- [x] Requirements Analysis
+## 阶段进度
+### 🔵 INCEPTION 阶段
+- [x] 工作区检测
+- [x] 逆向工程（如适用）
+- [x] 需求分析
 ```
 
-### Step 9: Log and Proceed
-   - Log approval prompt with timestamp in `aidlc-docs/audit.md`
-   - Present completion message in this structure:
-     1. **Completion Announcement** (mandatory): Always start with this:
+### 步骤 9：记录并继续
+   - 在 `aidlc-docs/audit.md` 中记录确认提示及时间戳
+   - 按以下结构展示完成消息：
+     1. **完成公告**（强制）：始终以此开头：
 
 ```markdown
-# 🔍 Requirements Analysis Complete
+# 🔍 需求分析完成
 ```
 
-     2. **AI Summary** (optional): Provide structured bullet-point summary of requirements
-        - Format: "Requirements analysis has identified [project type/complexity]:"
-        - List key functional requirements (bullet points)
-        - List key non-functional requirements (bullet points)
-        - Mention architectural considerations or technical decisions if relevant
-        - DO NOT include workflow instructions ("please review", "let me know", "proceed to next phase", "before we proceed")
-        - Keep factual and content-focused
-     3. **Formatted Workflow Message** (mandatory): Always end with this exact format:
+     2. **AI 摘要**（可选）：提供结构化的需求要点摘要
+        - 格式："需求分析已识别 [项目类型/复杂度]："
+        - 列出关键功能需求（要点列表）
+        - 列出关键非功能需求（要点列表）
+        - 如相关，提及架构考虑或技术决策
+        - 不要包含工作流指令（"请审查"、"让我知道"、"进入下一阶段"、"在我们继续之前"）
+        - 保持事实性和内容聚焦
+     3. **格式化工作流消息**（强制）：始终以此格式结尾：
 
 ```markdown
-> **📋 <u>**REVIEW REQUIRED:**</u>**  
-> Please examine the requirements document at: `aidlc-docs/inception/requirements/requirements.md`
+> **📋 <u>**需要审查：**</u>**
+> 请检查需求文档：`aidlc-docs/inception/requirements/requirements.md`
 
 
 
-> **🚀 <u>**WHAT'S NEXT?**</u>**
+> **🚀 <u>**下一步？**</u>**
 >
-> **You may:**
+> **你可以：**
 >
-> 🔧 **Request Changes** -  Ask for modifications to the requirements if required based on your review 
-> [IF User Stories will be skipped, add this option:]
-> 📝 **Add User Stories** - Choose to Include **User Stories** stage (currently skipped based on project simplicity)  
-> ✅ **Approve & Continue** - Approve requirements and proceed to **[User Stories/Workflow Planning]**
+> 🔧 **请求修改** - 根据审查结果要求修改需求
+> [如果用户故事将被跳过，添加此选项：]
+> 📝 **添加用户故事** - 选择包含**用户故事**步骤（当前因项目简单而跳过）
+> ✅ **确认并继续** - 确认需求，进入**[用户故事/工作流规划]**
 
 ---
 ```
 
-**Note**: Include the "Add User Stories" option only when User Stories stage will be skipped. Replace [User Stories/Workflow Planning] with the actual next stage name.
+**注意**：仅当用户故事步骤将被跳过时才包含"添加用户故事"选项。将 [用户故事/工作流规划] 替换为实际的下一步骤名称。
 
-   - Wait for explicit user approval before proceeding
-   - Record approval response with timestamp
-   - Update Requirements Analysis stage complete in aidlc-state.md
+   - 在用户明确确认前不得继续
+   - 记录确认回复及时间戳
+   - 在 aidlc-state.md 中更新需求分析阶段完成状态

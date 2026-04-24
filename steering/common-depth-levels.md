@@ -1,73 +1,73 @@
-# Adaptive Depth
+# 自适应深度
 
-**Purpose**: Explain how AI-DLC adapts detail level to problem complexity
+**目的**：说明 AI-DLC 如何根据问题复杂度调整详细程度
 
-## Core Principle
+## 核心原则
 
-**When a stage executes, ALL its defined artifacts are created. The "depth" refers to the level of detail and rigor within those artifacts, which adapts to the problem's complexity.**
+**当一个阶段执行时，其定义的所有产物都会被创建。"深度"指的是这些产物内部的详细程度和严谨程度，它会根据问题的复杂度进行自适应调整。**
 
-## Stage Selection vs Detail Level
+## 阶段选择 vs 详细程度
 
-### Stage Selection (Binary)
-- **Workflow Planning** decides: EXECUTE or SKIP for each stage
-- **If EXECUTE**: Stage runs and creates ALL its defined artifacts
-- **If SKIP**: Stage doesn't run at all
+### 阶段选择（二元的）
+- **工作流规划**决定：每个阶段是执行（EXECUTE）还是跳过（SKIP）
+- **如果执行**：阶段运行并创建其定义的所有产物
+- **如果跳过**：阶段完全不运行
 
-### Detail Level (Adaptive)
-- **Simple problems**: Concise artifacts with essential detail
-- **Complex problems**: Comprehensive artifacts with extensive detail
-- **Model decides**: Based on problem characteristics, not prescriptive rules
+### 详细程度（自适应的）
+- **简单问题**：简洁的产物，包含必要细节
+- **复杂问题**：全面的产物，包含详尽细节
+- **由模型决定**：基于问题特征，而非预设规则
 
-## Factors Influencing Detail Level
+## 影响详细程度的因素
 
-The model considers these factors when determining appropriate detail:
+模型在确定适当的详细程度时会考虑以下因素：
 
-1. **Request Clarity**: How clear and complete is the user's request?
-2. **Problem Complexity**: How intricate is the solution space?
-3. **Scope**: Single file, component, multiple components, or system-wide?
-4. **Risk Level**: What's the impact of errors or omissions?
-5. **Available Context**: Greenfield vs brownfield, existing documentation
-6. **User Preferences**: Has user expressed preference for brevity or detail?
+1. **需求清晰度**：用户的需求有多清晰和完整？
+2. **问题复杂度**：解决方案空间有多复杂？
+3. **范围**：单个文件、单个组件、多个组件，还是系统级别？
+4. **风险等级**：错误或遗漏的影响有多大？
+5. **可用上下文**：全新项目 vs 已有项目，现有文档情况
+6. **用户偏好**：用户是否表达了对简洁或详细的偏好？
 
-## Example: Requirements Analysis Artifacts
+## 示例：需求分析产物
 
-**All scenarios create the same artifacts**:
-- `requirement-verification-questions.md` (if needed)
+**所有场景创建相同的产物**：
+- `requirement-verification-questions.md`（如需要）
 - `requirements.md`
 
-**Note**: User's initial request is captured in `audit.md` (no separate user-intent.md needed)
+**注意**：用户的初始需求记录在 `audit.md` 中（不需要单独的 user-intent.md）
 
-**Detail level varies by complexity**:
+**详细程度因复杂度而异**：
 
-### Simple Scenario (Bug Fix)
-- **requirement-verification-questions.md**: necessary clarifying questions
-- **requirements.md**: Concise functional requirement, minimal sections
+### 简单场景（Bug 修复）
+- **requirement-verification-questions.md**：必要的澄清问题
+- **requirements.md**：简洁的功能需求，最少的章节
 
-### Complex Scenario (System Migration)
-- **requirement-verification-questions.md**: Multiple rounds, 10+ questions
-- **requirements.md**: Comprehensive functional + non-functional requirements, traceability, acceptance criteria
+### 复杂场景（系统迁移）
+- **requirement-verification-questions.md**：多轮提问，10+ 个问题
+- **requirements.md**：全面的功能 + 非功能需求、可追溯性、验收标准
 
-## Example: Application Design Artifacts
+## 示例：应用设计产物
 
-**All scenarios create the same artifacts**:
+**所有场景创建相同的产物**：
 - `application-design.md`
 - `component-diagram.md`
 
-**Detail level varies by complexity**:
+**详细程度因复杂度而异**：
 
-### Simple Scenario (Single Component)
-- **application-design.md**: Basic component description, key methods
-- **component-diagram.md**: Simple diagram with essential relationships
+### 简单场景（单组件）
+- **application-design.md**：基本的组件描述，关键方法
+- **component-diagram.md**：简单的图表，包含核心关系
 
-### Complex Scenario (Multi-Component System)
-- **application-design.md**: Detailed component responsibilities, all methods with signatures, design patterns, alternatives considered
-- **component-diagram.md**: Comprehensive diagram with all relationships, data flows, integration points
+### 复杂场景（多组件系统）
+- **application-design.md**：详细的组件职责、所有方法及签名、设计模式、备选方案分析
+- **component-diagram.md**：全面的图表，包含所有关系、数据流、集成点
 
-## Guiding Principle for Model
+## 模型指导原则
 
-**"Create exactly the detail needed for the problem at hand - no more, no less."**
+**"为当前问题创建恰到好处的细节——不多也不少。"**
 
-- Don't artificially inflate simple problems with unnecessary detail
-- Don't shortchange complex problems by omitting critical detail
-- Let problem characteristics drive detail level naturally
-- All required artifacts are always created when stage executes
+- 不要为简单问题人为增加不必要的细节
+- 不要因省略关键细节而对复杂问题敷衍了事
+- 让问题特征自然驱动详细程度
+- 当阶段执行时，所有必需的产物始终会被创建

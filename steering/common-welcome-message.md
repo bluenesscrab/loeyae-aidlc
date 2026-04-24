@@ -1,109 +1,96 @@
-# AI-DLC Welcome Message
+# AI-DLC 欢迎消息
 
-**Purpose**: This file contains the user-facing welcome message that should be displayed ONCE at the start of any AI-DLC workflow.
+**用途**：此文件包含在任何 AI-DLC 工作流开始时应显示一次的用户欢迎消息。
 
 ---
 
-# 👋 Welcome to AI-DLC (AI-Driven Development Life Cycle)! 👋
+# 👋 欢迎使用 Loeyae AI-DLC！
 
-I'll guide you through an adaptive software development workflow that intelligently tailors itself to your specific needs.
+我将引导你完成一个自适应的软件开发工作流，智能地根据你的具体需求进行调整。
 
-## What is AI-DLC?
+## 什么是 AI-DLC？
 
-AI-DLC is a structured yet flexible software development process that adapts to your project's needs. Think of it as having an experienced software architect who:
+AI-DLC 是一个结构化但灵活的软件开发流程，能适应你的项目需求。可以把它想象成一位经验丰富的软件架构师：
 
-- **Analyzes your requirements** and asks clarifying questions when needed
-- **Plans the optimal approach** based on complexity and risk
-- **Skips unnecessary steps** for simple changes while providing comprehensive coverage for complex projects
-- **Documents everything** so you have a complete record of decisions and rationale
-- **Guides you through each phase** with clear checkpoints and approval gates
+- **分析你的需求**，在需要时提出澄清问题
+- **规划最优方案**，基于复杂度和风险评估
+- **跳过不必要的步骤**，简单变更只执行核心阶段，复杂项目提供全面覆盖
+- **记录一切**，让你拥有完整的决策和理由记录
+- **引导你完成每个阶段**，设有清晰的检查点和审批关卡
 
-## The Three-Phase Lifecycle
+## 两阶段生命周期
 
 ```
-                         User Request
-                              |
-                              v
-        ╔═══════════════════════════════════════╗
-        ║     INCEPTION PHASE                   ║
-        ║     Planning & Application Design     ║
-        ╠═══════════════════════════════════════╣
-        ║ • Workspace Detection (ALWAYS)        ║
-        ║ • Reverse Engineering (COND)          ║
-        ║ • Requirements Analysis (ALWAYS)      ║
-        ║ • User Stories (CONDITIONAL)          ║
-        ║ • Workflow Planning (ALWAYS)          ║
-        ║ • Application Design (CONDITIONAL)    ║
-        ║ • Units Generation (CONDITIONAL)      ║
-        ╚═══════════════════════════════════════╝
-                              |
-                              v
-        ╔═══════════════════════════════════════╗
-        ║     CONSTRUCTION PHASE                ║
-        ║     Design, Implementation & Test     ║
-        ╠═══════════════════════════════════════╣
-        ║ • Per-Unit Loop (for each unit):      ║
-        ║   - Functional Design (COND)          ║
-        ║   - NFR Requirements Assess (COND)    ║
-        ║   - NFR Design (COND)                 ║
-        ║   - Infrastructure Design (COND)      ║
-        ║   - Code Generation (ALWAYS)          ║
-        ║ • Build and Test (ALWAYS)             ║
-        ╚═══════════════════════════════════════╝
-                              |
-                              v
-        ╔═══════════════════════════════════════╗
-        ║     OPERATIONS PHASE                  ║
-        ║     Placeholder for Future            ║
-        ╠═══════════════════════════════════════╣
-        ║ • Operations (PLACEHOLDER)            ║
-        ╚═══════════════════════════════════════╝
-                              |
-                              v
-                          Complete
+                         用户请求
+                            |
+                            v
+        +=======================================+
+        |     INCEPTION 阶段                     |
+        |     规划与应用设计                      |
+        +=======================================+
+        | * 工作区检测 (必执行)                    |
+        | * 逆向工程 (条件)                       |
+        | * 需求分析 (必执行)                      |
+        | * 用户故事 (条件)                        |
+        | * 工作流规划 (必执行)                     |
+        | * 应用设计 (条件)                        |
+        | * 单元生成 (条件)                        |
+        +=======================================+
+                            |
+                            v
+        +=======================================+
+        |     CONSTRUCTION 阶段                  |
+        |     设计、实现与测试                     |
+        +=======================================+
+        | * Per-Unit 循环 (每个单元):              |
+        |   - 功能设计 (条件)                      |
+        |   - NFR 需求评估 (条件)                  |
+        |   - NFR 设计 (条件)                      |
+        |   - 基础设施设计 (条件)                   |
+        |   - 代码生成 (必执行)                     |
+        | * 构建和测试 (必执行)                     |
+        +=======================================+
+                            |
+                            v
+                          完成
 ```
 
-### Phase Breakdown:
+### 阶段说明：
 
-**INCEPTION PHASE** - *Planning & Application Design*
-- **Purpose**: Determines WHAT to build and WHY
-- **Activities**: Understanding requirements, analyzing existing code (if any), planning the approach
-- **Output**: Clear requirements, execution plan, decisions on the number of units of work for parallel development
-- **Your Role**: Answer questions, review plans, approve direction
+**INCEPTION 阶段** - *规划与应用设计*
+- **目的**：确定做什么（WHAT）和为什么做（WHY）
+- **活动**：理解需求、分析现有代码（如有）、规划方案
+- **产出**：清晰的需求、执行计划、工作单元划分决策
+- **你的角色**：回答问题、审查计划、批准方向
 
-**CONSTRUCTION PHASE** - *Detailed Design, Implementation & Test*
-- **Purpose**: Determines HOW to build it
-- **Activities**: Detailed design (when needed), code generation, comprehensive testing
-- **Output**: Working code, tests, build instructions
-- **Your Role**: Review designs, approve implementation plans, validate results
+**CONSTRUCTION 阶段** - *详细设计、实现与测试*
+- **目的**：确定怎么做（HOW）
+- **活动**：详细设计（需要时）、代码生成、全面测试
+- **产出**：可运行的代码、测试、构建指导
+- **你的角色**：审查设计、批准实现计划、验证结果
 
-**OPERATIONS PHASE** - *Deployment & Monitoring (Future)*
-- **Purpose**: How to DEPLOY and RUN it
-- **Status**: Placeholder for future deployment and monitoring workflows
-- **Current State**: Build and test activities handled in CONSTRUCTION phase
+## 核心原则：
 
-## Key Principles:
+- ⚡ **完全自适应**：每个阶段独立评估是否需要
+- 🎯 **高效**：简单变更只执行核心阶段
+- 📋 **全面**：复杂变更获得完整处理和所有保障
+- 🔍 **透明**：开始工作前你会看到并批准执行计划
+- 📝 **有记录**：所有决策和变更的完整审计记录
+- 🎛️ **用户控制**：你可以请求包含或排除阶段
 
-- ⚡ **Fully Adaptive**: Each stage independently evaluated based on your needs
-- 🎯 **Efficient**: Simple changes execute only essential stages
-- 📋 **Comprehensive**: Complex changes get full treatment with all safeguards
-- 🔍 **Transparent**: You see and approve the execution plan before work begins
-- 📝 **Documented**: Complete audit trail of all decisions and changes
-- 🎛️ **User Control**: You can request stages be included or excluded
+## 接下来会发生什么：
 
-## What Happens Next:
+1. **我会分析你的工作区**，了解这是新项目还是现有项目
+2. **我会收集需求**，需要时提出澄清问题
+3. **我会创建执行计划**，展示我建议运行哪些阶段及原因
+4. **你来审查和批准**计划（或请求修改）
+5. **我们执行计划**，每个主要阶段都有检查点
+6. **你会得到可运行的代码**，附带完整文档和测试
 
-1. **I'll analyze your workspace** to understand if this is a new or existing project
-2. **I'll gather requirements** and ask clarifying questions if needed
-3. **I'll create an execution plan** showing which stages I propose to run and why
-4. **You'll review and approve** the plan (or request changes)
-5. **We'll execute the plan** with checkpoints at each major stage
-6. **You'll get working code** with complete documentation and tests
+AI-DLC 流程会适应：
+- 📋 你的意图清晰度和复杂度
+- 🔍 现有代码库状态
+- 🎯 变更的范围和影响
+- ⚡ 风险和质量要求
 
-The AI-DLC process adapts to:
-- 📋 Your intent clarity and complexity
-- 🔍 Existing codebase state
-- 🎯 Scope and impact of changes
-- ⚡ Risk and quality requirements
-
-Let's begin!
+让我们开始吧！

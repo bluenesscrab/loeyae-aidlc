@@ -1,94 +1,103 @@
-# Infrastructure Design
+# 基础设施设计
 
-## Prerequisites
-- Functional Design must be complete for the unit
-- NFR Design recommended (provides logical components to map)
-- Execution plan must indicate Infrastructure Design stage should execute
+## 前置条件
+- 该单元的功能设计必须完成
+- 建议完成 NFR 设计（提供需映射的逻辑组件）
+- 执行计划必须指示基础设施设计阶段应执行
 
-## Overview
-Map logical software components to actual infrastructure choices for deployment environments.
+## 概述
+将逻辑软件组件映射到实际基础设施选择，用于部署环境。
 
-## Steps to Execute
+## 执行步骤
 
-### Step 1: Analyze Design Artifacts
-- Read functional design from `aidlc-docs/construction/{unit-name}/functional-design/`
-- Read NFR design from `aidlc-docs/construction/{unit-name}/nfr-design/` (if exists)
-- Identify logical components needing infrastructure
+### 步骤 1：分析设计产物
+- 从 `aidlc-docs/construction/{unit-name}/functional-design/` 读取功能设计
+- 从 `aidlc-docs/construction/{unit-name}/nfr-design/` 读取 NFR 设计（如存在）
+- 识别需要基础设施的逻辑组件
 
-### Step 2: Create Infrastructure Design Plan
-- Generate plan with checkboxes [] for infrastructure design
-- Focus on mapping to actual services (AWS, Azure, GCP, on-premise)
-- Each step should have a checkbox []
+### 步骤 2：创建基础设施设计计划
+- 生成包含复选框 [] 的基础设施设计计划
+- 聚焦映射到实际服务（AWS、Azure、GCP、本地部署）
+- 每个步骤应有复选框 []
 
-### Step 3: Generate Context-Appropriate Questions
-**DIRECTIVE**: Analyze the functional and NFR design to generate ONLY questions relevant to THIS specific unit's infrastructure needs. Use the categories below as inspiration, NOT as a mandatory checklist. Skip entire categories if not applicable.
+### 步骤 3：生成上下文相关的问题
+**指令**：分析功能和 NFR 设计，仅生成与此特定单元基础设施需求相关的问题。使用以下类别作为灵感，而非强制清单。如不适用则跳过整个类别。
 
-- EMBED questions using [Answer]: tag format
-- Focus on ambiguities and missing information specific to this unit
-- Generate questions only where user input is needed for infrastructure decisions
+- 使用 [回答]: 标签格式嵌入问题
+- 聚焦此单元特有的歧义和缺失信息
+- 仅在需要用户输入进行基础设施决策时生成问题
 
-**Example question categories** (adapt as needed):
-- **Deployment Environment** - Only if cloud provider or environment setup is unclear
-- **Compute Infrastructure** - Only if compute service choice needs clarification
-- **Storage Infrastructure** - Only if database or storage selection is ambiguous
-- **Messaging Infrastructure** - Only if messaging/queuing services need specification
-- **Networking Infrastructure** - Only if load balancing or API gateway approach is unclear
-- **Monitoring Infrastructure** - Only if observability tooling needs clarification
-- **Shared Infrastructure** - Only if infrastructure sharing strategy is ambiguous
+**示例问题类别**（按需调整）：
+- **部署环境** — 仅当云提供商或环境设置不清楚时
+- **计算基础设施** — 仅当计算服务选择需要澄清时
+- **存储基础设施** — 仅当数据库或存储选择含糊时
+- **消息基础设施** — 仅当消息/队列服务需要指定时
+- **网络基础设施** — 仅当负载均衡或 API 网关方式不清楚时
+- **监控基础设施** — 仅当可观测性工具需要澄清时
+- **共享基础设施** — 仅当基础设施共享策略含糊时
 
-### Step 4: Store Plan
-- Save as `aidlc-docs/construction/plans/{unit-name}-infrastructure-design-plan.md`
-- Include all [Answer]: tags for user input
+**前端基础设施维度**（如项目包含前端）：
+- **前端构建配置** — Vite 配置、构建优化、代码分割策略
+- **静态资源部署** — CDN 配置、Nginx 配置、资源缓存策略
+- **环境变量管理** — .env 文件配置、环境区分（dev/staging/prod）
 
-### Step 5: Collect and Analyze Answers
-- Wait for user to complete all [Answer]: tags
-- Review for vague or ambiguous responses
-- Add follow-up questions if needed
+### 步骤 4：保存计划
+- 保存为 `aidlc-docs/construction/plans/{unit-name}-infrastructure-design-plan.md`
+- 包含所有 [回答]: 标签供用户输入
 
-### Step 6: Generate Infrastructure Design Artifacts
-- Create `aidlc-docs/construction/{unit-name}/infrastructure-design/infrastructure-design.md`
-- Create `aidlc-docs/construction/{unit-name}/infrastructure-design/deployment-architecture.md`
-- If shared infrastructure: Create `aidlc-docs/construction/shared-infrastructure.md`
+### 步骤 5：收集和分析答案
+- 等待用户完成所有 [回答]: 标签
+- 审查模糊或含糊的回复
+- 如需要则添加后续问题
 
-### Step 7: Present Completion Message
-- Present completion message in this structure:
-     1. **Completion Announcement** (mandatory): Always start with this:
+### 步骤 6：生成基础设施设计产物
+- 创建 `aidlc-docs/construction/{unit-name}/infrastructure-design/infrastructure-design.md`
+- 创建 `aidlc-docs/construction/{unit-name}/infrastructure-design/deployment-architecture.md`
+- 如有共享基础设施：创建 `aidlc-docs/construction/shared-infrastructure.md`
+
+**前端基础设施产物**（如为前端单元）：
+- 创建 `aidlc-docs/construction/{unit-name}/infrastructure-design/frontend-build-config.md`（前端构建配置）
+- 创建 `aidlc-docs/construction/{unit-name}/infrastructure-design/frontend-deployment.md`（前端部署方案）
+
+### 步骤 7：展示完成消息
+- 按以下结构展示完成消息：
+     1. **完成公告**（强制）：始终以此开头：
 
 ```markdown
-# 🏢 Infrastructure Design Complete - [unit-name]
+# 🏢 基础设施设计完成 - [unit-name]
 ```
 
-     2. **AI Summary** (optional): Provide structured bullet-point summary of infrastructure design
-        - Format: "Infrastructure design has mapped [description]:"
-        - List key infrastructure services and components (bullet points)
-        - List deployment architecture decisions and rationale
-        - Mention cloud provider choices and service mappings
-        - DO NOT include workflow instructions ("please review", "let me know", "proceed to next phase", "before we proceed")
-        - Keep factual and content-focused
-     3. **Formatted Workflow Message** (mandatory): Always end with this exact format:
+     2. **AI 摘要**（可选）：提供基础设施设计的结构化要点摘要
+        - 格式："基础设施设计已映射 [描述]："
+        - 列出关键基础设施服务和组件（要点列表）
+        - 列出部署架构决策和理由
+        - 提及云提供商选择和服务映射
+        - 不要包含工作流指令
+        - 保持事实性和内容聚焦
+     3. **格式化工作流消息**（强制）：始终以此格式结尾：
 
 ```markdown
-> **📋 <u>**REVIEW REQUIRED:**</u>**  
-> Please examine the infrastructure design at: `aidlc-docs/construction/[unit-name]/infrastructure-design/`
+> **📋 <u>**需要审查：**</u>**
+> 请检查基础设施设计：`aidlc-docs/construction/[unit-name]/infrastructure-design/`
 
 
 
-> **🚀 <u>**WHAT'S NEXT?**</u>**
+> **🚀 <u>**下一步？**</u>**
 >
-> **You may:**
+> **你可以：**
 >
-> 🔧 **Request Changes** - Ask for modifications to the infrastructure design based on your review  
-> ✅ **Continue to Next Stage** - Approve infrastructure design and proceed to **Code Generation**
+> 🔧 **请求修改** - 根据审查结果要求修改基础设施设计
+> ✅ **继续下一阶段** - 确认基础设施设计，进入**代码生成**
 
 ---
 ```
 
-### Step 8: Wait for Explicit Approval
-- Do not proceed until the user explicitly approves the infrastructure design
-- Approval must be clear and unambiguous
-- If user requests changes, update the design and repeat the approval process
+### 步骤 8：等待明确审批
+- 在用户明确审批前不得继续
+- 审批必须清晰且无歧义
+- 如用户请求修改，更新设计并重复审批流程
 
-### Step 9: Record Approval and Update Progress
-- Log approval in audit.md with timestamp
-- Record the user's approval response with timestamp
-- Mark Infrastructure Design stage complete in aidlc-state.md
+### 步骤 9：记录审批并更新进度
+- 在 audit.md 中记录审批及时间戳
+- 记录用户的审批回复及时间戳
+- 在 aidlc-state.md 中标记基础设施设计阶段完成

@@ -1,311 +1,381 @@
-# Reverse Engineering
+# 逆向工程
 
-**Purpose**: Analyze existing codebase and generate comprehensive design artifacts
+**目的**：分析现有代码库，生成全面的设计产物
 
-**Execute when**: Brownfield project detected (existing code found in workspace)
+**执行条件**：检测到存量项目（工作区中发现现有代码）
 
-**Skip when**: Greenfield project (no existing code)
+**跳过条件**：全新项目（无现有代码）
 
-**Rerun behavior**: Always rerun when brownfield project detected, even if artifacts exist. This ensures artifacts reflect current code state
+**重新执行行为**：检测到存量项目时始终重新执行，即使产物已存在。这确保产物反映当前代码状态
 
-## Step 1: Multi-Package Discovery
+## 步骤 1：多包发现
 
-### 1.1 Scan Workspace
-- All packages (not just mentioned ones)
-- Package relationships via config files
-- Package types: Application, CDK/Infrastructure, Models, Clients, Tests
+### 1.1 扫描工作区
+- 所有包（不仅是提到的）
+- 通过配置文件发现包关系
+- 包类型：应用、CDK/基础设施、模型、客户端、测试
 
-### 1.2 Understand the Business Context
-- The core business that the system is implementing overall
-- The business overview of every package
-- List of Business Transactions that are implemented in the system
+### 1.2 理解业务上下文
+- 系统整体实现的核心业务
+- 每个包的业务概述
+- 系统中实现的业务事务列表
 
-### 1.3 Infrastructure Discovery
-- CDK packages (package.json with CDK dependencies)
-- Terraform (.tf files)
-- CloudFormation (.yaml/.json templates)
-- Deployment scripts
+### 1.3 基础设施发现
+- CDK 包（package.json 中含 CDK 依赖）
+- Terraform（.tf 文件）
+- CloudFormation（.yaml/.json 模板）
+- 部署脚本
 
-### 1.4 Build System Discovery
-- Build systems: Brazil, Maven, Gradle, npm
-- Config files for build-system declarations
-- Build dependencies between packages
+### 1.4 构建系统发现
+- 构建系统：Maven, Gradle, npm, pnpm
+- 构建系统声明的配置文件
+- 包之间的构建依赖
 
-### 1.5 Service Architecture Discovery
-- Lambda functions (handlers, triggers)
-- Container services (Docker/ECS configs)
-- API definitions (Smithy models, OpenAPI specs)
-- Data stores (DynamoDB, S3, etc.)
+### 1.5 服务架构发现
+- Lambda 函数（处理器、触发器）
+- 容器服务（Docker/ECS 配置）
+- API 定义（Smithy 模型、OpenAPI 规范）
+- 数据存储（DynamoDB, S3 等）
 
-### 1.6 Code Quality Analysis
-- Programming languages and frameworks
-- Test coverage indicators
-- Linting configurations
-- CI/CD pipelines
+### 1.6 代码质量分析
+- 编程语言和框架
+- 测试覆盖率指标
+- Lint 配置
+- CI/CD 流水线
 
-## Step 1: Generate Business Overview Documentation
+### 1.7 前端代码分析
 
-Create `aidlc-docs/inception/reverse-engineering/business-overview.md`:
+**扫描前端目录结构：**
+- `src/views/` — 页面级组件
+- `src/components/` — 公共组件
+- `src/api/` — API 接口定义
+- `src/store/` 或 `src/stores/` — 状态管理（Pinia）
+- `src/router/` — 路由配置
+- `src/utils/` — 工具函数
+- `src/types/` — TypeScript 类型定义
+- `src/locales/` — 国际化文件
+
+**识别前端架构：**
+- Vue 组件结构（页面组件、业务组件、公共组件层级）
+- 路由配置（路由表、路由守卫、动态路由）
+- Store 定义（Pinia Store 划分、状态管理模式）
+- API 调用关系（接口定义、请求拦截器、响应处理）
+- 前端构建配置（Vite 配置、环境变量、代理设置）
+
+## 步骤 2：生成业务概述文档
+
+创建 `aidlc-docs/inception/reverse-engineering/business-overview.md`：
 
 ```markdown
-# Business Overview
+# 业务概述
 
-## Business Context Diagram
-[Mermaid diagram showing the Business Context]
+## 业务上下文图
+[Mermaid 图展示业务上下文]
 
-## Business Description
-- **Business Description**: [Overall Business description of what the system does]
-- **Business Transactions**: [List of Business Transactions that the system implements and their descriptions]
-- **Business Dictionary**: [Business dictionary terms that the system follows and their meaning]
+## 业务描述
+- **业务描述**：[系统整体业务描述]
+- **业务事务**：[系统实现的业务事务列表及描述]
+- **业务词典**：[系统遵循的业务词典术语及含义]
 
-## Component Level Business Descriptions
-### [Package/Component Name]
-- **Purpose**: [What it does from the business perspective]
-- **Responsibilities**: [Key responsibilities]
+## 组件级业务描述
+### [包/组件名称]
+- **用途**：[从业务角度描述其功能]
+- **职责**：[关键职责]
 ```
 
-## Step 2: Generate Architecture Documentation
+## 步骤 3：生成架构文档
 
-Create `aidlc-docs/inception/reverse-engineering/architecture.md`:
+创建 `aidlc-docs/inception/reverse-engineering/architecture.md`：
 
 ```markdown
-# System Architecture
+# 系统架构
 
-## System Overview
-[High-level description of the system]
+## 系统概述
+[系统高层描述]
 
-## Architecture Diagram
-[Mermaid diagram showing all packages, services, data stores, relationships]
+## 架构图
+[Mermaid 图展示所有包、服务、数据存储、关系]
 
-## Component Descriptions
-### [Package/Component Name]
-- **Purpose**: [What it does]
-- **Responsibilities**: [Key responsibilities]
-- **Dependencies**: [What it depends on]
-- **Type**: [Application/Infrastructure/Model/Client/Test]
+## 组件描述
+### [包/组件名称]
+- **用途**：[功能描述]
+- **职责**：[关键职责]
+- **依赖**：[依赖项]
+- **类型**：[应用/基础设施/模型/客户端/测试]
 
-## Data Flow
-[Mermaid sequence diagram of key workflows]
+## 数据流
+[Mermaid 时序图展示关键工作流]
 
-## Integration Points
-- **External APIs**: [List with purposes]
-- **Databases**: [List with purposes]
-- **Third-party Services**: [List with purposes]
+## 集成点
+- **外部 API**：[列表及用途]
+- **数据库**：[列表及用途]
+- **第三方服务**：[列表及用途]
 
-## Infrastructure Components
-- **CDK Stacks**: [List with purposes]
-- **Deployment Model**: [Description]
-- **Networking**: [VPC, subnets, security groups]
+## 基础设施组件
+- **CDK 栈**：[列表及用途]
+- **部署模型**：[描述]
+- **网络**：[VPC、子网、安全组]
 ```
 
-## Step 3: Generate Code Structure Documentation
+## 步骤 4：生成代码结构文档
 
-Create `aidlc-docs/inception/reverse-engineering/code-structure.md`:
+创建 `aidlc-docs/inception/reverse-engineering/code-structure.md`：
 
 ```markdown
-# Code Structure
+# 代码结构
 
-## Build System
-- **Type**: [Maven/Gradle/npm/Brazil]
-- **Configuration**: [Key build files and settings]
+## 构建系统
+- **类型**：[Maven/Gradle/npm/pnpm]
+- **配置**：[关键构建文件和设置]
 
-## Key Classes/Modules
-[Mermaid class diagram or module hierarchy]
+## 关键类/模块
+[Mermaid 类图或模块层级]
 
-### Existing Files Inventory
-[List all source files with their purposes - these are candidates for modification in brownfield projects]
+### 现有文件清单
+[列出所有源文件及其用途 — 这些是存量项目中可能修改的候选文件]
 
-**Example format**:
-- `[path/to/file]` - [Purpose/responsibility]
+**示例格式**：
+- `[文件路径]` - [用途/职责]
 
-## Design Patterns
-### [Pattern Name]
-- **Location**: [Where used]
-- **Purpose**: [Why used]
-- **Implementation**: [How implemented]
+## 设计模式
+### [模式名称]
+- **位置**：[使用位置]
+- **用途**：[使用原因]
+- **实现**：[实现方式]
 
-## Critical Dependencies
-### [Dependency Name]
-- **Version**: [Version number]
-- **Usage**: [How and where used]
-- **Purpose**: [Why needed]
+## 关键依赖
+### [依赖名称]
+- **版本**：[版本号]
+- **用法**：[使用方式和位置]
+- **用途**：[需要原因]
 ```
 
-## Step 4: Generate API Documentation
+## 步骤 5：生成 API 文档
 
-Create `aidlc-docs/inception/reverse-engineering/api-documentation.md`:
+创建 `aidlc-docs/inception/reverse-engineering/api-documentation.md`：
 
 ```markdown
-# API Documentation
+# API 文档
 
-## REST APIs
-### [Endpoint Name]
-- **Method**: [GET/POST/PUT/DELETE]
-- **Path**: [/api/path]
-- **Purpose**: [What it does]
-- **Request**: [Request format]
-- **Response**: [Response format]
+## REST API
+### [端点名称]
+- **方法**：[GET/POST/PUT/DELETE]
+- **路径**：[/api/path]
+- **用途**：[功能描述]
+- **请求**：[请求格式]
+- **响应**：[响应格式]
 
-## Internal APIs
-### [Interface/Class Name]
-- **Methods**: [List with signatures]
-- **Parameters**: [Parameter descriptions]
-- **Return Types**: [Return type descriptions]
+## 内部 API
+### [接口/类名称]
+- **方法**：[方法签名列表]
+- **参数**：[参数描述]
+- **返回类型**：[返回类型描述]
 
-## Data Models
-### [Model Name]
-- **Fields**: [Field descriptions]
-- **Relationships**: [Related models]
-- **Validation**: [Validation rules]
+## 数据模型
+### [模型名称]
+- **字段**：[字段描述]
+- **关系**：[关联模型]
+- **校验**：[校验规则]
 ```
 
-## Step 5: Generate Component Inventory
+## 步骤 6：生成前端架构文档
 
-Create `aidlc-docs/inception/reverse-engineering/component-inventory.md`:
+创建 `aidlc-docs/inception/reverse-engineering/frontend-architecture.md`：
 
 ```markdown
-# Component Inventory
+# 前端架构
 
-## Application Packages
-- [Package name] - [Purpose]
+## 技术栈
+- **框架**：[Vue 3/React/其他]
+- **UI 框架**：[Element Plus/Ant Design Vue/其他]
+- **构建工具**：[Vite/Webpack]
+- **状态管理**：[Pinia/Vuex]
+- **路由**：[Vue Router]
 
-## Infrastructure Packages
-- [Package name] - [CDK/Terraform] - [Purpose]
+## 组件树
+[Mermaid 图展示组件层级关系]
 
-## Shared Packages
-- [Package name] - [Models/Utilities/Clients] - [Purpose]
+### 页面组件（views/）
+- `[页面路径]` - [页面用途]
 
-## Test Packages
-- [Package name] - [Integration/Load/Unit] - [Purpose]
+### 公共组件（components/）
+- `[组件路径]` - [组件用途]
 
-## Total Count
-- **Total Packages**: [Number]
-- **Application**: [Number]
-- **Infrastructure**: [Number]
-- **Shared**: [Number]
-- **Test**: [Number]
+## 路由表
+### [路由模块名称]
+- **路径**：[路由路径]
+- **组件**：[对应组件]
+- **权限**：[权限要求]
+
+## API 调用关系
+### [API 模块名称]
+- **基础路径**：[API 前缀]
+- **接口列表**：[接口方法及用途]
+- **调用方**：[哪些页面/组件调用]
+
+## Store 定义
+### [Store 名称]
+- **状态**：[管理的状态数据]
+- **操作**：[关键 actions]
+- **使用方**：[哪些组件使用]
 ```
 
-## Step 6: Generate Technology Stack Documentation
+## 步骤 7：生成组件清单
 
-Create `aidlc-docs/inception/reverse-engineering/technology-stack.md`:
+创建 `aidlc-docs/inception/reverse-engineering/component-inventory.md`：
 
 ```markdown
-# Technology Stack
+# 组件清单
 
-## Programming Languages
-- [Language] - [Version] - [Usage]
+## 应用包
+- [包名称] - [用途]
 
-## Frameworks
-- [Framework] - [Version] - [Purpose]
+## 基础设施包
+- [包名称] - [CDK/Terraform] - [用途]
 
-## Infrastructure
-- [Service] - [Purpose]
+## 共享包
+- [包名称] - [模型/工具/客户端] - [用途]
 
-## Build Tools
-- [Tool] - [Version] - [Purpose]
+## 测试包
+- [包名称] - [集成/负载/单元] - [用途]
 
-## Testing Tools
-- [Tool] - [Version] - [Purpose]
+## 前端模块
+- [模块名称] - [页面/组件/Store] - [用途]
+
+## 总计
+- **总包数**：[数量]
+- **应用**：[数量]
+- **基础设施**：[数量]
+- **共享**：[数量]
+- **测试**：[数量]
+- **前端模块**：[数量]
 ```
 
-## Step 7: Generate Dependencies Documentation
+## 步骤 8：生成技术栈文档
 
-Create `aidlc-docs/inception/reverse-engineering/dependencies.md`:
+创建 `aidlc-docs/inception/reverse-engineering/technology-stack.md`：
 
 ```markdown
-# Dependencies
+# 技术栈
 
-## Internal Dependencies
-[Mermaid diagram showing package dependencies]
+## 编程语言
+- [语言] - [版本] - [用途]
 
-### [Package A] depends on [Package B]
-- **Type**: [Compile/Runtime/Test]
-- **Reason**: [Why dependency exists]
+## 后端框架
+- [框架] - [版本] - [用途]
 
-## External Dependencies
-### [Dependency Name]
-- **Version**: [Version]
-- **Purpose**: [Why used]
-- **License**: [License type]
+## 前端框架
+- [框架] - [版本] - [用途]
+
+## 基础设施
+- [服务] - [用途]
+
+## 构建工具
+- [工具] - [版本] - [用途]
+
+## 测试工具
+- [工具] - [版本] - [用途]
 ```
 
-## Step 8: Generate Code Quality Assessment
+## 步骤 9：生成依赖文档
 
-Create `aidlc-docs/inception/reverse-engineering/code-quality-assessment.md`:
+创建 `aidlc-docs/inception/reverse-engineering/dependencies.md`：
 
 ```markdown
-# Code Quality Assessment
+# 依赖关系
 
-## Test Coverage
-- **Overall**: [Percentage or Good/Fair/Poor/None]
-- **Unit Tests**: [Status]
-- **Integration Tests**: [Status]
+## 内部依赖
+[Mermaid 图展示包依赖关系]
 
-## Code Quality Indicators
-- **Linting**: [Configured/Not configured]
-- **Code Style**: [Consistent/Inconsistent]
-- **Documentation**: [Good/Fair/Poor]
+### [包 A] 依赖 [包 B]
+- **类型**：[编译/运行时/测试]
+- **原因**：[依赖存在的原因]
 
-## Technical Debt
-- [Issue description and location]
-
-## Patterns and Anti-patterns
-- **Good Patterns**: [List]
-- **Anti-patterns**: [List with locations]
+## 外部依赖
+### [依赖名称]
+- **版本**：[版本]
+- **用途**：[使用原因]
+- **许可证**：[许可证类型]
 ```
 
-## Step 9: Create Timestamp File
+## 步骤 10：生成代码质量评估
 
-Create `aidlc-docs/inception/reverse-engineering/reverse-engineering-timestamp.md`:
+创建 `aidlc-docs/inception/reverse-engineering/code-quality-assessment.md`：
 
 ```markdown
-# Reverse Engineering Metadata
+# 代码质量评估
 
-**Analysis Date**: [ISO timestamp]
-**Analyzer**: AI-DLC
-**Workspace**: [Workspace path]
-**Total Files Analyzed**: [Number]
+## 测试覆盖率
+- **整体**：[百分比或 好/一般/差/无]
+- **单元测试**：[状态]
+- **集成测试**：[状态]
 
-## Artifacts Generated
+## 代码质量指标
+- **Lint**：[已配置/未配置]
+- **代码风格**：[一致/不一致]
+- **文档**：[好/一般/差]
+
+## 技术债务
+- [问题描述和位置]
+
+## 模式与反模式
+- **良好模式**：[列表]
+- **反模式**：[列表及位置]
+```
+
+## 步骤 11：创建时间戳文件
+
+创建 `aidlc-docs/inception/reverse-engineering/reverse-engineering-timestamp.md`：
+
+```markdown
+# 逆向工程元数据
+
+**分析日期**：[ISO 时间戳]
+**分析器**：AI-DLC
+**工作区**：[工作区路径]
+**分析文件总数**：[数量]
+
+## 生成的产物
+- [x] business-overview.md
 - [x] architecture.md
 - [x] code-structure.md
 - [x] api-documentation.md
+- [x] frontend-architecture.md
 - [x] component-inventory.md
 - [x] technology-stack.md
 - [x] dependencies.md
 - [x] code-quality-assessment.md
 ```
 
-## Step 10: Update State Tracking
+## 步骤 12：更新状态跟踪
 
-Update `aidlc-docs/aidlc-state.md`:
-
-```markdown
-## Reverse Engineering Status
-- [x] Reverse Engineering - Completed on [timestamp]
-- **Artifacts Location**: aidlc-docs/inception/reverse-engineering/
-```
-
-## Step 11: Present Completion Message to User
+更新 `aidlc-docs/aidlc-state.md`：
 
 ```markdown
-# 🔍 Reverse Engineering Complete
-
-[AI-generated summary of key findings from analysis in the form of bullet points]
-
-> **📋 <u>**REVIEW REQUIRED:**</u>**  
-> Please examine the reverse engineering artifacts at: `aidlc-docs/inception/reverse-engineering/`
-
-> **🚀 <u>**WHAT'S NEXT?**</u>**
->
-> **You may:**
->
-> 🔧 **Request Changes** - Ask for modifications to the reverse engineering analysis if required
-> ✅ **Approve & Continue** - Approve analysis and proceed to **Requirements Analysis**
+## 逆向工程状态
+- [x] 逆向工程 - 完成于 [时间戳]
+- **产物位置**：aidlc-docs/inception/reverse-engineering/
 ```
 
-## Step 12: Wait for User Approval
+## 步骤 13：向用户展示完成消息
 
-- **MANDATORY**: Do not proceed until user explicitly approves
-- **MANDATORY**: Log user's response in audit.md with complete raw input
+```markdown
+# 🔍 逆向工程完成
+
+[AI 生成的分析关键发现摘要，使用要点列表]
+
+> **📋 <u>**需要审查：**</u>**
+> 请检查逆向工程产物：`aidlc-docs/inception/reverse-engineering/`
+
+> **🚀 <u>**下一步？**</u>**
+>
+> **你可以：**
+>
+> 🔧 **请求修改** - 如需修改逆向工程分析结果
+> ✅ **确认并继续** - 确认分析结果，进入**需求分析**
+```
+
+## 步骤 14：等待用户确认
+
+- **强制**：在用户明确确认前不得继续
+- **强制**：在 audit.md 中记录用户的完整原始回复

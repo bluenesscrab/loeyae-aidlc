@@ -1,145 +1,184 @@
-# Application Design - Detailed Steps
+# 应用设计 - 详细步骤
 
-## Purpose
-**High-level component identification and service layer design**
+## 目的
+**高层组件识别和服务层设计**
 
-Application Design focuses on:
-- Identifying main functional components and their responsibilities
-- Defining component interfaces (not detailed business logic)
-- Designing service layer for orchestration
-- Establishing component dependencies and communication patterns
+应用设计聚焦于：
+- 识别主要功能组件及其职责
+- 定义组件接口（非详细业务逻辑）
+- 设计服务层编排
+- 建立组件依赖和通信模式
 
-**Note**: Detailed business logic design happens later in Functional Design (per-unit, CONSTRUCTION phase)
+**注意**：详细业务逻辑设计在后续的功能设计中进行（按单元，CONSTRUCTION 阶段）
 
-## Prerequisites
-- Context Assessment must be complete
-- Requirements Assessment recommended (provides functional context)
-- Story Development recommended (user stories guide design decisions)
-- Execution plan must indicate Application Design stage should execute
+## 前置条件
+- 上下文评估必须完成
+- 建议完成需求评估（提供功能上下文）
+- 建议完成故事开发（用户故事指导设计决策）
+- 执行计划必须指示应用设计阶段应执行
 
-## Step-by-Step Execution
+## 逐步执行
 
-### 1. Analyze Context
-- Read `aidlc-docs/inception/requirements/requirements.md` and `aidlc-docs/inception/user-stories/stories.md`
-- Identify key business capabilities and functional areas
-- Determine design scope and complexity
+### 1. 分析上下文
+- 读取 `aidlc-docs/inception/requirements/requirements.md` 和 `aidlc-docs/inception/user-stories/stories.md`
+- 识别关键业务能力和功能领域
+- 确定设计范围和复杂度
 
-### 2. Create Application Design Plan
-- Generate plan with checkboxes [] for application design
-- Focus on components, responsibilities, methods, business rules, and services
-- Each step and sub-step should have a checkbox []
+### 2. 创建应用设计计划
+- 生成包含复选框 [] 的应用设计计划
+- 聚焦组件、职责、方法、业务规则和服务
+- 每个步骤和子步骤应有复选框 []
 
-### 3. Include Mandatory Design Artifacts in Plan
-- **ALWAYS** include these mandatory artifacts in the design plan:
-  - [ ] Generate components.md with component definitions and high-level responsibilities
-  - [ ] Generate component-methods.md with method signatures (business rules detailed later in Functional Design)
-  - [ ] Generate services.md with service definitions and orchestration patterns
-  - [ ] Generate component-dependency.md with dependency relationships and communication patterns
-  - [ ] Validate design completeness and consistency
+### 3. 在计划中包含强制设计产物
+- **始终**在设计计划中包含这些强制产物：
+  - [ ] 生成 components.md，包含组件定义和高层职责
+  - [ ] 生成 component-methods.md，包含方法签名（详细业务规则在功能设计中定义）
+  - [ ] 生成 services.md，包含服务定义和编排模式
+  - [ ] 生成 component-dependency.md，包含依赖关系和通信模式
+  - [ ] 验证设计完整性和一致性
 
-### 4. Generate Context-Appropriate Questions
-**DIRECTIVE**: Analyze the requirements and stories to generate ONLY questions relevant to THIS specific application design. Use the categories below as inspiration, NOT as a mandatory checklist. Skip entire categories if not applicable.
+**前端设计产物**（如项目包含前端）：
+  - [ ] 生成 frontend-components.md，包含前端组件设计：
+    - 页面组件拆分（页面 → 区块 → 组件）
+    - 组件层级关系和复用策略
+  - [ ] 生成 frontend-routes.md，包含前端路由设计：
+    - 路由结构和嵌套关系
+    - 路由守卫和权限控制
+    - 动态路由配置
+  - [ ] 生成 api-contracts.md，包含前后端接口契约：
+    - API 路径和方法
+    - 请求/响应数据结构
+    - 错误码定义
+    - 分页/排序约定
+  - [ ] 生成 state-management.md，包含状态管理设计：
+    - Pinia Store 划分策略
+    - 全局状态 vs 局部状态
+    - Store 间依赖关系
 
-- EMBED questions using [Answer]: tag format
-- Focus on ambiguities and missing information specific to this context
-- Generate questions only where user input is needed for design decisions
+### 4. 生成上下文相关的问题
+**指令**：分析需求和故事，仅生成与此特定应用设计相关的问题。使用以下类别作为灵感，而非强制清单。如不适用则跳过整个类别。
 
-**Example question categories** (adapt as needed):
-- **Component Identification** - Only if component boundaries or organization is unclear
-- **Component Methods** - Only if method signatures need clarification (detailed business rules come later)
-- **Service Layer Design** - Only if service orchestration or boundaries are ambiguous
-- **Component Dependencies** - Only if communication patterns or dependency management is unclear
-- **Design Patterns** - Only if architectural style or pattern choice needs user input
+- 使用 [回答]: 标签格式嵌入问题
+- 聚焦此上下文特有的歧义和缺失信息
+- 仅在需要用户输入进行设计决策时生成问题
 
-### 5. Store Application Design Plan
-- Save as `aidlc-docs/inception/plans/application-design-plan.md`
-- Include all [Answer]: tags for user input
-- Ensure plan covers all design aspects
+**示例问题类别**（按需调整）：
+- **组件识别** — 仅当组件边界或组织不清楚时
+- **组件方法** — 仅当方法签名需要澄清时（详细业务规则后续定义）
+- **服务层设计** — 仅当服务编排或边界含糊时
+- **组件依赖** — 仅当通信模式或依赖管理不清楚时
+- **设计模式** — 仅当架构风格或模式选择需要用户输入时
+- **前端组件拆分** — 仅当页面组件层级或复用策略不清楚时
+- **前后端接口契约** — 仅当 API 设计需要澄清时
+- **状态管理策略** — 仅当 Store 划分或状态管理方式不清楚时
 
-### 6. Request User Input
-- Ask user to fill [Answer]: tags directly in the plan document
-- Emphasize importance of design decisions
-- Provide clear instructions on completing the [Answer]: tags
+### 5. 保存应用设计计划
+- 保存为 `aidlc-docs/inception/plans/application-design-plan.md`
+- 包含所有 [回答]: 标签供用户输入
+- 确保计划覆盖所有设计方面
 
-### 7. Collect Answers
-- Wait for user to provide answers to all questions using [Answer]: tags in the document
-- Do not proceed until ALL [Answer]: tags are completed
-- Review the document to ensure no [Answer]: tags are left blank
+### 6. 请求用户输入
+- 请用户直接在计划文档中填写 [回答]: 标签
+- 强调设计决策的重要性
+- 提供完成 [回答]: 标签的清晰说明
 
-### 8. ANALYZE ANSWERS (MANDATORY)
-Before proceeding, you MUST carefully review all user answers for:
-- **Vague or ambiguous responses**: "mix of", "somewhere between", "not sure", "depends"
-- **Undefined criteria or terms**: References to concepts without clear definitions
-- **Contradictory answers**: Responses that conflict with each other
-- **Missing design details**: Answers that lack specific guidance
-- **Answers that combine options**: Responses that merge different approaches without clear decision rules
+### 7. 收集答案
+- 等待用户使用文档中的 [回答]: 标签提供所有问题的答案
+- 在所有 [回答]: 标签完成前不得继续
+- 审查文档确保没有 [回答]: 标签留空
 
-### 9. MANDATORY Follow-up Questions
-If the analysis in step 8 reveals ANY ambiguous answers, you MUST:
-- Add specific follow-up questions to the plan document using [Answer]: tags
-- DO NOT proceed to approval until all ambiguities are resolved
-- Examples of required follow-ups:
-  - "You mentioned 'mix of A and B' - what specific criteria should determine when to use A vs B?"
-  - "You said 'somewhere between A and B' - can you define the exact middle ground approach?"
-  - "You indicated 'not sure' - what additional information would help you decide?"
-  - "You mentioned 'depends on complexity' - how do you define complexity levels?"
+### 8. 分析答案（强制）
+在继续之前，必须仔细审查所有用户答案：
+- **模糊或含糊的回复**："混合"、"介于之间"、"不确定"、"取决于"
+- **未定义的标准或术语**：引用未明确定义的概念
+- **矛盾的答案**：相互冲突的回复
+- **缺失的设计细节**：缺乏具体指导的答案
+- **合并选项的答案**：混合不同方式但无清晰决策规则的回复
 
-### 10. Generate Application Design Artifacts
-- Execute the approved plan to generate design artifacts
-- Create `aidlc-docs/inception/application-design/components.md` with:
-  - Component name and purpose
-  - Component responsibilities
-  - Component interfaces
-- Create `aidlc-docs/inception/application-design/component-methods.md` with:
-  - Method signatures for each component
-  - High-level purpose of each method
-  - Input/output types
-  - Note: Detailed business rules will be defined in Functional Design (per-unit, CONSTRUCTION phase)
-- Create `aidlc-docs/inception/application-design/services.md` with:
-  - Service definitions
-  - Service responsibilities
-  - Service interactions and orchestration
-- Create `aidlc-docs/inception/application-design/component-dependency.md` with:
-  - Dependency matrix showing relationships
-  - Communication patterns between components
-  - Data flow diagrams
+### 9. 强制后续问题
+如果步骤 8 的分析发现任何含糊答案，必须：
+- 使用 [回答]: 标签在计划文档中添加具体的后续问题
+- 在所有歧义解决前不得继续审批
+- 需要后续问题的示例：
+  - "你提到'混合 A 和 B' — 什么具体标准决定何时使用 A vs B？"
+  - "你说'介于 A 和 B 之间' — 能定义确切的中间方式吗？"
+  - "你表示'不确定' — 什么额外信息能帮助你决定？"
+  - "你提到'取决于复杂度' — 如何定义复杂度级别？"
 
-### 11. Log Approval
-- Log approval prompt with timestamp in `aidlc-docs/audit.md`
-- Include complete approval prompt text
-- Use ISO 8601 timestamp format
+### 10. 生成应用设计产物
+- 执行批准的计划生成设计产物
+- 创建 `aidlc-docs/inception/application-design/components.md`，包含：
+  - 组件名称和用途
+  - 组件职责
+  - 组件接口
+- 创建 `aidlc-docs/inception/application-design/component-methods.md`，包含：
+  - 每个组件的方法签名
+  - 每个方法的高层用途
+  - 输入/输出类型
+  - 注意：详细业务规则将在功能设计中定义（按单元，CONSTRUCTION 阶段）
+- 创建 `aidlc-docs/inception/application-design/services.md`，包含：
+  - 服务定义
+  - 服务职责
+  - 服务交互和编排
+- 创建 `aidlc-docs/inception/application-design/component-dependency.md`，包含：
+  - 显示关系的依赖矩阵
+  - 组件间通信模式
+  - 数据流图
 
-### 12. Present Completion Message
+**前端设计产物**（如项目包含前端）：
+- 创建 `aidlc-docs/inception/application-design/frontend-components.md`，包含：
+  - 页面组件拆分方案
+  - 组件层级关系图
+  - 公共组件复用策略
+- 创建 `aidlc-docs/inception/application-design/frontend-routes.md`，包含：
+  - 路由结构设计
+  - 路由守卫配置
+  - 动态路由方案
+- 创建 `aidlc-docs/inception/application-design/api-contracts.md`，包含：
+  - 前后端接口契约定义
+  - 请求/响应数据结构
+  - 错误码和状态码约定
+- 创建 `aidlc-docs/inception/application-design/state-management.md`，包含：
+  - Pinia Store 划分方案
+  - 状态管理模式
+  - Store 间依赖关系
+
+### 11. 记录审批
+- 在 `aidlc-docs/audit.md` 中记录审批提示及时间戳
+- 包含完整的审批提示文本
+- 使用 ISO 8601 时间戳格式
+
+### 12. 展示完成消息
 
 ```markdown
-# 🏗️ Application Design Complete
+# 🏗️ 应用设计完成
 
-[AI-generated summary of application design artifacts created in bullet points]
+[AI 生成的应用设计产物摘要，使用要点列表]
 
-> **📋 <u>**REVIEW REQUIRED:**</u>**  
-> Please examine the application design artifacts at: `aidlc-docs/inception/application-design/`
+> **📋 <u>**需要审查：**</u>**
+> 请检查应用设计产物：`aidlc-docs/inception/application-design/`
 
-> **🚀 <u>**WHAT'S NEXT?**</u>**
+> **🚀 <u>**下一步？**</u>**
 >
-> **You may:**
+> **你可以：**
 >
-> 🔧 **Request Changes** - Ask for modifications to the application design if required
-> [IF Units Generation is skipped:]
-> 📝 **Add Units Generation** - Choose to include **Units Generation** stage (currently skipped)
-> ✅ **Approve & Continue** - Approve design and proceed to **[Units Generation/CONSTRUCTION PHASE]**
+> 🔧 **请求修改** - 要求修改应用设计
+> [如果单元生成被跳过：]
+> 📝 **添加单元生成** - 选择包含**单元生成**步骤（当前已跳过）
+> ✅ **确认并继续** - 确认设计，进入**[单元生成/CONSTRUCTION 阶段]**
 ```
 
-### 13. Wait for Explicit Approval
-- Do not proceed until the user explicitly approves the application design
-- Approval must be clear and unambiguous
-- If user requests changes, update the design and repeat the approval process
+### 13. 等待明确审批
+- 在用户明确审批前不得继续
+- 审批必须清晰且无歧义
+- 如用户请求修改，更新设计并重复审批流程
 
-### 14. Record Approval Response
-- Log the user's approval response with timestamp in `aidlc-docs/audit.md`
-- Include the exact user response text
-- Mark the approval status clearly
+### 14. 记录审批回复
+- 在 `aidlc-docs/audit.md` 中记录用户的审批回复及时间戳
+- 包含用户的确切回复文本
+- 清晰标记审批状态
 
-### 15. Update Progress
-- Mark Application Design stage complete in `aidlc-docs/aidlc-state.md`
-- Update the "Current Status" section
-- Prepare for transition to next stage
+### 15. 更新进度
+- 在 `aidlc-docs/aidlc-state.md` 中标记应用设计阶段完成
+- 更新"当前状态"部分
+- 准备过渡到下一阶段

@@ -1,349 +1,376 @@
-# Build and Test
+# 构建和测试
 
-**Purpose**: Build all units and execute comprehensive testing strategy
+**目的**：构建所有单元并执行全面的测试策略
 
-## Prerequisites
-- Code Generation must be complete for all units
-- All code artifacts must be generated
-- Project is ready for build and testing
-
----
-
-## Step 1: Analyze Testing Requirements
-
-Analyze the project to determine appropriate testing strategy:
-- **Unit tests**: Already generated per unit during code generation
-- **Integration tests**: Test interactions between units/services
-- **Performance tests**: Load, stress, and scalability testing
-- **End-to-end tests**: Complete user workflows
-- **Contract tests**: API contract validation between services
-- **Security tests**: Vulnerability scanning, penetration testing
+## 前置条件
+- 所有单元的代码生成必须完成
+- 所有代码产物必须已生成
+- 项目已准备好进行构建和测试
 
 ---
 
-## Step 2: Generate Build Instructions
+## 步骤 1：分析测试需求
 
-Create `aidlc-docs/construction/build-and-test/build-instructions.md`:
+分析项目以确定适当的测试策略：
+- **单元测试**：在代码生成期间已按单元生成
+- **集成测试**：测试单元/服务间的交互
+- **性能测试**：负载、压力和可扩展性测试
+- **端到端测试**：完整用户工作流
+- **契约测试**：服务间 API 契约验证
+- **安全测试**：漏洞扫描、渗透测试
+
+---
+
+## 步骤 2：生成构建指令
+
+创建 `aidlc-docs/construction/build-and-test/build-instructions.md`：
 
 ```markdown
-# Build Instructions
+# 构建指令
 
-## Prerequisites
-- **Build Tool**: [Tool name and version]
-- **Dependencies**: [List all required dependencies]
-- **Environment Variables**: [List required env vars]
-- **System Requirements**: [OS, memory, disk space]
+## 前置条件
+- **构建工具**：[工具名称和版本]
+- **依赖**：[列出所有必需依赖]
+- **环境变量**：[列出必需环境变量]
+- **系统要求**：[操作系统、内存、磁盘空间]
 
-## Build Steps
+## 后端构建步骤
 
-### 1. Install Dependencies
+### 1. 安装依赖
 \`\`\`bash
-[Command to install dependencies]
-# Example: npm install, mvn dependency:resolve, pip install -r requirements.txt
+[安装依赖的命令]
+# 示例：mvn dependency:resolve
 \`\`\`
 
-### 2. Configure Environment
+### 2. 配置环境
 \`\`\`bash
-[Commands to set up environment]
-# Example: export variables, configure credentials
+[设置环境的命令]
+# 示例：导出变量、配置凭证
 \`\`\`
 
-### 3. Build All Units
+### 3. 构建所有单元
 \`\`\`bash
-[Command to build all units]
-# Example: mvn clean install, npm run build, brazil-build
+[构建所有单元的命令]
+# 示例：mvn clean install
 \`\`\`
 
-### 4. Verify Build Success
-- **Expected Output**: [Describe successful build output]
-- **Build Artifacts**: [List generated artifacts and locations]
-- **Common Warnings**: [Note any acceptable warnings]
+### 4. 验证构建成功
+- **预期输出**：[描述成功构建输出]
+- **构建产物**：[列出生成的产物和位置]
+- **常见警告**：[注明可接受的警告]
 
-## Troubleshooting
+## 前端构建步骤
 
-### Build Fails with Dependency Errors
-- **Cause**: [Common causes]
-- **Solution**: [Step-by-step fix]
+### 1. 安装依赖
+\`\`\`bash
+pnpm install
+\`\`\`
 
-### Build Fails with Compilation Errors
-- **Cause**: [Common causes]
-- **Solution**: [Step-by-step fix]
+### 2. 代码检查
+\`\`\`bash
+pnpm lint:all    # ESLint + Prettier 检查
+\`\`\`
+
+### 3. 构建
+\`\`\`bash
+pnpm build:dev   # 开发环境构建
+pnpm build:prod  # 生产环境构建
+\`\`\`
+
+### 4. 预览
+\`\`\`bash
+pnpm preview     # 预览构建结果
+\`\`\`
+
+## 故障排除
+
+### 构建因依赖错误失败
+- **原因**：[常见原因]
+- **解决方案**：[逐步修复]
+
+### 构建因编译错误失败
+- **原因**：[常见原因]
+- **解决方案**：[逐步修复]
 ```
 
 ---
 
-## Step 3: Generate Unit Test Execution Instructions
+## 步骤 3：生成单元测试执行指令
 
-Create `aidlc-docs/construction/build-and-test/unit-test-instructions.md`:
+创建 `aidlc-docs/construction/build-and-test/unit-test-instructions.md`：
 
 ```markdown
-# Unit Test Execution
+# 单元测试执行
 
-## Run Unit Tests
+## 运行单元测试
 
-### 1. Execute All Unit Tests
+### 1. 执行所有单元测试
 \`\`\`bash
-[Command to run all unit tests]
-# Example: mvn test, npm test, pytest tests/unit
+[运行所有单元测试的命令]
+# 后端示例：mvn test
+# 前端示例：pnpm test:unit
 \`\`\`
 
-### 2. Review Test Results
-- **Expected**: [X] tests pass, 0 failures
-- **Test Coverage**: [Expected coverage percentage]
-- **Test Report Location**: [Path to test reports]
+### 2. 审查测试结果
+- **预期**：[X] 个测试通过，0 个失败
+- **测试覆盖率**：[预期覆盖率百分比]
+- **测试报告位置**：[测试报告路径]
 
-### 3. Fix Failing Tests
-If tests fail:
-1. Review test output in [location]
-2. Identify failing test cases
-3. Fix code issues
-4. Rerun tests until all pass
+### 3. 修复失败的测试
+如果测试失败：
+1. 在 [位置] 审查测试输出
+2. 识别失败的测试用例
+3. 修复代码问题
+4. 重新运行测试直到全部通过
 ```
 
 ---
 
-## Step 4: Generate Integration Test Instructions
+## 步骤 4：生成集成测试指令
 
-Create `aidlc-docs/construction/build-and-test/integration-test-instructions.md`:
+创建 `aidlc-docs/construction/build-and-test/integration-test-instructions.md`：
 
 ```markdown
-# Integration Test Instructions
+# 集成测试指令
 
-## Purpose
-Test interactions between units/services to ensure they work together correctly.
+## 目的
+测试单元/服务间的交互，确保它们正确协同工作。
 
-## Test Scenarios
+## 测试场景
 
-### Scenario 1: [Unit A] → [Unit B] Integration
-- **Description**: [What is being tested]
-- **Setup**: [Required test environment setup]
-- **Test Steps**: [Step-by-step test execution]
-- **Expected Results**: [What should happen]
-- **Cleanup**: [How to clean up after test]
+### 场景 1：[单元 A] → [单元 B] 集成
+- **描述**：[测试内容]
+- **设置**：[必需的测试环境设置]
+- **测试步骤**：[逐步测试执行]
+- **预期结果**：[应该发生什么]
+- **清理**：[测试后如何清理]
 
-### Scenario 2: [Unit B] → [Unit C] Integration
-[Similar structure]
+### 场景 2：前后端联调
+- **描述**：验证前端 API 调用与后端接口的一致性
+- **设置**：启动后端服务，配置前端代理
+- **测试步骤**：按页面模块逐一验证接口调用
+- **预期结果**：所有接口返回正确数据，错误处理正常
 
-## Setup Integration Test Environment
+## 设置集成测试环境
 
-### 1. Start Required Services
+### 1. 启动必需服务
 \`\`\`bash
-[Commands to start services]
-# Example: docker-compose up, start test database
+[启动服务的命令]
+# 示例：docker-compose up, 启动测试数据库
 \`\`\`
 
-### 2. Configure Service Endpoints
+### 2. 配置服务端点
 \`\`\`bash
-[Commands to configure endpoints]
-# Example: export API_URL=http://localhost:8080
+[配置端点的命令]
+# 示例：export API_URL=http://localhost:8080
 \`\`\`
 
-## Run Integration Tests
+## 运行集成测试
 
-### 1. Execute Integration Test Suite
+### 1. 执行集成测试套件
 \`\`\`bash
-[Command to run integration tests]
-# Example: mvn integration-test, npm run test:integration
+[运行集成测试的命令]
+# 后端示例：mvn integration-test
 \`\`\`
 
-### 2. Verify Service Interactions
-- **Test Scenarios**: [List key integration test scenarios]
-- **Expected Results**: [Describe expected outcomes]
-- **Logs Location**: [Where to check logs]
+### 2. 验证服务交互
+- **测试场景**：[列出关键集成测试场景]
+- **预期结果**：[描述预期结果]
+- **日志位置**：[查看日志的位置]
 
-### 3. Cleanup
+### 3. 清理
 \`\`\`bash
-[Commands to clean up test environment]
-# Example: docker-compose down, stop test services
+[清理测试环境的命令]
+# 示例：docker-compose down, 停止测试服务
 \`\`\`
 ```
 
 ---
 
-## Step 5: Generate Performance Test Instructions (If Applicable)
+## 步骤 5：生成性能测试指令（如适用）
 
-Create `aidlc-docs/construction/build-and-test/performance-test-instructions.md`:
+创建 `aidlc-docs/construction/build-and-test/performance-test-instructions.md`：
 
 ```markdown
-# Performance Test Instructions
+# 性能测试指令
 
-## Purpose
-Validate system performance under load to ensure it meets requirements.
+## 目的
+在负载下验证系统性能，确保满足需求。
 
-## Performance Requirements
-- **Response Time**: < [X]ms for [Y]% of requests
-- **Throughput**: [X] requests/second
-- **Concurrent Users**: Support [X] concurrent users
-- **Error Rate**: < [X]%
+## 性能需求
+- **响应时间**：< [X]ms（[Y]% 的请求）
+- **吞吐量**：[X] 请求/秒
+- **并发用户**：支持 [X] 个并发用户
+- **错误率**：< [X]%
 
-## Setup Performance Test Environment
+## 设置性能测试环境
 
-### 1. Prepare Test Environment
+### 1. 准备测试环境
 \`\`\`bash
-[Commands to set up performance testing]
-# Example: scale services, configure load balancers
+[设置性能测试的命令]
+# 示例：扩展服务、配置负载均衡器
 \`\`\`
 
-### 2. Configure Test Parameters
-- **Test Duration**: [X] minutes
-- **Ramp-up Time**: [X] seconds
-- **Virtual Users**: [X] users
+### 2. 配置测试参数
+- **测试时长**：[X] 分钟
+- **预热时间**：[X] 秒
+- **虚拟用户**：[X] 个用户
 
-## Run Performance Tests
+## 运行性能测试
 
-### 1. Execute Load Tests
+### 1. 执行负载测试
 \`\`\`bash
-[Command to run load tests]
-# Example: jmeter -n -t test.jmx, k6 run script.js
+[运行负载测试的命令]
+# 示例：jmeter -n -t test.jmx, k6 run script.js
 \`\`\`
 
-### 2. Execute Stress Tests
+### 2. 执行压力测试
 \`\`\`bash
-[Command to run stress tests]
-# Example: gradually increase load until failure
+[运行压力测试的命令]
+# 示例：逐步增加负载直到失败
 \`\`\`
 
-### 3. Analyze Performance Results
-- **Response Time**: [Actual vs Expected]
-- **Throughput**: [Actual vs Expected]
-- **Error Rate**: [Actual vs Expected]
-- **Bottlenecks**: [Identified bottlenecks]
-- **Results Location**: [Path to performance reports]
+### 3. 分析性能结果
+- **响应时间**：[实际 vs 预期]
+- **吞吐量**：[实际 vs 预期]
+- **错误率**：[实际 vs 预期]
+- **瓶颈**：[识别的瓶颈]
+- **结果位置**：[性能报告路径]
 
-## Performance Optimization
+## 性能优化
 
-If performance doesn't meet requirements:
-1. Identify bottlenecks from test results
-2. Optimize code/queries/configurations
-3. Rerun tests to validate improvements
+如果性能不满足需求：
+1. 从测试结果识别瓶颈
+2. 优化代码/查询/配置
+3. 重新运行测试验证改进
 ```
 
 ---
 
-## Step 6: Generate Additional Test Instructions (As Needed)
+## 步骤 6：生成额外测试指令（按需）
 
-Based on project requirements, generate additional test instruction files:
+根据项目需求，生成额外的测试指令文件：
 
-### Contract Tests (For Microservices)
-Create `aidlc-docs/construction/build-and-test/contract-test-instructions.md`:
-- API contract validation between services
-- Consumer-driven contract testing
-- Schema validation
+### 契约测试（微服务）
+创建 `aidlc-docs/construction/build-and-test/contract-test-instructions.md`：
+- 服务间 API 契约验证
+- 消费者驱动的契约测试
+- Schema 验证
 
-### Security Tests
-Create `aidlc-docs/construction/build-and-test/security-test-instructions.md`:
-- Vulnerability scanning
-- Dependency security checks
-- Authentication/authorization testing
-- Input validation testing
+### 安全测试
+创建 `aidlc-docs/construction/build-and-test/security-test-instructions.md`：
+- 漏洞扫描
+- 依赖安全检查
+- 认证/授权测试
+- 输入校验测试
 
-### End-to-End Tests
-Create `aidlc-docs/construction/build-and-test/e2e-test-instructions.md`:
-- Complete user workflow testing
-- Cross-service scenarios
-- UI testing (if applicable)
+### 端到端测试
+创建 `aidlc-docs/construction/build-and-test/e2e-test-instructions.md`：
+- 完整用户工作流测试
+- 跨服务场景
+- UI 测试（如适用）
 
 ---
 
-## Step 7: Generate Test Summary
+## 步骤 7：生成测试摘要
 
-Create `aidlc-docs/construction/build-and-test/build-and-test-summary.md`:
+创建 `aidlc-docs/construction/build-and-test/build-and-test-summary.md`：
 
 ```markdown
-# Build and Test Summary
+# 构建和测试摘要
 
-## Build Status
-- **Build Tool**: [Tool name]
-- **Build Status**: [Success/Failed]
-- **Build Artifacts**: [List artifacts]
-- **Build Time**: [Duration]
+## 构建状态
+- **构建工具**：[工具名称]
+- **构建状态**：[成功/失败]
+- **构建产物**：[列出产物]
+- **构建时间**：[时长]
 
-## Test Execution Summary
+## 测试执行摘要
 
-### Unit Tests
-- **Total Tests**: [X]
-- **Passed**: [X]
-- **Failed**: [X]
-- **Coverage**: [X]%
-- **Status**: [Pass/Fail]
+### 单元测试
+- **总测试数**：[X]
+- **通过**：[X]
+- **失败**：[X]
+- **覆盖率**：[X]%
+- **状态**：[通过/失败]
 
-### Integration Tests
-- **Test Scenarios**: [X]
-- **Passed**: [X]
-- **Failed**: [X]
-- **Status**: [Pass/Fail]
+### 集成测试
+- **测试场景**：[X]
+- **通过**：[X]
+- **失败**：[X]
+- **状态**：[通过/失败]
 
-### Performance Tests
-- **Response Time**: [Actual] (Target: [Expected])
-- **Throughput**: [Actual] (Target: [Expected])
-- **Error Rate**: [Actual] (Target: [Expected])
-- **Status**: [Pass/Fail]
+### 性能测试
+- **响应时间**：[实际]（目标：[预期]）
+- **吞吐量**：[实际]（目标：[预期]）
+- **错误率**：[实际]（目标：[预期]）
+- **状态**：[通过/失败]
 
-### Additional Tests
-- **Contract Tests**: [Pass/Fail/N/A]
-- **Security Tests**: [Pass/Fail/N/A]
-- **E2E Tests**: [Pass/Fail/N/A]
+### 额外测试
+- **契约测试**：[通过/失败/不适用]
+- **安全测试**：[通过/失败/不适用]
+- **端到端测试**：[通过/失败/不适用]
 
-## Overall Status
-- **Build**: [Success/Failed]
-- **All Tests**: [Pass/Fail]
-- **Ready for Operations**: [Yes/No]
+## 整体状态
+- **构建**：[成功/失败]
+- **所有测试**：[通过/失败]
+- **准备就绪**：[是/否]
 
-## Next Steps
-[If all pass]: Ready to proceed to Operations phase for deployment planning
-[If failures]: Address failing tests and rebuild
+## 下一步
+[如全部通过]：项目完成，可进行部署
+[如有失败]：修复失败的测试并重新构建
 ```
 
 ---
 
-## Step 8: Update State Tracking
+## 步骤 8：更新状态跟踪
 
-Update `aidlc-docs/aidlc-state.md`:
-- Mark Build and Test stage as complete
-- Update current status
+更新 `aidlc-docs/aidlc-state.md`：
+- 标记构建和测试阶段完成
+- 更新当前状态
 
 ---
 
-## Step 9: Present Results to User
+## 步骤 9：向用户展示结果
 
-Present comprehensive message:
+展示全面消息：
 
 ```
-"🔨 Build and Test Complete!
+"🔨 构建和测试完成！
 
-**Build Status**: [Success/Failed]
+**构建状态**：[成功/失败]
 
-**Test Results**:
-✅ Unit Tests: [X] passed
-✅ Integration Tests: [X] scenarios passed
-✅ Performance Tests: [Status]
-✅ Additional Tests: [Status]
+**测试结果**：
+✅ 单元测试：[X] 个通过
+✅ 集成测试：[X] 个场景通过
+✅ 性能测试：[状态]
+✅ 额外测试：[状态]
 
-**Generated Files**:
+**生成的文件**：
 1. ✅ build-instructions.md
 2. ✅ unit-test-instructions.md
 3. ✅ integration-test-instructions.md
-4. ✅ performance-test-instructions.md (if applicable)
-5. ✅ [additional test files as needed]
+4. ✅ performance-test-instructions.md（如适用）
+5. ✅ [按需的额外测试文件]
 6. ✅ build-and-test-summary.md
 
-Review the summary in aidlc-docs/construction/build-and-test/build-and-test-summary.md
+请审查摘要：aidlc-docs/construction/build-and-test/build-and-test-summary.md
 
-**Ready to proceed to Operations stage for deployment planning?""
+**项目已完成，准备就绪。**"
 ```
 
 ---
 
-## Step 10: Log Interaction
+## 步骤 10：记录交互
 
-**MANDATORY**: Log the phase completion in `aidlc-docs/audit.md`:
+**强制**：在 `aidlc-docs/audit.md` 中记录阶段完成：
 
 ```markdown
-## Build and Test Stage
-**Timestamp**: [ISO timestamp]
-**Build Status**: [Success/Failed]
-**Test Status**: [Pass/Fail]
-**Files Generated**:
+## 构建和测试阶段
+**时间戳**：[ISO 时间戳]
+**构建状态**：[成功/失败]
+**测试状态**：[通过/失败]
+**生成的文件**：
 - build-instructions.md
 - unit-test-instructions.md
 - integration-test-instructions.md

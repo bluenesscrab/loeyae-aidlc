@@ -1,93 +1,114 @@
-# Workspace Detection
+# 工作区检测
 
-**Purpose**: Determine workspace state and check for existing AI-DLC projects
+**目的**：确定工作区状态，检查是否存在 AI-DLC 项目
 
-## Step 1: Check for Existing AI-DLC Project
+## 步骤 1：检查现有 AI-DLC 项目
 
-Check if `aidlc-docs/aidlc-state.md` exists:
-- **If exists**: Resume from last phase (load context from previous phases)
-- **If not exists**: Continue with new project assessment
+检查 `aidlc-docs/aidlc-state.md` 是否存在：
+- **存在**：从上次阶段恢复（加载之前阶段的上下文）
+- **不存在**：继续进行新项目评估
 
-## Step 2: Scan Workspace for Existing Code
+## 步骤 2：扫描工作区现有代码
 
-**Determine if workspace has existing code:**
-- Scan workspace for source code files (.java, .py, .js, .ts, .jsx, .tsx, .kt, .kts, .scala, .groovy, .go, .rs, .rb, .php, .c, .h, .cpp, .hpp, .cc, .cs, .fs, etc.)
-- Check for build files (pom.xml, package.json, build.gradle, etc.)
-- Look for project structure indicators
-- Identify workspace root directory (NOT aidlc-docs/)
+**判断工作区是否有现有代码：**
 
-**Record findings:**
+### 后端代码扫描
+- 扫描源代码文件（.java, .kt, .kts, .scala, .groovy, .py, .go, .rs, .rb, .php, .c, .h, .cpp, .hpp, .cc, .cs, .fs 等）
+- 检查后端构建文件（pom.xml, build.gradle, Makefile, Cargo.toml 等）
+- 识别后端项目结构指标
+
+### 前端代码扫描
+- 扫描前端源代码文件（.vue, .tsx, .jsx, .ts, .js, .css, .scss, .less）
+- 检查前端构建文件（package.json, vite.config.ts, tsconfig.json 等）
+- 检测前端框架依赖（在 package.json 中查找）：
+  - Vue 3 相关：`vue`, `vue-router`, `pinia`
+  - 构建工具：`vite`, `@vitejs/plugin-vue`
+  - UI 框架：`element-plus`, `ant-design-vue`
+  - 工具库：`axios`, `@vueuse/core`
+- 识别前端目录结构（`src/views/`, `src/components/`, `src/api/`, `src/store/`, `src/router/`）
+
+### 通用检查
+- 查找项目结构指标
+- 确定工作区根目录（非 aidlc-docs/）
+
+**记录发现：**
 ```markdown
-## Workspace State
-- **Existing Code**: [Yes/No]
-- **Programming Languages**: [List if found]
-- **Build System**: [Maven/Gradle/npm/etc. if found]
-- **Project Structure**: [Monolith/Microservices/Library/Empty]
-- **Workspace Root**: [Absolute path]
+## 工作区状态
+- **现有代码**：[是/否]
+- **编程语言**：[发现的语言列表]
+- **后端构建系统**：[Maven/Gradle/其他（如发现）]
+- **后端框架**：[Spring Boot/其他（如发现）]
+- **前端技术栈**：[Vue 3/React/其他/无]
+- **前端 UI 框架**：[Element Plus/Ant Design Vue/其他/无]
+- **前端构建工具**：[Vite/Webpack/其他/无]
+- **项目结构**：[单体/微服务/库/空]
+- **工作区根目录**：[绝对路径]
 ```
 
-## Step 3: Determine Next Phase
+## 步骤 3：确定下一阶段
 
-**IF workspace is empty (no existing code)**:
-- Set flag: `brownfield = false`
-- Next phase: Requirements Analysis
+**如果工作区为空（无现有代码）**：
+- 设置标志：`brownfield = false`
+- 下一阶段：需求分析
 
-**IF workspace has existing code**:
-- Set flag: `brownfield = true`
-- Check for existing reverse engineering artifacts in `aidlc-docs/inception/reverse-engineering/`
-- **IF reverse engineering artifacts exist**: Load them, skip to Requirements Analysis
-- **IF no reverse engineering artifacts**: Next phase is Reverse Engineering
+**如果工作区有现有代码**：
+- 设置标志：`brownfield = true`
+- 检查 `aidlc-docs/inception/reverse-engineering/` 中是否存在逆向工程产物
+- **如果逆向工程产物存在**：加载它们，跳到需求分析
+- **如果无逆向工程产物**：下一阶段为逆向工程
 
-## Step 4: Create Initial State File
+## 步骤 4：创建初始状态文件
 
-Create `aidlc-docs/aidlc-state.md`:
+创建 `aidlc-docs/aidlc-state.md`：
 
 ```markdown
-# AI-DLC State Tracking
+# AI-DLC 状态跟踪
 
-## Project Information
-- **Project Type**: [Greenfield/Brownfield]
-- **Start Date**: [ISO timestamp]
-- **Current Stage**: INCEPTION - Workspace Detection
+## 项目信息
+- **项目类型**：[全新项目/存量项目]
+- **开始日期**：[ISO 时间戳]
+- **当前步骤**：INCEPTION - 工作区检测
 
-## Workspace State
-- **Existing Code**: [Yes/No]
-- **Reverse Engineering Needed**: [Yes/No]
-- **Workspace Root**: [Absolute path]
+## 工作区状态
+- **现有代码**：[是/否]
+- **需要逆向工程**：[是/否]
+- **工作区根目录**：[绝对路径]
+- **前端技术栈**：[Vue 3/React/无]
+- **前端 UI 框架**：[Element Plus/无]
 
-## Code Location Rules
-- **Application Code**: Workspace root (NEVER in aidlc-docs/)
-- **Documentation**: aidlc-docs/ only
-- **Structure patterns**: See code-generation.md Critical Rules
+## 代码位置规则
+- **应用代码**：工作区根目录（绝对不在 aidlc-docs/ 中）
+- **文档**：仅在 aidlc-docs/
+- **结构模式**：参见 code-generation.md 关键规则
 
-## Stage Progress
-[Will be populated as workflow progresses]
+## 阶段进度
+[随工作流推进填充]
 ```
 
-## Step 5: Present Completion Message
+## 步骤 5：展示完成消息
 
-**For Brownfield Projects:**
+**存量项目：**
 ```markdown
-# 🔍 Workspace Detection Complete
+# 🔍 工作区检测完成
 
-Workspace analysis findings:
-• **Project Type**: Brownfield project
-• [AI-generated summary of workspace findings in bullet points]
-• **Next Step**: Proceeding to **Reverse Engineering** to analyze existing codebase...
+工作区分析结果：
+• **项目类型**：存量项目
+• [AI 生成的工作区发现摘要，使用要点列表]
+• **下一步**：进入**逆向工程**分析现有代码库...
 ```
 
-**For Greenfield Projects:**
+**全新项目：**
 ```markdown
-# 🔍 Workspace Detection Complete
+# 🔍 工作区检测完成
 
-Workspace analysis findings:
-• **Project Type**: Greenfield project
-• **Next Step**: Proceeding to **Requirements Analysis**...
+工作区分析结果：
+• **项目类型**：全新项目
+• **下一步**：进入**需求分析**...
 ```
 
-## Step 6: Automatically Proceed
+## 步骤 6：自动继续
 
-- **No user approval required** - this is informational only
-- Automatically proceed to next phase:
-  - **Brownfield**: Reverse Engineering (if no existing artifacts) or Requirements Analysis (if artifacts exist)
-  - **Greenfield**: Requirements Analysis
+- **无需用户确认** — 此步骤仅为信息展示
+- 自动进入下一阶段：
+  - **存量项目**：逆向工程（如无现有产物）或需求分析（如产物已存在）
+  - **全新项目**：需求分析

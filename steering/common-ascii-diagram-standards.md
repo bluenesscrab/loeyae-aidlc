@@ -1,21 +1,21 @@
-# ASCII Diagram Standards
+# ASCII 图标准
 
-## MANDATORY: Use Basic ASCII Only
+## 强制要求：仅使用基本 ASCII 字符
 
-**CRITICAL**: ALWAYS use basic ASCII characters for diagrams (maximum compatibility).
+**关键**：绘制图表时始终使用基本 ASCII 字符（最大兼容性）。
 
-### ✅ ALLOWED: `+` `-` `|` `^` `v` `<` `>` and alphanumeric text
+### ✅ 允许使用：`+` `-` `|` `^` `v` `<` `>` 以及字母数字文本
 
-### ❌ FORBIDDEN: Unicode box-drawing characters
-- NO: `┌` `─` `│` `└` `┐` `┘` `├` `┤` `┬` `┴` `┼` `▼` `▲` `►` `◄`
-- Reason: Inconsistent rendering across fonts/platforms
+### ❌ 禁止使用：Unicode 制表符
+- 禁止：`┌` `─` `│` `└` `┐` `┘` `├` `┤` `┬` `┴` `┼` `▼` `▲` `►` `◄`
+- 原因：在不同字体/平台上渲染不一致
 
-## Standard ASCII Diagram Patterns
+## 标准 ASCII 图模式
 
-### CRITICAL: Character Width Rule
-**Every line in a box MUST have EXACTLY the same character count (including spaces)**
+### 关键：字符宽度规则
+**方框中的每一行必须具有完全相同的字符数（包括空格）**
 
-✅ CORRECT (all lines = 67 chars):
+✅ 正确（所有行 = 67 个字符）：
 ```
 +---------------------------------------------------------------+
 |                      Component Name                           |
@@ -23,7 +23,7 @@
 +---------------------------------------------------------------+
 ```
 
-❌ WRONG (inconsistent widths):
+❌ 错误（宽度不一致）：
 ```
 +---------------------------------------------------------------+
 |                      Component Name                           |
@@ -31,7 +31,7 @@
 +---------------------------------------------------------------+
 ```
 
-### Box Pattern
+### 方框模式
 ```
 +-----------------------------------------------------+
 |                                                     |
@@ -43,7 +43,7 @@
 +-----------------------------------------------------+
 ```
 
-### Nested Boxes
+### 嵌套方框
 ```
 +-------------------------------------------------------+
 |              Web Server (PHP Runtime)                 |
@@ -58,7 +58,7 @@
 +-------------------------------------------------------+
 ```
 
-### Arrows and Connections
+### 箭头和连接
 ```
 +----------+
 |  Source  |
@@ -71,14 +71,14 @@
 +----------+
 ```
 
-### Horizontal Flow
+### 水平流程
 ```
 +-------+     +-------+     +-------+
 | Step1 | --> | Step2 | --> | Step3 |
 +-------+     +-------+     +-------+
 ```
 
-### Vertical Flow with Labels
+### 带标签的垂直流程
 ```
 User Action Flow:
     |
@@ -100,17 +100,16 @@ User Action Flow:
 +----------+
 ```
 
-## Validation
+## 验证
 
-Before creating diagrams:
-- [ ] Basic ASCII only: `+` `-` `|` `^` `v` `<` `>`
-- [ ] No Unicode box-drawing
-- [ ] Spaces (not tabs) for alignment
-- [ ] Corners use `+`
-- [ ] **ALL box lines same character width** (count characters including spaces)
-- [ ] Test: Verify corners align vertically in monospace font
+创建图表前：
+- [ ] 仅使用基本 ASCII：`+` `-` `|` `^` `v` `<` `>`
+- [ ] 无 Unicode 制表符
+- [ ] 使用空格（非 Tab）进行对齐
+- [ ] 角使用 `+`
+- [ ] **所有方框行的字符宽度一致**（统计包括空格在内的字符数）
+- [ ] 测试：在等宽字体中验证角是否垂直对齐
 
-## Alternative
+## 替代方案
 
-For complex diagrams, use Mermaid (see `content-validation.md`)
-
+对于复杂图表，使用 Mermaid（参见 `content-validation.md`）

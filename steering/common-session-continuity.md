@@ -1,47 +1,47 @@
-# Session Continuity Templates
+# 会话连续性模板
 
-## Welcome Back Prompt Template
-When a user returns to continue work on an existing AI-DLC project, present this prompt:
+## 欢迎回来提示模板
+当用户返回继续处理现有的 AI-DLC 项目时，展示此提示：
 
 ```markdown
-**Welcome back! I can see you have an existing AI-DLC project in progress.**
+**欢迎回来！我发现您有一个正在进行中的 AI-DLC 项目。**
 
-Based on your aidlc-state.md, here's your current status:
-- **Project**: [project-name]
-- **Current Phase**: [INCEPTION/CONSTRUCTION/OPERATIONS]
-- **Current Stage**: [Stage Name]
-- **Last Completed**: [Last completed step]
-- **Next Step**: [Next step to work on]
+根据您的 aidlc-state.md，以下是您当前的状态：
+- **项目**：[project-name]
+- **当前阶段**：[INCEPTION/CONSTRUCTION/OPERATIONS]
+- **当前步骤**：[Stage Name]
+- **上次完成**：[上次完成的步骤]
+- **下一步**：[下一个要处理的步骤]
 
-**What would you like to work on today?**
+**您今天想做什么？**
 
-A) Continue where you left off ([Next step description])
-B) Review a previous stage ([Show available stages])
+A) 从上次中断的地方继续（[下一步描述]）
+B) 回顾之前的阶段（[显示可用阶段]）
 
-[Answer]: 
+[回答]: 
 ```
 
-## MANDATORY: Session Continuity Instructions
-1. **Always read aidlc-state.md first** when detecting existing project
-2. **Parse current status** from the workflow file to populate the prompt
-3. **MANDATORY: Load Previous Stage Artifacts** - Before resuming any stage, automatically read all relevant artifacts from previous stages:
-   - **Reverse Engineering**: Read architecture.md, code-structure.md, api-documentation.md
-   - **Requirements Analysis**: Read requirements.md, requirement-verification-questions.md
-   - **User Stories**: Read stories.md, personas.md, story-generation-plan.md
-   - **Application Design**: Read application-design artifacts (components.md, component-methods.md, services.md)
-   - **Design (Units)**: Read unit-of-work.md, unit-of-work-dependency.md, unit-of-work-story-map.md
-   - **Per-Unit Design**: Read functional-design.md, nfr-requirements.md, nfr-design.md, infrastructure-design.md
-   - **Code Stages**: Read all code files, plans, AND all previous artifacts
-4. **Smart Context Loading by Stage**:
-   - **Early Stages (Workspace Detection, Reverse Engineering)**: Load workspace analysis
-   - **Requirements/Stories**: Load reverse engineering + requirements artifacts
-   - **Design Stages**: Load requirements + stories + architecture + design artifacts
-   - **Code Stages**: Load ALL artifacts + existing code files
-5. **Adapt options** based on architectural choice and current phase
-6. **Show specific next steps** rather than generic descriptions
-7. **Log the continuity prompt** in audit.md with timestamp
-8. **Context Summary**: After loading artifacts, provide brief summary of what was loaded for user awareness
-9. **Asking questions**: ALWAYS ask clarification or user feedback questions by placing them in .md files. DO NOT place the multiple-choice questions in-line in the chat session.
+## 强制要求：会话连续性指令
+1. **检测到现有项目时，始终先读取 aidlc-state.md**
+2. **从工作流文件中解析当前状态**以填充提示内容
+3. **强制要求：加载前序阶段产物** - 在恢复任何阶段之前，自动读取前序阶段的所有相关产物：
+   - **逆向工程**：读取 architecture.md、code-structure.md、api-documentation.md
+   - **需求分析**：读取 requirements.md、requirement-verification-questions.md
+   - **用户故事**：读取 stories.md、personas.md、story-generation-plan.md
+   - **应用设计**：读取应用设计产物（components.md、component-methods.md、services.md）
+   - **设计（单元）**：读取 unit-of-work.md、unit-of-work-dependency.md、unit-of-work-story-map.md
+   - **单元级设计**：读取 functional-design.md、nfr-requirements.md、nfr-design.md、infrastructure-design.md
+   - **代码阶段**：读取所有代码文件、计划以及所有前序产物
+4. **按阶段智能加载上下文**：
+   - **早期阶段（工作区检测、逆向工程）**：加载工作区分析
+   - **需求/故事**：加载逆向工程 + 需求产物
+   - **设计阶段**：加载需求 + 故事 + 架构 + 设计产物
+   - **代码阶段**：加载所有产物 + 现有代码文件
+5. **根据架构选择和当前阶段调整选项**
+6. **显示具体的下一步操作**而非通用描述
+7. **在 audit.md 中记录连续性提示**并附带时间戳
+8. **上下文摘要**：加载产物后，提供已加载内容的简要摘要，让用户了解情况
+9. **提问方式**：始终将澄清问题或用户反馈问题放在 .md 文件中。不要在聊天会话中内联放置多选题。
 
-## Error Handling
-If artifacts are missing or corrupted during session resumption, see [error-handling.md](error-handling.md) for guidance on recovery procedures. 
+## 错误处理
+如果在会话恢复期间产物缺失或损坏，请参阅 [error-handling.md](error-handling.md) 获取恢复流程指导。

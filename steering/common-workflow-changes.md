@@ -1,285 +1,285 @@
-# Mid-Workflow Changes and Phase Management
+# 工作流中途变更与阶段管理
 
-## Overview
+## 概述
 
-Users may request changes to the execution plan or phase execution during the workflow. This document provides guidance on handling these requests safely and effectively.
-
----
-
-## Types of Mid-Workflow Changes
-
-### 1. Adding a Skipped Phase
-
-**Scenario**: User wants to add a phase that was originally skipped
-
-**Example**: "Actually, I want to add user stories even though we skipped that stage"
-
-**Handling**:
-1. **Confirm Request**: "You want to add User Stories stage. This will create user stories and personas. Confirm?"
-2. **Check Dependencies**: Verify all prerequisite phases are complete
-3. **Update Execution Plan**: Add phase to `execution-plan.md` with rationale
-4. **Update State**: Mark phase as "PENDING" in `aidlc-state.md`
-5. **Execute Phase**: Follow normal phase execution process
-6. **Log Change**: Document in `audit.md` with timestamp and reason
-
-**Considerations**:
-- May need to update later phases that could benefit from new artifacts
-- Existing artifacts may need revision to incorporate new information
-- Timeline will be extended
+用户可能在工作流执行过程中请求变更执行计划或阶段执行。本文档提供安全有效地处理这些请求的指导。
 
 ---
 
-### 2. Skipping a Planned Phase
+## 工作流中途变更类型
 
-**Scenario**: User wants to skip a phase that was planned to execute
+### 1. 添加已跳过的步骤
 
-**Example**: "Let's skip the NFR Design stage for now"
+**场景**：用户想要添加一个原本被跳过的步骤
 
-**Handling**:
-1. **Confirm Request**: "You want to skip NFR Design. This means no NFR patterns or logical components will be incorporated. Confirm?"
-2. **Warn About Impact**: Explain what will be missing and potential consequences
-3. **Get Explicit Confirmation**: User must explicitly confirm understanding of impact
-4. **Update Execution Plan**: Mark phase as "SKIPPED" with reason
-5. **Update State**: Mark phase as "SKIPPED" in `aidlc-state.md`
-6. **Adjust Later Phases**: Note that later phases may need manual setup
-7. **Log Change**: Document in `audit.md` with timestamp and reason
+**示例**："实际上，我想添加用户故事，即使我们之前跳过了那个步骤"
 
-**Considerations**:
-- Later phases may fail or require manual intervention
-- User accepts responsibility for missing artifacts
-- Can be added back later if needed
+**处理方式**：
+1. **确认请求**："你想添加用户故事步骤。这将创建用户故事和角色。确认？"
+2. **检查依赖**：验证所有前置步骤是否已完成
+3. **更新执行计划**：在 `execution-plan.md` 中添加步骤并说明原因
+4. **更新状态**：在 `aidlc-state.md` 中将步骤标记为"待执行"
+5. **执行步骤**：按照正常步骤执行流程
+6. **记录变更**：在 `audit.md` 中记录时间戳和原因
 
----
-
-### 3. Restarting Current Stage
-
-**Scenario**: User is unhappy with current stage results and wants to redo it
-
-**Example**: "I don't like these user stories. Can we start over?"
-
-**Handling**:
-1. **Understand Concern**: "What specifically would you like to change about the stories?"
-2. **Offer Options**:
-   - **Option A**: Modify existing artifacts (faster, preserves some work)
-   - **Option B**: Complete restart (clean slate, more time)
-3. **If Restart Chosen**:
-   - Archive existing artifacts: `{artifact}.backup.{timestamp}`
-   - Reset stage checkboxes in plan file
-   - Mark stage as "IN PROGRESS" in `aidlc-state.md`
-   - Clear stage completion status
-   - Re-execute from beginning
-4. **Log Change**: Document reason for restart and what will change
-
-**Considerations**:
-- Existing work will be lost (but backed up)
-- May need to redo dependent stages
-- Timeline will be extended
+**注意事项**：
+- 可能需要更新后续步骤以利用新产物
+- 现有产物可能需要修订以整合新信息
+- 时间线将延长
 
 ---
 
-### 4. Restarting Previous Stage
+### 2. 跳过已计划的步骤
 
-**Scenario**: User wants to go back and redo a completed stage
+**场景**：用户想要跳过一个已计划执行的步骤
 
-**Example**: "I want to change the architectural decision we made earlier"
+**示例**："我们先跳过非功能设计步骤"
 
-**Handling**:
-1. **Assess Impact**: Identify all stages that depend on the stage to be restarted
-2. **Warn User**: "Restarting Application Design will require redoing: Units Planning, Units Generation, per-unit design (all units), Code Planning, Code Generation. Confirm?"
-3. **Get Explicit Confirmation**: User must understand full impact
-4. **If Confirmed**:
-   - Archive all affected artifacts
-   - Reset all affected stages in `aidlc-state.md`
-   - Clear checkboxes in all affected plan files
-   - Return to the stage to restart
-   - Re-execute from that point forward
-5. **Log Change**: Document full impact and reason for restart
+**处理方式**：
+1. **确认请求**："你想跳过非功能设计。这意味着不会整合非功能需求模式或逻辑组件。确认？"
+2. **警告影响**：解释将缺少什么以及潜在后果
+3. **获取明确确认**：用户必须明确确认理解影响
+4. **更新执行计划**：将步骤标记为"已跳过"并说明原因
+5. **更新状态**：在 `aidlc-state.md` 中将步骤标记为"已跳过"
+6. **调整后续步骤**：注明后续步骤可能需要手动设置
+7. **记录变更**：在 `audit.md` 中记录时间戳和原因
 
-**Considerations**:
-- Significant rework required
-- All dependent stages must be redone
-- Timeline will be significantly extended
-- Consider if modification is better than restart
+**注意事项**：
+- 后续步骤可能失败或需要手动干预
+- 用户承担缺少产物的责任
+- 如需要可以稍后重新添加
 
 ---
 
-### 5. Changing Stage Depth
+### 3. 重新开始当前步骤
 
-**Scenario**: User wants to change the depth level of current or upcoming stage
+**场景**：用户对当前步骤的结果不满意，想要重做
 
-**Example**: "Let's do a comprehensive requirements analysis instead of standard"
+**示例**："我不喜欢这些用户故事。能重新开始吗？"
 
-**Handling**:
-1. **Confirm Request**: "You want to change Requirements Analysis from Standard to Comprehensive depth. This will be more thorough but take longer. Confirm?"
-2. **Update Execution Plan**: Change depth level in `workflow-planning.md`
-3. **Adjust Approach**: Follow comprehensive depth guidelines for the stage
-4. **Update Estimates**: Inform user of new timeline estimate
-5. **Log Change**: Document depth change and reason
+**处理方式**：
+1. **了解关注点**："你具体想改变故事的哪些方面？"
+2. **提供选项**：
+   - **选项 A**：修改现有产物（更快，保留部分工作）
+   - **选项 B**：完全重新开始（全新开始，需要更多时间）
+3. **如果选择重新开始**：
+   - 归档现有产物：`{artifact}.backup.{timestamp}`
+   - 重置计划文件中的步骤复选框
+   - 在 `aidlc-state.md` 中将步骤标记为"进行中"
+   - 清除步骤完成状态
+   - 从头重新执行
+4. **记录变更**：记录重新开始的原因和将要改变的内容
 
-**Considerations**:
-- More depth = more time but better quality
-- Less depth = faster but may miss details
-- Can only change before or during stage, not after completion
-
----
-
-### 6. Pausing Workflow
-
-**Scenario**: User needs to pause and resume later
-
-**Example**: "I need to stop for now and continue tomorrow"
-
-**Handling**:
-1. **Complete Current Step**: Finish the current step in progress if possible
-2. **Update Checkboxes**: Mark all completed steps with [x]
-3. **Update State**: Ensure `aidlc-state.md` reflects current status
-4. **Log Pause**: Document pause point in `audit.md`
-5. **Provide Resume Instructions**: "When you return, I'll detect your existing project and offer to continue from: [current phase, current step]"
-
-**On Resume**:
-1. **Detect Existing Project**: Check for `aidlc-state.md`
-2. **Load Context**: Read all artifacts from completed stages
-3. **Show Status**: Display current stage and next step
-4. **Offer Options**: Continue where left off or review previous work
-5. **Log Resume**: Document resume point in `audit.md`
+**注意事项**：
+- 现有工作将丢失（但已备份）
+- 可能需要重做依赖步骤
+- 时间线将延长
 
 ---
 
-### 7. Changing Architectural Decision
+### 4. 重新开始之前的步骤
 
-**Scenario**: User wants to change from monolith to microservices (or vice versa)
+**场景**：用户想要回退并重做一个已完成的步骤
 
-**Example**: "Actually, let's do microservices instead of a monolith"
+**示例**："我想更改我们之前做的架构决策"
 
-**Handling**:
-1. **Assess Current Progress**: Determine how far into workflow
-2. **Explain Impact**: 
-   - If before Units Planning: Minimal impact, just update decision
-   - If after Units Planning: Must redo Units Planning, Units Generation, all per-unit design
-   - If after Code Generation: Significant rework required
-3. **Recommend Approach**:
-   - Early in workflow: Restart from Application Design stage
-   - Late in workflow: Consider if modification is feasible vs. restart
-4. **Get Confirmation**: User must understand full scope of change
-5. **Execute Change**: Follow restart procedures for affected stages
+**处理方式**：
+1. **评估影响**：识别所有依赖于要重新开始的步骤的后续步骤
+2. **警告用户**："重新开始应用设计将需要重做：工作单元规划、工作单元生成、按工作单元设计（所有工作单元）、代码规划、代码生成。确认？"
+3. **获取明确确认**：用户必须理解完整影响
+4. **如果确认**：
+   - 归档所有受影响的产物
+   - 重置 `aidlc-state.md` 中所有受影响的步骤
+   - 清除所有受影响计划文件中的复选框
+   - 返回到要重新开始的步骤
+   - 从该点重新执行
+5. **记录变更**：记录完整影响和重新开始的原因
 
-**Considerations**:
-- Architectural changes have cascading effects
-- Earlier in workflow = easier to change
-- Later in workflow = consider cost vs. benefit
-
----
-
-### 8. Adding/Removing Units
-
-**Scenario**: User wants to add or remove units after Units Generation
-
-**Example**: "We need to split the Payment unit into Payment and Billing"
-
-**Handling**:
-1. **Assess Impact**: Determine which units have completed design/code
-2. **Explain Consequences**:
-   - Adding unit: Need to do full design and code for new unit
-   - Removing unit: Need to redistribute functionality to other units
-   - Splitting unit: Need to redo design and code for both resulting units
-3. **Update Unit Artifacts**:
-   - Modify `unit-of-work.md`
-   - Update `unit-of-work-dependency.md`
-   - Revise `unit-of-work-story-map.md`
-4. **Reset Affected Units**: Mark affected units as needing redesign
-5. **Execute Changes**: Follow normal unit design and code process for affected units
-
-**Considerations**:
-- Affects all downstream stages for those units
-- May affect other units if dependencies change
-- Timeline impact depends on how many units affected
+**注意事项**：
+- 需要大量返工
+- 所有依赖步骤必须重做
+- 时间线将显著延长
+- 考虑修改是否比重新开始更好
 
 ---
 
-## General Guidelines for Handling Changes
+### 5. 更改步骤深度
 
-### Before Making Changes
+**场景**：用户想要更改当前或即将执行的步骤的深度级别
 
-1. **Understand the Request**: Ask clarifying questions about what user wants to change and why
-2. **Assess Impact**: Identify all affected stages, artifacts, and dependencies
-3. **Explain Consequences**: Clearly communicate what will need to be redone and timeline impact
-4. **Offer Alternatives**: Sometimes modification is better than restart
-5. **Get Explicit Confirmation**: User must understand and accept the impact
+**示例**："让我们做全面的需求分析，而不是标准的"
 
-### During Changes
+**处理方式**：
+1. **确认请求**："你想将需求分析从标准深度更改为全面深度。这将更加彻底但需要更长时间。确认？"
+2. **更新执行计划**：在 `workflow-planning.md` 中更改深度级别
+3. **调整方法**：按照全面深度指南执行步骤
+4. **更新估算**：告知用户新的时间线估算
+5. **记录变更**：记录深度变更和原因
 
-1. **Archive Existing Work**: Always backup before making destructive changes
-2. **Update All Tracking**: Keep `aidlc-state.md`, plan files, and `audit.md` in sync
-3. **Communicate Progress**: Keep user informed about what's happening
-4. **Validate Changes**: Ensure changes are consistent across all artifacts
-5. **Test Continuity**: Verify workflow can continue smoothly after changes
-
-### After Changes
-
-1. **Verify Consistency**: Check that all artifacts are aligned with changes
-2. **Update Documentation**: Ensure all references are updated
-3. **Log Completely**: Document full change history in `audit.md`
-4. **Confirm with User**: Verify changes meet user's expectations
-5. **Resume Workflow**: Continue with normal execution from new state
+**注意事项**：
+- 更深 = 更多时间但更高质量
+- 更浅 = 更快但可能遗漏细节
+- 只能在步骤开始前或执行中更改，完成后不能更改
 
 ---
 
-## Change Request Decision Tree
+### 6. 暂停工作流
+
+**场景**：用户需要暂停并稍后继续
+
+**示例**："我现在需要停下来，明天继续"
+
+**处理方式**：
+1. **完成当前步骤**：如果可能，完成正在进行的当前步骤
+2. **更新复选框**：将所有已完成的步骤标记为 [x]
+3. **更新状态**：确保 `aidlc-state.md` 反映当前状态
+4. **记录暂停**：在 `audit.md` 中记录暂停点
+5. **提供恢复说明**："当你回来时，我会检测到你的现有项目并提供从以下位置继续的选项：[当前阶段，当前步骤]"
+
+**恢复时**：
+1. **检测现有项目**：检查 `aidlc-state.md`
+2. **加载上下文**：读取已完成步骤的所有产物
+3. **显示状态**：显示当前步骤和下一步
+4. **提供选项**：从中断处继续或回顾之前的工作
+5. **记录恢复**：在 `audit.md` 中记录恢复点
+
+---
+
+### 7. 更改架构决策
+
+**场景**：用户想要从单体架构改为微服务架构（或反之）
+
+**示例**："实际上，让我们做微服务而不是单体"
+
+**处理方式**：
+1. **评估当前进度**：确定工作流进行到哪里
+2. **解释影响**：
+   - 如果在工作单元规划之前：影响最小，只需更新决策
+   - 如果在工作单元规划之后：必须重做工作单元规划、工作单元生成、所有按工作单元设计
+   - 如果在代码生成之后：需要大量返工
+3. **推荐方法**：
+   - 工作流早期：从应用设计步骤重新开始
+   - 工作流后期：考虑修改是否可行 vs. 重新开始
+4. **获取确认**：用户必须理解变更的完整范围
+5. **执行变更**：按照受影响步骤的重新开始流程执行
+
+**注意事项**：
+- 架构变更具有级联效应
+- 工作流越早 = 越容易更改
+- 工作流越晚 = 考虑成本与收益
+
+---
+
+### 8. 添加/移除工作单元
+
+**场景**：用户想要在工作单元生成后添加或移除工作单元
+
+**示例**："我们需要将支付工作单元拆分为支付和计费"
+
+**处理方式**：
+1. **评估影响**：确定哪些工作单元已完成设计/代码
+2. **解释后果**：
+   - 添加工作单元：需要为新工作单元完成完整的设计和代码
+   - 移除工作单元：需要将功能重新分配到其他工作单元
+   - 拆分工作单元：需要为两个结果工作单元重做设计和代码
+3. **更新工作单元产物**：
+   - 修改 `unit-of-work.md`
+   - 更新 `unit-of-work-dependency.md`
+   - 修订 `unit-of-work-story-map.md`
+4. **重置受影响的工作单元**：将受影响的工作单元标记为需要重新设计
+5. **执行变更**：按照正常的工作单元设计和代码流程处理受影响的工作单元
+
+**注意事项**：
+- 影响这些工作单元的所有下游步骤
+- 如果依赖关系发生变化，可能影响其他工作单元
+- 时间线影响取决于受影响的工作单元数量
+
+---
+
+## 处理变更的通用指南
+
+### 变更前
+
+1. **理解请求**：询问澄清问题，了解用户想要更改什么以及为什么
+2. **评估影响**：识别所有受影响的步骤、产物和依赖关系
+3. **解释后果**：清楚传达需要重做的内容和时间线影响
+4. **提供替代方案**：有时修改比重新开始更好
+5. **获取明确确认**：用户必须理解并接受影响
+
+### 变更中
+
+1. **归档现有工作**：在进行破坏性变更前始终备份
+2. **更新所有跟踪**：保持 `aidlc-state.md`、计划文件和 `audit.md` 同步
+3. **沟通进度**：让用户了解正在发生的事情
+4. **验证变更**：确保变更在所有产物中保持一致
+5. **测试连续性**：验证变更后工作流能否顺利继续
+
+### 变更后
+
+1. **验证一致性**：检查所有产物是否与变更对齐
+2. **更新文档**：确保所有引用已更新
+3. **完整记录**：在 `audit.md` 中记录完整的变更历史
+4. **与用户确认**：验证变更是否满足用户期望
+5. **恢复工作流**：从新状态继续正常执行
+
+---
+
+## 变更请求决策树
 
 ```
-User requests change
+用户请求变更
     |
-    ├─ Is it current phase?
-    |   ├─ Yes: Can modify or restart current phase
-    |   └─ No: Go to next question
+    ├─ 是当前步骤吗？
+    |   ├─ 是：可以修改或重新开始当前步骤
+    |   └─ 否：继续下一个判断
     |
-    ├─ Is it a completed phase?
-    |   ├─ Yes: Assess impact on dependent phases
-    |   |   ├─ Low impact: Modify and update dependents
-    |   |   └─ High impact: Recommend restart from that phase
-    |   └─ No: Go to next question
+    ├─ 是已完成的步骤吗？
+    |   ├─ 是：评估对依赖步骤的影响
+    |   |   ├─ 低影响：修改并更新依赖项
+    |   |   └─ 高影响：建议从该步骤重新开始
+    |   └─ 否：继续下一个判断
     |
-    ├─ Is it adding a skipped phase?
-    |   ├─ Yes: Check prerequisites, add to plan, execute
-    |   └─ No: Go to next question
+    ├─ 是添加已跳过的步骤吗？
+    |   ├─ 是：检查前置条件，添加到计划，执行
+    |   └─ 否：继续下一个判断
     |
-    ├─ Is it skipping a planned phase?
-    |   ├─ Yes: Warn about impact, get confirmation, skip
-    |   └─ No: Go to next question
+    ├─ 是跳过已计划的步骤吗？
+    |   ├─ 是：警告影响，获取确认，跳过
+    |   └─ 否：继续下一个判断
     |
-    └─ Is it changing depth level?
-        ├─ Yes: Update plan, adjust approach
-        └─ No: Clarify request with user
+    └─ 是更改深度级别吗？
+        ├─ 是：更新计划，调整方法
+        └─ 否：与用户澄清请求
 ```
 
 ---
 
-## Logging Requirements
+## 记录要求
 
-### Change Request Log Format
+### 变更请求日志格式
 
 ```markdown
-## Change Request - [Phase Name]
-**Timestamp**: [ISO timestamp]
-**Request**: [What user wants to change]
-**Current State**: [Where we are in workflow]
-**Impact Assessment**: [What will be affected]
-**User Confirmation**: [User's explicit confirmation]
-**Action Taken**: [What was done]
-**Artifacts Affected**: [List of files changed/reset]
+## 变更请求 - [步骤名称]
+**时间戳**：[ISO 时间戳]
+**请求**：[用户想要更改的内容]
+**当前状态**：[工作流中的当前位置]
+**影响评估**：[将受到影响的内容]
+**用户确认**：[用户的明确确认]
+**采取的行动**：[执行了什么操作]
+**受影响的产物**：[已更改/重置的文件列表]
 
 ---
 ```
 
 ---
 
-## Best Practices
+## 最佳实践
 
-1. **Always Confirm**: Never make destructive changes without explicit user confirmation
-2. **Explain Impact**: Users need to understand consequences before deciding
-3. **Offer Options**: Sometimes there are multiple ways to handle a change
-4. **Archive First**: Always backup before making destructive changes
-5. **Update Everything**: Keep all tracking files in sync
-6. **Log Thoroughly**: Document all changes for audit trail
-7. **Validate After**: Ensure workflow can continue smoothly
-8. **Be Flexible**: Workflow should adapt to user needs, not force rigid process
+1. **始终确认**：未经用户明确确认，绝不进行破坏性变更
+2. **解释影响**：用户需要在决策前了解后果
+3. **提供选项**：有时处理变更有多种方式
+4. **先归档**：在进行破坏性变更前始终备份
+5. **全面更新**：保持所有跟踪文件同步
+6. **详细记录**：记录所有变更以供审计追踪
+7. **变更后验证**：确保工作流能顺利继续
+8. **保持灵活**：工作流应适应用户需求，而非强制执行僵化流程

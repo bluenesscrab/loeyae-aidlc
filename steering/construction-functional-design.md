@@ -1,112 +1,123 @@
-# Functional Design
+# 功能设计
 
-## Purpose
-**Detailed business logic design per unit**
+## 目的
+**按单元的详细业务逻辑设计**
 
-Functional Design focuses on:
-- Detailed business logic and algorithms for the unit
-- Domain models with entities and relationships
-- Detailed business rules, validation logic, and constraints
-- Technology-agnostic design (no infrastructure concerns)
+功能设计聚焦于：
+- 单元的详细业务逻辑和算法
+- 包含实体和关系的领域模型
+- 详细的业务规则、校验逻辑和约束
+- 技术无关的设计（不涉及基础设施关注点）
 
-**Note**: This builds upon high-level component design from Application Design (INCEPTION phase)
+**注意**：此阶段基于应用设计（INCEPTION 阶段）的高层组件设计
 
-## Prerequisites
-- Units Generation must be complete
-- Unit of work artifacts must be available
-- Application Design recommended (provides high-level component structure)
-- Execution plan must indicate Functional Design stage should execute
+## 前置条件
+- 单元生成必须完成
+- 工作单元产物必须可用
+- 建议完成应用设计（提供高层组件结构）
+- 执行计划必须指示功能设计阶段应执行
 
-## Overview
-Design detailed business logic for the unit, technology-agnostic and focused purely on business functions.
+## 概述
+为单元设计详细的业务逻辑，技术无关，纯粹聚焦于业务功能。
 
-## Steps to Execute
+## 执行步骤
 
-### Step 1: Analyze Unit Context
-- Read unit definition from `aidlc-docs/inception/application-design/unit-of-work.md`
-- Read assigned stories from `aidlc-docs/inception/application-design/unit-of-work-story-map.md`
-- Understand unit responsibilities and boundaries
+### 步骤 1：分析单元上下文
+- 从 `aidlc-docs/inception/application-design/unit-of-work.md` 读取单元定义
+- 从 `aidlc-docs/inception/application-design/unit-of-work-story-map.md` 读取分配的故事
+- 理解单元职责和边界
 
-### Step 2: Create Functional Design Plan
-- Generate plan with checkboxes [] for functional design
-- Focus on business logic, domain models, business rules
-- Each step should have a checkbox []
+### 步骤 2：创建功能设计计划
+- 生成包含复选框 [] 的功能设计计划
+- 聚焦业务逻辑、领域模型、业务规则
+- 每个步骤应有复选框 []
 
-### Step 3: Generate Context-Appropriate Questions
-**DIRECTIVE**: Thoroughly analyze the unit definition and functional design artifacts to identify ALL areas where clarification would improve the functional design. Be proactive in asking questions to ensure comprehensive understanding.
+### 步骤 3：生成上下文相关的问题
+**指令**：全面分析单元定义和功能设计产物，识别所有澄清后能改善功能设计的领域。主动提问以确保全面理解。
 
-**CRITICAL**: Default to asking questions when there is ANY ambiguity or missing detail that could affect functional design quality. It's better to ask too many questions than to make incorrect assumptions.
+**关键**：有任何可能影响功能设计质量的歧义或缺失细节时，默认提出问题。宁可多问也不要做出错误假设。
 
-- EMBED questions using [Answer]: tag format
-- Focus on ANY ambiguities, missing information, or areas needing clarification
-- Generate questions wherever user input would improve functional design decisions
-- **When in doubt, ask the question** - overconfidence leads to poor designs
+- 使用 [回答]: 标签格式嵌入问题
+- 聚焦任何歧义、缺失信息或需要澄清的领域
+- 在用户输入能改善功能设计决策的地方生成问题
+- **有疑问就提问** — 过度自信导致糟糕的设计
 
-**Question categories to consider** (evaluate ALL categories):
-- **Business Logic Modeling** - Ask about core entities, workflows, data transformations, and business processes
-- **Domain Model** - Ask about domain concepts, entity relationships, data structures, and business objects
-- **Business Rules** - Ask about decision rules, validation logic, constraints, and business policies
-- **Data Flow** - Ask about data inputs, outputs, transformations, and persistence requirements
-- **Integration Points** - Ask about external system interactions, APIs, and data exchange
-- **Error Handling** - Ask about error scenarios, validation failures, and exception handling
-- **Business Scenarios** - Ask about edge cases, alternative flows, and complex business situations
+**需考虑的问题类别**（评估所有类别）：
+- **业务逻辑建模** — 询问核心实体、工作流、数据转换和业务流程
+- **领域模型** — 询问领域概念、实体关系、数据结构和业务对象
+- **业务规则** — 询问决策规则、校验逻辑、约束和业务策略
+- **数据流** — 询问数据输入、输出、转换和持久化需求
+- **集成点** — 询问外部系统交互、API 和数据交换
+- **错误处理** — 询问错误场景、校验失败和异常处理
+- **业务场景** — 询问边界情况、替代流程和复杂业务场景
 
-### Step 4: Store Plan
-- Save as `aidlc-docs/construction/plans/{unit-name}-functional-design-plan.md`
-- Include all [Answer]: tags for user input
+**前端功能设计维度**（如项目包含前端）：
+- **页面状态流转** — 加载中 → 数据展示 → 错误状态 → 空状态
+- **表单校验逻辑** — 前端校验规则、实时校验、提交校验
+- **交互行为设计** — 点击、悬停、拖拽、键盘快捷键等
+- **组件间通信设计** — props/emit/provide-inject/Store 通信模式
 
-### Step 5: Collect and Analyze Answers
-- Wait for user to complete all [Answer]: tags
-- **MANDATORY**: Carefully review ALL responses for vague or ambiguous answers
-- **CRITICAL**: Add follow-up questions for ANY unclear responses - do not proceed with ambiguity
-- Look for responses like "depends", "maybe", "not sure", "mix of", "somewhere between"
-- Create clarification questions file if ANY ambiguities are detected
-- **Do not proceed until ALL ambiguities are resolved**
+### 步骤 4：保存计划
+- 保存为 `aidlc-docs/construction/plans/{unit-name}-functional-design-plan.md`
+- 包含所有 [回答]: 标签供用户输入
 
-### Step 6: Generate Functional Design Artifacts
-- Create `aidlc-docs/construction/{unit-name}/functional-design/business-logic-model.md`
-- Create `aidlc-docs/construction/{unit-name}/functional-design/business-rules.md`
-- Create `aidlc-docs/construction/{unit-name}/functional-design/domain-entities.md`
+### 步骤 5：收集和分析答案
+- 等待用户完成所有 [回答]: 标签
+- **强制**：仔细审查所有回复中的模糊或含糊答案
+- **关键**：对任何不清楚的回复添加后续问题 — 不带歧义继续
+- 查找"取决于"、"可能"、"不确定"、"混合"、"介于之间"等回复
+- 如检测到任何歧义则创建澄清问题文件
+- **在所有歧义解决前不得继续**
 
-### Step 7: Present Completion Message
-- Present completion message in this structure:
-     1. **Completion Announcement** (mandatory): Always start with this:
+### 步骤 6：生成功能设计产物
+- 创建 `aidlc-docs/construction/{unit-name}/functional-design/business-logic-model.md`
+- 创建 `aidlc-docs/construction/{unit-name}/functional-design/business-rules.md`
+- 创建 `aidlc-docs/construction/{unit-name}/functional-design/domain-entities.md`
+
+**前端功能设计产物**（如为前端单元）：
+- 创建 `aidlc-docs/construction/{unit-name}/functional-design/page-state-flow.md`（页面状态流转）
+- 创建 `aidlc-docs/construction/{unit-name}/functional-design/form-validation.md`（表单校验逻辑）
+- 创建 `aidlc-docs/construction/{unit-name}/functional-design/interaction-design.md`（交互行为设计）
+
+### 步骤 7：展示完成消息
+- 按以下结构展示完成消息：
+     1. **完成公告**（强制）：始终以此开头：
 
 ```markdown
-# 🔧 Functional Design Complete - [unit-name]
+# 🔧 功能设计完成 - [unit-name]
 ```
 
-     2. **AI Summary** (optional): Provide structured bullet-point summary of functional design
-        - Format: "Functional design has created [description]:"
-        - List key business logic models and entities (bullet points)
-        - List business rules and validation logic defined
-        - Mention domain model structure and relationships
-        - DO NOT include workflow instructions ("please review", "let me know", "proceed to next phase", "before we proceed")
-        - Keep factual and content-focused
-     3. **Formatted Workflow Message** (mandatory): Always end with this exact format:
+     2. **AI 摘要**（可选）：提供功能设计的结构化要点摘要
+        - 格式："功能设计已创建 [描述]："
+        - 列出关键业务逻辑模型和实体（要点列表）
+        - 列出定义的业务规则和校验逻辑
+        - 提及领域模型结构和关系
+        - 不要包含工作流指令
+        - 保持事实性和内容聚焦
+     3. **格式化工作流消息**（强制）：始终以此格式结尾：
 
 ```markdown
-> **📋 <u>**REVIEW REQUIRED:**</u>**  
-> Please examine the functional design artifacts at: `aidlc-docs/construction/[unit-name]/functional-design/`
+> **📋 <u>**需要审查：**</u>**
+> 请检查功能设计产物：`aidlc-docs/construction/[unit-name]/functional-design/`
 
 
 
-> **🚀 <u>**WHAT'S NEXT?**</u>**
+> **🚀 <u>**下一步？**</u>**
 >
-> **You may:**
+> **你可以：**
 >
-> 🔧 **Request Changes** - Ask for modifications to the functional design based on your review  
-> ✅ **Continue to Next Stage** - Approve functional design and proceed to **[next-stage-name]**
+> 🔧 **请求修改** - 根据审查结果要求修改功能设计
+> ✅ **继续下一阶段** - 确认功能设计，进入**[下一阶段名称]**
 
 ---
 ```
 
-### Step 8: Wait for Explicit Approval
-- Do not proceed until the user explicitly approves the functional design
-- Approval must be clear and unambiguous
-- If user requests changes, update the design and repeat the approval process
+### 步骤 8：等待明确审批
+- 在用户明确审批前不得继续
+- 审批必须清晰且无歧义
+- 如用户请求修改，更新设计并重复审批流程
 
-### Step 9: Record Approval and Update Progress
-- Log approval in audit.md with timestamp
-- Record the user's approval response with timestamp
-- Mark Functional Design stage complete in aidlc-state.md
+### 步骤 9：记录审批并更新进度
+- 在 audit.md 中记录审批及时间戳
+- 记录用户的审批回复及时间戳
+- 在 aidlc-state.md 中标记功能设计阶段完成

@@ -1,332 +1,331 @@
-# Question Format Guide
+# 问题格式指南
 
-## MANDATORY: All Questions Must Use This Format
+## 强制要求：所有问题必须使用此格式
 
-### Rule: Never Ask Questions in Chat
-**CRITICAL**: You must NEVER ask questions directly in the chat. ALL questions must be placed in dedicated question files.
+### 规则：禁止在聊天中直接提问
+**关键**：你绝对不能在聊天中直接提问。所有问题必须放在专用的问题文件中。
 
-### Question File Format
+### 问题文件格式
 
-#### File Naming Convention
-- Use descriptive names: `{phase-name}-questions.md`
-- Examples:
+#### 文件命名规范
+- 使用描述性名称：`{阶段名称}-questions.md`
+- 示例：
   - `classification-questions.md`
   - `requirements-questions.md`
   - `story-planning-questions.md`
   - `design-questions.md`
 
-#### Question Structure
-Every question must include meaningful options plus "Other" as the last option:
+#### 问题结构
+每个问题必须包含有意义的选项，并以"其他"作为最后一个选项：
 
 ```markdown
-## Question [Number]
-[Clear, specific question text]
+## 问题 [编号]
+[清晰、具体的问题文本]
 
-A) [First meaningful option]
-B) [Second meaningful option]
-[...additional options as needed...]
-X) Other (please describe after [Answer]: tag below)
+A) [第一个有意义的选项]
+B) [第二个有意义的选项]
+[...根据需要添加更多选项...]
+X) 其他（请在 [回答]: 标签后描述）
 
-[Answer]: 
+[回答]: 
 ```
 
-**CRITICAL**: 
-- "Other" is MANDATORY as the LAST option for every question
-- Only include meaningful options - don't make up options to fill slots
-- Use as many or as few options as make sense (minimum 2 + Other)
+**关键**：
+- "其他"作为每个问题的最后一个选项是**强制要求**
+- 只包含有意义的选项——不要为了凑数而编造选项
+- 根据实际需要使用选项数量（最少 2 个 + 其他）
 
-### Complete Example
+### 完整示例
 
 ```markdown
-# Requirements Clarification Questions
+# 需求澄清问题
 
-Please answer the following questions to help clarify the requirements.
+请回答以下问题，以帮助澄清需求。
 
-## Question 1
-What is the primary user authentication method?
+## 问题 1
+主要的用户认证方式是什么？
 
-A) Username and password
-B) Social media login (Google, Facebook)
-C) Single Sign-On (SSO)
-D) Multi-factor authentication
-E) Other (please describe after [Answer]: tag below)
+A) 用户名和密码
+B) 社交媒体登录（Google、Facebook）
+C) 单点登录（SSO）
+D) 多因素认证
+E) 其他（请在 [回答]: 标签后描述）
 
-[Answer]: 
+[回答]: 
 
-## Question 2
-Will this be a web or mobile application?
+## 问题 2
+这是 Web 应用还是移动应用？
 
-A) Web application
-B) Mobile application
-C) Both web and mobile
-D) Other (please describe after [Answer]: tag below)
+A) Web 应用
+B) 移动应用
+C) Web 和移动应用都有
+D) 其他（请在 [回答]: 标签后描述）
 
-[Answer]: 
+[回答]: 
 
-## Question 3
-Is this a new project or existing codebase?
+## 问题 3
+这是新项目还是现有代码库？
 
-A) New project (greenfield)
-B) Existing codebase (brownfield)
-C) Other (please describe after [Answer]: tag below)
+A) 新项目（绿地项目）
+B) 现有代码库（棕地项目）
+C) 其他（请在 [回答]: 标签后描述）
 
-[Answer]: 
+[回答]: 
 ```
 
-### User Response Format
-Users will answer by filling in the letter choice after [Answer]: tag:
+### 用户回答格式
+用户通过在 [回答]: 标签后填写字母选项来回答：
 
 ```markdown
-## Question 1
-What is the primary user authentication method?
+## 问题 1
+主要的用户认证方式是什么？
 
-A) Username and password
-B) Social media login (Google, Facebook)
-C) Single Sign-On (SSO)
-D) Multi-factor authentication
+A) 用户名和密码
+B) 社交媒体登录（Google、Facebook）
+C) 单点登录（SSO）
+D) 多因素认证
 
-[Answer]: C
+[回答]: C
 ```
 
-### Reading User Responses
-After user confirms completion:
-1. Read the question file
-2. Extract answers after [Answer]: tags
-3. Validate all questions are answered
-4. Proceed with analysis based on responses
+### 读取用户回答
+用户确认完成后：
+1. 读取问题文件
+2. 提取 [回答]: 标签后的答案
+3. 验证所有问题是否已回答
+4. 根据回答继续分析
 
-### Multiple Choice Guidelines
+### 多选题指南
 
-#### Option Count
-- Minimum: 2 meaningful options + "Other" (A, B, C)
-- Typical: 3-4 meaningful options + "Other" (A, B, C, D, E)
-- Maximum: 5 meaningful options + "Other" (A, B, C, D, E, F)
-- **CRITICAL**: Don't make up options just to fill slots - only include meaningful choices
+#### 选项数量
+- 最少：2 个有意义的选项 + "其他"（A、B、C）
+- 典型：3-4 个有意义的选项 + "其他"（A、B、C、D、E）
+- 最多：5 个有意义的选项 + "其他"（A、B、C、D、E、F）
+- **关键**：不要为了凑数而编造选项——只包含有意义的选择
 
-#### Option Quality
-- Make options mutually exclusive
-- Cover the most common scenarios
-- Only include meaningful, realistic options
-- **ALWAYS include "Other" as the LAST option** (MANDATORY)
-- Be specific and clear
-- **Don't make up options to fill A, B, C, D slots**
+#### 选项质量
+- 选项之间应互斥
+- 覆盖最常见的场景
+- 只包含有意义的、现实的选项
+- **始终将"其他"作为最后一个选项（强制要求）**
+- 表述具体清晰
+- **不要为了填满 A、B、C、D 而编造选项**
 
-#### Good Example:
+#### 好的示例：
 ```markdown
-## Question 5
-What database technology will be used?
+## 问题 5
+将使用什么数据库技术？
 
-A) Relational (PostgreSQL, MySQL)
-B) NoSQL Document (MongoDB, DynamoDB)
-C) NoSQL Key-Value (Redis, Memcached)
-D) Graph Database (Neo4j, Neptune)
-E) Other (please describe after [Answer]: tag below)
+A) 关系型数据库（PostgreSQL、MySQL）
+B) NoSQL 文档数据库（MongoDB、DynamoDB）
+C) NoSQL 键值数据库（Redis、Memcached）
+D) 图数据库（Neo4j、Neptune）
+E) 其他（请在 [回答]: 标签后描述）
 
-[Answer]: 
+[回答]: 
 ```
 
-#### Bad Example (Avoid):
+#### 不好的示例（避免）：
 ```markdown
-## Question 5
-What database will you use?
+## 问题 5
+你会使用什么数据库？
 
-A) Yes
-B) No
-C) Maybe
+A) 是
+B) 否
+C) 也许
 
-[Answer]: 
+[回答]: 
 ```
 
-### Workflow Integration
+### 工作流集成
 
-#### Step 1: Create Question File
+#### 步骤 1：创建问题文件
 ```markdown
-Create aidlc-docs/{phase-name}-questions.md with all questions
+创建 aidlc-docs/{阶段名称}-questions.md，包含所有问题
 ```
 
-#### Step 2: Inform User
+#### 步骤 2：通知用户
 ```
-"I've created {phase-name}-questions.md with [X] questions. 
-Please answer each question by filling in the letter choice after the [Answer]: tag. 
-If none of the options match your needs, choose the last option (Other) and describe your preference. Let me know when you're done."
-```
-
-#### Step 3: Wait for Confirmation
-Wait for user to say "done", "completed", "finished", or similar.
-
-#### Step 4: Read and Analyze
-```
-Read aidlc-docs/{phase-name}-questions.md
-Extract all answers
-Validate completeness
-Proceed with analysis
+"我已创建 {阶段名称}-questions.md，包含 [X] 个问题。
+请在每个问题的 [回答]: 标签后填写字母选项来回答。
+如果没有匹配的选项，请选择最后一个选项（其他）并描述你的偏好。完成后请告诉我。"
 ```
 
-### Error Handling
+#### 步骤 3：等待确认
+等待用户说"完成"、"好了"、"搞定"或类似表述。
 
-#### Missing Answers
-If any [Answer]: tag is empty:
+#### 步骤 4：读取并分析
 ```
-"I noticed Question [X] is not answered. Please provide an answer using one of the letter choices 
-for all questions before proceeding."
-```
-
-#### Invalid Answers
-If answer is not a valid letter choice:
-```
-"Question [X] has an invalid answer '[answer]'. 
-Please use only the letter choices provided in the question."
+读取 aidlc-docs/{阶段名称}-questions.md
+提取所有答案
+验证完整性
+继续分析
 ```
 
-#### Ambiguous Answers
-If user provides explanation instead of letter:
+### 错误处理
+
+#### 缺少答案
+如果任何 [回答]: 标签为空：
 ```
-"For Question [X], please provide the letter choice that best matches your answer. 
-If none match, choose 'Other' and add your description after the [Answer]: tag."
+"我注意到问题 [X] 尚未回答。请在继续之前为所有问题提供字母选项答案。"
 ```
 
-### Contradiction and Ambiguity Detection
+#### 无效答案
+如果答案不是有效的字母选项：
+```
+"问题 [X] 的答案 '[answer]' 无效。
+请只使用问题中提供的字母选项。"
+```
 
-**MANDATORY**: After reading user responses, you MUST check for contradictions and ambiguities.
+#### 模糊答案
+如果用户提供了解释而非字母：
+```
+"对于问题 [X]，请提供最匹配你答案的字母选项。
+如果没有匹配的选项，请选择'其他'并在 [回答]: 标签后添加你的描述。"
+```
 
-#### Detecting Contradictions
-Look for logically inconsistent answers:
-- Scope mismatch: "Bug fix" but "Entire codebase affected"
-- Risk mismatch: "Low risk" but "Breaking changes"
-- Timeline mismatch: "Quick fix" but "Multiple subsystems"
-- Impact mismatch: "Single component" but "Significant architecture changes"
+### 矛盾和歧义检测
 
-#### Detecting Ambiguities
-Look for unclear or borderline responses:
-- Answers that could fit multiple classifications
-- Responses that lack specificity
-- Conflicting indicators across multiple questions
+**强制要求**：读取用户回答后，你必须检查矛盾和歧义。
 
-#### Creating Clarification Questions
-If contradictions or ambiguities detected:
+#### 检测矛盾
+寻找逻辑上不一致的答案：
+- 范围不匹配："Bug 修复"但"影响整个代码库"
+- 风险不匹配："低风险"但"有破坏性变更"
+- 时间线不匹配："快速修复"但"涉及多个子系统"
+- 影响不匹配："单个组件"但"重大架构变更"
 
-1. **Create clarification file**: `{phase-name}-clarification-questions.md`
-2. **Explain the issue**: Clearly state what contradiction/ambiguity was detected
-3. **Ask targeted questions**: Use multiple choice format to resolve the issue
-4. **Reference original questions**: Show which questions had conflicting answers
+#### 检测歧义
+寻找不清晰或边界模糊的回答：
+- 可能适用于多种分类的答案
+- 缺乏具体性的回答
+- 多个问题之间存在冲突的指标
 
-**Example**:
+#### 创建澄清问题
+如果检测到矛盾或歧义：
+
+1. **创建澄清文件**：`{阶段名称}-clarification-questions.md`
+2. **解释问题**：清楚说明检测到了什么矛盾/歧义
+3. **提出针对性问题**：使用多选题格式来解决问题
+4. **引用原始问题**：显示哪些问题的答案存在冲突
+
+**示例**：
 ```markdown
-# [Phase Name] Clarification Questions
+# [阶段名称] 澄清问题
 
-I detected contradictions in your responses that need clarification:
+我在你的回答中检测到需要澄清的矛盾：
 
-## Contradiction 1: [Brief Description]
-You indicated "[Answer A]" (Q[X]:[Letter]) but also "[Answer B]" (Q[Y]:[Letter]).
-These responses are contradictory because [explanation].
+## 矛盾 1：[简要描述]
+你表示"[答案 A]"（Q[X]:[字母]）但同时表示"[答案 B]"（Q[Y]:[字母]）。
+这些回答是矛盾的，因为 [解释]。
 
-### Clarification Question 1
-[Specific question to resolve contradiction]
+### 澄清问题 1
+[解决矛盾的具体问题]
 
-A) [Option that resolves toward first answer]
-B) [Option that resolves toward second answer]
-C) [Option that provides middle ground]
-D) [Option that reframes the question]
+A) [倾向于第一个答案的选项]
+B) [倾向于第二个答案的选项]
+C) [提供折中方案的选项]
+D) [重新定义问题的选项]
 
-[Answer]: 
+[回答]: 
 
-## Ambiguity 1: [Brief Description]
-Your response to Q[X] ("[Answer]") is ambiguous because [explanation].
+## 歧义 1：[简要描述]
+你对 Q[X] 的回答（"[答案]"）存在歧义，因为 [解释]。
 
-### Clarification Question 2
-[Specific question to clarify ambiguity]
+### 澄清问题 2
+[澄清歧义的具体问题]
 
-A) [Clear option 1]
-B) [Clear option 2]
-C) [Clear option 3]
-D) [Clear option 4]
+A) [明确选项 1]
+B) [明确选项 2]
+C) [明确选项 3]
+D) [明确选项 4]
 
-[Answer]: 
+[回答]: 
 ```
 
-#### Workflow for Clarifications
+#### 澄清工作流
 
-1. **Detect**: Analyze all responses for contradictions/ambiguities
-2. **Create**: Generate clarification question file if issues found
-3. **Inform**: Tell user about the issues and clarification file
-4. **Wait**: Do not proceed until user provides clarifications
-5. **Re-validate**: After clarifications, check again for consistency
-6. **Proceed**: Only move forward when all contradictions are resolved
+1. **检测**：分析所有回答中的矛盾/歧义
+2. **创建**：如发现问题，生成澄清问题文件
+3. **通知**：告知用户问题和澄清文件
+4. **等待**：在用户提供澄清之前不要继续
+5. **重新验证**：澄清后再次检查一致性
+6. **继续**：只有在所有矛盾解决后才继续推进
 
-#### Example User Message
+#### 用户消息示例
 ```
-"I detected 2 contradictions in your responses:
+"我在你的回答中检测到 2 个矛盾：
 
-1. Bug fix scope vs. codebase impact (Q1 vs Q2)
-2. Low risk vs. breaking changes (Q7 vs Q4)
+1. Bug 修复范围与代码库影响不一致（Q1 vs Q2）
+2. 低风险与破坏性变更不一致（Q7 vs Q4）
 
-I've created classification-clarification-questions.md with 2 questions to resolve these.
-Please answer these clarifying questions before I can proceed with classification."
+我已创建 classification-clarification-questions.md，包含 2 个问题来解决这些矛盾。
+请在我继续分类之前回答这些澄清问题。"
 ```
 
-### Best Practices
+### 最佳实践
 
-1. **Be Specific**: Questions should be clear and unambiguous
-2. **Be Comprehensive**: Cover all necessary information
-3. **Be Concise**: Keep questions focused on one topic
-4. **Be Practical**: Options should be realistic and actionable
-5. **Be Consistent**: Use same format throughout all question files
+1. **具体明确**：问题应清晰无歧义
+2. **全面覆盖**：涵盖所有必要信息
+3. **简洁聚焦**：每个问题只关注一个主题
+4. **务实可行**：选项应现实且可操作
+5. **格式一致**：在所有问题文件中使用相同格式
 
-### Phase-Specific Examples
+### 阶段特定示例
 
-#### Example with 2 meaningful options:
+#### 2 个有意义选项的示例：
 ```markdown
-## Question 1
-Is this a new project or existing codebase?
+## 问题 1
+这是新项目还是现有代码库？
 
-A) New project (greenfield)
-B) Existing codebase (brownfield)
-C) Other (please describe after [Answer]: tag below)
+A) 新项目（绿地项目）
+B) 现有代码库（棕地项目）
+C) 其他（请在 [回答]: 标签后描述）
 
-[Answer]: 
+[回答]: 
 ```
 
-#### Example with 3 meaningful options:
+#### 3 个有意义选项的示例：
 ```markdown
-## Question 2
-What is the deployment target?
+## 问题 2
+部署目标是什么？
 
-A) Cloud (AWS, Azure, GCP)
-B) On-premises servers
-C) Hybrid (both cloud and on-premises)
-D) Other (please describe after [Answer]: tag below)
+A) 云端（AWS、Azure、GCP）
+B) 本地服务器
+C) 混合部署（云端和本地）
+D) 其他（请在 [回答]: 标签后描述）
 
-[Answer]: 
+[回答]: 
 ```
 
-#### Example with 4 meaningful options:
+#### 4 个有意义选项的示例：
 ```markdown
-## Question 3
-What architectural pattern should be used?
+## 问题 3
+应该使用什么架构模式？
 
-A) Monolithic architecture
-B) Microservices architecture
-C) Serverless architecture
-D) Event-driven architecture
-E) Other (please describe after [Answer]: tag below)
+A) 单体架构
+B) 微服务架构
+C) 无服务器架构
+D) 事件驱动架构
+E) 其他（请在 [回答]: 标签后描述）
 
-[Answer]: 
+[回答]: 
 ```
 
-## Summary
+## 总结
 
-**Remember**: 
-- ✅ Always create question files
-- ✅ Always use multiple choice format
-- ✅ **Always include "Other" as the LAST option (MANDATORY)**
-- ✅ Only include meaningful options - don't make up options to fill slots
-- ✅ Always use [Answer]: tags
-- ✅ Always wait for user completion
-- ✅ Always validate responses for contradictions
-- ✅ Always create clarification files if needed
-- ✅ Always resolve contradictions before proceeding
-- ❌ Never ask questions in chat
-- ❌ Never make up options just to have A, B, C, D
-- ❌ Never proceed without answers
-- ❌ Never proceed with unresolved contradictions
-- ❌ Never make assumptions about ambiguous responses
+**请记住**：
+- ✅ 始终创建问题文件
+- ✅ 始终使用多选题格式
+- ✅ **始终将"其他"作为最后一个选项（强制要求）**
+- ✅ 只包含有意义的选项——不要为了凑数而编造选项
+- ✅ 始终使用 [回答]: 标签
+- ✅ 始终等待用户完成
+- ✅ 始终验证回答中的矛盾
+- ✅ 如需要，始终创建澄清文件
+- ✅ 始终在继续之前解决矛盾
+- ❌ 禁止在聊天中直接提问
+- ❌ 禁止为了凑 A、B、C、D 而编造选项
+- ❌ 禁止在没有答案的情况下继续
+- ❌ 禁止在矛盾未解决的情况下继续
+- ❌ 禁止对模糊回答做出假设

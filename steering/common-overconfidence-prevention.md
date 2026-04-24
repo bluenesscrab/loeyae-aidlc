@@ -1,100 +1,100 @@
-# Overconfidence Prevention Guide
+# 过度自信防范指南
 
-## Problem Statement
+## 问题描述
 
-AI-DLC was exhibiting overconfidence by not asking enough clarifying questions, even for complex project intent statements. This led to assumptions being made instead of gathering proper requirements.
+AI-DLC 表现出过度自信的行为，即使面对复杂的项目意图描述也不提出足够的澄清问题。这导致了基于假设而非收集正确需求来推进工作。
 
-## Root Cause Analysis
+## 根因分析
 
-The overconfidence issue was caused by directives in multiple stages that encouraged skipping questions:
+过度自信问题是由多个阶段中鼓励跳过提问的指令引起的：
 
-1. **Functional Design**: "Skip entire categories if not applicable"
-2. **User Stories**: "Use categories as inspiration, NOT as mandatory checklist"
-3. **Requirements Analysis**: Similar patterns encouraging minimal questioning
-4. **NFR Requirements**: "Only if" conditions that discouraged thorough analysis
+1. **功能设计**："如果不适用则跳过整个类别"
+2. **用户故事**："将类别作为灵感，而非强制清单"
+3. **需求分析**：类似的鼓励最少提问的模式
+4. **NFR 需求**："仅当"条件阻碍了全面分析
 
-These directives were telling the AI to avoid asking questions rather than encouraging comprehensive requirements gathering.
+这些指令告诉 AI 避免提问，而不是鼓励全面的需求收集。
 
-## Solution Implemented
+## 已实施的解决方案
 
-### Updated Question Generation Philosophy
+### 更新后的提问生成理念
 
-**OLD APPROACH**: "Only ask questions if absolutely necessary"
-**NEW APPROACH**: "When in doubt, ask the question - overconfidence leads to poor outcomes"
+**旧方法**："只在绝对必要时才提问"
+**新方法**："有疑问就提问——过度自信会导致糟糕的结果"
 
-### Key Changes Made
+### 关键变更
 
-#### 1. Requirements Analysis Stage
-- Changed from "only if needed" to "ALWAYS create questions unless exceptionally clear"
-- Added comprehensive evaluation areas (functional, non-functional, business context, technical context)
-- Emphasized proactive questioning approach
+#### 1. 需求分析阶段
+- 从"仅在需要时"改为"除非异常清晰，否则始终创建问题"
+- 增加了全面的评估领域（功能、非功能、业务上下文、技术上下文）
+- 强调主动提问的方式
 
-#### 2. User Stories Stage
-- Removed "skip entire categories" directive
-- Added comprehensive question categories to evaluate
-- Enhanced answer analysis requirements
-- Strengthened follow-up question mandates
+#### 2. 用户故事阶段
+- 移除了"跳过整个类别"的指令
+- 增加了全面的问题类别进行评估
+- 增强了回答分析要求
+- 加强了后续提问的强制要求
 
-#### 3. Functional Design Stage
-- Replaced "only if" conditions with comprehensive evaluation
-- Added more question categories (data flow, integration points, error handling)
-- Strengthened ambiguity detection and resolution requirements
+#### 3. 功能设计阶段
+- 将"仅当"条件替换为全面评估
+- 增加了更多问题类别（数据流、集成点、错误处理）
+- 加强了歧义检测和解决要求
 
-#### 4. NFR Requirements Stage
-- Expanded question categories beyond basic NFRs
-- Added reliability, maintainability, and usability considerations
-- Enhanced answer analysis for technical ambiguities
+#### 4. NFR 需求阶段
+- 扩展了超出基本 NFR 的问题类别
+- 增加了可靠性、可维护性和可用性方面的考量
+- 增强了技术歧义的回答分析
 
-### New Guiding Principles
+### 新的指导原则
 
-1. **Default to Asking**: When there's any ambiguity, ask clarifying questions
-2. **Comprehensive Coverage**: Evaluate ALL relevant categories, don't skip areas
-3. **Thorough Analysis**: Carefully analyze ALL user responses for ambiguities
-4. **Mandatory Follow-up**: Create follow-up questions for ANY unclear responses
-5. **No Proceeding with Ambiguity**: Don't move forward until ALL ambiguities are resolved
+1. **默认提问**：当存在任何歧义时，提出澄清问题
+2. **全面覆盖**：评估所有相关类别，不跳过任何领域
+3. **深入分析**：仔细分析所有用户回复中的歧义
+4. **强制后续提问**：对任何不清晰的回复创建后续问题
+5. **不带歧义推进**：在所有歧义解决之前不向前推进
 
-## Implementation Guidelines
+## 实施指南
 
-### For Question Generation
-- Evaluate ALL question categories, don't skip any
-- Ask questions wherever clarification would improve quality
-- Include comprehensive question categories in each stage
-- Default to inclusion rather than exclusion of questions
+### 关于提问生成
+- 评估所有问题类别，不跳过任何一个
+- 在澄清能提升质量的地方提问
+- 在每个阶段包含全面的问题类别
+- 默认包含而非排除问题
 
-### For Answer Analysis
-- Look for vague responses: "depends", "maybe", "not sure", "mix of", "somewhere between"
-- Detect undefined terms and references to external concepts
-- Identify contradictory or incomplete answers
-- Create follow-up questions for ANY ambiguities
+### 关于回答分析
+- 注意模糊回复："看情况"、"也许"、"不确定"、"混合的"、"介于之间"
+- 检测未定义的术语和对外部概念的引用
+- 识别矛盾或不完整的回答
+- 对任何歧义创建后续问题
 
-### For Follow-up Questions
-- Create separate clarification files when ambiguities are detected
-- Ask specific questions to resolve each ambiguity
-- Don't proceed until ALL unclear responses are clarified
-- Be thorough - better to over-clarify than under-clarify
+### 关于后续问题
+- 当检测到歧义时，创建单独的澄清文件
+- 针对每个歧义提出具体问题
+- 在所有不清晰的回复得到澄清之前不继续推进
+- 要全面——过度澄清好过澄清不足
 
-## Quality Assurance
+## 质量保证
 
-### Red Flags to Watch For
-- Stages completing without asking any questions on complex projects
-- Proceeding with vague or ambiguous user responses
-- Skipping entire question categories without justification
-- Making assumptions instead of asking for clarification
+### 需要警惕的危险信号
+- 复杂项目的阶段完成时没有提出任何问题
+- 在用户回复模糊或有歧义的情况下继续推进
+- 没有正当理由就跳过整个问题类别
+- 做出假设而不是寻求澄清
 
-### Success Indicators
-- Appropriate number of clarifying questions for project complexity
-- Thorough analysis of user responses with follow-up when needed
-- Clear, unambiguous requirements before proceeding to implementation
-- Reduced need for changes during later stages due to better upfront clarification
+### 成功指标
+- 针对项目复杂度提出适当数量的澄清问题
+- 对用户回复进行深入分析，必要时进行后续提问
+- 在进入实施之前确保需求清晰、无歧义
+- 由于前期更好的澄清，后续阶段的变更需求减少
 
-## Maintenance
+## 维护
 
-This guide should be referenced when:
-- Adding new stages to AI-DLC
-- Updating existing stage instructions
-- Reviewing AI-DLC performance for overconfidence issues
-- Training team members on AI-DLC question generation principles
+在以下情况下应参考本指南：
+- 向 AI-DLC 添加新阶段时
+- 更新现有阶段指令时
+- 审查 AI-DLC 是否存在过度自信问题时
+- 培训团队成员了解 AI-DLC 提问生成原则时
 
-## Key Takeaway
+## 核心要点
 
-**It's better to ask too many questions than to make incorrect assumptions.** The cost of asking clarifying questions upfront is far less than the cost of implementing the wrong solution based on assumptions.
+**宁可多问几个问题，也不要做出错误的假设。** 前期提出澄清问题的成本远低于基于假设实施错误方案的成本。

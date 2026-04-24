@@ -1,207 +1,261 @@
-# Code Generation - Detailed Steps
+# 代码生成 - 详细步骤
 
-## Overview
-This stage generates code for each unit of work through two integrated parts:
-- **Part 1 - Planning**: Create detailed code generation plan with explicit steps
-- **Part 2 - Generation**: Execute approved plan to generate code, tests, and artifacts
+## 概述
+此阶段通过两个集成部分为每个工作单元生成代码：
+- **第一部分 - 规划**：创建详细的代码生成计划，包含明确步骤
+- **第二部分 - 生成**：执行批准的计划生成代码、测试和产物
 
-**Note**: For brownfield projects, "generate" means modify existing files when appropriate, not create duplicates.
+**注意**：对于存量项目，"生成"意味着在适当时修改现有文件，而非创建副本。
 
-## Prerequisites
-- Unit Design Generation must be complete for the unit
-- NFR Implementation (if executed) must be complete for the unit
-- All unit design artifacts must be available
-- Unit is ready for code generation
-
----
-
-# PART 1: PLANNING
-
-## Step 1: Analyze Unit Context
-- [ ] Read unit design artifacts from Unit Design Generation
-- [ ] Read unit story map to understand assigned stories
-- [ ] Identify unit dependencies and interfaces
-- [ ] Validate unit is ready for code generation
-
-## Step 2: Create Detailed Unit Code Generation Plan
-- [ ] Read workspace root and project type from `aidlc-docs/aidlc-state.md`
-- [ ] Determine code location (see Critical Rules for structure patterns)
-- [ ] **Brownfield only**: Review reverse engineering code-structure.md for existing files to modify
-- [ ] Document exact paths (never aidlc-docs/)
-- [ ] Create explicit steps for unit generation:
-  - Project Structure Setup (greenfield only)
-  - Business Logic Generation
-  - Business Logic Unit Testing
-  - Business Logic Summary
-  - API Layer Generation
-  - API Layer Unit Testing
-  - API Layer Summary
-  - Repository Layer Generation
-  - Repository Layer Unit Testing
-  - Repository Layer Summary
-  - Database Migration Scripts (if data models exist)
-  - Documentation Generation (API docs, README updates)
-  - Deployment Artifacts Generation
-- [ ] Number each step sequentially
-- [ ] Include story mapping references
-- [ ] Add checkboxes [ ] for each step
-
-## Step 3: Include Unit Generation Context
-- [ ] For this unit, include:
-  - Stories implemented by this unit
-  - Dependencies on other units/services
-  - Expected interfaces and contracts
-  - Database entities owned by this unit
-  - Service boundaries and responsibilities
-
-## Step 4: Create Unit Plan Document
-- [ ] Save complete plan as `aidlc-docs/construction/plans/{unit-name}-code-generation-plan.md`
-- [ ] Include step numbering (Step 1, Step 2, etc.)
-- [ ] Include unit context and dependencies
-- [ ] Include story traceability
-- [ ] Ensure plan is executable step-by-step
-- [ ] Emphasize that this plan is the single source of truth for Code Generation
-
-## Step 5: Summarize Unit Plan
-- [ ] Provide summary of the unit code generation plan to the user
-- [ ] Highlight unit generation approach
-- [ ] Explain step sequence and story coverage
-- [ ] Note total number of steps and estimated scope
-
-## Step 6: Log Approval Prompt
-- [ ] Before asking for approval, log the prompt with timestamp in `aidlc-docs/audit.md`
-- [ ] Include reference to the complete unit code generation plan
-- [ ] Use ISO 8601 timestamp format
-
-## Step 7: Wait for Explicit Approval
-- [ ] Do not proceed until the user explicitly approves the unit code generation plan
-- [ ] Approval must cover the entire plan and generation sequence
-- [ ] If user requests changes, update the plan and repeat approval process
-
-## Step 8: Record Approval Response
-- [ ] Log the user's approval response with timestamp in `aidlc-docs/audit.md`
-- [ ] Include the exact user response text
-- [ ] Mark the approval status clearly
-
-## Step 9: Update Progress
-- [ ] Mark Code Planning complete in `aidlc-state.md`
-- [ ] Update the "Current Status" section
-- [ ] Prepare for transition to Code Generation
+## 前置条件
+- 该单元的单元设计生成必须完成
+- NFR 实现（如已执行）必须完成
+- 所有单元设计产物必须可用
+- 单元已准备好进行代码生成
 
 ---
 
-# PART 2: GENERATION
+# 第一部分：规划
 
-## Step 10: Load Unit Code Generation Plan
-- [ ] Read the complete plan from `aidlc-docs/construction/plans/{unit-name}-code-generation-plan.md`
-- [ ] Identify the next uncompleted step (first [ ] checkbox)
-- [ ] Load the context for that step (unit, dependencies, stories)
+## 步骤 1：分析单元上下文
+- [ ] 读取单元设计生成的设计产物
+- [ ] 读取单元故事映射以理解分配的故事
+- [ ] 识别单元依赖和接口
+- [ ] 验证单元已准备好进行代码生成
 
-## Step 11: Execute Current Step
-- [ ] Verify target directory from plan (never aidlc-docs/)
-- [ ] **Brownfield only**: Check if target file exists
-- [ ] Generate exactly what the current step describes:
-  - **If file exists**: Modify it in-place (never create `ClassName_modified.java`, `ClassName_new.java`, etc.)
-  - **If file doesn't exist**: Create new file
-- [ ] Write to correct locations:
-  - **Application Code**: Workspace root per project structure
-  - **Documentation**: `aidlc-docs/construction/{unit-name}/code/` (markdown only)
-  - **Build/Config Files**: Workspace root
-- [ ] Follow unit story requirements
-- [ ] Respect dependencies and interfaces
+## 步骤 2：MCP Skill 加载策略
 
-## Step 12: Update Progress
-- [ ] Mark the completed step as [x] in the unit code generation plan
-- [ ] Mark associated unit stories as [x] when their generation is finished
-- [ ] Update `aidlc-docs/aidlc-state.md` current status
-- [ ] **Brownfield only**: Verify no duplicate files created (e.g., no `ClassName_modified.java` alongside `ClassName.java`)
-- [ ] Save all generated artifacts
+在创建代码生成计划时，根据代码类型识别需要的 skill：
 
-## Step 13: Continue or Complete Generation
-- [ ] If more steps remain, return to Step 10
-- [ ] If all steps complete, proceed to present completion message
+### 后端代码
+1. 加载 common-tech-backend.md（后端编码规范）
+2. 根据代码类型调用 MCP skill：
+   - CRUD 模块 → `get_skill_summary("loeyae-crud")`
+   - 认证授权 → `get_skill_summary("loeyae-auth")`
+   - 参数校验 → `get_skill_summary("loeyae-validation")`
+   - 异常处理 → `get_skill_summary("loeyae-error-handling")`
+   - 数据访问 → `get_skill_summary("loeyae-data-access")`
+   - Web 基础设施 → `get_skill_summary("loeyae-web-infra")`
+   - 缓存 → `get_skill_summary("loeyae-cache")`
+   - 消息队列 → `get_skill_summary("loeyae-message")`
+   - 定时任务 → `get_skill_summary("loeyae-job")`
+   - 邮件 → `get_skill_summary("loeyae-mail")`
+   - CMS → `get_skill_summary("loeyae-cms")`
+   - Feign → `get_skill_summary("loeyae-feign")`
+   - 数据安全 → `get_skill_summary("loeyae-data-security")`
+   - 测试 → `get_skill_summary("loeyae-test")`
+   - 不确定时 → `search_skill("关键词")`
+3. 加载 common-tech-security.md（安全编码规范）
+4. 加载 common-database-design.md（数据库设计规范）
+5. 读取项目 `.kiro/steering/structure.md`（项目结构，如存在）
+6. 读取项目 `.kiro/steering/tech.md`（技术栈版本，如存在）
 
-## Step 14: Present Completion Message
-- Present completion message in this structure:
-     1. **Completion Announcement** (mandatory): Always start with this:
+### 前端代码
+1. 加载 common-tech-frontend.md（前端编码规范）
+2. 如有 Figma 设计稿 → 加载 common-figma-design-standards.md
+3. 读取项目 `.kiro/steering/structure.md`（前端目录结构，如存在）
+
+### 测试代码
+1. 加载 common-tech-testing.md（测试规范）
+2. 后端测试 → `get_skill_summary("loeyae-test")`
+
+## 步骤 3：创建详细单元代码生成计划
+- [ ] 从 `aidlc-docs/aidlc-state.md` 读取工作区根目录和项目类型
+- [ ] 确定代码位置（参见关键规则的结构模式）
+- [ ] **仅存量项目**：审查逆向工程 code-structure.md 了解需修改的现有文件
+- [ ] 记录确切路径（绝对不在 aidlc-docs/ 中）
+- [ ] 为单元生成创建明确步骤：
+
+### 后端单元步骤模板
+  - 项目结构设置（仅全新项目）
+  - 业务逻辑生成
+  - 业务逻辑单元测试
+  - 业务逻辑摘要
+  - API 层生成
+  - API 层单元测试
+  - API 层摘要
+  - 数据访问层生成
+  - 数据访问层单元测试
+  - 数据访问层摘要
+  - 数据库迁移脚本（如有数据模型）
+  - 文档生成（API 文档、README 更新）
+  - 部署产物生成
+
+### 前端单元步骤模板
+  - 类型定义（types/）— API 接口类型
+  - API 接口定义（api/）— 调用后端接口
+  - Store 定义（store/）— Pinia 状态管理
+  - 页面组件（views/）— 页面级组件
+  - 业务组件（views/components/）— 页面内子组件
+  - 路由配置（router/modules/）— 路由注册
+  - 国际化（locales/）— 翻译文件
+
+- [ ] 按顺序编号每个步骤
+- [ ] 包含故事映射引用
+- [ ] 为每个步骤添加复选框 [ ]
+
+## 步骤 4：包含单元生成上下文
+- [ ] 对此单元，包含：
+  - 此单元实现的故事
+  - 对其他单元/服务的依赖
+  - 预期接口和契约
+  - 此单元拥有的数据库实体
+  - 服务边界和职责
+
+## 步骤 5：创建单元计划文档
+- [ ] 将完整计划保存为 `aidlc-docs/construction/plans/{unit-name}-code-generation-plan.md`
+- [ ] 包含步骤编号（步骤 1、步骤 2 等）
+- [ ] 包含单元上下文和依赖
+- [ ] 包含故事可追溯性
+- [ ] 确保计划可逐步执行
+- [ ] 强调此计划是代码生成的唯一真实来源
+
+## 步骤 6：总结单元计划
+- [ ] 向用户提供单元代码生成计划的摘要
+- [ ] 突出单元生成方式
+- [ ] 解释步骤顺序和故事覆盖
+- [ ] 注明总步骤数和预估范围
+
+## 步骤 7：记录审批提示
+- [ ] 在请求审批前，在 `aidlc-docs/audit.md` 中记录提示及时间戳
+- [ ] 包含对完整单元代码生成计划的引用
+- [ ] 使用 ISO 8601 时间戳格式
+
+## 步骤 8：等待明确审批
+- [ ] 在用户明确审批前不得继续
+- [ ] 审批必须覆盖整个计划和生成顺序
+- [ ] 如用户请求修改，更新计划并重复审批流程
+
+## 步骤 9：记录审批回复
+- [ ] 在 `aidlc-docs/audit.md` 中记录用户的审批回复及时间戳
+- [ ] 包含用户的确切回复文本
+- [ ] 清晰标记审批状态
+
+## 步骤 10：更新进度
+- [ ] 在 `aidlc-state.md` 中标记代码规划完成
+- [ ] 更新"当前状态"部分
+- [ ] 准备过渡到代码生成
+
+---
+
+# 第二部分：生成
+
+## 步骤 11：加载单元代码生成计划
+- [ ] 从 `aidlc-docs/construction/plans/{unit-name}-code-generation-plan.md` 读取完整计划
+- [ ] 识别下一个未完成的步骤（第一个 [ ] 复选框）
+- [ ] 加载该步骤的上下文（单元、依赖、故事）
+
+## 步骤 12：执行当前步骤
+- [ ] 验证计划中的目标目录（绝对不在 aidlc-docs/ 中）
+- [ ] **仅存量项目**：检查目标文件是否存在
+- [ ] 精确生成当前步骤描述的内容：
+  - **如果文件存在**：就地修改（绝不创建 `ClassName_modified.java`、`ClassName_new.java` 等）
+  - **如果文件不存在**：创建新文件
+- [ ] 写入正确位置：
+  - **应用代码**：按项目结构写入工作区根目录
+  - **文档**：`aidlc-docs/construction/{unit-name}/code/`（仅 markdown）
+  - **构建/配置文件**：工作区根目录
+- [ ] 遵循单元故事需求
+- [ ] 尊重依赖和接口
+
+## 步骤 13：更新进度
+- [ ] 在单元代码生成计划中将已完成步骤标记为 [x]
+- [ ] 当故事的生成完成时，将关联的单元故事标记为 [x]
+- [ ] 更新 `aidlc-docs/aidlc-state.md` 当前状态
+- [ ] **仅存量项目**：验证未创建重复文件（如 `ClassName_modified.java` 与 `ClassName.java` 并存）
+- [ ] 保存所有生成的产物
+
+## 步骤 14：继续或完成生成
+- [ ] 如果还有步骤，返回步骤 11
+- [ ] 如果所有步骤完成，进入展示完成消息
+
+## 步骤 15：展示完成消息
+- 按以下结构展示完成消息：
+     1. **完成公告**（强制）：始终以此开头：
 
 ```markdown
-# 💻 Code Generation Complete - [unit-name]
+# 💻 代码生成完成 - [unit-name]
 ```
 
-     2. **AI Summary** (optional): Provide structured bullet-point summary
-        - **Brownfield**: Distinguish modified vs created files (e.g., "• Modified: `src/services/user-service.ts`", "• Created: `src/services/auth-service.ts`")
-        - **Greenfield**: List created files with paths (e.g., "• Created: `src/services/user-service.ts`")
-        - List tests, documentation, deployment artifacts with paths
-        - Keep factual, no workflow instructions
-     3. **Formatted Workflow Message** (mandatory): Always end with this exact format:
+     2. **AI 摘要**（可选）：提供结构化要点摘要
+        - **存量项目**：区分修改 vs 创建的文件（如"• 修改：`src/services/user-service.ts`"、"• 创建：`src/services/auth-service.ts`"）
+        - **全新项目**：列出创建的文件及路径（如"• 创建：`src/services/user-service.ts`"）
+        - 列出测试、文档、部署产物及路径
+        - 保持事实性，无工作流指令
+     3. **格式化工作流消息**（强制）：始终以此格式结尾：
 
 ```markdown
-> **📋 <u>**REVIEW REQUIRED:**</u>**  
-> Please examine the generated code at:
-> - **Application Code**: `[actual-workspace-path]`
-> - **Documentation**: `aidlc-docs/construction/[unit-name]/code/`
+> **📋 <u>**需要审查：**</u>**
+> 请检查生成的代码：
+> - **应用代码**：`[实际工作区路径]`
+> - **文档**：`aidlc-docs/construction/[unit-name]/code/`
 
 
 
-> **🚀 <u>**WHAT'S NEXT?**</u>**
+> **🚀 <u>**下一步？**</u>**
 >
-> **You may:**
+> **你可以：**
 >
-> 🔧 **Request Changes** - Ask for modifications to the generated code based on your review  
-> ✅ **Continue to Next Stage** - Approve code generation and proceed to **[next-unit/Build & Test]**
+> 🔧 **请求修改** - 根据审查结果要求修改生成的代码
+> ✅ **继续下一阶段** - 确认代码生成，进入**[下一单元/构建和测试]**
 
 ---
 ```
 
-## Step 15: Wait for Explicit Approval
-- Do not proceed until the user explicitly approves the generated code
-- Approval must be clear and unambiguous
-- If user requests changes, update the code and repeat the approval process
+## 步骤 16：等待明确审批
+- 在用户明确审批前不得继续
+- 审批必须清晰且无歧义
+- 如用户请求修改，更新代码并重复审批流程
 
-## Step 16: Record Approval and Update Progress
-- Log approval in audit.md with timestamp
-- Record the user's approval response with timestamp
-- Mark Code Generation stage as complete for this unit in aidlc-state.md
+## 步骤 17：记录审批并更新进度
+- 在 audit.md 中记录审批及时间戳
+- 记录用户的审批回复及时间戳
+- 在 aidlc-state.md 中标记此单元的代码生成阶段完成
 
 ---
 
-## Critical Rules
+## 代码生成强制规则
 
-### Code Location Rules
-- **Application code**: Workspace root only (NEVER aidlc-docs/)
-- **Documentation**: aidlc-docs/ only (markdown summaries)
-- **Read workspace root** from aidlc-state.md before generating code
+- 禁止在代码中留下 TODO、FIXME 或占位符
+- 所有功能必须实现到位，不得省略或跳过
+- 如果某部分无法实现，必须明确告知用户原因并提出替代方案
 
-**Structure patterns by project type**:
-- **Brownfield**: Use existing structure (e.g., `src/main/java/`, `lib/`, `pkg/`)
-- **Greenfield single unit**: `src/`, `tests/`, `config/` in workspace root
-- **Greenfield multi-unit (microservices)**: `{unit-name}/src/`, `{unit-name}/tests/`
-- **Greenfield multi-unit (monolith)**: `src/{unit-name}/`, `tests/{unit-name}/`
+## 关键规则
 
-### Brownfield File Modification Rules
-- Check if file exists before generating
-- If exists: Modify in-place (never create copies like `ClassName_modified.java`)
-- If doesn't exist: Create new file
-- Verify no duplicate files after generation (Step 12)
+### 代码位置规则
+- **应用代码**：仅在工作区根目录（绝不在 aidlc-docs/ 中）
+- **文档**：仅在 aidlc-docs/（markdown 摘要）
+- 生成代码前从 aidlc-state.md **读取工作区根目录**
 
-### Planning Phase Rules
-- Create explicit, numbered steps for all generation activities
-- Include story traceability in the plan
-- Document unit context and dependencies
-- Get explicit user approval before generation
+**按项目类型的结构模式**：
+- **存量项目**：使用现有结构（如 `src/main/java/`、`lib/`、`pkg/`）
+- **全新单单元项目**：工作区根目录下 `src/`、`tests/`、`config/`
+- **全新多单元（微服务）**：`{unit-name}/src/`、`{unit-name}/tests/`
+- **全新多单元（单体）**：`src/{unit-name}/`、`tests/{unit-name}/`
 
-### Generation Phase Rules
-- **NO HARDCODED LOGIC**: Only execute what's written in the unit plan
-- **FOLLOW PLAN EXACTLY**: Do not deviate from the step sequence
-- **UPDATE CHECKBOXES**: Mark [x] immediately after completing each step
-- **STORY TRACEABILITY**: Mark unit stories [x] when functionality is implemented
-- **RESPECT DEPENDENCIES**: Only implement when unit dependencies are satisfied
+### 存量项目文件修改规则
+- 生成前检查文件是否存在
+- 如果存在：就地修改（绝不创建副本如 `ClassName_modified.java`）
+- 如果不存在：创建新文件
+- 生成后验证无重复文件（步骤 13）
 
-## Completion Criteria
-- Complete unit code generation plan created and approved
-- All steps in unit code generation plan marked [x]
-- All unit stories implemented according to plan
-- All code and tests generated (tests will be executed in Build & Test phase)
-- Deployment artifacts generated
-- Complete unit ready for build and verification
+### 规划阶段规则
+- 为所有生成活动创建明确的编号步骤
+- 在计划中包含故事可追溯性
+- 记录单元上下文和依赖
+- 在生成前获取用户明确审批
+
+### 生成阶段规则
+- **无硬编码逻辑**：仅执行单元计划中写的内容
+- **严格遵循计划**：不偏离步骤顺序
+- **更新复选框**：完成每个步骤后立即标记 [x]
+- **故事可追溯性**：功能实现后标记单元故事 [x]
+- **尊重依赖**：仅在单元依赖满足时实现
+
+## 完成标准
+- 完整的单元代码生成计划已创建并获批
+- 单元代码生成计划中所有步骤已标记 [x]
+- 所有单元故事已按计划实现
+- 所有代码和测试已生成（测试将在构建和测试阶段执行）
+- 部署产物已生成
+- 完整单元已准备好进行构建和验证

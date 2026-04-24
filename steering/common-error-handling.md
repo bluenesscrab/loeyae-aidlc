@@ -1,373 +1,373 @@
-# Error Handling and Recovery Procedures
-
-## General Error Handling Principles
-
-### When Errors Occur
-1. **Identify the error**: Clearly state what went wrong
-2. **Assess impact**: Determine if the error is blocking or can be worked around
-3. **Communicate**: Inform the user about the error and options
-4. **Offer solutions**: Provide clear steps to resolve or work around the error
-5. **Document**: Log the error and resolution in `audit.md`
-
-### Error Severity Levels
-
-**Critical**: Workflow cannot continue
-- Missing required files or artifacts
-- Invalid user input that cannot be processed
-- System errors preventing file operations
-
-**High**: Phase cannot complete as planned
-- Incomplete answers to required questions
-- Contradictory user responses
-- Missing dependencies from prior phases
-
-**Medium**: Phase can continue with workarounds
-- Optional artifacts missing
-- Non-critical validation failures
-- Partial completion possible
-
-**Low**: Minor issues that don't block progress
-- Formatting inconsistencies
-- Optional information missing
-- Non-blocking warnings
-
-## Phase-Specific Error Handling
-
-### Context Assessment Errors
-
-**Error**: Cannot read workspace files
-- **Cause**: Permission issues, missing directories
-- **Solution**: Ask user to verify workspace path and permissions
-- **Workaround**: Proceed with user-provided information only
-
-**Error**: Existing `aidlc-state.md` is corrupted
-- **Cause**: Manual editing, incomplete previous run
-- **Solution**: Ask user if they want to start fresh or attempt recovery
-- **Recovery**: Create backup, start new state file
-
-**Error**: Cannot determine required phases
-- **Cause**: Insufficient information from user
-- **Solution**: Ask clarifying questions about intent and scope
-- **Workaround**: Default to comprehensive execution plan
-
-### Requirements Assessment Errors
-
-**Error**: User provides contradictory requirements
-- **Cause**: Unclear understanding, changing needs
-- **Solution**: Create follow-up questions to resolve contradictions
-- **Do Not Proceed**: Until contradictions are resolved
-
-**Error**: Requirements document cannot be converted
-- **Cause**: Unsupported format, corrupted file
-- **Solution**: Ask user to provide requirements in supported format
-- **Workaround**: Work with user's verbal description
-
-**Error**: Incomplete answers to verification questions
-- **Cause**: User skipped questions, unclear what to answer
-- **Solution**: Highlight unanswered questions, provide examples
-- **Do Not Proceed**: Until all required questions are answered
-
-### Story Development Errors
-
-**Error**: Cannot map requirements to stories
-- **Cause**: Requirements too vague, missing functional details
-- **Solution**: Return to Requirements Assessment for clarification
-- **Workaround**: Create stories based on available information, mark as incomplete
-
-**Error**: User provides ambiguous story planning answers
-- **Cause**: Unclear options, complex decision
-- **Solution**: Add follow-up questions with specific examples
-- **Do Not Proceed**: Until ambiguities are resolved
+# 错误处理和恢复流程
+
+## 通用错误处理原则
+
+### 当错误发生时
+1. **识别错误**：清楚说明出了什么问题
+2. **评估影响**：判断错误是阻塞性的还是可以绕过的
+3. **沟通**：告知用户错误情况和可选方案
+4. **提供解决方案**：提供清晰的步骤来解决或绕过错误
+5. **记录**：在 `audit.md` 中记录错误和解决方案
+
+### 错误严重级别
+
+**严重（Critical）**：工作流无法继续
+- 缺少必需的文件或产物
+- 无法处理的无效用户输入
+- 阻止文件操作的系统错误
+
+**高（High）**：阶段无法按计划完成
+- 必需问题的回答不完整
+- 用户回复相互矛盾
+- 缺少前序阶段的依赖
+
+**中（Medium）**：阶段可以通过变通方案继续
+- 可选产物缺失
+- 非关键性验证失败
+- 可以部分完成
+
+**低（Low）**：不阻塞进度的小问题
+- 格式不一致
+- 可选信息缺失
+- 非阻塞性警告
+
+## 阶段特定的错误处理
+
+### 上下文评估错误
+
+**错误**：无法读取工作区文件
+- **原因**：权限问题、目录缺失
+- **解决方案**：请用户验证工作区路径和权限
+- **变通方案**：仅使用用户提供的信息继续
+
+**错误**：现有的 `aidlc-state.md` 已损坏
+- **原因**：手动编辑、上次运行未完成
+- **解决方案**：询问用户是要重新开始还是尝试恢复
+- **恢复**：创建备份，启动新的状态文件
+
+**错误**：无法确定所需阶段
+- **原因**：用户提供的信息不足
+- **解决方案**：提出澄清问题，了解意图和范围
+- **变通方案**：默认使用全面的执行计划
+
+### 需求评估错误
+
+**错误**：用户提供了矛盾的需求
+- **原因**：理解不清晰、需求变化
+- **解决方案**：创建后续问题以解决矛盾
+- **不得继续**：直到矛盾解决
+
+**错误**：需求文档无法转换
+- **原因**：不支持的格式、文件损坏
+- **解决方案**：请用户以支持的格式提供需求
+- **变通方案**：使用用户的口头描述
+
+**错误**：验证问题的回答不完整
+- **原因**：用户跳过了问题、不清楚如何回答
+- **解决方案**：高亮未回答的问题，提供示例
+- **不得继续**：直到所有必需问题都已回答
+
+### 故事开发错误
+
+**错误**：无法将需求映射到故事
+- **原因**：需求过于模糊、缺少功能细节
+- **解决方案**：返回需求评估进行澄清
+- **变通方案**：基于可用信息创建故事，标记为不完整
+
+**错误**：用户提供了模糊的故事规划回答
+- **原因**：选项不清晰、决策复杂
+- **解决方案**：添加带有具体示例的后续问题
+- **不得继续**：直到歧义解决
 
-**Error**: Story generation plan has uncompleted steps
-- **Cause**: Execution interrupted, steps skipped
-- **Solution**: Resume from first uncompleted step
-- **Recovery**: Review completed steps, continue from checkpoint
-
-### Application Design Errors
-
-**Error**: Architectural decision is unclear or contradictory
-- **Cause**: Ambiguous answers, conflicting requirements
-- **Solution**: Add follow-up questions to clarify decision
-- **Do Not Proceed**: Until decision is clear and documented
+**错误**：故事生成计划有未完成的步骤
+- **原因**：执行中断、步骤被跳过
+- **解决方案**：从第一个未完成的步骤恢复
+- **恢复**：审查已完成的步骤，从检查点继续
+
+### 应用设计错误
+
+**错误**：架构决策不清晰或相互矛盾
+- **原因**：回答模糊、需求冲突
+- **解决方案**：添加后续问题以澄清决策
+- **不得继续**：直到决策清晰并已记录
 
-**Error**: Cannot determine number of services/units
-- **Cause**: Insufficient information about boundaries
-- **Solution**: Ask specific questions about deployment, team structure, scaling
-- **Workaround**: Default to monolith, allow change later
-
-### Design Errors
+**错误**：无法确定服务/单元的数量
+- **原因**：关于边界的信息不足
+- **解决方案**：提出关于部署、团队结构、扩展性的具体问题
+- **变通方案**：默认使用单体架构，允许后续更改
+
+### 设计错误
 
-**Error**: Unit dependencies are circular
-- **Cause**: Poor boundary definition, tight coupling
-- **Solution**: Identify circular dependencies, suggest refactoring
-- **Recovery**: Revise unit boundaries to break cycles
+**错误**：单元依赖存在循环
+- **原因**：边界定义不当、耦合过紧
+- **解决方案**：识别循环依赖，建议重构
+- **恢复**：修改单元边界以打破循环
 
-**Error**: Unit design plan has missing steps
-- **Cause**: Plan generation incomplete, template error
-- **Solution**: Regenerate plan with all required steps
-- **Recovery**: Add missing steps to existing plan
-
-**Error**: Cannot generate design artifacts
-- **Cause**: Missing unit information, unclear requirements
-- **Solution**: Return to Units Planning to clarify unit definition
-- **Workaround**: Generate partial design, mark gaps
+**错误**：单元设计计划缺少步骤
+- **原因**：计划生成不完整、模板错误
+- **解决方案**：重新生成包含所有必需步骤的计划
+- **恢复**：向现有计划添加缺失的步骤
+
+**错误**：无法生成设计产物
+- **原因**：缺少单元信息、需求不清晰
+- **解决方案**：返回单元规划以澄清单元定义
+- **变通方案**：生成部分设计，标记缺口
 
-### NFR Implementation Errors
+### NFR 实施错误
 
-**Error**: Technology stack choices are incompatible
-- **Cause**: Conflicting requirements, platform limitations
-- **Solution**: Highlight incompatibilities, ask user to choose
-- **Do Not Proceed**: Until compatible choices are made
+**错误**：技术栈选择不兼容
+- **原因**：需求冲突、平台限制
+- **解决方案**：指出不兼容之处，请用户选择
+- **不得继续**：直到做出兼容的选择
 
-**Error**: Organizational constraints cannot be met
-- **Cause**: Network restrictions, security policies
-- **Solution**: Document constraints, ask user for workarounds
-- **Escalation**: May require human intervention for setup
+**错误**：无法满足组织约束
+- **原因**：网络限制、安全策略
+- **解决方案**：记录约束，请用户提供变通方案
+- **升级处理**：可能需要人工介入进行设置
 
-**Error**: NFR implementation step requires human action
-- **Cause**: AI cannot perform certain tasks (network config, credentials)
-- **Solution**: Clearly mark as **HUMAN TASK**, provide instructions
-- **Wait**: For user confirmation before proceeding
+**错误**：NFR 实施步骤需要人工操作
+- **原因**：AI 无法执行某些任务（网络配置、凭证管理）
+- **解决方案**：明确标记为**人工任务**，提供操作说明
+- **等待**：在继续之前等待用户确认
 
-### Code Planning Errors
+### 代码规划错误
 
-**Error**: Code generation plan is incomplete
-- **Cause**: Missing design artifacts, unclear requirements
-- **Solution**: Return to Design phase to complete artifacts
-- **Recovery**: Generate plan with available information, mark gaps
+**错误**：代码生成计划不完整
+- **原因**：缺少设计产物、需求不清晰
+- **解决方案**：返回设计阶段完成产物
+- **恢复**：使用可用信息生成计划，标记缺口
 
-**Error**: Unit dependencies not satisfied
-- **Cause**: Dependent units not yet generated
-- **Solution**: Reorder generation sequence to respect dependencies
-- **Workaround**: Generate with stub dependencies, integrate later
+**错误**：单元依赖未满足
+- **原因**：依赖的单元尚未生成
+- **解决方案**：重新排序生成顺序以遵循依赖关系
+- **变通方案**：使用桩依赖生成，后续集成
 
-### Code Generation Errors
-
-**Error**: Cannot generate code for a step
-- **Cause**: Insufficient design information, unclear requirements
-- **Solution**: Skip step, document as incomplete, continue
-- **Recovery**: Return to step after gathering more information
+### 代码生成错误
+
+**错误**：无法为某个步骤生成代码
+- **原因**：设计信息不足、需求不清晰
+- **解决方案**：跳过该步骤，记录为不完整，继续
+- **恢复**：收集更多信息后返回该步骤
 
-**Error**: Generated code has syntax errors
-- **Cause**: Template issues, language-specific problems
-- **Solution**: Fix syntax errors, regenerate if needed
-- **Validation**: Verify code compiles before proceeding
+**错误**：生成的代码有语法错误
+- **原因**：模板问题、语言特定问题
+- **解决方案**：修复语法错误，必要时重新生成
+- **验证**：在继续之前验证代码可编译
 
-**Error**: Test generation fails
-- **Cause**: Complex logic, missing test framework setup
-- **Solution**: Generate basic test structure, mark for manual completion
-- **Workaround**: Proceed without tests, add in Operations phase
+**错误**：测试生成失败
+- **原因**：逻辑复杂、缺少测试框架设置
+- **解决方案**：生成基本测试结构，标记为需手动完成
+- **变通方案**：不带测试继续，在运维阶段添加
 
-### Operations Errors
+### 运维错误
 
-**Error**: Cannot determine build tool
-- **Cause**: Unusual project structure, multiple build systems
-- **Solution**: Ask user to specify build tool and commands
-- **Workaround**: Provide generic instructions, user adapts
+**错误**：无法确定构建工具
+- **原因**：项目结构不常见、存在多个构建系统
+- **解决方案**：请用户指定构建工具和命令
+- **变通方案**：提供通用说明，由用户适配
 
-**Error**: Deployment target is unclear
-- **Cause**: Multiple environments, complex infrastructure
-- **Solution**: Ask user to specify deployment targets and methods
-- **Workaround**: Provide instructions for common platforms
-
-## Recovery Procedures
-
-### Partial Phase Completion
-
-**Scenario**: Phase was interrupted mid-execution
-
-**Recovery Steps**:
-1. Load the phase plan file
-2. Identify last completed step (last [x] checkbox)
-3. Resume from next uncompleted step
-4. Verify all prior steps are actually complete
-5. Continue execution normally
-
-### Corrupted State File
-
-**Scenario**: `aidlc-state.md` is corrupted or inconsistent
-
-**Recovery Steps**:
-1. Create backup: `aidlc-state.md.backup`
-2. Ask user which phase they're actually on
-3. Regenerate state file from scratch
-4. Mark completed phases based on existing artifacts
-5. Resume from current phase
-
-### Missing Artifacts
-
-**Scenario**: Required artifacts from prior phase are missing
-
-**Recovery Steps**:
-1. Identify which artifacts are missing
-2. Determine if they can be regenerated
-3. If yes: Return to that phase, regenerate artifacts
-4. If no: Ask user to provide information manually
-5. Document the gap in `audit.md`
-
-### User Wants to Restart Phase
-
-**Scenario**: User is unhappy with phase results and wants to redo
-
-**Recovery Steps**:
-1. Confirm user wants to restart (data will be lost)
-2. Archive existing artifacts: `{artifact}.backup`
-3. Reset phase status in `aidlc-state.md`
-4. Clear phase checkboxes in plan files
-5. Re-execute phase from beginning
-
-### User Wants to Skip Phase
-
-**Scenario**: User wants to skip a phase that was planned
-
-**Recovery Steps**:
-1. Confirm user understands implications
-2. Document skip reason in `audit.md`
-3. Mark phase as "SKIPPED" in `aidlc-state.md`
-4. Proceed to next phase
-5. Note: May cause issues in later phases if dependencies missing
-
-## Escalation Guidelines
-
-### When to Ask for User Help
-
-**Immediately**:
-- Contradictory or ambiguous user input
-- Missing required information
-- Technical constraints AI cannot resolve
-- Decisions requiring business judgment
-
-**After Attempting Resolution**:
-- Repeated errors in same step
-- Complex technical issues
-- Unusual project structures
-- Integration with external systems
-
-### When to Suggest Starting Over
-
-**Consider Fresh Start If**:
-- Multiple phases have errors
-- State file is severely corrupted
-- User cannot provide missing information
-- Artifacts are inconsistent across phases
-
-## Session Resumption Errors
-
-### Missing Artifacts During Resumption
-
-**Error**: Required artifacts from previous stages are missing
-- **Cause**: Files deleted, moved, or never created
-- **Solution**: 
-  1. Identify which stage created the missing artifacts
-  2. Check if stage was marked complete in aidlc-state.md
-  3. If marked complete but artifacts missing: Regenerate that stage
-  4. If not marked complete: Resume from that stage
-- **Recovery**: Return to the stage that creates missing artifacts and re-execute
-
-**Error**: Artifact file exists but is empty or corrupted
-- **Cause**: Interrupted write, manual editing, file system issues
-- **Solution**:
-  1. Create backup of corrupted file
-  2. Attempt to regenerate from stage that creates it
-  3. If cannot regenerate: Ask user for information to recreate
-- **Recovery**: Re-execute the stage that creates the artifact
-
-### Inconsistent State During Resumption
-
-**Error**: aidlc-state.md shows stage complete but artifacts don't exist
-- **Cause**: State file updated but artifact generation failed
-- **Solution**:
-  1. Mark stage as incomplete in aidlc-state.md
-  2. Re-execute the stage to generate artifacts
-  3. Verify artifacts exist before marking complete
-- **Recovery**: Reset stage status and re-execute
-
-**Error**: Artifacts exist but aidlc-state.md shows stage incomplete
-- **Cause**: Artifact generation succeeded but state update failed
-- **Solution**:
-  1. Verify artifacts are complete and valid
-  2. Update aidlc-state.md to mark stage complete
-  3. Proceed to next stage
-- **Recovery**: Update state file to reflect actual completion
-
-**Error**: Multiple stages marked as "current" in aidlc-state.md
-- **Cause**: State file corruption, manual editing
-- **Solution**:
-  1. Review artifacts to determine actual progress
-  2. Ask user which stage they're actually on
-  3. Correct aidlc-state.md to show single current stage
-- **Recovery**: Rebuild state file based on existing artifacts
-
-### Context Loading Errors
-
-**Error**: Cannot load required context from previous stages
-- **Cause**: Missing files, corrupted content, wrong file paths
-- **Solution**:
-  1. List which artifacts are needed for current stage
-  2. Check which ones are missing or corrupted
-  3. Regenerate missing artifacts or ask user for information
-- **Recovery**: Complete prerequisite stages before resuming current stage
-
-**Error**: Loaded artifacts contain contradictory information
-- **Cause**: Manual editing, multiple people working, incomplete updates
-- **Solution**:
-  1. Identify contradictions and present to user
-  2. Ask user which information is correct
-  3. Update artifacts to resolve contradictions
-- **Recovery**: Reconcile contradictions before proceeding
-
-### Resumption Best Practices
-
-1. **Always validate state**: Check aidlc-state.md matches actual artifacts
-2. **Load incrementally**: Load artifacts stage-by-stage, validate each
-3. **Fail fast**: Stop immediately if critical artifacts are missing
-4. **Communicate clearly**: Tell user exactly what's missing and why it's needed
-5. **Offer options**: Regenerate, provide manually, or start fresh
-6. **Document recovery**: Log all recovery actions in audit.md State file is severely corrupted
-- User requirements have changed significantly
-- Architectural decision needs to be reversed
-
-**Before Starting Over**:
-1. Archive all existing work
-2. Document lessons learned
-3. Identify what to preserve
-4. Get user confirmation
-5. Create new execution plan
-
-## Logging Requirements
-
-### Error Logging Format
+**错误**：部署目标不清晰
+- **原因**：多个环境、复杂的基础设施
+- **解决方案**：请用户指定部署目标和方法
+- **变通方案**：提供常见平台的说明
+
+## 恢复流程
+
+### 阶段部分完成
+
+**场景**：阶段在执行过程中被中断
+
+**恢复步骤**：
+1. 加载阶段计划文件
+2. 识别最后完成的步骤（最后一个 [x] 复选框）
+3. 从下一个未完成的步骤恢复
+4. 验证所有之前的步骤确实已完成
+5. 正常继续执行
+
+### 状态文件损坏
+
+**场景**：`aidlc-state.md` 损坏或不一致
+
+**恢复步骤**：
+1. 创建备份：`aidlc-state.md.backup`
+2. 询问用户实际处于哪个阶段
+3. 从头重新生成状态文件
+4. 根据现有产物标记已完成的阶段
+5. 从当前阶段恢复
+
+### 产物缺失
+
+**场景**：前序阶段的必需产物缺失
+
+**恢复步骤**：
+1. 识别哪些产物缺失
+2. 判断是否可以重新生成
+3. 如果可以：返回该阶段，重新生成产物
+4. 如果不可以：请用户手动提供信息
+5. 在 `audit.md` 中记录缺口
+
+### 用户想要重新开始某阶段
+
+**场景**：用户对阶段结果不满意，想要重做
+
+**恢复步骤**：
+1. 确认用户想要重新开始（数据将丢失）
+2. 归档现有产物：`{artifact}.backup`
+3. 在 `aidlc-state.md` 中重置阶段状态
+4. 清除计划文件中的阶段复选框
+5. 从头重新执行阶段
+
+### 用户想要跳过某阶段
+
+**场景**：用户想要跳过一个已计划的阶段
+
+**恢复步骤**：
+1. 确认用户理解跳过的影响
+2. 在 `audit.md` 中记录跳过原因
+3. 在 `aidlc-state.md` 中将阶段标记为"SKIPPED"
+4. 继续下一个阶段
+5. 注意：如果缺少依赖，可能会在后续阶段造成问题
+
+## 升级处理指南
+
+### 何时请求用户帮助
+
+**立即请求**：
+- 用户输入矛盾或模糊
+- 缺少必需信息
+- AI 无法解决的技术约束
+- 需要业务判断的决策
+
+**尝试解决后请求**：
+- 同一步骤反复出错
+- 复杂的技术问题
+- 不常见的项目结构
+- 与外部系统的集成
+
+### 何时建议重新开始
+
+**考虑重新开始的情况**：
+- 多个阶段存在错误
+- 状态文件严重损坏
+- 用户无法提供缺失信息
+- 产物在各阶段之间不一致
+
+## 会话恢复错误
+
+### 恢复期间产物缺失
+
+**错误**：前序阶段的必需产物缺失
+- **原因**：文件被删除、移动或从未创建
+- **解决方案**：
+  1. 识别哪个阶段创建了缺失的产物
+  2. 检查该阶段在 aidlc-state.md 中是否标记为已完成
+  3. 如果标记为已完成但产物缺失：重新生成该阶段
+  4. 如果未标记为已完成：从该阶段恢复
+- **恢复**：返回创建缺失产物的阶段并重新执行
+
+**错误**：产物文件存在但为空或已损坏
+- **原因**：写入中断、手动编辑、文件系统问题
+- **解决方案**：
+  1. 创建损坏文件的备份
+  2. 尝试从创建它的阶段重新生成
+  3. 如果无法重新生成：请用户提供信息以重新创建
+- **恢复**：重新执行创建该产物的阶段
+
+### 恢复期间状态不一致
+
+**错误**：aidlc-state.md 显示阶段已完成但产物不存在
+- **原因**：状态文件已更新但产物生成失败
+- **解决方案**：
+  1. 在 aidlc-state.md 中将阶段标记为未完成
+  2. 重新执行该阶段以生成产物
+  3. 在标记完成之前验证产物存在
+- **恢复**：重置阶段状态并重新执行
+
+**错误**：产物存在但 aidlc-state.md 显示阶段未完成
+- **原因**：产物生成成功但状态更新失败
+- **解决方案**：
+  1. 验证产物是否完整且有效
+  2. 更新 aidlc-state.md 将阶段标记为已完成
+  3. 继续下一个阶段
+- **恢复**：更新状态文件以反映实际完成情况
+
+**错误**：aidlc-state.md 中多个阶段被标记为"当前"
+- **原因**：状态文件损坏、手动编辑
+- **解决方案**：
+  1. 审查产物以确定实际进度
+  2. 询问用户实际处于哪个阶段
+  3. 修正 aidlc-state.md 使其只显示一个当前阶段
+- **恢复**：根据现有产物重建状态文件
+
+### 上下文加载错误
+
+**错误**：无法从前序阶段加载所需上下文
+- **原因**：文件缺失、内容损坏、文件路径错误
+- **解决方案**：
+  1. 列出当前阶段需要的产物
+  2. 检查哪些缺失或损坏
+  3. 重新生成缺失的产物或请用户提供信息
+- **恢复**：在恢复当前阶段之前完成前置阶段
+
+**错误**：加载的产物包含矛盾信息
+- **原因**：手动编辑、多人协作、更新不完整
+- **解决方案**：
+  1. 识别矛盾并呈现给用户
+  2. 询问用户哪些信息是正确的
+  3. 更新产物以解决矛盾
+- **恢复**：在继续之前调和矛盾
+
+### 恢复最佳实践
+
+1. **始终验证状态**：检查 aidlc-state.md 是否与实际产物匹配
+2. **增量加载**：逐阶段加载产物，逐个验证
+3. **快速失败**：如果关键产物缺失，立即停止
+4. **清晰沟通**：准确告知用户缺少什么以及为什么需要
+5. **提供选项**：重新生成、手动提供或重新开始
+6. **记录恢复**：在 audit.md 中记录所有恢复操作 状态文件严重损坏
+- 用户需求发生了重大变化
+- 架构决策需要撤销
+
+**重新开始之前**：
+1. 归档所有现有工作
+2. 记录经验教训
+3. 确定需要保留的内容
+4. 获得用户确认
+5. 创建新的执行计划
+
+## 日志记录要求
+
+### 错误日志格式
 
 ```markdown
-## Error - [Phase Name]
-**Timestamp**: [ISO timestamp]
-**Error Type**: [Critical/High/Medium/Low]
-**Description**: [What went wrong]
-**Cause**: [Why it happened]
-**Resolution**: [How it was resolved]
-**Impact**: [Effect on workflow]
+## 错误 - [阶段名称]
+**时间戳**：[ISO 时间戳]
+**错误类型**：[严重/高/中/低]
+**描述**：[出了什么问题]
+**原因**：[为什么发生]
+**解决方案**：[如何解决]
+**影响**：[对工作流的影响]
 
 ---
 ```
 
-### Recovery Logging Format
+### 恢复日志格式
 
 ```markdown
-## Recovery - [Phase Name]
-**Timestamp**: [ISO timestamp]
-**Issue**: [What needed recovery]
-**Recovery Steps**: [What was done]
-**Outcome**: [Result of recovery]
-**Artifacts Affected**: [List of files]
+## 恢复 - [阶段名称]
+**时间戳**：[ISO 时间戳]
+**问题**：[需要恢复的内容]
+**恢复步骤**：[执行了什么操作]
+**结果**：[恢复的结果]
+**受影响的产物**：[文件列表]
 
 ---
 ```
 
-## Prevention Best Practices
+## 预防最佳实践
 
-1. **Validate Early**: Check inputs and dependencies before starting work
-2. **Checkpoint Often**: Update checkboxes immediately after completing steps
-3. **Communicate Clearly**: Explain what you're doing and why
-4. **Ask Questions**: Don't assume - clarify ambiguities immediately
-5. **Document Everything**: Log all decisions and changes in `audit.md`
+1. **尽早验证**：在开始工作之前检查输入和依赖
+2. **频繁设置检查点**：完成步骤后立即更新复选框
+3. **清晰沟通**：解释你在做什么以及为什么
+4. **主动提问**：不要假设——立即澄清歧义
+5. **记录一切**：在 `audit.md` 中记录所有决策和变更

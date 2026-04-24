@@ -1,189 +1,190 @@
-# AI-DLC Terminology Glossary
+# AI-DLC 术语表
 
-## Core Terminology
+## 核心术语
 
-### Phase vs Stage
+### 阶段（Phase）与步骤（Stage）
 
-**Phase**: One of the three high-level lifecycle phases in AI-DLC
-- 🔵 **INCEPTION PHASE** - Planning & Architecture (WHAT and WHY)
-- 🟢 **CONSTRUCTION PHASE** - Design, Implementation & Test (HOW)
-- 🟡 **OPERATIONS PHASE** - Deployment & Monitoring (future expansion)
+**阶段（Phase）**：AI-DLC 中的高层级生命周期阶段
+- 🔵 **INCEPTION 阶段** - 规划与架构（做什么以及为什么做）
+- 🟢 **CONSTRUCTION 阶段** - 设计、实现与测试（怎么做）
 
-**Stage**: An individual workflow activity within a phase
-- Examples: Context Assessment stage, Requirements Assessment stage, Code Planning stage
-- Each stage has specific prerequisites, steps, and outputs
-- Stages can be ALWAYS-EXECUTE or CONDITIONAL
+**步骤（Stage）**：阶段内的单个工作流活动
+- 示例：上下文评估步骤、需求分析步骤、代码规划步骤
+- 每个步骤有特定的前置条件、执行步骤和输出
+- 步骤可以是"始终执行"或"条件执行"
 
-**Usage Examples**:
-- ✅ "The CONSTRUCTION phase contains 7 stages"
-- ✅ "The Code Planning stage is always executed"
-- ✅ "We're in the INCEPTION phase, executing the Requirements Assessment stage"
-- ❌ "The Requirements Assessment phase" (should be "stage")
-- ❌ "The CONSTRUCTION stage" (should be "phase")
+**用法示例**：
+- ✅ "CONSTRUCTION 阶段包含 7 个步骤"
+- ✅ "代码规划步骤始终执行"
+- ✅ "我们在 INCEPTION 阶段，正在执行需求分析步骤"
+- ❌ "需求分析阶段"（应该是"步骤"）
+- ❌ "CONSTRUCTION 步骤"（应该是"阶段"）
 
-## Three-Phase Lifecycle
+## 两阶段生命周期
 
-### INCEPTION PHASE
-**Purpose**: Planning and architectural decisions  
-**Focus**: Determine WHAT to build and WHY  
-**Location**: `inception/` directory
+### INCEPTION 阶段
+**目的**：规划和架构决策
+**关注点**：确定做什么以及为什么做
+**位置**：`inception/` 目录
 
-**Stages**:
-- Workspace Detection (ALWAYS)
-- Reverse Engineering (CONDITIONAL - Brownfield only)
-- Requirements Analysis (ALWAYS - Adaptive depth)
-- User Stories (CONDITIONAL)
-- Workflow Planning (ALWAYS)
-- Application Design (CONDITIONAL)
-- Design - Units Planning/Generation (CONDITIONAL)
+**步骤**：
+- 工作区检测（始终执行）
+- 逆向工程（条件执行 - 仅棕地项目）
+- 需求分析（始终执行 - 自适应深度）
+- 用户故事（条件执行）
+- 工作流规划（始终执行）
+- 应用设计（条件执行）
+- 设计 - 工作单元规划/生成（条件执行）
 
-**Outputs**: Requirements, user stories, architectural decisions, unit definitions
+**输出**：需求、用户故事、架构决策、工作单元定义
 
-### CONSTRUCTION PHASE
-**Purpose**: Detailed design and implementation  
-**Focus**: Determine HOW to build it  
-**Location**: `construction/` directory
+### CONSTRUCTION 阶段
+**目的**：详细设计和实现
+**关注点**：确定怎么做
+**位置**：`construction/` 目录
 
-**Stages**:
-- Functional Design (CONDITIONAL, per-unit)
-- NFR Requirements (CONDITIONAL, per-unit)
-- NFR Design (CONDITIONAL, per-unit)
-- Infrastructure Design (CONDITIONAL, per-unit)
-- Code Planning (ALWAYS)
-- Code Generation (ALWAYS)
-- Build and Test (ALWAYS)
+**步骤**：
+- 功能设计（条件执行，按工作单元）
+- 非功能需求（条件执行，按工作单元）
+- 非功能设计（条件执行，按工作单元）
+- 基础设施设计（条件执行，按工作单元）
+- 代码规划（始终执行）
+- 代码生成（始终执行）
+- 构建与测试（始终执行）
 
-**Outputs**: Design artifacts, NFR implementations, code, tests
-
-### OPERATIONS PHASE
-**Purpose**: Deployment and operational readiness  
-**Focus**: How to DEPLOY and RUN it  
-**Location**: `operations/` directory
-
-**Stages**:
-- Operations (PLACEHOLDER)
-
-**Outputs**: Build instructions, deployment guides, monitoring setup, verification procedures
+**输出**：设计产物、非功能需求实现、代码、测试
 
 ---
 
-## Workflow Stages
+## 工作流步骤
 
-### Always-Execute Stages
-- **Workspace Detection**: Initial analysis of workspace state and project type
-- **Requirements Analysis**: Gathering requirements (depth varies based on complexity)
-- **Workflow Planning**: Creating execution plan for which phases to run
-- **Code Planning**: Creating detailed implementation plans for code generation
-- **Code Generation**: Generating actual code based on plans and prior artifacts
-- **Build and Test**: Building all units and executing comprehensive testing
+### 始终执行的步骤
+- **工作区检测**：对工作区状态和项目类型的初始分析
+- **需求分析**：收集需求（深度根据复杂度变化）
+- **工作流规划**：创建执行计划，确定哪些阶段需要运行
+- **代码规划**：为代码生成创建详细的实现计划
+- **代码生成**：根据计划和先前产物生成实际代码
+- **构建与测试**：构建所有工作单元并执行全面测试
 
-### Conditional Stages
-- **Reverse Engineering**: Analyzing existing codebase (brownfield projects only)
-- **User Stories**: Creating user stories and personas (includes Story Planning and Story Generation)
-- **Application Design**: Designing application components, methods, business rules, and services
-- **Design**: Designing system components (includes Units Planning, Units Generation, per-unit design)
-- **Functional Design**: Technology-agnostic business logic design (per-unit)
-- **NFR Requirements**: Determining NFRs and selecting tech stack (per-unit)
-- **NFR Design**: Incorporating NFR patterns and logical components (per-unit)
-- **Infrastructure Design**: Mapping to actual infrastructure services (per-unit)
+### 条件执行的步骤
+- **逆向工程**：分析现有代码库（仅棕地项目）
+- **用户故事**：创建用户故事和角色（包括故事规划和故事生成）
+- **应用设计**：设计应用组件、方法、业务规则和服务
+- **设计**：设计系统组件（包括工作单元规划、工作单元生成、按工作单元设计）
+- **功能设计**：与技术无关的业务逻辑设计（按工作单元）
+- **非功能需求**：确定非功能需求并选择技术栈（按工作单元）
+- **非功能设计**：整合非功能需求模式和逻辑组件（按工作单元）
+- **基础设施设计**：映射到实际基础设施服务（按工作单元）
 
-## Application Design Terms
+## 应用设计术语
 
-- **Component**: A functional unit with specific responsibilities
-- **Method**: A function or operation within a component with defined business rules
-- **Business Rule**: Logic that governs method behavior and validation
-- **Service**: Orchestration layer that coordinates business logic across components
-- **Component Dependency**: Relationship and communication pattern between components
+- **组件（Component）**：具有特定职责的功能单元
+- **方法（Method）**：组件内的函数或操作，具有定义的业务规则
+- **业务规则（Business Rule）**：控制方法行为和验证的逻辑
+- **服务（Service）**：协调跨组件业务逻辑的编排层
+- **组件依赖（Component Dependency）**：组件之间的关系和通信模式
 
-## Architecture Terms (Infrastructure)
+## 架构术语（基础设施）
 
-### Unit of Work
-A logical grouping of user stories for development purposes. The term used during planning and decomposition.
+### 工作单元（Unit of Work）
+用于开发目的的用户故事逻辑分组。在规划和分解过程中使用的术语。
 
-**Usage**: "We need to decompose the system into units of work"
+**用法**："我们需要将系统分解为工作单元"
 
-### Service
-An independently deployable component in a microservices architecture. Each service is a separate unit of work.
+### 服务（Service）
+微服务架构中可独立部署的组件。每个服务是一个独立的工作单元。
 
-**Usage**: "The Payment Service handles all payment processing"
+**用法**："支付服务处理所有支付流程"
 
-### Module
-A logical grouping of functionality within a single service or monolith. Modules are not independently deployable.
+### 模块（Module）
+单个服务或单体应用内的功能逻辑分组。模块不可独立部署。
 
-**Usage**: "The authentication module within the User Service"
+**用法**："用户服务中的认证模块"
 
-### Component
-A reusable building block within a service or module. Components are classes, functions, or packages that provide specific functionality.
+### 组件（Component）
+服务或模块内的可复用构建块。组件是提供特定功能的类、函数或包。
 
-**Usage**: "The EmailValidator component validates email addresses"
+**用法**："EmailValidator 组件验证电子邮件地址"
 
-## Terminology Guidelines
+## 术语使用指南
 
-### When to Use Each Term
+### 何时使用各术语
 
-**Unit of Work**:
-- During Units Planning and Units Generation phases
-- When discussing system decomposition
-- In planning documents and discussions
-- Example: "How should we decompose this into units of work?"
+**工作单元（Unit of Work）**：
+- 在工作单元规划和工作单元生成阶段
+- 讨论系统分解时
+- 在规划文档和讨论中
+- 示例："我们应该如何将其分解为工作单元？"
 
-**Service**:
-- When referring to independently deployable components
-- In microservices architecture contexts
-- In deployment and infrastructure discussions
-- Example: "The Order Service will be deployed to ECS"
+**服务（Service）**：
+- 指代可独立部署的组件时
+- 在微服务架构上下文中
+- 在部署和基础设施讨论中
+- 示例："订单服务将部署到 ECS"
 
-**Module**:
-- When referring to logical groupings within a service
-- In monolith architecture contexts
-- When discussing internal organization
-- Example: "The reporting module generates all reports"
+**模块（Module）**：
+- 指代服务内的逻辑分组时
+- 在单体架构上下文中
+- 讨论内部组织时
+- 示例："报表模块生成所有报表"
 
-**Component**:
-- When referring to specific classes, functions, or packages
-- In design and implementation discussions
-- When discussing reusable building blocks
-- Example: "The DatabaseConnection component manages connections"
+**组件（Component）**：
+- 指代特定的类、函数或包时
+- 在设计和实现讨论中
+- 讨论可复用构建块时
+- 示例："DatabaseConnection 组件管理连接"
 
-## Stage Terminology
+## 步骤术语
 
-### Planning vs Generation
-- **Planning**: Creating a plan with questions and checkboxes for execution
-- **Generation**: Executing the plan to create artifacts
+### 规划（Planning）与生成（Generation）
+- **规划（Planning）**：创建包含问题和复选框的执行计划
+- **生成（Generation）**：执行计划以创建产物
 
-Examples:
-- Story Planning → Story Generation
-- Units Planning → Units Generation
-- Unit Design Planning → Unit Design Generation
-- NFR Planning → NFR Generation
-- Code Planning → Code Generation
+示例：
+- 故事规划 → 故事生成
+- 工作单元规划 → 工作单元生成
+- 单元设计规划 → 单元设计生成
+- 非功能需求规划 → 非功能需求生成
+- 代码规划 → 代码生成
 
-### Depth Levels
-- **Minimal**: Quick, focused execution for simple changes
-- **Standard**: Normal depth with standard artifacts for typical projects
-- **Comprehensive**: Full depth with all artifacts for complex/high-risk projects
+### 深度级别（Depth Levels）
+- **最小化（Minimal）**：快速、聚焦的执行，适用于简单变更
+- **标准（Standard）**：正常深度，包含标准产物，适用于典型项目
+- **全面（Comprehensive）**：完整深度，包含所有产物，适用于复杂/高风险项目
 
-## Artifact Types
+## 产物类型
 
-### Plans
-Documents with checkboxes and questions that guide execution.
-- Located in `aidlc-docs/plans/`
-- Examples: `story-generation-plan.md`, `unit-of-work-plan.md`
+### 计划（Plans）
+包含复选框和问题的文档，用于指导执行。
+- 位于 `aidlc-docs/plans/`
+- 示例：`story-generation-plan.md`、`unit-of-work-plan.md`
 
-### Artifacts
-Generated outputs from executing plans.
-- Located in various `aidlc-docs/` subdirectories
-- Examples: `requirements.md`, `stories.md`, `design.md`
+### 产物（Artifacts）
+执行计划后生成的输出。
+- 位于 `aidlc-docs/` 的各子目录中
+- 示例：`requirements.md`、`stories.md`、`design.md`
 
-### State Files
-Files tracking workflow progress and status.
-- `aidlc-state.md`: Overall workflow state
-- `audit.md`: Complete audit trail of all interactions
+### 状态文件（State Files）
+跟踪工作流进度和状态的文件。
+- `aidlc-state.md`：整体工作流状态
+- `audit.md`：所有交互的完整审计记录
 
-## Common Abbreviations
+## 团队特有术语
 
-- **AI-DLC**: AI-Driven Development Life Cycle
-- **NFR**: Non-Functional Requirements
-- **UOW**: Unit of Work
-- **API**: Application Programming Interface
-- **CDK**: Cloud Development Kit (AWS)
+### MCP Skill
+通过 MCP 服务提供的编码规范文档。用于在开发过程中为 AI 提供项目特定的编码标准和最佳实践指导。
+
+### Loeyae Boot Framework
+团队的 Java 后端开发框架。基于 Spring Boot 构建，提供统一的项目结构、通用组件和开发规范。
+
+### Per-Unit 循环
+Construction 阶段中对每个工作单元执行的设计-代码循环。包括功能设计、非功能需求、非功能设计、基础设施设计、代码规划、代码生成和构建测试等步骤的完整迭代。
+
+## 常用缩写
+
+- **AI-DLC**：AI 驱动的开发生命周期（AI-Driven Development Life Cycle）
+- **NFR**：非功能需求（Non-Functional Requirements）
+- **UOW**：工作单元（Unit of Work）
+- **API**：应用程序编程接口（Application Programming Interface）
+- **CDK**：云开发工具包（Cloud Development Kit，AWS）
+- **MCP**：模型上下文协议（Model Context Protocol）

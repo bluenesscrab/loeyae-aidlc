@@ -1,549 +1,479 @@
----
-inclusion: always
----
-
-# PRIORITY: This workflow OVERRIDES all other built-in workflows
-# When user requests software development, ALWAYS follow this workflow FIRST
+# 优先级：本工作流覆盖所有其他内置工作流
+# 当用户请求软件开发时，始终优先遵循本工作流
 
 ---
 
-## MANDATORY FIRST STEP: Language Selection
+## 团队强制规则
 
-**CRITICAL**: You MUST ask user to select language BEFORE any other interaction. This is NON-NEGOTIABLE.
-
-When user activates AI-DLC, you MUST first display this prompt:
-
-```
-AI-DLC Power activated.
-
-Please select your preferred language / 请选择您的首选语言:
-
-► **A** - English
-  _All conversations and generated documents will be in English_
-
-► **B** - 中文
-  _所有对话和生成的文档都将使用中文_
-
----
-Reply with "A" or "B" / 请回复 "A" 或 "B"
-```
-
-**WAIT for user response before proceeding.**
-
-**Do NOT display welcome message until language is selected.**
-**Do NOT proceed with ANY workflow steps until language is confirmed.**
-
-Once language is selected:
-1. Record the selection in `aidlc-docs/aidlc-state.md`
-2. Use the selected language for ALL subsequent outputs
-3. Then proceed with the welcome message and workflow
+1. **使用简体中文交互**
+2. **禁止在代码中留下 TODO、FIXME 或占位符** — 所有功能必须实现到位
+3. **按需加载文档** — 避免不必要的 token 消耗
+4. **如果某部分无法实现，必须明确告知用户原因并提出替代方案**
 
 ---
 
-## Adaptive Workflow Principle
-**The workflow adapts to the work, not the other way around.**
+## 自适应工作流原则
 
-The AI model intelligently assesses what stages are needed based on:
-1. User's stated intent and clarity
-2. Existing codebase state (if any)
-3. Complexity and scope of change
-4. Risk and impact assessment
+**工作流适应工作，而非工作适应工作流。**
 
-## MANDATORY: Rule Details Loading
-**CRITICAL**: When performing any phase, you MUST read and use relevant content from steering files within this power.
+AI 模型根据以下因素智能评估需要哪些阶段：
+1. 用户意图的清晰度和完整性
+2. 现有代码库状态（如有）
+3. 变更的复杂度和范围
+4. 风险和影响评估
 
-**Common Rules**: ALWAYS load common rules at workflow start:
-- Load `common-process-overview.md` for workflow overview
-- Load `common-session-continuity.md` for session resumption guidance
-- Load `common-content-validation.md` for content validation requirements
-- Load `common-question-format-guide.md` for question formatting rules
-- Reference these throughout the workflow execution
+## 必须：规则详情加载
 
-## MANDATORY: Content Validation
-**CRITICAL**: Before creating ANY file, you MUST validate content according to `common-content-validation.md` rules:
-- Validate Mermaid diagram syntax
-- Validate ASCII art diagrams (see `common-ascii-diagram-standards.md`)
-- Escape special characters properly
-- Provide text alternatives for complex visual content
-- Test content parsing compatibility
+**关键**：执行任何阶段时，必须读取并使用本 Power 的 steering 文件中的相关内容。
 
-## MANDATORY: Question File Format
-**CRITICAL**: When asking questions at any phase, you MUST follow question format guidelines.
+**通用规则**：工作流启动时始终加载：
+- 加载 `common-process-overview.md` 了解工作流概览
+- 加载 `common-session-continuity.md` 了解会话恢复指导
+- 加载 `common-content-validation.md` 了解内容验证要求
+- 加载 `common-question-format-guide.md` 了解问题格式规则
+- 在整个工作流执行过程中引用这些规则
 
-**See `common-question-format-guide.md` for complete question formatting rules including**:
-- Multiple choice format (A, B, C, D, E options)
-- [Answer]: tag usage
-- Answer validation and ambiguity resolution
+## 必须：内容验证
 
-## MANDATORY: Custom Welcome Message
-**CRITICAL**: When starting ANY software development request, you MUST display the welcome message.
+**关键**：创建任何文件之前，必须按照 `common-content-validation.md` 的规则验证内容：
+- 验证 Mermaid 图表语法
+- 验证 ASCII 图表（参见 `common-ascii-diagram-standards.md`）
+- 正确转义特殊字符
+- 为复杂视觉内容提供文本替代
+- 测试内容解析兼容性
 
-**How to Display Welcome Message**:
-1. Load the welcome message from `common-welcome-message.md` within this power
-2. Display the complete message to the user
-3. This should only be done ONCE at the start of a new workflow
-4. Do NOT load this file in subsequent interactions to save context space
+## 必须：问题文件格式
 
-# Adaptive Software Development Workflow
+**关键**：在任何阶段提问时，必须遵循问题格式指南。
 
----
+**参见 `common-question-format-guide.md` 了解完整的问题格式规则**，包括：
+- 多选格式（A、B、C、D、E 选项）
+- [回答]: 标签用法
+- 答案验证和歧义解决
 
-# INCEPTION PHASE
+## 必须：欢迎消息
 
-**Purpose**: Planning, requirements gathering, and architectural decisions
+**关键**：启动任何软件开发请求时，必须显示欢迎消息。
 
-**Focus**: Determine WHAT to build and WHY
-
-**Stages in INCEPTION PHASE**:
-- Workspace Detection (ALWAYS)
-- Reverse Engineering (CONDITIONAL - Brownfield only)
-- Requirements Analysis (ALWAYS - Adaptive depth)
-- User Stories (CONDITIONAL)
-- Workflow Planning (ALWAYS)
-- Application Design (CONDITIONAL)
-- Units Generation (CONDITIONAL)
+**显示方式**：
+1. 从本 Power 的 `common-welcome-message.md` 加载欢迎消息
+2. 向用户显示完整消息
+3. 仅在新工作流开始时显示一次
+4. 后续交互中不再加载此文件以节省上下文空间
 
 ---
 
-## Workspace Detection (ALWAYS EXECUTE)
-
-1. **MANDATORY**: Log initial user request in audit.md with complete raw input
-2. Load all steps from `inception-workspace-detection.md`
-3. Execute workspace detection:
-   - Check for existing aidlc-state.md (resume if found)
-   - Scan workspace for existing code
-   - Determine if brownfield or greenfield
-   - Check for existing reverse engineering artifacts
-4. Determine next phase: Reverse Engineering (if brownfield and no artifacts) OR Requirements Analysis
-5. **MANDATORY**: Log findings in audit.md
-6. Present completion message to user (see workspace-detection.md for message formats)
-7. Automatically proceed to next phase
-
-## Reverse Engineering (CONDITIONAL - Brownfield Only)
-
-**Execute IF**:
-- Existing codebase detected
-- No previous reverse engineering artifacts found
-
-**Skip IF**:
-- Greenfield project
-- Previous reverse engineering artifacts exist
-
-**Execution**:
-1. **MANDATORY**: Log start of reverse engineering in audit.md
-2. Load all steps from `inception-reverse-engineering.md`
-3. Execute reverse engineering:
-   - Analyze all packages and components
-   - Generate a busienss overview of the whole system covering the business transactions
-   - Generate architecture documentation
-   - Generate code structure documentation
-   - Generate API documentation
-   - Generate component inventory
-   - Generate Interaction Diagrams depicting how business transactions are implemented across components
-   - Generate technology stack documentation
-   - Generate dependencies documentation
-
-4. **Wait for Explicit Approval**: Present detailed completion message (see reverse-engineering.md for message format) - DO NOT PROCEED until user confirms
-5. **MANDATORY**: Log user's response in audit.md with complete raw input
-
-## Requirements Analysis (ALWAYS EXECUTE - Adaptive Depth)
-
-**Always executes** but depth varies based on request clarity and complexity:
-- **Minimal**: Simple, clear request - just document intent analysis
-- **Standard**: Normal complexity - gather functional and non-functional requirements
-- **Comprehensive**: Complex, high-risk - detailed requirements with traceability
-
-**Execution**:
-1. **MANDATORY**: Log any user input during this phase in audit.md
-2. Load all steps from `inception-requirements-analysis.md`
-3. Execute requirements analysis:
-   - Load reverse engineering artifacts (if brownfield)
-   - Analyze user request (intent analysis)
-   - Determine requirements depth needed
-   - Assess current requirements
-   - Ask clarifying questions (if needed)
-   - Generate requirements document
-4. Execute at appropriate depth (minimal/standard/comprehensive)
-5. **Wait for Explicit Approval**: Follow approval format from requirements-analysis.md detailed steps - DO NOT PROCEED until user confirms
-6. **MANDATORY**: Log user's response in audit.md with complete raw input
-
-## User Stories (CONDITIONAL)
-
-**INTELLIGENT ASSESSMENT**: Use multi-factor analysis to determine if user stories add value:
-
-**ALWAYS Execute IF** (High Priority Indicators):
-- New user-facing features or functionality
-- Changes affecting user workflows or interactions
-- Multiple user types or personas involved
-- Complex business requirements with acceptance criteria needs
-- Cross-functional team collaboration required
-- Customer-facing API or service changes
-- New product capabilities or enhancements
-
-**LIKELY Execute IF** (Medium Priority - Assess Complexity):
-- Modifications to existing user-facing features
-- Backend changes that indirectly affect user experience
-- Integration work that impacts user workflows
-- Performance improvements with user-visible benefits
-- Security enhancements affecting user interactions
-- Data model changes affecting user data or reports
-
-**COMPLEXITY-BASED ASSESSMENT**: For medium priority cases, execute user stories if:
-- Request involves multiple components or services
-- Changes span multiple user touchpoints
-- Business logic is complex or has multiple scenarios
-- Requirements have ambiguity that stories could clarify
-- Implementation affects multiple user journeys
-- Change has significant business impact or risk
-
-**SKIP ONLY IF** (Low Priority - Simple Cases):
-- Pure internal refactoring with zero user impact
-- Simple bug fixes with clear, isolated scope
-- Infrastructure changes with no user-facing effects
-- Technical debt cleanup with no functional changes
-- Developer tooling or build process improvements
-- Documentation-only updates
-
-**ASSESSMENT CRITERIA**: When in doubt, favor inclusion of user stories for:
-- Requests with business stakeholder involvement
-- Changes requiring user acceptance testing
-- Features with multiple implementation approaches
-- Work that benefits from shared team understanding
-- Projects where requirements clarity is valuable
-
-**ASSESSMENT PROCESS**: 
-1. Analyze request complexity and scope
-2. Identify user impact (direct or indirect)
-3. Evaluate business context and stakeholder needs
-4. Consider team collaboration benefits
-5. Default to inclusion for borderline cases
-
-**Note**: If Requirements Analysis executed, Stories can reference and build upon those requirements.
-
-**User Stories has two parts within one stage**:
-1. **Part 1 - Planning**: Create story plan with questions, collect answers, analyze for ambiguities, get approval
-2. **Part 2 - Generation**: Execute approved plan to generate stories and personas
-
-**Execution**:
-1. **MANDATORY**: Log any user input during this phase in audit.md
-2. Load all steps from `inception-user-stories.md`
-3. **MANDATORY**: Perform intelligent assessment (Step 1 in user-stories.md) to validate user stories are needed
-4. Load reverse engineering artifacts (if brownfield)
-5. If Requirements exist, reference them when creating stories
-6. Execute at appropriate depth (minimal/standard/comprehensive)
-7. **PART 1 - Planning**: Create story plan with questions, wait for user answers, analyze for ambiguities, get approval
-8. **PART 2 - Generation**: Execute approved plan to generate stories and personas
-9. **Wait for Explicit Approval**: Follow approval format from user-stories.md detailed steps - DO NOT PROCEED until user confirms
-10. **MANDATORY**: Log user's response in audit.md with complete raw input
-
-## Workflow Planning (ALWAYS EXECUTE)
-
-1. **MANDATORY**: Log any user input during this phase in audit.md
-2. Load all steps from `inception-workflow-planning.md`
-3. **MANDATORY**: Load content validation rules from `common-content-validation.md`
-4. Load all prior context:
-   - Reverse engineering artifacts (if brownfield)
-   - Intent analysis
-   - Requirements (if executed)
-   - User stories (if executed)
-5. Execute workflow planning:
-   - Determine which phases to execute
-   - Determine depth level for each phase
-   - Create multi-package change sequence (if brownfield)
-   - Generate workflow visualization (VALIDATE Mermaid syntax before writing)
-6. **MANDATORY**: Validate all content before file creation per content-validation.md rules
-7. **Wait for Explicit Approval**: Present recommendations using language from workflow-planning.md Step 9, emphasizing user control to override recommendations - DO NOT PROCEED until user confirms
-8. **MANDATORY**: Log user's response in audit.md with complete raw input
-
-## Application Design (CONDITIONAL)
-
-**Execute IF**:
-- New components or services needed
-- Component methods and business rules need definition
-- Service layer design required
-- Component dependencies need clarification
-
-**Skip IF**:
-- Changes within existing component boundaries
-- No new components or methods
-- Pure implementation changes
-
-**Execution**:
-1. **MANDATORY**: Log any user input during this phase in audit.md
-2. Load all steps from `inception-application-design.md`
-3. Load reverse engineering artifacts (if brownfield)
-4. Execute at appropriate depth (minimal/standard/comprehensive)
-5. **Wait for Explicit Approval**: Present detailed completion message (see application-design.md for message format) - DO NOT PROCEED until user confirms
-6. **MANDATORY**: Log user's response in audit.md with complete raw input
-
-## Units Generation (CONDITIONAL)
-
-**Execute IF**:
-- System needs decomposition into multiple units of work
-- Multiple services or modules required
-- Complex system requiring structured breakdown
-
-**Skip IF**:
-- Single simple unit
-- No decomposition needed
-- Straightforward single-component implementation
-
-**Execution**:
-1. **MANDATORY**: Log any user input during this phase in audit.md
-2. Load all steps from `inception-units-generation.md`
-3. Load reverse engineering artifacts (if brownfield)
-4. Execute at appropriate depth (minimal/standard/comprehensive)
-5. **Wait for Explicit Approval**: Present detailed completion message (see units-generation.md for message format) - DO NOT PROCEED until user confirms
-6. **MANDATORY**: Log user's response in audit.md with complete raw input
+# 自适应软件开发工作流
 
 ---
 
-# 🟢 CONSTRUCTION PHASE
+# INCEPTION 阶段
 
-**Purpose**: Detailed design, NFR implementation, and code generation
+**目的**：规划、需求收集和架构决策
 
-**Focus**: Determine HOW to build it
+**聚焦**：确定做什么（WHAT）和为什么做（WHY）
 
-**Stages in CONSTRUCTION PHASE**:
-- Per-Unit Loop (executes for each unit):
-  - Functional Design (CONDITIONAL, per-unit)
-  - NFR Requirements (CONDITIONAL, per-unit)
-  - NFR Design (CONDITIONAL, per-unit)
-  - Infrastructure Design (CONDITIONAL, per-unit)
-  - Code Generation (ALWAYS, per-unit)
-- Build and Test (ALWAYS - after all units complete)
-
-**Note**: Each unit is completed fully (design + code) before moving to the next unit.
+**INCEPTION 阶段的步骤**：
+- 工作区检测（必执行）
+- 逆向工程（条件 - 仅存量项目）
+- 需求分析（必执行 - 自适应深度）
+- 用户故事（条件）
+- 工作流规划（必执行）
+- 应用设计（条件）
+- 单元生成（条件）
 
 ---
 
-## Per-Unit Loop (Executes for Each Unit)
+## 工作区检测（必执行）
 
-**For each unit of work, execute the following stages in sequence:**
+1. **必须**：在 audit.md 中记录初始用户请求的完整原始输入
+2. 加载 `inception-workspace-detection.md` 的所有步骤
+3. 执行工作区检测：
+   - 检查是否存在 aidlc-state.md（如存在则恢复）
+   - 扫描工作区中的现有代码（包括前端文件：.vue、.ts、.tsx、.jsx）
+   - 判断是存量项目还是全新项目
+   - 检查是否存在逆向工程产物
+4. 确定下一阶段：逆向工程（存量项目且无产物）或需求分析
+5. **必须**：在 audit.md 中记录发现
+6. 向用户展示完成消息（参见 workspace-detection.md 的消息格式）
+7. 自动进入下一阶段
 
-### Functional Design (CONDITIONAL, per-unit)
+## 逆向工程（条件 - 仅存量项目）
 
-**Execute IF**:
-- New data models or schemas
-- Complex business logic
-- Business rules need detailed design
+**执行条件**：
+- 检测到现有代码库
+- 未找到之前的逆向工程产物
 
-**Skip IF**:
-- Simple logic changes
-- No new business logic
+**跳过条件**：
+- 全新项目
+- 已存在逆向工程产物
 
-**Execution**:
-1. **MANDATORY**: Log any user input during this stage in audit.md
-2. Load all steps from `construction-functional-design.md`
-3. Execute functional design for this unit
-4. **MANDATORY**: Present standardized 2-option completion message as defined in functional-design.md - DO NOT use emergent 3-option behavior
-5. **Wait for Explicit Approval**: User must choose between "Request Changes" or "Continue to Next Stage" - DO NOT PROCEED until user confirms
-6. **MANDATORY**: Log user's response in audit.md with complete raw input
+**执行**：
+1. **必须**：在 audit.md 中记录逆向工程开始
+2. 加载 `inception-reverse-engineering.md` 的所有步骤
+3. 执行逆向工程（包括前端代码分析：Vue 组件、路由、Store、API 调用）
+4. **等待明确批准**：展示详细完成消息 - 用户确认前不得继续
+5. **必须**：在 audit.md 中记录用户的完整原始输入
 
-### NFR Requirements (CONDITIONAL, per-unit)
+## 需求分析（必执行 - 自适应深度）
 
-**Execute IF**:
-- Performance requirements exist
-- Security considerations needed
-- Scalability concerns present
-- Tech stack selection required
+**始终执行**，但深度根据请求清晰度和复杂度变化：
+- **最小深度**：简单、清晰的请求 - 仅记录意图分析
+- **标准深度**：正常复杂度 - 收集功能和非功能需求
+- **全面深度**：复杂、高风险 - 详细需求与可追溯性
 
-**Skip IF**:
-- No NFR requirements
-- Tech stack already determined
+**执行**：
+1. **必须**：在 audit.md 中记录此阶段的任何用户输入
+2. 加载 `inception-requirements-analysis.md` 的所有步骤
+3. 执行需求分析（包括前端需求：页面、交互、状态管理、设计稿）
+4. 按适当深度执行（最小/标准/全面）
+5. **等待明确批准**：遵循 requirements-analysis.md 的批准格式 - 用户确认前不得继续
+6. **必须**：在 audit.md 中记录用户的完整原始输入
 
-**Execution**:
-1. **MANDATORY**: Log any user input during this stage in audit.md
-2. Load all steps from `construction-nfr-requirements.md`
-3. Execute NFR assessment for this unit
-4. **MANDATORY**: Present standardized 2-option completion message as defined in nfr-requirements.md - DO NOT use emergent behavior
-5. **Wait for Explicit Approval**: User must choose between "Request Changes" or "Continue to Next Stage" - DO NOT PROCEED until user confirms
-6. **MANDATORY**: Log user's response in audit.md with complete raw input
+## 用户故事（条件）
 
-### NFR Design (CONDITIONAL, per-unit)
+**智能评估**：使用多因素分析确定用户故事是否有价值：
 
-**Execute IF**:
-- NFR Requirements was executed
-- NFR patterns need to be incorporated
+**必须执行**（高优先级指标）：
+- 新的面向用户的功能
+- 影响用户工作流或交互的变更
+- 涉及多种用户类型或角色
+- 复杂的业务需求需要验收标准
+- 需要跨职能团队协作
+- 面向客户的 API 或服务变更
 
-**Skip IF**:
-- No NFR requirements
-- NFR Requirements Assessment was skipped
+**可能执行**（中优先级 - 评估复杂度）：
+- 修改现有面向用户的功能
+- 间接影响用户体验的后端变更
+- 影响用户工作流的集成工作
 
-**Execution**:
-1. **MANDATORY**: Log any user input during this stage in audit.md
-2. Load all steps from `construction-nfr-design.md`
-3. Execute NFR design for this unit
-4. **MANDATORY**: Present standardized 2-option completion message as defined in nfr-design.md - DO NOT use emergent behavior
-5. **Wait for Explicit Approval**: User must choose between "Request Changes" or "Continue to Next Stage" - DO NOT PROCEED until user confirms
-6. **MANDATORY**: Log user's response in audit.md with complete raw input
+**仅在以下情况跳过**（低优先级 - 简单场景）：
+- 纯内部重构，零用户影响
+- 简单 bug 修复，范围清晰
+- 无用户影响的基础设施变更
 
-### Infrastructure Design (CONDITIONAL, per-unit)
+**执行**：
+1. **必须**：在 audit.md 中记录此阶段的任何用户输入
+2. 加载 `inception-user-stories.md` 的所有步骤
+3. **必须**：执行智能评估验证用户故事的必要性
+4. 包含前端用户故事（页面交互、表单操作、响应式等）
+5. **第一部分 - 规划**：创建故事计划并提问，等待用户回答，分析歧义，获得批准
+6. **第二部分 - 生成**：执行批准的计划生成故事和角色
+7. **等待明确批准** - 用户确认前不得继续
+8. **必须**：在 audit.md 中记录用户的完整原始输入
 
-**Execute IF**:
-- Infrastructure services need mapping
-- Deployment architecture required
-- Cloud resources need specification
+## 工作流规划（必执行）
 
-**Skip IF**:
-- No infrastructure changes
-- Infrastructure already defined
+1. **必须**：在 audit.md 中记录此阶段的任何用户输入
+2. 加载 `inception-workflow-planning.md` 的所有步骤
+3. **必须**：加载 `common-content-validation.md` 的内容验证规则
+4. 加载所有先前上下文
+5. 执行工作流规划：
+   - 确定执行哪些阶段
+   - 确定每个阶段的深度级别
+   - 创建多包变更序列（存量项目）
+   - 生成工作流可视化（写入前验证 Mermaid 语法）
+   - 规划前后端并行开发策略
+6. **必须**：按 content-validation.md 规则在文件创建前验证所有内容
+7. **等待明确批准** - 用户确认前不得继续
+8. **必须**：在 audit.md 中记录用户的完整原始输入
 
-**Execution**:
-1. **MANDATORY**: Log any user input during this stage in audit.md
-2. Load all steps from `construction-infrastructure-design.md`
-3. Execute infrastructure design for this unit
-4. **MANDATORY**: Present standardized 2-option completion message as defined in infrastructure-design.md - DO NOT use emergent behavior
-5. **Wait for Explicit Approval**: User must choose between "Request Changes" or "Continue to Next Stage" - DO NOT PROCEED until user confirms
-6. **MANDATORY**: Log user's response in audit.md with complete raw input
+## 应用设计（条件）
 
-### Code Generation (ALWAYS EXECUTE, per-unit)
+**执行条件**：
+- 需要新组件或服务
+- 需要定义组件方法和业务规则
+- 需要服务层设计
+- 需要明确组件依赖关系
 
-**Always executes for each unit**
+**跳过条件**：
+- 变更在现有组件边界内
+- 无新组件或方法
+- 纯实现变更
 
-**Code Generation has two parts within one stage**:
-1. **Part 1 - Planning**: Create detailed code generation plan with explicit steps
-2. **Part 2 - Generation**: Execute approved plan to generate code, tests, and artifacts
+**执行**：
+1. **必须**：在 audit.md 中记录此阶段的任何用户输入
+2. 加载 `inception-application-design.md` 的所有步骤
+3. 执行应用设计（包括前端组件设计：页面拆分、路由规划、状态管理、前后端接口契约）
+4. 按适当深度执行（最小/标准/全面）
+5. **等待明确批准** - 用户确认前不得继续
+6. **必须**：在 audit.md 中记录用户的完整原始输入
 
-**Execution**:
-1. **MANDATORY**: Log any user input during this stage in audit.md
-2. Load all steps from `construction-code-generation.md`
-3. **PART 1 - Planning**: Create code generation plan with checkboxes, get user approval
-4. **PART 2 - Generation**: Execute approved plan to generate code for this unit
-5. **MANDATORY**: Present standardized 2-option completion message as defined in code-generation.md - DO NOT use emergent behavior
-6. **Wait for Explicit Approval**: User must choose between "Request Changes" or "Continue to Next Stage" - DO NOT PROCEED until user confirms
-7. **MANDATORY**: Log user's response in audit.md with complete raw input
+## 单元生成（条件）
+
+**执行条件**：
+- 系统需要分解为多个工作单元
+- 需要多个服务或模块
+- 复杂系统需要结构化分解
+
+**跳过条件**：
+- 单一简单单元
+- 无需分解
+- 直接的单组件实现
+
+**执行**：
+1. **必须**：在 audit.md 中记录此阶段的任何用户输入
+2. 加载 `inception-units-generation.md` 的所有步骤
+3. 执行单元生成（支持前后端分离拆分：后端按业务模块、前端按页面模块）
+4. 按适当深度执行（最小/标准/全面）
+5. **等待明确批准** - 用户确认前不得继续
+6. **必须**：在 audit.md 中记录用户的完整原始输入
 
 ---
 
-## Build and Test (ALWAYS EXECUTE)
+# 🟢 CONSTRUCTION 阶段
 
-1. **MANDATORY**: Log any user input during this phase in audit.md
-2. Load all steps from `construction-build-and-test.md`
-3. Generate comprehensive build and test instructions:
-   - Build instructions for all units
-   - Unit test execution instructions
-   - Integration test instructions (test interactions between units)
-   - Performance test instructions (if applicable)
-   - Additional test instructions as needed (contract tests, security tests, e2e tests)
-4. Create instruction files in build-and-test/ subdirectory: build-instructions.md, unit-test-instructions.md, integration-test-instructions.md, performance-test-instructions.md, build-and-test-summary.md
-5. **Wait for Explicit Approval**: Ask: "**Build and test instructions complete. Ready to proceed to Operations stage?**" - DO NOT PROCEED until user confirms
-6. **MANDATORY**: Log user's response in audit.md with complete raw input
+**目的**：详细设计、NFR 实现和代码生成
 
----
+**聚焦**：确定怎么做（HOW）
 
-# 🟡 OPERATIONS PHASE
+**CONSTRUCTION 阶段的步骤**：
+- Per-Unit 循环（对每个单元执行）：
+  - 功能设计（条件，per-unit）
+  - NFR 需求（条件，per-unit）
+  - NFR 设计（条件，per-unit）
+  - 基础设施设计（条件，per-unit）
+  - 代码生成（必执行，per-unit）
+- 构建和测试（必执行 - 所有单元完成后）
 
-**Purpose**: Placeholder for future deployment and monitoring workflows
-
-**Focus**: How to DEPLOY and RUN it (future expansion)
-
-**Stages in OPERATIONS PHASE**:
-- Operations (PLACEHOLDER)
+**注意**：每个单元完整完成（设计 + 代码）后再进入下一个单元。
 
 ---
 
-## Operations (PLACEHOLDER)
+## Per-Unit 循环（对每个单元执行）
 
-**Status**: This stage is currently a placeholder for future expansion.
+### 功能设计（条件，per-unit）
 
-The Operations stage will eventually include:
-- Deployment planning and execution
-- Monitoring and observability setup
-- Incident response procedures
-- Maintenance and support workflows
-- Production readiness checklists
+**执行条件**：
+- 新数据模型或 schema
+- 复杂业务逻辑
+- 业务规则需要详细设计
 
-**Current State**: All build and test activities are handled in the CONSTRUCTION phase.
+**跳过条件**：
+- 简单逻辑变更
+- 无新业务逻辑
 
-## Key Principles
+**执行**：
+1. **必须**：在 audit.md 中记录此阶段的任何用户输入
+2. 加载 `construction-functional-design.md` 的所有步骤
+3. 执行功能设计（包括前端交互设计：状态流转、表单校验、组件通信）
+4. **必须**：展示标准化的 2 选项完成消息
+5. **等待明确批准** - 用户确认前不得继续
+6. **必须**：在 audit.md 中记录用户的完整原始输入
 
-- **Adaptive Execution**: Only execute stages that add value
-- **Transparent Planning**: Always show execution plan before starting
-- **User Control**: User can request stage inclusion/exclusion
-- **Progress Tracking**: Update aidlc-state.md with executed and skipped stages
-- **Complete Audit Trail**: Log ALL user inputs and AI responses in audit.md with timestamps
-  - **CRITICAL**: Capture user's COMPLETE RAW INPUT exactly as provided
-  - **CRITICAL**: Never summarize or paraphrase user input in audit log
-  - **CRITICAL**: Log every interaction, not just approvals
-- **Quality Focus**: Complex changes get full treatment, simple changes stay efficient
-- **Content Validation**: Always validate content before file creation per content-validation.md rules
-- **NO EMERGENT BEHAVIOR**: Construction phases MUST use standardized 2-option completion messages as defined in their respective rule files. DO NOT create 3-option menus or other emergent navigation patterns.
+### NFR 需求（条件，per-unit）
 
-## MANDATORY: Plan-Level Checkbox Enforcement
+**执行条件**：
+- 存在性能需求
+- 需要安全考虑
+- 存在可扩展性关注
+- 需要技术栈选型
 
-### MANDATORY RULES FOR PLAN EXECUTION
-1. **NEVER complete any work without updating plan checkboxes**
-2. **IMMEDIATELY after completing ANY step described in a plan file, mark that step [x]**
-3. **This must happen in the SAME interaction where the work is completed**
-4. **NO EXCEPTIONS**: Every plan step completion MUST be tracked with checkbox updates
+**跳过条件**：
+- 无 NFR 需求
+- 技术栈已确定
 
-### Two-Level Checkbox Tracking System
-- **Plan-Level**: Track detailed execution progress within each stage
-- **Stage-Level**: Track overall workflow progress in aidlc-state.md
-- **Update immediately**: All progress updates in SAME interaction where work is completed
+**执行**：
+1. **必须**：在 audit.md 中记录此阶段的任何用户输入
+2. 加载 `construction-nfr-requirements.md` 的所有步骤
+3. 执行 NFR 评估（包括前端 NFR：首屏性能、可访问性、浏览器兼容性、国际化）
+4. **必须**：展示标准化的 2 选项完成消息
+5. **等待明确批准** - 用户确认前不得继续
+6. **必须**：在 audit.md 中记录用户的完整原始输入
 
-## Prompts Logging Requirements
-- **MANDATORY**: Log EVERY user input (prompts, questions, responses) with timestamp in audit.md
-- **MANDATORY**: Capture user's COMPLETE RAW INPUT exactly as provided (never summarize)
-- **MANDATORY**: Log every approval prompt with timestamp before asking the user
-- **MANDATORY**: Record every user response with timestamp after receiving it
-- **CRITICAL**: ALWAYS append changes to EDIT audit.md file, NEVER use tools and commands that completely overwrite its contents
-- **CRITICAL**: Using file writing tools and commands that overwrite contents of the entire audit.md and cause duplication
-- Use ISO 8601 format for timestamps (YYYY-MM-DDTHH:MM:SSZ)
-- Include stage context for each entry
+### NFR 设计（条件，per-unit）
 
-### Audit Log Format:
+**执行条件**：
+- 已执行 NFR 需求
+- 需要融入 NFR 模式
+
+**跳过条件**：
+- 无 NFR 需求
+- 已跳过 NFR 需求评估
+
+**执行**：
+1. **必须**：在 audit.md 中记录此阶段的任何用户输入
+2. 加载 `construction-nfr-design.md` 的所有步骤
+3. 执行 NFR 设计（包括前端 NFR 模式：懒加载、虚拟滚动、防抖节流、缓存策略）
+4. **必须**：展示标准化的 2 选项完成消息
+5. **等待明确批准** - 用户确认前不得继续
+6. **必须**：在 audit.md 中记录用户的完整原始输入
+
+### 基础设施设计（条件，per-unit）
+
+**执行条件**：
+- 需要基础设施服务映射
+- 需要部署架构
+- 需要指定云资源
+
+**跳过条件**：
+- 无基础设施变更
+- 基础设施已定义
+
+**执行**：
+1. **必须**：在 audit.md 中记录此阶段的任何用户输入
+2. 加载 `construction-infrastructure-design.md` 的所有步骤
+3. 执行基础设施设计（包括前端：Vite 构建配置、静态资源部署、环境变量管理）
+4. **必须**：展示标准化的 2 选项完成消息
+5. **等待明确批准** - 用户确认前不得继续
+6. **必须**：在 audit.md 中记录用户的完整原始输入
+
+### 代码生成（必执行，per-unit）
+
+**每个单元必须执行**
+
+**代码生成包含两个部分**：
+1. **第一部分 - 规划**：创建详细的代码生成计划
+2. **第二部分 - 生成**：执行批准的计划生成代码、测试和产物
+
+**MCP Skill 集成**：
+在规划阶段，根据代码类型自动加载编码规范：
+
+**后端代码**：
+1. 加载 `common-tech-backend.md`（后端编码规范）
+2. 根据代码类型调用 MCP skill：
+   - CRUD 模块 → `get_skill_summary("loeyae-crud")`
+   - 认证授权 → `get_skill_summary("loeyae-auth")`
+   - 参数校验 → `get_skill_summary("loeyae-validation")`
+   - 异常处理 → `get_skill_summary("loeyae-error-handling")`
+   - 数据访问 → `get_skill_summary("loeyae-data-access")`
+   - Web 基础设施 → `get_skill_summary("loeyae-web-infra")`
+   - 缓存 → `get_skill_summary("loeyae-cache")`
+   - 消息队列 → `get_skill_summary("loeyae-message")`
+   - 定时任务 → `get_skill_summary("loeyae-job")`
+   - 邮件 → `get_skill_summary("loeyae-mail")`
+   - CMS → `get_skill_summary("loeyae-cms")`
+   - Feign → `get_skill_summary("loeyae-feign")`
+   - 数据安全 → `get_skill_summary("loeyae-data-security")`
+   - 测试 → `get_skill_summary("loeyae-test")`
+   - 不确定时 → `search_skill("关键词")`
+3. 加载 `common-tech-security.md`（安全编码规范）
+4. 加载 `common-database-design.md`（数据库设计规范）
+5. 读取项目 `.kiro/steering/structure.md`（项目结构，如存在）
+6. 读取项目 `.kiro/steering/tech.md`（技术栈版本，如存在）
+
+**前端代码**：
+1. 加载 `common-tech-frontend.md`（前端编码规范）
+2. 如有 Figma 设计稿 → 加载 `common-figma-design-standards.md`
+3. 读取项目 `.kiro/steering/structure.md`（前端目录结构，如存在）
+
+**测试代码**：
+1. 加载 `common-tech-testing.md`（测试规范）
+2. 后端测试 → `get_skill_summary("loeyae-test")`
+
+**执行**：
+1. **必须**：在 audit.md 中记录此阶段的任何用户输入
+2. 加载 `construction-code-generation.md` 的所有步骤
+3. **第一部分 - 规划**：创建代码生成计划（含 MCP Skill 加载策略），获得用户批准
+4. **第二部分 - 生成**：执行批准的计划生成代码
+5. **必须**：展示标准化的 2 选项完成消息
+6. **等待明确批准** - 用户确认前不得继续
+7. **必须**：在 audit.md 中记录用户的完整原始输入
+
+---
+
+## 构建和测试（必执行）
+
+1. **必须**：在 audit.md 中记录此阶段的任何用户输入
+2. 加载 `construction-build-and-test.md` 的所有步骤
+3. 生成全面的构建和测试指导：
+   - 后端构建指导（Maven）
+   - 前端构建指导（pnpm build）
+   - 单元测试执行指导
+   - 集成测试指导（测试单元间交互）
+   - 前端代码检查（pnpm lint:all）
+   - 性能测试指导（如适用）
+   - 其他测试指导（合约测试、安全测试、端到端测试）
+4. 在 build-and-test/ 子目录创建指导文件
+5. **等待明确批准**：询问"构建和测试指导已完成。确认完成？" - 用户确认前不得继续
+6. **必须**：在 audit.md 中记录用户的完整原始输入
+
+---
+
+## 核心原则
+
+- **自适应执行**：仅执行有价值的阶段
+- **透明规划**：开始前始终展示执行计划
+- **用户控制**：用户可以请求包含/排除阶段
+- **进度跟踪**：在 aidlc-state.md 中更新已执行和已跳过的阶段
+- **完整审计**：在 audit.md 中记录所有用户输入和 AI 响应（含时间戳）
+  - **关键**：捕获用户的完整原始输入
+  - **关键**：不要总结或改述用户输入
+  - **关键**：记录每次交互，不仅仅是批准
+- **质量聚焦**：复杂变更获得完整处理，简单变更保持高效
+- **内容验证**：始终按 content-validation.md 规则在文件创建前验证内容
+- **禁止涌现行为**：Construction 阶段必须使用各自规则文件中定义的标准化 2 选项完成消息
+
+## 必须：计划级复选框执行
+
+### 计划执行的强制规则
+1. **不得在未更新计划复选框的情况下完成任何工作**
+2. **完成计划文件中描述的任何步骤后，立即标记该步骤 [x]**
+3. **必须在完成工作的同一交互中完成**
+4. **无例外**：每个计划步骤的完成都必须通过复选框更新跟踪
+
+### 两级复选框跟踪系统
+- **计划级**：跟踪每个阶段内的详细执行进度
+- **阶段级**：在 aidlc-state.md 中跟踪整体工作流进度
+- **立即更新**：所有进度更新在完成工作的同一交互中完成
+
+## 提示日志要求
+- **必须**：在 audit.md 中记录每个用户输入（提示、问题、响应）并附时间戳
+- **必须**：捕获用户的完整原始输入（不要总结）
+- **必须**：在询问用户之前记录每个批准提示并附时间戳
+- **必须**：收到用户响应后记录并附时间戳
+- **关键**：始终追加编辑 audit.md 文件，不要使用完全覆盖其内容的工具和命令
+- 使用 ISO 8601 格式的时间戳（YYYY-MM-DDTHH:MM:SSZ）
+- 每个条目包含阶段上下文
+
+### 审计日志格式：
 ```markdown
-## [Stage Name or Interaction Type]
-**Timestamp**: [ISO timestamp]
-**User Input**: "[Complete raw user input - never summarized]"
-**AI Response**: "[AI's response or action taken]"
-**Context**: [Stage, action, or decision made]
+## [阶段名称或交互类型]
+**时间戳**: [ISO 时间戳]
+**用户输入**: "[完整原始用户输入 - 不要总结]"
+**AI 响应**: "[AI 的响应或采取的行动]"
+**上下文**: [阶段、行动或做出的决定]
 
 ---
 ```
 
-### Correct Tool Usage for audit.md
+### audit.md 的正确工具使用
 
-✅ CORRECT:
+✅ 正确：
+1. 读取 audit.md 文件
+2. 追加/编辑文件以进行更改
 
-1. Read the audit.md file
-2. Append/Edit the file to make changes
+❌ 错误：
+1. 读取 audit.md 文件
+2. 用读取的内容加上新更改完全覆盖 audit.md
 
-❌ WRONG:
-
-1. Read the audit.md file
-2. Completely overwrite the audit.md with the contents of what you read, plus the new changes you want to add to it
-
-## Directory Structure
+## 目录结构
 
 ```text
-<WORKSPACE-ROOT>/                   # ⚠️ APPLICATION CODE HERE
-├── [project-specific structure]    # Varies by project (see code-generation.md)
+<工作区根目录>/                      # ⚠️ 应用代码在这里
+├── [项目特定结构]                   # 因项目而异（参见 code-generation.md）
 │
-├── aidlc-docs/                     # 📄 DOCUMENTATION ONLY
-│   ├── inception/                  # 🔵 INCEPTION PHASE
+├── aidlc-docs/                     # 📄 仅文档
+│   ├── inception/                  # 🔵 INCEPTION 阶段
 │   │   ├── plans/
-│   │   ├── reverse-engineering/    # Brownfield only
+│   │   ├── reverse-engineering/    # 仅存量项目
 │   │   ├── requirements/
 │   │   ├── user-stories/
 │   │   └── application-design/
-│   ├── construction/               # 🟢 CONSTRUCTION PHASE
+│   ├── construction/               # 🟢 CONSTRUCTION 阶段
 │   │   ├── plans/
 │   │   ├── {unit-name}/
 │   │   │   ├── functional-design/
 │   │   │   ├── nfr-requirements/
 │   │   │   ├── nfr-design/
 │   │   │   ├── infrastructure-design/
-│   │   │   └── code/               # Markdown summaries only
+│   │   │   └── code/               # 仅 Markdown 摘要
 │   │   └── build-and-test/
-│   ├── operations/                 # 🟡 OPERATIONS PHASE (placeholder)
 │   ├── aidlc-state.md
 │   └── audit.md
 ```
 
-**CRITICAL RULE**:
-- Application code: Workspace root (NEVER in aidlc-docs/)
-- Documentation: aidlc-docs/ only
-- Project structure: See code-generation.md for patterns by project type
+**关键规则**：
+- 应用代码：工作区根目录（绝不放在 aidlc-docs/ 中）
+- 文档：仅放在 aidlc-docs/
+- 项目结构：参见 code-generation.md 了解各项目类型的模式

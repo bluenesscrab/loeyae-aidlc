@@ -1,60 +1,54 @@
-# AI-DLC Adaptive Workflow Overview
+# AI-DLC 自适应工作流概览
 
-**Purpose**: Technical reference for AI model and developers to understand complete workflow structure.
+**用途**：AI 模型和开发者理解完整工作流结构的技术参考。
 
-**Note**: Similar content exists in core-workflow.md (user welcome message) and README.md (documentation). This duplication is INTENTIONAL - each file serves a different purpose:
-- **This file**: Detailed technical reference with Mermaid diagram for AI model context loading
-- **core-workflow.md**: User-facing welcome message with ASCII diagram
-- **README.md**: Human-readable documentation for repository
+**注意**：类似内容存在于 core-workflow.md（用户欢迎消息）和 README.md（文档）。这种重复是有意为之——每个文件服务于不同目的：
+- **本文件**：带 Mermaid 图的详细技术参考，供 AI 模型上下文加载
+- **core-workflow.md**：带 ASCII 图的用户欢迎消息
+- **README.md**：人类可读的仓库文档
 
-## The Three-Phase Lifecycle:
-• **INCEPTION PHASE**: Planning and architecture (Workspace Detection + conditional phases + Workflow Planning)
-• **CONSTRUCTION PHASE**: Design, implementation, build and test (per-unit design + Code Planning/Generation + Build & Test)
-• **OPERATIONS PHASE**: Placeholder for future deployment and monitoring workflows
+## 两阶段生命周期：
+• **INCEPTION 阶段**：规划和架构（工作区检测 + 条件阶段 + 工作流规划）
+• **CONSTRUCTION 阶段**：设计、实现、构建和测试（per-unit 设计 + 代码规划/生成 + 构建测试）
 
-## The Adaptive Workflow:
-• **Workspace Detection** (always) → **Reverse Engineering** (brownfield only) → **Requirements Analysis** (always, adaptive depth) → **Conditional Phases** (as needed) → **Workflow Planning** (always) → **Code Generation** (always, per-unit) → **Build and Test** (always)
+## 自适应工作流：
+• **工作区检测**（必执行）→ **逆向工程**（仅存量项目）→ **需求分析**（必执行，自适应深度）→ **条件阶段**（按需）→ **工作流规划**（必执行）→ **代码生成**（必执行，per-unit）→ **构建和测试**（必执行）
 
-## How It Works:
-• **AI analyzes** your request, workspace, and complexity to determine which stages are needed
-• **These stages always execute**: Workspace Detection, Requirements Analysis (adaptive depth), Workflow Planning, Code Generation (per-unit), Build and Test
-• **All other stages are conditional**: Reverse Engineering, User Stories, Application Design, Units Generation, per-unit design stages (Functional Design, NFR Requirements, NFR Design, Infrastructure Design)
-• **No fixed sequences**: Stages execute in the order that makes sense for your specific task
+## 工作原理：
+• **AI 分析**你的请求、工作区和复杂度，确定需要哪些阶段
+• **这些阶段始终执行**：工作区检测、需求分析（自适应深度）、工作流规划、代码生成（per-unit）、构建和测试
+• **所有其他阶段是条件性的**：逆向工程、用户故事、应用设计、单元生成、per-unit 设计阶段（功能设计、NFR 需求、NFR 设计、基础设施设计）
+• **无固定顺序**：阶段按对你的具体任务有意义的顺序执行
 
-## Your Team's Role:
-• **Answer questions** in dedicated question files using [Answer]: tags with letter choices (A, B, C, D, E)
-• **Option E available**: Choose "Other" and describe your custom response if provided options don't match
-• **Work as a team** to review and approve each phase before proceeding
-• **Collectively decide** on architectural approach when needed
-• **Important**: This is a team effort - involve relevant stakeholders for each phase
+## 团队角色：
+• **回答问题**：在专用问题文件中使用 [回答]: 标签和字母选择（A、B、C、D、E）
+• **团队协作**：审查和批准每个阶段后再继续
+• **集体决策**：在需要时共同决定架构方案
+• **重要**：这是团队协作——每个阶段都应让相关干系人参与
 
-## AI-DLC Three-Phase Workflow:
+## AI-DLC 两阶段工作流：
 
 ```mermaid
 flowchart TD
-    Start(["User Request"])
+    Start(["用户请求"])
     
-    subgraph INCEPTION["🔵 INCEPTION PHASE"]
-        WD["Workspace Detection<br/><b>ALWAYS</b>"]
-        RE["Reverse Engineering<br/><b>CONDITIONAL</b>"]
-        RA["Requirements Analysis<br/><b>ALWAYS</b>"]
-        Stories["User Stories<br/><b>CONDITIONAL</b>"]
-        WP["Workflow Planning<br/><b>ALWAYS</b>"]
-        AppDesign["Application Design<br/><b>CONDITIONAL</b>"]
-        UnitsG["Units Generation<br/><b>CONDITIONAL</b>"]
+    subgraph INCEPTION["🔵 INCEPTION 阶段"]
+        WD["工作区检测<br/><b>必执行</b>"]
+        RE["逆向工程<br/><b>条件</b>"]
+        RA["需求分析<br/><b>必执行</b>"]
+        Stories["用户故事<br/><b>条件</b>"]
+        WP["工作流规划<br/><b>必执行</b>"]
+        AppDesign["应用设计<br/><b>条件</b>"]
+        UnitsG["单元生成<br/><b>条件</b>"]
     end
     
-    subgraph CONSTRUCTION["🟢 CONSTRUCTION PHASE"]
-        FD["Functional Design<br/><b>CONDITIONAL</b>"]
-        NFRA["NFR Requirements<br/><b>CONDITIONAL</b>"]
-        NFRD["NFR Design<br/><b>CONDITIONAL</b>"]
-        ID["Infrastructure Design<br/><b>CONDITIONAL</b>"]
-        CG["Code Generation<br/><b>ALWAYS</b>"]
-        BT["Build and Test<br/><b>ALWAYS</b>"]
-    end
-    
-    subgraph OPERATIONS["🟡 OPERATIONS PHASE"]
-        OPS["Operations<br/><b>PLACEHOLDER</b>"]
+    subgraph CONSTRUCTION["🟢 CONSTRUCTION 阶段"]
+        FD["功能设计<br/><b>条件</b>"]
+        NFRA["NFR 需求<br/><b>条件</b>"]
+        NFRD["NFR 设计<br/><b>条件</b>"]
+        ID["基础设施设计<br/><b>条件</b>"]
+        CG["代码生成<br/><b>必执行</b>"]
+        BT["构建和测试<br/><b>必执行</b>"]
     end
     
     Start --> WD
@@ -79,63 +73,54 @@ flowchart TD
     NFRA --> CG
     NFRD --> CG
     ID --> CG
-    CG -.->|Next Unit| FD
+    CG -.->|下一单元| FD
     CG --> BT
-    BT -.-> OPS
-    BT --> End(["Complete"])
+    BT --> End(["完成"])
     
     style WD fill:#4CAF50,stroke:#1B5E20,stroke-width:3px,color:#fff
     style RA fill:#4CAF50,stroke:#1B5E20,stroke-width:3px,color:#fff
     style WP fill:#4CAF50,stroke:#1B5E20,stroke-width:3px,color:#fff
-
     style CG fill:#4CAF50,stroke:#1B5E20,stroke-width:3px,color:#fff
     style BT fill:#4CAF50,stroke:#1B5E20,stroke-width:3px,color:#fff
-    style OPS fill:#BDBDBD,stroke:#424242,stroke-width:2px,stroke-dasharray: 5 5,color:#000
     style RE fill:#FFA726,stroke:#E65100,stroke-width:3px,stroke-dasharray: 5 5,color:#000
     style Stories fill:#FFA726,stroke:#E65100,stroke-width:3px,stroke-dasharray: 5 5,color:#000
     style AppDesign fill:#FFA726,stroke:#E65100,stroke-width:3px,stroke-dasharray: 5 5,color:#000
-
     style UnitsG fill:#FFA726,stroke:#E65100,stroke-width:3px,stroke-dasharray: 5 5,color:#000
     style FD fill:#FFA726,stroke:#E65100,stroke-width:3px,stroke-dasharray: 5 5,color:#000
     style NFRA fill:#FFA726,stroke:#E65100,stroke-width:3px,stroke-dasharray: 5 5,color:#000
     style NFRD fill:#FFA726,stroke:#E65100,stroke-width:3px,stroke-dasharray: 5 5,color:#000
     style ID fill:#FFA726,stroke:#E65100,stroke-width:3px,stroke-dasharray: 5 5,color:#000
-    style INCEPTION fill:#BBDEFB,stroke:#1565C0,stroke-width:3px, color:#000
-    style CONSTRUCTION fill:#C8E6C9,stroke:#2E7D32,stroke-width:3px, color:#000
-    style OPERATIONS fill:#FFF59D,stroke:#F57F17,stroke-width:3px, color:#000
+    style INCEPTION fill:#BBDEFB,stroke:#1565C0,stroke-width:3px,color:#000
+    style CONSTRUCTION fill:#C8E6C9,stroke:#2E7D32,stroke-width:3px,color:#000
     style Start fill:#CE93D8,stroke:#6A1B9A,stroke-width:3px,color:#000
     style End fill:#CE93D8,stroke:#6A1B9A,stroke-width:3px,color:#000
     
     linkStyle default stroke:#333,stroke-width:2px
 ```
 
-**Stage Descriptions:**
+**阶段描述：**
 
-**🔵 INCEPTION PHASE** - Planning and Architecture
-- Workspace Detection: Analyze workspace state and project type (ALWAYS)
-- Reverse Engineering: Analyze existing codebase (CONDITIONAL - Brownfield only)
-- Requirements Analysis: Gather and validate requirements (ALWAYS - Adaptive depth)
-- User Stories: Create user stories and personas (CONDITIONAL)
-- Workflow Planning: Create execution plan (ALWAYS)
-- Application Design: High-level component identification and service layer design (CONDITIONAL)
-- Units Generation: Decompose into units of work (CONDITIONAL)
+**🔵 INCEPTION 阶段** - 规划与架构
+- 工作区检测：分析工作区状态和项目类型（必执行）
+- 逆向工程：分析现有代码库（条件 - 仅存量项目）
+- 需求分析：收集和验证需求（必执行 - 自适应深度）
+- 用户故事：创建用户故事和角色（条件）
+- 工作流规划：创建执行计划（必执行）
+- 应用设计：高层组件识别和服务层设计（条件）
+- 单元生成：分解为工作单元（条件）
 
-**🟢 CONSTRUCTION PHASE** - Design, Implementation, Build and Test
-- Functional Design: Detailed business logic design per unit (CONDITIONAL, per-unit)
-- NFR Requirements: Determine NFRs and select tech stack (CONDITIONAL, per-unit)
-- NFR Design: Incorporate NFR patterns and logical components (CONDITIONAL, per-unit)
-- Infrastructure Design: Map to actual infrastructure services (CONDITIONAL, per-unit)
-- Code Generation: Generate code with Part 1 - Planning, Part 2 - Generation (ALWAYS, per-unit)
-- Build and Test: Build all units and execute comprehensive testing (ALWAYS)
+**🟢 CONSTRUCTION 阶段** - 设计、实现、构建和测试
+- 功能设计：每个单元的详细业务逻辑设计（条件，per-unit）
+- NFR 需求：确定 NFR 并选择技术栈（条件，per-unit）
+- NFR 设计：融入 NFR 模式和逻辑组件（条件，per-unit）
+- 基础设施设计：映射到实际基础设施服务（条件，per-unit）
+- 代码生成：生成代码，含规划和生成两部分（必执行，per-unit）
+- 构建和测试：构建所有单元并执行全面测试（必执行）
 
-**🟡 OPERATIONS PHASE** - Placeholder
-- Operations: Placeholder for future deployment and monitoring workflows (PLACEHOLDER)
-
-**Key Principles:**
-- Phases execute only when they add value
-- Each phase independently evaluated
-- INCEPTION focuses on "what" and "why"
-- CONSTRUCTION focuses on "how" plus "build and test"
-- OPERATIONS is placeholder for future expansion
-- Simple changes may skip conditional INCEPTION stages
-- Complex changes get full INCEPTION and CONSTRUCTION treatment
+**核心原则：**
+- 阶段仅在有价值时执行
+- 每个阶段独立评估
+- INCEPTION 聚焦"做什么"和"为什么"
+- CONSTRUCTION 聚焦"怎么做"加"构建和测试"
+- 简单变更可跳过条件性 INCEPTION 阶段
+- 复杂变更获得完整 INCEPTION 和 CONSTRUCTION 处理

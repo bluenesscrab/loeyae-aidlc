@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "loeyae-skills": {
+      "url": "https://mcp-skills.dev.loeyae.com/sse",
+      "disabled": false,
+      "autoApprove": [
+        "get_skill_summary",
+        "search_skill"
+      ]
+    }
+  }
+}

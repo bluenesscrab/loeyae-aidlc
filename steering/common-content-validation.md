@@ -1,78 +1,78 @@
-# Content Validation Rules
+# 内容验证规则
 
-## MANDATORY: Content Validation Before File Creation
+## 强制要求：文件创建前进行内容验证
 
-**CRITICAL**: All generated content MUST be validated before writing to files to prevent parsing errors.
+**关键**：所有生成的内容在写入文件之前必须经过验证，以防止解析错误。
 
-## ASCII Diagram Standards
+## ASCII 图标准
 
-**CRITICAL**: Before creating ANY file with ASCII diagrams:
+**关键**：在创建任何包含 ASCII 图的文件之前：
 
-1. **LOAD** `common-ascii-diagram-standards.md`
-2. **VALIDATE** each diagram:
-   - Count characters per line (all lines MUST be same width)
-   - Use ONLY: `+` `-` `|` `^` `v` `<` `>` and spaces
-   - NO Unicode box-drawing characters
-   - Spaces only (NO tabs)
-3. **TEST** alignment by verifying box corners align vertically
+1. **加载** `common-ascii-diagram-standards.md`
+2. **验证**每个图表：
+   - 统计每行字符数（所有行必须宽度一致）
+   - 仅使用：`+` `-` `|` `^` `v` `<` `>` 和空格
+   - 禁止使用 Unicode 制表符
+   - 仅使用空格（禁止使用 Tab）
+3. **测试**对齐方式，验证方框角是否垂直对齐
 
-**See `common-ascii-diagram-standards.md` for patterns and validation checklist.**
+**详见 `common-ascii-diagram-standards.md` 中的模式和验证清单。**
 
-## Mermaid Diagram Validation
+## Mermaid 图表验证
 
-### Required Validation Steps
-1. **Syntax Check**: Validate Mermaid syntax before file creation
-2. **Character Escaping**: Ensure special characters are properly escaped
-3. **Fallback Content**: Provide text alternative if Mermaid fails validation
+### 必需的验证步骤
+1. **语法检查**：在创建文件前验证 Mermaid 语法
+2. **字符转义**：确保特殊字符已正确转义
+3. **备用内容**：如果 Mermaid 验证失败，提供文本替代方案
 
-### Mermaid Validation Rules
+### Mermaid 验证规则
 ```markdown
-## BEFORE creating any file with Mermaid diagrams:
+## 在创建任何包含 Mermaid 图表的文件之前：
 
-1. Check for invalid characters in node IDs (use alphanumeric + underscore only)
-2. Escape special characters in labels: " → \" and ' → \'
-3. Validate flowchart syntax: node connections must be valid
-4. Test diagram parsing with simple validation
+1. 检查节点 ID 中是否有无效字符（仅使用字母数字 + 下划线）
+2. 转义标签中的特殊字符：" → \" 和 ' → \'
+3. 验证流程图语法：节点连接必须有效
+4. 通过简单验证测试图表解析
 
-## FALLBACK: If Mermaid validation fails, use text-based workflow representation
+## 备用方案：如果 Mermaid 验证失败，使用基于文本的工作流表示
 ```
 
-### Implementation Pattern
+### 实现模式
 ```markdown
-## Workflow Visualization
+## 工作流可视化
 
-### Mermaid Diagram (if syntax valid)
+### Mermaid 图表（语法有效时使用）
 ```mermaid
-[validated diagram content]
+[已验证的图表内容]
 ```
 
-### Text Alternative (always include)
+### 文本替代方案（始终包含）
 ```
 Phase 1: INCEPTION
 - Stage 1: Workspace Detection (COMPLETED)
 - Stage 2: Requirements Analysis (COMPLETED)
-[continue with text representation]
+[继续使用文本表示]
 ```
 
-## General Content Validation
+## 通用内容验证
 
-### Pre-Creation Validation Checklist
-- [ ] Validate embedded code blocks (Mermaid, JSON, YAML)
-- [ ] Check special character escaping
-- [ ] Verify markdown syntax correctness
-- [ ] Test content parsing compatibility
-- [ ] Include fallback content for complex elements
+### 创建前验证清单
+- [ ] 验证嵌入的代码块（Mermaid、JSON、YAML）
+- [ ] 检查特殊字符转义
+- [ ] 验证 Markdown 语法正确性
+- [ ] 测试内容解析兼容性
+- [ ] 为复杂元素包含备用内容
 
-### Error Prevention Rules
-1. **Always validate before using tools/commands to write files**: Never write unvalidated content
-2. **Escape special characters**: Particularly in diagrams and code blocks
-3. **Provide alternatives**: Include text versions of visual content
-4. **Test syntax**: Validate complex content structures
+### 错误预防规则
+1. **始终在使用工具/命令写入文件前进行验证**：绝不写入未经验证的内容
+2. **转义特殊字符**：特别是在图表和代码块中
+3. **提供替代方案**：为可视化内容包含文本版本
+4. **测试语法**：验证复杂的内容结构
 
-## Validation Failure Handling
+## 验证失败处理
 
-### When Validation Fails
-1. **Log the error**: Record what failed validation
-2. **Use fallback content**: Switch to text-based alternative
-3. **Continue workflow**: Don't block on content validation failures
-4. **Inform user**: Mention simplified content was used due to parsing constraints
+### 当验证失败时
+1. **记录错误**：记录验证失败的内容
+2. **使用备用内容**：切换到基于文本的替代方案
+3. **继续工作流**：不要因内容验证失败而阻塞流程
+4. **通知用户**：说明由于解析限制使用了简化内容
