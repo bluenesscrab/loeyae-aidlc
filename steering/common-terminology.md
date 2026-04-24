@@ -156,17 +156,17 @@
 
 ### 计划（Plans）
 包含复选框和问题的文档，用于指导执行。
-- 位于 `aidlc-docs/plans/`
+- 位于 `docs/aidlc/plans/`
 - 示例：`story-generation-plan.md`、`unit-of-work-plan.md`
 
 ### 产物（Artifacts）
 执行计划后生成的输出。
-- 位于 `aidlc-docs/` 的各子目录中
+- 位于 `docs/aidlc/` 的各子目录中
 - 示例：`requirements.md`、`stories.md`、`design.md`
 
 ### 状态文件（State Files）
 跟踪工作流进度和状态的文件。
-- `aidlc-state.md`：整体工作流状态
+- `state.md`：整体工作流状态
 - `audit.md`：所有交互的完整审计记录
 
 ## 团队特有术语

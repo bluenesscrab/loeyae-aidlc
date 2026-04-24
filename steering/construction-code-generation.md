@@ -60,10 +60,10 @@
 2. 后端测试 → `get_skill_summary("loeyae-test")`
 
 ## 步骤 3：创建详细单元代码生成计划
-- [ ] 从 `aidlc-docs/aidlc-state.md` 读取工作区根目录和项目类型
+- [ ] 从 `docs/aidlc/state.md` 读取工作区根目录和项目类型
 - [ ] 确定代码位置（参见关键规则的结构模式）
 - [ ] **仅存量项目**：审查逆向工程 code-structure.md 了解需修改的现有文件
-- [ ] 记录确切路径（绝对不在 aidlc-docs/ 中）
+- [ ] 记录确切路径（绝对不在 docs/aidlc/ 中）
 - [ ] 为单元生成创建明确步骤：
 
 ### 后端单元步骤模板
@@ -103,7 +103,7 @@
   - 服务边界和职责
 
 ## 步骤 5：创建单元计划文档
-- [ ] 将完整计划保存为 `aidlc-docs/construction/plans/{unit-name}-code-generation-plan.md`
+- [ ] 将完整计划保存为 `docs/aidlc/construction/plans/{unit-name}-code-generation-plan.md`
 - [ ] 包含步骤编号（步骤 1、步骤 2 等）
 - [ ] 包含单元上下文和依赖
 - [ ] 包含故事可追溯性
@@ -117,7 +117,7 @@
 - [ ] 注明总步骤数和预估范围
 
 ## 步骤 7：记录审批提示
-- [ ] 在请求审批前，在 `aidlc-docs/audit.md` 中记录提示及时间戳
+- [ ] 在请求审批前，在 `docs/aidlc/audit.md` 中记录提示及时间戳
 - [ ] 包含对完整单元代码生成计划的引用
 - [ ] 使用 ISO 8601 时间戳格式
 
@@ -127,12 +127,12 @@
 - [ ] 如用户请求修改，更新计划并重复审批流程
 
 ## 步骤 9：记录审批回复
-- [ ] 在 `aidlc-docs/audit.md` 中记录用户的审批回复及时间戳
+- [ ] 在 `docs/aidlc/audit.md` 中记录用户的审批回复及时间戳
 - [ ] 包含用户的确切回复文本
 - [ ] 清晰标记审批状态
 
 ## 步骤 10：更新进度
-- [ ] 在 `aidlc-state.md` 中标记代码规划完成
+- [ ] 在 `state.md` 中标记代码规划完成
 - [ ] 更新"当前状态"部分
 - [ ] 准备过渡到代码生成
 
@@ -141,19 +141,19 @@
 # 第二部分：生成
 
 ## 步骤 11：加载单元代码生成计划
-- [ ] 从 `aidlc-docs/construction/plans/{unit-name}-code-generation-plan.md` 读取完整计划
+- [ ] 从 `docs/aidlc/construction/plans/{unit-name}-code-generation-plan.md` 读取完整计划
 - [ ] 识别下一个未完成的步骤（第一个 [ ] 复选框）
 - [ ] 加载该步骤的上下文（单元、依赖、故事）
 
 ## 步骤 12：执行当前步骤
-- [ ] 验证计划中的目标目录（绝对不在 aidlc-docs/ 中）
+- [ ] 验证计划中的目标目录（绝对不在 docs/aidlc/ 中）
 - [ ] **仅存量项目**：检查目标文件是否存在
 - [ ] 精确生成当前步骤描述的内容：
   - **如果文件存在**：就地修改（绝不创建 `ClassName_modified.java`、`ClassName_new.java` 等）
   - **如果文件不存在**：创建新文件
 - [ ] 写入正确位置：
   - **应用代码**：按项目结构写入工作区根目录
-  - **文档**：`aidlc-docs/construction/{unit-name}/code/`（仅 markdown）
+  - **文档**：`docs/aidlc/construction/{unit-name}/code/`（仅 markdown）
   - **构建/配置文件**：工作区根目录
 - [ ] 遵循单元故事需求
 - [ ] 尊重依赖和接口
@@ -161,7 +161,7 @@
 ## 步骤 13：更新进度
 - [ ] 在单元代码生成计划中将已完成步骤标记为 [x]
 - [ ] 当故事的生成完成时，将关联的单元故事标记为 [x]
-- [ ] 更新 `aidlc-docs/aidlc-state.md` 当前状态
+- [ ] 更新 `docs/aidlc/state.md` 当前状态
 - [ ] **仅存量项目**：验证未创建重复文件（如 `ClassName_modified.java` 与 `ClassName.java` 并存）
 - [ ] 保存所有生成的产物
 
@@ -188,7 +188,7 @@
 > **📋 <u>**需要审查：**</u>**
 > 请检查生成的代码：
 > - **应用代码**：`[实际工作区路径]`
-> - **文档**：`aidlc-docs/construction/[unit-name]/code/`
+> - **文档**：`docs/aidlc/construction/[unit-name]/code/`
 
 
 
@@ -210,7 +210,7 @@
 ## 步骤 17：记录审批并更新进度
 - 在 audit.md 中记录审批及时间戳
 - 记录用户的审批回复及时间戳
-- 在 aidlc-state.md 中标记此单元的代码生成阶段完成
+- 在 state.md 中标记此单元的代码生成阶段完成
 
 ---
 
@@ -223,9 +223,9 @@
 ## 关键规则
 
 ### 代码位置规则
-- **应用代码**：仅在工作区根目录（绝不在 aidlc-docs/ 中）
-- **文档**：仅在 aidlc-docs/（markdown 摘要）
-- 生成代码前从 aidlc-state.md **读取工作区根目录**
+- **应用代码**：仅在工作区根目录（绝不在 docs/aidlc/ 中）
+- **文档**：仅在 docs/aidlc/（markdown 摘要）
+- 生成代码前从 state.md **读取工作区根目录**
 
 **按项目类型的结构模式**：
 - **存量项目**：使用现有结构（如 `src/main/java/`、`lib/`、`pkg/`）

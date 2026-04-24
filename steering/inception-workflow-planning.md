@@ -240,7 +240,7 @@ linkStyle default stroke:#333,stroke-width:2px
 
 ## 步骤 7：创建执行计划文档
 
-创建 `aidlc-docs/inception/plans/execution-plan.md`：
+创建 `docs/aidlc/inception/plans/execution-plan.md`：
 
 ```markdown
 # 执行计划
@@ -362,7 +362,7 @@ flowchart TD
 
 ## 步骤 8：初始化状态跟踪
 
-更新 `aidlc-docs/aidlc-state.md`：
+更新 `docs/aidlc/state.md`：
 
 ```markdown
 # AI-DLC 状态跟踪
@@ -454,7 +454,7 @@ flowchart TD
 **预估时间线**：[时长]
 
 > **📋 <u>**需要审查：**</u>**
-> 请检查执行计划：`aidlc-docs/inception/plans/execution-plan.md`
+> 请检查执行计划：`docs/aidlc/inception/plans/execution-plan.md`
 
 > **🚀 <u>**下一步？**</u>**
 >
@@ -474,7 +474,7 @@ flowchart TD
 
 ## 步骤 11：记录交互
 
-在 `aidlc-docs/audit.md` 中记录：
+在 `docs/aidlc/audit.md` 中记录：
 
 ```markdown
 ## 工作流规划 - 审批

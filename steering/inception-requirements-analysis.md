@@ -15,10 +15,10 @@
 ### 步骤 1：加载逆向工程上下文（如可用）
 
 **如果是存量项目**：
-- 加载 `aidlc-docs/inception/reverse-engineering/architecture.md`
-- 加载 `aidlc-docs/inception/reverse-engineering/component-inventory.md`
-- 加载 `aidlc-docs/inception/reverse-engineering/technology-stack.md`
-- 加载 `aidlc-docs/inception/reverse-engineering/frontend-architecture.md`（如存在）
+- 加载 `docs/aidlc/inception/reverse-engineering/architecture.md`
+- 加载 `docs/aidlc/inception/reverse-engineering/component-inventory.md`
+- 加载 `docs/aidlc/inception/reverse-engineering/technology-stack.md`
+- 加载 `docs/aidlc/inception/reverse-engineering/frontend-architecture.md`（如存在）
 - 利用这些信息在分析请求时理解现有系统
 
 ### 步骤 2：分析用户请求（意图分析）
@@ -98,7 +98,7 @@
 **有疑问就提问** — 不完整的需求会导致糟糕的实现。
 
 ### 步骤 6：生成澄清问题（主动方式）
-   - **始终**创建 `aidlc-docs/inception/requirements/requirement-verification-questions.md`，除非需求异常清晰完整
+   - **始终**创建 `docs/aidlc/inception/requirements/requirement-verification-questions.md`，除非需求异常清晰完整
    - 对任何缺失、不清楚或含糊的领域提出问题
    - 聚焦功能需求、非功能需求、用户场景和业务上下文
    - 请求用户直接在问题文档中填写所有 [回答]: 标签
@@ -111,7 +111,7 @@
    - **强制**：持续提问直到所有歧义解决或用户明确要求继续
 
 ### 步骤 7：生成需求文档
-   - 创建 `aidlc-docs/inception/requirements/requirements.md`
+   - 创建 `docs/aidlc/inception/requirements/requirements.md`
    - 顶部包含意图分析摘要：
      - 用户请求
      - 请求类型
@@ -123,7 +123,7 @@
 
 ### 步骤 8：更新状态跟踪
 
-更新 `aidlc-docs/aidlc-state.md`：
+更新 `docs/aidlc/state.md`：
 
 ```markdown
 ## 阶段进度
@@ -134,7 +134,7 @@
 ```
 
 ### 步骤 9：记录并继续
-   - 在 `aidlc-docs/audit.md` 中记录确认提示及时间戳
+   - 在 `docs/aidlc/audit.md` 中记录确认提示及时间戳
    - 按以下结构展示完成消息：
      1. **完成公告**（强制）：始终以此开头：
 
@@ -153,7 +153,7 @@
 
 ```markdown
 > **📋 <u>**需要审查：**</u>**
-> 请检查需求文档：`aidlc-docs/inception/requirements/requirements.md`
+> 请检查需求文档：`docs/aidlc/inception/requirements/requirements.md`
 
 
 
@@ -173,4 +173,4 @@
 
    - 在用户明确确认前不得继续
    - 记录确认回复及时间戳
-   - 在 aidlc-state.md 中更新需求分析阶段完成状态
+   - 在 state.md 中更新需求分析阶段完成状态

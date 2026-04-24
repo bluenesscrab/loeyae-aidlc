@@ -23,8 +23,8 @@
 ## 执行步骤
 
 ### 步骤 1：分析单元上下文
-- 从 `aidlc-docs/inception/application-design/unit-of-work.md` 读取单元定义
-- 从 `aidlc-docs/inception/application-design/unit-of-work-story-map.md` 读取分配的故事
+- 从 `docs/aidlc/inception/application-design/unit-of-work.md` 读取单元定义
+- 从 `docs/aidlc/inception/application-design/unit-of-work-story-map.md` 读取分配的故事
 - 理解单元职责和边界
 
 ### 步骤 2：创建功能设计计划
@@ -58,7 +58,7 @@
 - **组件间通信设计** — props/emit/provide-inject/Store 通信模式
 
 ### 步骤 4：保存计划
-- 保存为 `aidlc-docs/construction/plans/{unit-name}-functional-design-plan.md`
+- 保存为 `docs/aidlc/construction/plans/{unit-name}-functional-design-plan.md`
 - 包含所有 [回答]: 标签供用户输入
 
 ### 步骤 5：收集和分析答案
@@ -70,14 +70,14 @@
 - **在所有歧义解决前不得继续**
 
 ### 步骤 6：生成功能设计产物
-- 创建 `aidlc-docs/construction/{unit-name}/functional-design/business-logic-model.md`
-- 创建 `aidlc-docs/construction/{unit-name}/functional-design/business-rules.md`
-- 创建 `aidlc-docs/construction/{unit-name}/functional-design/domain-entities.md`
+- 创建 `docs/aidlc/construction/{unit-name}/functional-design/business-logic-model.md`
+- 创建 `docs/aidlc/construction/{unit-name}/functional-design/business-rules.md`
+- 创建 `docs/aidlc/construction/{unit-name}/functional-design/domain-entities.md`
 
 **前端功能设计产物**（如为前端单元）：
-- 创建 `aidlc-docs/construction/{unit-name}/functional-design/page-state-flow.md`（页面状态流转）
-- 创建 `aidlc-docs/construction/{unit-name}/functional-design/form-validation.md`（表单校验逻辑）
-- 创建 `aidlc-docs/construction/{unit-name}/functional-design/interaction-design.md`（交互行为设计）
+- 创建 `docs/aidlc/construction/{unit-name}/functional-design/page-state-flow.md`（页面状态流转）
+- 创建 `docs/aidlc/construction/{unit-name}/functional-design/form-validation.md`（表单校验逻辑）
+- 创建 `docs/aidlc/construction/{unit-name}/functional-design/interaction-design.md`（交互行为设计）
 
 ### 步骤 7：展示完成消息
 - 按以下结构展示完成消息：
@@ -98,7 +98,7 @@
 
 ```markdown
 > **📋 <u>**需要审查：**</u>**
-> 请检查功能设计产物：`aidlc-docs/construction/[unit-name]/functional-design/`
+> 请检查功能设计产物：`docs/aidlc/construction/[unit-name]/functional-design/`
 
 
 
@@ -120,4 +120,4 @@
 ### 步骤 9：记录审批并更新进度
 - 在 audit.md 中记录审批及时间戳
 - 记录用户的审批回复及时间戳
-- 在 aidlc-state.md 中标记功能设计阶段完成
+- 在 state.md 中标记功能设计阶段完成

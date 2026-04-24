@@ -4,7 +4,7 @@
 
 ## 步骤 1：检查现有 AI-DLC 项目
 
-检查 `aidlc-docs/aidlc-state.md` 是否存在：
+检查 `docs/aidlc/state.md` 是否存在：
 - **存在**：从上次阶段恢复（加载之前阶段的上下文）
 - **不存在**：继续进行新项目评估
 
@@ -29,7 +29,7 @@
 
 ### 通用检查
 - 查找项目结构指标
-- 确定工作区根目录（非 aidlc-docs/）
+- 确定工作区根目录（非 docs/aidlc/）
 
 **记录发现：**
 ```markdown
@@ -53,13 +53,13 @@
 
 **如果工作区有现有代码**：
 - 设置标志：`brownfield = true`
-- 检查 `aidlc-docs/inception/reverse-engineering/` 中是否存在逆向工程产物
+- 检查 `docs/aidlc/inception/reverse-engineering/` 中是否存在逆向工程产物
 - **如果逆向工程产物存在**：加载它们，跳到需求分析
 - **如果无逆向工程产物**：下一阶段为逆向工程
 
 ## 步骤 4：创建初始状态文件
 
-创建 `aidlc-docs/aidlc-state.md`：
+创建 `docs/aidlc/state.md`：
 
 ```markdown
 # AI-DLC 状态跟踪
@@ -77,8 +77,8 @@
 - **前端 UI 框架**：[Element Plus/无]
 
 ## 代码位置规则
-- **应用代码**：工作区根目录（绝对不在 aidlc-docs/ 中）
-- **文档**：仅在 aidlc-docs/
+- **应用代码**：工作区根目录（绝对不在 docs/aidlc/ 中）
+- **文档**：仅在 docs/aidlc/
 - **结构模式**：参见 code-generation.md 关键规则
 
 ## 阶段进度

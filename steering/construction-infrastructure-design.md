@@ -11,8 +11,8 @@
 ## 执行步骤
 
 ### 步骤 1：分析设计产物
-- 从 `aidlc-docs/construction/{unit-name}/functional-design/` 读取功能设计
-- 从 `aidlc-docs/construction/{unit-name}/nfr-design/` 读取 NFR 设计（如存在）
+- 从 `docs/aidlc/construction/{unit-name}/functional-design/` 读取功能设计
+- 从 `docs/aidlc/construction/{unit-name}/nfr-design/` 读取 NFR 设计（如存在）
 - 识别需要基础设施的逻辑组件
 
 ### 步骤 2：创建基础设施设计计划
@@ -42,7 +42,7 @@
 - **环境变量管理** — .env 文件配置、环境区分（dev/staging/prod）
 
 ### 步骤 4：保存计划
-- 保存为 `aidlc-docs/construction/plans/{unit-name}-infrastructure-design-plan.md`
+- 保存为 `docs/aidlc/construction/plans/{unit-name}-infrastructure-design-plan.md`
 - 包含所有 [回答]: 标签供用户输入
 
 ### 步骤 5：收集和分析答案
@@ -51,13 +51,13 @@
 - 如需要则添加后续问题
 
 ### 步骤 6：生成基础设施设计产物
-- 创建 `aidlc-docs/construction/{unit-name}/infrastructure-design/infrastructure-design.md`
-- 创建 `aidlc-docs/construction/{unit-name}/infrastructure-design/deployment-architecture.md`
-- 如有共享基础设施：创建 `aidlc-docs/construction/shared-infrastructure.md`
+- 创建 `docs/aidlc/construction/{unit-name}/infrastructure-design/infrastructure-design.md`
+- 创建 `docs/aidlc/construction/{unit-name}/infrastructure-design/deployment-architecture.md`
+- 如有共享基础设施：创建 `docs/aidlc/construction/shared-infrastructure.md`
 
 **前端基础设施产物**（如为前端单元）：
-- 创建 `aidlc-docs/construction/{unit-name}/infrastructure-design/frontend-build-config.md`（前端构建配置）
-- 创建 `aidlc-docs/construction/{unit-name}/infrastructure-design/frontend-deployment.md`（前端部署方案）
+- 创建 `docs/aidlc/construction/{unit-name}/infrastructure-design/frontend-build-config.md`（前端构建配置）
+- 创建 `docs/aidlc/construction/{unit-name}/infrastructure-design/frontend-deployment.md`（前端部署方案）
 
 ### 步骤 7：展示完成消息
 - 按以下结构展示完成消息：
@@ -78,7 +78,7 @@
 
 ```markdown
 > **📋 <u>**需要审查：**</u>**
-> 请检查基础设施设计：`aidlc-docs/construction/[unit-name]/infrastructure-design/`
+> 请检查基础设施设计：`docs/aidlc/construction/[unit-name]/infrastructure-design/`
 
 
 
@@ -100,4 +100,4 @@
 ### 步骤 9：记录审批并更新进度
 - 在 audit.md 中记录审批及时间戳
 - 记录用户的审批回复及时间戳
-- 在 aidlc-state.md 中标记基础设施设计阶段完成
+- 在 state.md 中标记基础设施设计阶段完成

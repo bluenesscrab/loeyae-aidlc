@@ -23,7 +23,7 @@
 
 ## 步骤 2：生成构建指令
 
-创建 `aidlc-docs/construction/build-and-test/build-instructions.md`：
+创建 `docs/aidlc/construction/build-and-test/build-instructions.md`：
 
 ```markdown
 # 构建指令
@@ -97,7 +97,7 @@ pnpm preview     # 预览构建结果
 
 ## 步骤 3：生成单元测试执行指令
 
-创建 `aidlc-docs/construction/build-and-test/unit-test-instructions.md`：
+创建 `docs/aidlc/construction/build-and-test/unit-test-instructions.md`：
 
 ```markdown
 # 单元测试执行
@@ -128,7 +128,7 @@ pnpm preview     # 预览构建结果
 
 ## 步骤 4：生成集成测试指令
 
-创建 `aidlc-docs/construction/build-and-test/integration-test-instructions.md`：
+创建 `docs/aidlc/construction/build-and-test/integration-test-instructions.md`：
 
 ```markdown
 # 集成测试指令
@@ -189,7 +189,7 @@ pnpm preview     # 预览构建结果
 
 ## 步骤 5：生成性能测试指令（如适用）
 
-创建 `aidlc-docs/construction/build-and-test/performance-test-instructions.md`：
+创建 `docs/aidlc/construction/build-and-test/performance-test-instructions.md`：
 
 ```markdown
 # 性能测试指令
@@ -252,20 +252,20 @@ pnpm preview     # 预览构建结果
 根据项目需求，生成额外的测试指令文件：
 
 ### 契约测试（微服务）
-创建 `aidlc-docs/construction/build-and-test/contract-test-instructions.md`：
+创建 `docs/aidlc/construction/build-and-test/contract-test-instructions.md`：
 - 服务间 API 契约验证
 - 消费者驱动的契约测试
 - Schema 验证
 
 ### 安全测试
-创建 `aidlc-docs/construction/build-and-test/security-test-instructions.md`：
+创建 `docs/aidlc/construction/build-and-test/security-test-instructions.md`：
 - 漏洞扫描
 - 依赖安全检查
 - 认证/授权测试
 - 输入校验测试
 
 ### 端到端测试
-创建 `aidlc-docs/construction/build-and-test/e2e-test-instructions.md`：
+创建 `docs/aidlc/construction/build-and-test/e2e-test-instructions.md`：
 - 完整用户工作流测试
 - 跨服务场景
 - UI 测试（如适用）
@@ -274,7 +274,7 @@ pnpm preview     # 预览构建结果
 
 ## 步骤 7：生成测试摘要
 
-创建 `aidlc-docs/construction/build-and-test/build-and-test-summary.md`：
+创建 `docs/aidlc/construction/build-and-test/build-and-test-summary.md`：
 
 ```markdown
 # 构建和测试摘要
@@ -325,7 +325,7 @@ pnpm preview     # 预览构建结果
 
 ## 步骤 8：更新状态跟踪
 
-更新 `aidlc-docs/aidlc-state.md`：
+更新 `docs/aidlc/state.md`：
 - 标记构建和测试阶段完成
 - 更新当前状态
 
@@ -354,7 +354,7 @@ pnpm preview     # 预览构建结果
 5. ✅ [按需的额外测试文件]
 6. ✅ build-and-test-summary.md
 
-请审查摘要：aidlc-docs/construction/build-and-test/build-and-test-summary.md
+请审查摘要：docs/aidlc/construction/build-and-test/build-and-test-summary.md
 
 **项目已完成，准备就绪。**"
 ```
@@ -363,7 +363,7 @@ pnpm preview     # 预览构建结果
 
 ## 步骤 10：记录交互
 
-**强制**：在 `aidlc-docs/audit.md` 中记录阶段完成：
+**强制**：在 `docs/aidlc/audit.md` 中记录阶段完成：
 
 ```markdown
 ## 构建和测试阶段

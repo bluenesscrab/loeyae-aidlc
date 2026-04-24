@@ -27,9 +27,9 @@
 
 ## 步骤 2：在计划中包含强制单元产物
 **始终**在单元计划中包含这些强制产物：
-- [ ] 生成 `aidlc-docs/inception/application-design/unit-of-work.md`，包含单元定义和职责
-- [ ] 生成 `aidlc-docs/inception/application-design/unit-of-work-dependency.md`，包含依赖矩阵
-- [ ] 生成 `aidlc-docs/inception/application-design/unit-of-work-story-map.md`，映射故事到单元
+- [ ] 生成 `docs/aidlc/inception/application-design/unit-of-work.md`，包含单元定义和职责
+- [ ] 生成 `docs/aidlc/inception/application-design/unit-of-work-dependency.md`，包含依赖矩阵
+- [ ] 生成 `docs/aidlc/inception/application-design/unit-of-work-story-map.md`，映射故事到单元
 - [ ] **仅全新项目**：在 `unit-of-work.md` 中记录代码组织策略（参见 code-generation.md 的结构模式）
 - [ ] 验证单元边界和依赖
 - [ ] 确保所有故事已分配到单元
@@ -65,7 +65,7 @@
 - **前后端拆分策略** — 仅当前后端单元的划分粒度不清楚时
 
 ## 步骤 4：保存工作单元计划
-- 保存为 `aidlc-docs/inception/plans/unit-of-work-plan.md`
+- 保存为 `docs/aidlc/inception/plans/unit-of-work-plan.md`
 - 包含所有 [回答]: 标签供用户输入
 - 确保计划覆盖系统分解的所有方面
 
@@ -98,7 +98,7 @@
   - "你提到'取决于复杂度' — 如何定义复杂度级别？"
 
 ## 步骤 9：请求审批
-- 询问："**工作单元计划完成。请审查 aidlc-docs/inception/plans/unit-of-work-plan.md 中的计划。准备好进入生成了吗？**"
+- 询问："**工作单元计划完成。请审查 docs/aidlc/inception/plans/unit-of-work-plan.md 中的计划。准备好进入生成了吗？**"
 - 在用户确认前不得继续
 
 ## 步骤 10：记录审批
@@ -107,7 +107,7 @@
 - 包含完整的审批提示文本
 
 ## 步骤 11：更新进度
-- 在 aidlc-state.md 中标记单元规划完成
+- 在 state.md 中标记单元规划完成
 - 更新"当前状态"部分
 - 准备过渡到单元生成
 
@@ -116,7 +116,7 @@
 # 第二部分：生成
 
 ## 步骤 12：加载工作单元计划
-- [ ] 从 `aidlc-docs/inception/plans/unit-of-work-plan.md` 读取完整计划
+- [ ] 从 `docs/aidlc/inception/plans/unit-of-work-plan.md` 读取完整计划
 - [ ] 识别下一个未完成的步骤（第一个 [ ] 复选框）
 - [ ] 加载该步骤的上下文和需求
 
@@ -128,7 +128,7 @@
 
 ## 步骤 14：更新进度
 - [ ] 在工作单元计划中将已完成步骤标记为 [x]
-- [ ] 更新 `aidlc-docs/aidlc-state.md` 当前状态
+- [ ] 更新 `docs/aidlc/state.md` 当前状态
 - [ ] 保存所有生成的产物
 
 ## 步骤 15：继续或完成
@@ -144,7 +144,7 @@
 [AI 生成的单元和分解摘要，使用要点列表]
 
 > **📋 <u>**需要审查：**</u>**
-> 请检查单元生成产物：`aidlc-docs/inception/application-design/`
+> 请检查单元生成产物：`docs/aidlc/inception/application-design/`
 
 > **🚀 <u>**下一步？**</u>**
 >
@@ -160,12 +160,12 @@
 - 如用户请求修改，更新单元并重复审批流程
 
 ## 步骤 18：记录审批回复
-- 在 `aidlc-docs/audit.md` 中记录用户的审批回复及时间戳
+- 在 `docs/aidlc/audit.md` 中记录用户的审批回复及时间戳
 - 包含用户的确切回复文本
 - 清晰标记审批状态
 
 ## 步骤 19：更新进度
-- 在 `aidlc-docs/aidlc-state.md` 中标记单元生成阶段完成
+- 在 `docs/aidlc/state.md` 中标记单元生成阶段完成
 - 更新"当前状态"部分
 - 准备过渡到 CONSTRUCTION 阶段
 

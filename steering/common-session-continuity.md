@@ -6,7 +6,7 @@
 ```markdown
 **欢迎回来！我发现您有一个正在进行中的 AI-DLC 项目。**
 
-根据您的 aidlc-state.md，以下是您当前的状态：
+根据您的 state.md，以下是您当前的状态：
 - **项目**：[project-name]
 - **当前阶段**：[INCEPTION/CONSTRUCTION/OPERATIONS]
 - **当前步骤**：[Stage Name]
@@ -22,7 +22,7 @@ B) 回顾之前的阶段（[显示可用阶段]）
 ```
 
 ## 强制要求：会话连续性指令
-1. **检测到现有项目时，始终先读取 aidlc-state.md**
+1. **检测到现有项目时，始终先读取 state.md**
 2. **从工作流文件中解析当前状态**以填充提示内容
 3. **强制要求：加载前序阶段产物** - 在恢复任何阶段之前，自动读取前序阶段的所有相关产物：
    - **逆向工程**：读取 architecture.md、code-structure.md、api-documentation.md

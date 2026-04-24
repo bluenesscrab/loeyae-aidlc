@@ -141,7 +141,7 @@ C) 也许
 
 #### 步骤 1：创建问题文件
 ```markdown
-创建 aidlc-docs/{阶段名称}-questions.md，包含所有问题
+创建 docs/aidlc/{阶段名称}-questions.md，包含所有问题
 ```
 
 #### 步骤 2：通知用户
@@ -156,7 +156,7 @@ C) 也许
 
 #### 步骤 4：读取并分析
 ```
-读取 aidlc-docs/{阶段名称}-questions.md
+读取 docs/aidlc/{阶段名称}-questions.md
 提取所有答案
 验证完整性
 继续分析
