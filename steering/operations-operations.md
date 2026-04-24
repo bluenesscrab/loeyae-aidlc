@@ -1,19 +1,23 @@
-# Operations
+# 运维阶段（Operations）
 
-**Purpose**: Placeholder for future operational phases (deployment, monitoring, maintenance)
+**目的**：部署、监控、维护等运维阶段的占位文件
 
-**Status**: This phase is currently a placeholder and will be expanded in future versions.
+**状态**：当前为占位阶段，将在未来版本中扩展。
 
-## Future Scope
+## 未来范围
 
-The Operations phase will eventually include:
-- Deployment planning and execution
-- Monitoring and observability setup
-- Incident response procedures
-- Maintenance and support workflows
-- Production readiness checklists
+运维阶段最终将包含：
+- 部署规划与执行
+- 监控与可观测性配置
+- 事件响应流程
+- 维护与支持工作流
+- 生产就绪检查清单
 
-## Current State
+## 当前状态
 
-All build and test activities have been moved to the CONSTRUCTION phase.
-The AI-DLC workflow currently ends after the Build and Test phase in CONSTRUCTION.
+所有构建和测试活动已移至 CONSTRUCTION 阶段。
+AI-DLC 工作流当前在 CONSTRUCTION 阶段的"构建和测试"步骤后结束。
+
+## 恢复指南
+
+如需将运维阶段恢复到工作流中，请参阅 `README.md` 中的"恢复 Operations 阶段"章节。
