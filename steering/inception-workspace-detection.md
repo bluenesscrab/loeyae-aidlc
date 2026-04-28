@@ -18,14 +18,43 @@
 - 识别后端项目结构指标
 
 ### 前端代码扫描
-- 扫描前端源代码文件（.vue, .tsx, .jsx, .ts, .js, .css, .scss, .less）
-- 检查前端构建文件（package.json, vite.config.ts, tsconfig.json 等）
-- 检测前端框架依赖（在 package.json 中查找）：
-  - Vue 3 相关：`vue`, `vue-router`, `pinia`
-  - 构建工具：`vite`, `@vitejs/plugin-vue`
-  - UI 框架：`element-plus`, `ant-design-vue`
-  - 工具库：`axios`, `@vueuse/core`
-- 识别前端目录结构（`src/views/`, `src/components/`, `src/api/`, `src/store/`, `src/router/`）
+- **源代码文件**：扫描前端源代码文件（.vue, .tsx, .jsx, .ts, .js, .css, .scss, .less）
+- **构建配置**：检查前端构建文件（package.json, vite.config.ts, tsconfig.json, windi.config.ts 等）
+- **技术栈检测**（在 package.json 中查找核心依赖）：
+  - **框架**：Vue 3, TypeScript
+  - **构建工具**：Vite
+  - **UI 框架**：Element Plus, Element Plus Icons
+  - **状态管理**：Pinia
+  - **路由**：Vue Router
+  - **国际化**：Vue I18n
+  - **样式**：Sass, Windi CSS, stylelint
+  - **表单生成器**：@form-create/element-ui
+  - **HTTP 请求**：Axios
+  - **工具库**：@vueuse/core, dayjs, crypto-js, qrcode, lodash-es, province-city-china
+  - **图表**：ECharts, echarts-wordcloud
+  - **富文本**：@wangeditor/editor, @wangeditor/editor-for-vue
+  - **图片处理**：cropperjs, vue-color
+- **目录结构识别**：
+  - `src/api/`（API 接口定义，按模块组织）
+  - `src/components/`（全局组件）
+  - `src/config/`（全局配置）
+  - `src/directives/`（全局指令）
+  - `src/hooks/`（Composables）
+  - `src/layouts/`（布局组件）
+  - `src/locales/`（国际化文件）
+  - `src/permission/`（权限管理）
+  - `src/router/`（路由配置）
+  - `src/store/`（Pinia Store）
+  - `src/styles/`（全局样式）
+  - `src/types/`（类型定义）
+  - `src/utils/`（工具函数）
+  - `src/views/`（页面组件）
+- **规范检查**：
+  - 命名规范：组件文件 PascalCase, CSS类 kebab-case, 文件夹 kebab-case
+  - 代码风格：2空格缩进, 单引号, 无分号, 标签属性超过2个时换行
+  - 导入顺序：Vue 相关 → 第三方库 → 项目内部（@别名）→ 相对路径
+  - 优先使用项目现有组件：ContentWrap, Dialog, Form, Table, UploadFile, UploadImg, Icon, Pagination
+  - TypeScript 使用：避免 any 类型，使用 type 关键字导入类型
 
 ### 通用检查
 - 查找项目结构指标
