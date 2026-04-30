@@ -7,10 +7,30 @@
 | 框架 | Vue + TypeScript | 3.5.12 / 5.3.3 |
 | 构建 | Vite | 5.4.4 |
 | 组件库 | Element Plus | 2.11.8 |
+| 图标 | Element Plus Icons | 2.3.2 |
+| 表单生成器 | @form-create/element-ui | 3.1.11 |
 | 状态 | Pinia | 2.1.7 |
 | 路由 | Vue Router | 4.4.5 |
 | 国际化 | Vue I18n | 9.10.2 |
-| HTTP | Axios | - |
+| 样式 | Sass | 1.58.0 |
+| 样式 | Windi CSS | 3.5.6 |
+| 样式 | stylelint | 14.16.1 |
+| 动画 | animate.css | 4.1.1 |
+| 图表 | ECharts | 5.4.1 |
+| 图表 | echarts-wordcloud | 2.1.0 |
+| 颜色选择器 | vue-color | 3.3.3 |
+| 富文本编辑器 | @wangeditor/editor | 5.1.23 |
+| 富文本编辑器 | @wangeditor/editor-for-vue | 5.1.10 |
+| 图片裁剪 | cropperjs | 1.5.13 |
+| 日期处理 | dayjs | 1.11.7 |
+| 加密 | crypto-js | 4.1.1 |
+| 前端二维码 | qrcode | 1.5.1 |
+| Vue 工具 | @vueuse/core | 9.12.0 |
+| 进度条 | nprogress | 0.2.0 |
+| 工具 | lodash-es | 4.17.21 |
+| 工具 | autoprefixer | 10.4.13 |
+| 中国省市区字典 | province-city-china | 8.5.8 |
+| HTTP | Axios | 1.4.0 |
 | 图标 | Iconify | - |
 
 ---
@@ -22,10 +42,16 @@ src/
 ├── api/           # API 接口定义
 │   └── system/
 │       └── user/  # 按模块组织
+├── App.vue        # 应用入口
 ├── assets/        # 静态资源
 ├── components/    # 全局组件（优先使用）
+├── config/        # 全局配置
+├── directives/    # 全局指令
 ├── hooks/         # Composables
 ├── layouts/       # 布局组件
+├── locales/       # 国际化文件
+├── main.ts        # 应用入口
+├── permission/    # 权限管理
 ├── router/        # 路由配置
 ├── store/         # Pinia Store
 ├── styles/        # 全局样式
@@ -128,8 +154,8 @@ const loading = ref(false)
 const list = ref<UserVO[]>([])
 const total = ref(0)
 const queryParams = reactive<UserPageQuery>({
-  pageNo: 1,
-  pageSize: 10
+  p: 1,
+  s: 10
 })
 
 // 计算属性
@@ -140,7 +166,7 @@ const getList = async () => {
   loading.value = true
   try {
     const data = await UserApi.getPage(queryParams)
-    list.value = data.list
+    list.value = data.rows
     total.value = data.total
   } finally {
     loading.value = false
@@ -191,16 +217,16 @@ export const UserApi = {
     request.get({ url: '/system/user/page', params }),
   
   get: (id: number) => 
-    request.get({ url: `/system/user/get?id=${id}` }),
+    request.get({ url: `/system/user/${id}` }),
   
   create: (data: UserCreate) => 
-    request.post({ url: '/system/user/create', data }),
+    request.post({ url: '/system/user/', data }),
   
   update: (data: UserCreate) => 
-    request.put({ url: '/system/user/update', data }),
+    request.put({ url: '/system/user/', data }),
   
   delete: (id: number) => 
-    request.delete({ url: `/system/user/delete?id=${id}` })
+    request.delete({ url: `/system/user/${id}` })
 }
 ```
 
@@ -211,7 +237,7 @@ const getList = async () => {
   loading.value = true
   try {
     const data = await UserApi.getPage(queryParams)
-    list.value = data.list
+    list.value = data.rows
   } catch (error) {
     message.error('获取列表失败')
   } finally {
