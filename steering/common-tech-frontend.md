@@ -13,7 +13,7 @@
 | 路由 | Vue Router | 4.4.5 |
 | 国际化 | Vue I18n | 9.10.2 |
 | 样式 | Sass | 1.58.0 |
-| 样式 | Windi CSS | 3.5.6 |
+| 样式 | windicss | 3.5.6 |
 | 样式 | stylelint | 14.16.1 |
 | 动画 | animate.css | 4.1.1 |
 | 图表 | ECharts | 5.4.1 |
@@ -329,6 +329,50 @@ const systemRoutes: AppRouteRecordRaw[] = [
 ]
 ```
 
+#### 路由定义规则
+
+1. 前端静态路由必须定义在 `router/modules` 目录下，文件名： `remaining.ts`。
+2. 路由定义必须符合 `AppRouteRecordRaw` 类型。
+3. 路由定义必须包含 `meta` 字段，用于定义路由的标题和图标,是否在菜单中显示。
+4. 路由 `name` 字段，用于定义路由的名称，必须全局唯一。
+5. 路由 `path` 字段，用于定义路由的路径，必须全局唯一。
+6. 路由 `children` 字段，用于定义子路由。
+7. 路由 `component` 字段，用于定义路由的组件，可以使用 `import` 动态加载组件，并且页面文件夹创建规则例如： 【src/目录/页面/index.vue】、【src/目录/子目录/页面/index.vue】， 所有页面必须使用 `index` 作为入口文件名字。
+8. 路由如果为目录，`component`字段必须为 `Layout`。
+9. ❌产品相似模块页面，不允许简化使用相同路由名称通过query参数区分，必须区分为不同路由页面。
+
+### 路由注册
+
+```typescript
+// router/index.ts
+import { createRouter, createWebHistory } from 'vue-router'
+import { AppRouteRecordRaw } from '@/router/types'
+import { constantRoutes } from '@/router/routes'
+import { asyncRoutes } from '@/router/modules'
+
+const routes: AppRouteRecordRaw[] = [...constantRoutes, ...asyncRoutes]
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes
+})
+
+---
+
+## 路由配置
+
+### 路由配置
+
+```typescript
+// router/index.ts
+import { createRouter, createWebHistory } from 'vue-router'
+
+### 路由注册
+
+```typescript
+// router/index.ts
+
+
 ### 路由跳转
 
 ```typescript
@@ -374,7 +418,7 @@ const { t } = useI18n()
 
 ---
 
-## 优先使用现有组件
+## 优先使用 `@/components` 中现有组件
 
 | 组件 | 用途 | 路径 |
 |------|------|------|
@@ -387,9 +431,19 @@ const { t } = useI18n()
 | `Icon` | 图标 | `@/components/Icon` |
 | `Pagination` | 分页 | `@/components/Pagination` |
 
-❌ 避免直接使用 `el-dialog`、`el-form` 等原生组件
+❌ 尽量避免直接使用 `el-dialog`、`el-form` 等原生组件
 
----
+### 组件提取规则
+
+> 根据组件使用频率，同一组件使用频率大于等于2次，需要提取到 `@/components` 中，并根据组件特性加以区分。
+
+### 业务组件 `@/components/buiness/*` 公共业务组件
+
+> 与业务强相关的组件，如：`@/components/business/UserSelect`、`@/components/business/OrgTree` 等
+
+### 基础组件 `@/components/*` 基础组件
+
+> 与业务无关的组件，如：`@/components/Icon`、`@/components/UploadImg` 等
 
 ## 常用 Hooks
 
@@ -431,6 +485,7 @@ const { register, formRef, methods } = useForm()
 ## 检查清单
 
 - [ ] 优先使用项目组件
+- [ ] 使用 windicss 规范
 - [ ] 遵循命名规范
 - [ ] 使用 TypeScript 类型
 - [ ] 正确处理错误
