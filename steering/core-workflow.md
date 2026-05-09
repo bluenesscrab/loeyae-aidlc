@@ -28,14 +28,29 @@ AI 模型根据以下因素智能评估需要哪些阶段：
 
 **关键**：执行任何阶段时，必须读取并使用本 Power 的 steering 文件中的相关内容。
 
-**通用规则**：工作流启动时始终加载：
-- 加载 `common-process-overview.md` 了解工作流概览
-- 加载 `common-session-continuity.md` 了解会话恢复指导
-- 加载 `common-content-validation.md` 了解内容验证要求
-- 加载 `common-question-format-guide.md` 了解问题格式规则
-- 加载 `common-quality-gates.md` 了解质量门禁要求
-- 加载 `common-team-collaboration.md` 了解团队协作模型（团队协作模式时）
-- 在整个工作流执行过程中引用这些规则
+**加载策略**（参见 `common-token-management.md` 了解完整策略）：
+
+**第一层 — 启动时加载（必须）**：
+- `core-workflow.md` — 主控逻辑（本文件，已加载）
+
+**第二层 — 恢复时按需加载**：
+- `common-session-continuity.md` — 仅在检测到现有项目时加载
+- `common-team-collaboration.md` — 仅在团队协作模式时加载
+
+**第三层 — 进入阶段时加载**：
+- 当前阶段的 steering 文件（如 `inception-requirements-analysis.md`）
+- `common-content-validation.md` — 仅在需要创建文件时加载
+- `common-question-format-guide.md` — 仅在需要提问时加载
+
+**第四层 — 执行特定任务时加载**：
+- 质量门禁：使用 core-workflow.md 中内联的检查清单，仅在需要了解门禁流程时加载完整 `common-quality-gates.md`
+- 编码规范文件：仅在代码生成阶段加载
+- `common-ascii-diagram-standards.md`：仅在需要创建图表时加载
+
+**禁止预加载**：
+- ❌ 不要在启动时一次性加载所有通用规则文件
+- ❌ 不要预加载后续阶段的 steering 文件
+- ✅ 进入哪个阶段，加载哪个阶段的文件
 
 ## 必须：内容验证
 
@@ -482,7 +497,8 @@ AI 模型根据以下因素智能评估需要哪些阶段：
 - **透明规划**：开始前始终展示执行计划
 - **用户控制**：用户可以请求包含/排除阶段
 - **进度跟踪**：在 state.md 中更新已执行和已跳过的阶段
-- **完整审计**：在 audit.md 中记录所有用户输入和 AI 响应（含时间戳）
+- **完整审计**：在审计分段文件中记录所有用户输入和 AI 响应（含时间戳）
+  - **关键**：本文件中所有"在 audit.md 中记录"的指令，实际写入对应的分段文件（Inception → `audit-inception.md`，Construction → `audit-construction-{unit-name}.md`），并同步更新 `audit-summary.md`
   - **关键**：捕获用户的完整原始输入
   - **关键**：不要总结或改述用户输入
   - **关键**：记录每次交互，不仅仅是批准
@@ -510,15 +526,40 @@ AI 模型根据以下因素智能评估需要哪些阶段：
 - **立即更新**：所有进度更新在完成工作的同一交互中完成
 
 ## 提示日志要求
-- **必须**：在 audit.md 中记录每个用户输入（提示、问题、响应）并附时间戳
+
+**审计日志分段化**（参见 `common-token-management.md` 策略 B）：
+
+### 文件结构
+- `docs/aidlc/audit-summary.md` — 极简时间线（每次恢复必加载，控制在 ~2KB）
+- `docs/aidlc/inception/audit-inception.md` — Inception 阶段完整审计
+- `docs/aidlc/construction/audit-construction-{unit-name}.md` — 各单元的审计
+
+### 写入规则
+- **当前阶段的审计**：写入对应的分段文件
+- **审计摘要**：每次阶段转换或关键决策时，追加一行到 `audit-summary.md`
+- **恢复时**：只加载 `audit-summary.md`，不加载历史分段
+- **需要历史时**：按需读取特定分段文件
+
+### 记录要求
+- **必须**：在对应分段文件中记录每个用户输入（提示、问题、响应）并附时间戳
 - **必须**：捕获用户的完整原始输入（不要总结）
 - **必须**：在询问用户之前记录每个批准提示并附时间戳
 - **必须**：收到用户响应后记录并附时间戳
-- **关键**：始终追加编辑 audit.md 文件，不要使用完全覆盖其内容的工具和命令
+- **关键**：始终追加编辑审计文件，不要使用完全覆盖其内容的工具和命令
 - 使用 ISO 8601 格式的时间戳（YYYY-MM-DDTHH:MM:SSZ）
 - 每个条目包含阶段上下文
 
-### 审计日志格式：
+### audit-summary.md 格式
+```markdown
+# 审计摘要
+
+## 项目时间线
+| 时间 | 阶段/步骤 | 关键事件 |
+|------|-----------|----------|
+| [ISO时间] | [步骤名] | [一句话描述关键决策或事件] |
+```
+
+### 分段审计日志格式
 ```markdown
 ## [阶段名称或交互类型]
 **时间戳**: [ISO 时间戳]
@@ -529,15 +570,18 @@ AI 模型根据以下因素智能评估需要哪些阶段：
 ---
 ```
 
-### audit.md 的正确工具使用
+### 审计文件的正确工具使用
 
 ✅ 正确：
-1. 读取 audit.md 文件
+1. 读取对应分段的审计文件
 2. 追加/编辑文件以进行更改
 
 ❌ 错误：
-1. 读取 audit.md 文件
-2. 用读取的内容加上新更改完全覆盖 audit.md
+1. 读取审计文件
+2. 用读取的内容加上新更改完全覆盖文件
+
+### 向后兼容
+如果检测到旧格式的单一 `audit.md` 文件，继续使用它（不强制迁移）。新项目默认使用分段格式。
 
 ## 目录结构
 
@@ -553,12 +597,29 @@ AI 模型根据以下因素智能评估需要哪些阶段：
 │   └── aidlc/                      # AIDLC 过程文档
 │       ├── inception/              # 🔵 INCEPTION 阶段
 │       │   ├── plans/
+│       │   ├── audit-inception.md  # Inception 审计日志
 │       │   ├── reverse-engineering/  # 仅存量项目
+│       │   │   └── decision-summary.md
 │       │   ├── requirements/
+│       │   │   ├── index.md        # 需求索引（多单元时）
+│       │   │   ├── shared-requirements.md
+│       │   │   ├── unit-{name}-requirements.md
+│       │   │   └── decision-summary.md
 │       │   ├── user-stories/
+│       │   │   ├── index.md        # 故事索引（多单元时）
+│       │   │   ├── unit-{name}-stories.md
+│       │   │   └── decision-summary.md
 │       │   └── application-design/
+│       │       ├── index.md        # 设计索引（多单元时）
+│       │       ├── shared-interfaces.md
+│       │       ├── unit-{name}-design.md
+│       │       ├── unit-of-work.md
+│       │       ├── unit-of-work-dependency.md
+│       │       ├── unit-of-work-story-map.md
+│       │       └── decision-summary.md
 │       ├── construction/           # 🟢 CONSTRUCTION 阶段
 │       │   ├── plans/
+│       │   ├── audit-construction-{unit-name}.md  # 各单元审计
 │       │   ├── {unit-name}/
 │       │   │   ├── functional-design/
 │       │   │   ├── nfr-requirements/
@@ -567,7 +628,7 @@ AI 模型根据以下因素智能评估需要哪些阶段：
 │       │   │   └── code/           # 仅 Markdown 摘要
 │       │   └── build-and-test/
 │       ├── state.md
-│       └── audit.md
+│       └── audit-summary.md        # 极简审计摘要（必加载）
 ```
 
 **关键规则**：
@@ -576,3 +637,5 @@ AI 模型根据以下因素智能评估需要哪些阶段：
 - 设计文档：docs/specs/（与 cc-aidlc、oc-aidlc 共享）
 - 实现计划：docs/plans/（superpowers 写入）或 .sisyphus/plans/（Sisyphus 写入）
 - 项目结构：参见 code-generation.md 了解各项目类型的模式
+- **审计日志**：分段存储，audit-summary.md 为必加载的极简摘要
+- **文档切片**：多单元项目在单元生成后按单元拆分产出物（参见 common-token-management.md 策略 E）

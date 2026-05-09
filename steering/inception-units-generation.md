@@ -156,6 +156,45 @@
 - [ ] 如果所有步骤完成，验证单元已准备好进入设计阶段
 - [ ] 标记单元生成阶段完成
 
+## 步骤 15.1：文档切片（多单元项目，≥2 个单元时执行）
+
+**触发条件**：项目有 2 个或以上单元。单单元项目跳过此步骤。
+
+**执行**（参见 `common-token-management.md` 策略 E）：
+
+- [ ] 读取 `unit-of-work-story-map.md` 确定故事到单元的映射
+- [ ] 读取 `unit-of-work.md` 确定单元包含的组件/服务
+
+**需求文档切片**：
+- [ ] 根据故事-单元映射，反向追溯需求到单元
+- [ ] 为每个单元生成 `unit-{name}-requirements.md`（仅包含该单元相关需求）
+- [ ] 生成 `shared-requirements.md`（跨单元共享的 NFR、全局约束）
+- [ ] 生成 `index.md`（需求索引，极简）
+- [ ] 将原始 `requirements.md` 重命名为 `requirements.full.md`
+
+**用户故事切片**：
+- [ ] 根据 `unit-of-work-story-map.md` 直接按单元拆分故事
+- [ ] 为每个单元生成 `unit-{name}-stories.md`
+- [ ] 生成 `shared-stories.md`（跨单元共享故事，如有）
+- [ ] 生成 `index.md`（故事索引，极简）
+- [ ] 将原始 `stories.md` 重命名为 `stories.full.md`
+
+**应用设计切片**：
+- [ ] 根据 `unit-of-work.md` 中单元包含的组件/服务进行切片
+- [ ] 为每个单元生成 `unit-{name}-design.md`（该单元的组件、方法、业务规则）
+- [ ] 生成 `shared-interfaces.md`（跨单元接口契约）
+- [ ] 生成 `index.md`（设计索引，极简）
+- [ ] 保留 `unit-of-work.md`、`unit-of-work-dependency.md`、`unit-of-work-story-map.md` 不变
+
+**切片质量验证**：
+- [ ] 验证每个需求至少出现在一个单元切片或 shared 文件中（无遗漏）
+- [ ] 验证每个用户故事至少出现在一个单元切片中
+- [ ] 验证 shared-interfaces.md 包含所有跨单元调用的接口定义
+
+**更新 state.md**：
+- [ ] 在 state.md 中记录"文档切片已完成"
+- [ ] 更新"单元认领状态"表（团队协作模式）
+
 ## 步骤 16：展示完成消息
 
 ```markdown
@@ -241,6 +280,11 @@
   - `unit-of-work-dependency.md` 包含依赖矩阵
   - `unit-of-work-story-map.md` 包含故事映射
 - 单元已验证并准备好进入按单元设计阶段
+- **多单元项目额外要求**：
+  - 文档切片已完成（需求、故事、设计按单元拆分）
+  - 各索引文件已生成
+  - shared-*.md 文件已生成
+  - 切片质量验证通过（无遗漏）
 - **团队协作模式额外要求**：
   - `unit-of-work.md` 包含认领状态表
   - state.md 中的"单元认领状态"已填充

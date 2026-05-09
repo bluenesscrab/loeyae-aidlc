@@ -24,24 +24,40 @@ B) 回顾之前的阶段（[显示可用阶段]）
 ## 强制要求：会话连续性指令
 1. **检测到现有项目时，始终先读取 state.md**
 2. **从工作流文件中解析当前状态**以填充提示内容
-3. **强制要求：加载前序阶段产物** - 在恢复任何阶段之前，自动读取前序阶段的所有相关产物：
-   - **逆向工程**：读取 architecture.md、code-structure.md、api-documentation.md
-   - **需求分析**：读取 requirements.md、requirement-verification-questions.md
-   - **用户故事**：读取 stories.md、personas.md、story-generation-plan.md
-   - **应用设计**：读取应用设计产物（components.md、component-methods.md、services.md）
-   - **设计（单元）**：读取 unit-of-work.md、unit-of-work-dependency.md、unit-of-work-story-map.md
-   - **单元级设计**：读取 functional-design.md、nfr-requirements.md、nfr-design.md、infrastructure-design.md
-   - **代码阶段**：读取所有代码文件、计划以及所有前序产物
+3. **延迟加载产出物**（参见 `common-token-management.md`）— 不再预加载所有前序产物：
+
+   **必须立即加载（~5-8KB）**：
+   - `state.md` — 全局进度和当前位置
+   - `audit-summary.md` — 关键决策时间线
+
+   **按当前阶段加载（~5-10KB）**：
+   - 当前步骤的 `decision-summary.md`
+   - 当前单元的相关切片文件（如有）
+   - 当前步骤的 steering 文件
+
+   **延迟加载（AI 判断需要时主动读取）**：
+   - 完整需求文档 / 需求切片
+   - 完整用户故事 / 故事切片
+   - 完整应用设计 / 设计切片
+   - 其他单元的产出物
+   - 历史审计日志分段
+
 4. **按阶段智能加载上下文**：
-   - **早期阶段（工作区检测、逆向工程）**：加载工作区分析
-   - **需求/故事**：加载逆向工程 + 需求产物
-   - **设计阶段**：加载需求 + 故事 + 架构 + 设计产物
-   - **代码阶段**：加载所有产物 + 现有代码文件
+   - **早期阶段（工作区检测、逆向工程）**：仅加载 state.md + audit-summary.md
+   - **需求/故事**：加载前序步骤的 decision-summary.md
+   - **设计阶段**：加载需求 decision-summary + 故事 decision-summary + 按需读取具体产物
+   - **代码阶段**：加载当前单元切片 + shared-interfaces.md + 代码生成计划
 5. **根据架构选择和当前阶段调整选项**
 6. **显示具体的下一步操作**而非通用描述
-7. **在 audit.md 中记录连续性提示**并附带时间戳
-8. **上下文摘要**：加载产物后，提供已加载内容的简要摘要，让用户了解情况
+7. **在审计分段文件中记录连续性提示**并附带时间戳
+8. **上下文摘要**：恢复后，向用户简要说明已加载的上下文和当前位置
 9. **提问方式**：始终将澄清问题或用户反馈问题放在 .md 文件中。不要在聊天会话中内联放置多选题。
+
+### 禁止的恢复行为
+- ❌ 恢复时预加载所有 Inception 产出物
+- ❌ 开始新单元时加载所有已完成单元的设计
+- ❌ 每次恢复都加载完整审计日志
+- ❌ 加载与当前单元无关的需求/故事/设计
 
 ## 错误处理
 如果在会话恢复期间产物缺失或损坏，请参阅 [error-handling.md](error-handling.md) 获取恢复流程指导。
