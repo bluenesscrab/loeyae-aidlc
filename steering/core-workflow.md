@@ -43,7 +43,7 @@ AI 模型根据以下因素智能评估需要哪些阶段：
 - `common-question-format-guide.md` — 仅在需要提问时加载
 
 **第四层 — 执行特定任务时加载**：
-- 质量门禁：使用 core-workflow.md 中内联的检查清单，仅在需要了解门禁流程时加载完整 `common-quality-gates.md`
+- 质量门禁：执行质量门禁检查时加载 `common-quality-gates.md` 获取对应阶段的检查清单和验证方法
 - 编码规范文件：仅在代码生成阶段加载
 - `common-ascii-diagram-standards.md`：仅在需要创建图表时加载
 
@@ -116,11 +116,7 @@ AI 模型根据以下因素智能评估需要哪些阶段：
    - **新项目**：询问协作模式（单人/团队）
 4. 确定下一阶段：逆向工程（存量项目且无产物）或需求分析
 5. **必须**：在 audit.md 中记录发现
-6. **必须**：执行工作区检测质量门禁检查（加载 `common-quality-gates.md` 的检查清单）
-   - [ ] audit.md中记录了完整的初始用户请求
-   - [ ] state.md文件已创建或恢复
-   - [ ] 工作区扫描完成，项目类型已确定
-   - [ ] 下一阶段决策已记录
+6. **必须**：执行工作区检测质量门禁检查（参见 `common-quality-gates.md` → INCEPTION → 工作区检测）
 7. **质量门禁检查**：如果任何检查项失败，工作流立即停止，必须修复后才能继续
 8. 向用户展示完成消息（参见 workspace-detection.md 的消息格式）
 9. 自动进入下一阶段
@@ -154,13 +150,7 @@ AI 模型根据以下因素智能评估需要哪些阶段：
 2. 加载 `inception-requirements-analysis.md` 的所有步骤
 3. 执行需求分析（包括前端需求：页面、交互、状态管理、设计稿）
 4. 按适当深度执行（最小/标准/全面）
-5. **必须**：执行需求分析质量门禁检查（加载 `common-quality-gates.md` 的检查清单）
-   - [ ] 需求文档包含完整的功能需求列表
-   - [ ] 需求文档包含非功能需求（性能、安全、可用性等）
-   - [ ] 每个需求都有明确的验收标准
-   - [ ] 需求优先级已明确（高/中/低）
-   - [ ] 需求可追溯性矩阵已建立
-   - [ ] audit.md中记录了所有用户输入
+5. **必须**：执行需求分析质量门禁检查（参见 `common-quality-gates.md` → INCEPTION → 需求分析）
 6. **质量门禁检查**：如果任何检查项失败，工作流立即停止，必须修复后才能继续
 7. **团队协作模式**：生成决策摘要 `docs/aidlc/inception/requirements/decision-summary.md`
 8. **等待明确批准**：遵循 requirements-analysis.md 的批准格式 - 用户确认前不得继续
@@ -195,12 +185,7 @@ AI 模型根据以下因素智能评估需要哪些阶段：
 4. 包含前端用户故事（页面交互、表单操作、响应式等）
 5. **第一部分 - 规划**：创建故事计划并提问，等待用户回答，分析歧义，获得批准
 6. **第二部分 - 生成**：执行批准的计划生成故事和角色
-7. **必须**：执行用户故事质量门禁检查（加载 `common-quality-gates.md` 的检查清单）
-   - [ ] 用户故事遵循INVEST原则（独立、可协商、有价值、可估算、小、可测试）
-   - [ ] 每个用户故事都有明确的角色、目标、价值
-   - [ ] 用户故事包含详细的验收标准
-   - [ ] 故事点估算已完成（如适用）
-   - [ ] 故事优先级已排序
+7. **必须**：执行用户故事质量门禁检查（参见 `common-quality-gates.md` → INCEPTION → 用户故事）
 8. **质量门禁检查**：如果任何检查项失败，工作流立即停止，必须修复后才能继续
 9. **等待明确批准** - 用户确认前不得继续
 10. **必须**：在 audit.md 中记录用户的完整原始输入
@@ -239,12 +224,7 @@ AI 模型根据以下因素智能评估需要哪些阶段：
 2. 加载 `inception-application-design.md` 的所有步骤
 3. 执行应用设计（包括前端组件设计：页面拆分、路由规划、状态管理、前后端接口契约）
 4. 按适当深度执行（最小/标准/全面）
-5. **必须**：执行应用设计质量门禁检查（加载 `common-quality-gates.md` 的检查清单）
-   - [ ] 组件/服务边界清晰定义
-   - [ ] 接口契约明确（输入/输出）
-   - [ ] 数据模型完整（实体、关系、约束）
-   - [ ] 业务规则详细说明
-   - [ ] 设计符合架构原则（单一职责、开闭原则等）
+5. **必须**：执行应用设计质量门禁检查（参见 `common-quality-gates.md` → INCEPTION → 应用设计）
 6. **质量门禁检查**：如果任何检查项失败，工作流立即停止，必须修复后才能继续
 7. **等待明确批准** - 用户确认前不得继续
 8. **必须**：在 audit.md 中记录用户的完整原始输入
@@ -307,11 +287,7 @@ AI 模型根据以下因素智能评估需要哪些阶段：
 1. **必须**：在 audit.md 中记录此阶段的任何用户输入
 2. 加载 `construction-functional-design.md` 的所有步骤
 3. 执行功能设计（包括前端交互设计：状态流转、表单校验、组件通信）
-4. **必须**：执行功能设计质量门禁检查（加载 `common-quality-gates.md` 的检查清单）
-   - [ ] 数据验证规则完整
-   - [ ] 业务逻辑流程图清晰
-   - [ ] 错误处理策略明确
-   - [ ] 状态转换定义完整
+4. **必须**：执行功能设计质量门禁检查（参见 `common-quality-gates.md` → CONSTRUCTION → 功能设计）
 5. **质量门禁检查**：如果任何检查项失败，工作流立即停止，必须修复后才能继续
 6. **必须**：展示标准化的 2 选项完成消息
 7. **等待明确批准** - 用户确认前不得继续
@@ -383,80 +359,14 @@ AI 模型根据以下因素智能评估需要哪些阶段：
 2. **第二部分 - 生成**：执行批准的计划生成代码、测试和产物
 
 **MCP Skill 集成**：
-在规划阶段，根据代码类型自动加载编码规范：
-
-**后端代码**：
-1. 加载 `common-tech-backend.md`（后端编码规范）
-2. 加载 `common-tech-backend-annotations.md`（框架注解与工具类速查）
-3. 根据代码类型调用 MCP skill：
-   - CRUD 模块 → `get_skill_summary("loeyae-crud")`
-   - 认证授权 → `get_skill_summary("loeyae-auth")`
-   - 参数校验 → `get_skill_summary("loeyae-validation")`
-   - 异常处理 → `get_skill_summary("loeyae-error-handling")`
-   - 数据访问 → `get_skill_summary("loeyae-data-access")`
-   - Web 基础设施 → `get_skill_summary("loeyae-web-infra")`
-   - 缓存 → `get_skill_summary("loeyae-cache")`
-   - 消息队列 → `get_skill_summary("loeyae-message")`
-   - 定时任务 → `get_skill_summary("loeyae-job")`
-   - 邮件 → `get_skill_summary("loeyae-mail")`
-   - CMS → `get_skill_summary("loeyae-cms")`
-   - Feign → `get_skill_summary("loeyae-feign")`
-   - 数据安全 → `get_skill_summary("loeyae-data-security")`
-   - 测试 → `get_skill_summary("loeyae-test")`
-   - 不确定时 → `search_skill("关键词")`
-4. 加载 `common-tech-security.md`（安全编码规范）
-5. 加载 `common-database-design.md`（数据库设计规范）
-6. 读取项目 `.kiro/steering/structure.md`（项目结构，如存在）
-7. 读取项目 `.kiro/steering/tech.md`（技术栈版本，如存在）
-8. 新模块初始化时 → 加载 `common-tech-backend-modules.md`（模块依赖组合）
-9. 需要最佳实践参考时 → 加载 `common-tech-backend-practices.md`（最佳实践与快速开始）
-
-**前端代码**：
-1. PC端项目，加载 `common-tech-frontend-PC.md`，微信小程序&APP项目，加载 `common-tech-frontend-uniapp.md`（前端编码规范）
-2. 如有 Figma 设计稿 → 加载 `common-figma-design-standards.md`
-3. 读取项目 `.kiro/steering/structure.md`（前端目录结构，如存在）
-
-**测试代码**：
-1. 加载 `common-tech-testing.md`（测试规范）
-2. 后端测试 → `get_skill_summary("loeyae-test")`
+在规划阶段，根据代码类型自动加载编码规范（参见 `construction-code-generation.md` 的 MCP Skill 加载策略）。
 
 **执行**：
 1. **必须**：在 audit.md 中记录此阶段的任何用户输入
 2. 加载 `construction-code-generation.md` 的所有步骤
 3. **第一部分 - 规划**：创建代码生成计划（含 MCP Skill 加载策略），获得用户批准
 4. **第二部分 - 生成**：执行批准的计划生成代码
-5. **必须**：执行代码生成质量门禁检查（加载 `common-quality-gates.md` 的检查清单）
-
-   **后端代码质量门禁**：
-   - [ ] 符合Loeyae Boot Framework编码规范
-   - [ ] 类和方法命名符合规范（驼峰命名法）
-   - [ ] 注释完整（类注释、方法注释、复杂逻辑注释）
-   - [ ] 异常处理完整（try-catch、自定义异常）
-   - [ ] 输入验证完整（参数校验、空值检查）
-   - [ ] 日志记录完整（关键操作日志）
-   - [ ] 安全防护完整（SQL注入防护、XSS防护）
-   - [ ] 单元测试覆盖率≥80%（如适用）
-   - [ ] 代码严格按需求实现，禁止私自扩展或简化功能
-   - [ ] 禁止留下TODO、FIXME、待实现等占位符
-
-   **前端代码质量门禁**：
-   - [ ] 符合Vue 3编码规范
-   - [ ] 组件命名规范（PascalCase）
-   - [ ] TypeScript类型定义完整
-   - [ ] 响应式设计完整
-   - [ ] 可访问性检查通过
-   - [ ] 性能优化（懒加载、代码分割）
-   - [ ] 代码严格按需求实现，禁止私自扩展或简化功能
-   - [ ] 禁止留下TODO、FIXME、待实现等占位符
-
-   **安全质量门禁**：
-   - [ ] 输入验证完整（前端+后端）
-   - [ ] 输出编码完整（防止XSS）
-   - [ ] SQL注入防护完整（参数化查询）
-   - [ ] 认证授权机制完整
-   - [ ] 敏感数据加密存储
-   - [ ] CSRF防护完整
-   - [ ] CORS配置安全
+5. **必须**：执行代码生成质量门禁检查（参见 `common-quality-gates.md` → CONSTRUCTION → 代码生成 + 安全）
 
 6. **质量门禁检查**：如果任何检查项失败，工作流立即停止，必须修复后才能继续
 7. **必须**：展示标准化的 2 选项完成消息
@@ -477,13 +387,7 @@ AI 模型根据以下因素智能评估需要哪些阶段：
    - 前端代码检查（pnpm lint:all）
    - 性能测试指导（如适用）
    - 其他测试指导（合约测试、安全测试、端到端测试）
-4. **必须**：执行构建和测试质量门禁检查（加载 `common-quality-gates.md` 的检查清单）
-   - [ ] 构建成功（无编译错误）
-   - [ ] 单元测试通过率100%
-   - [ ] 集成测试通过率100%
-   - [ ] 代码检查通过（linting）
-   - [ ] 安全扫描通过（如适用）
-   - [ ] 性能测试通过（如适用）
+4. **必须**：执行构建和测试质量门禁检查（参见 `common-quality-gates.md` → CONSTRUCTION → 构建和测试）
 5. **质量门禁检查**：如果任何检查项失败，工作流立即停止，必须修复后才能继续
 6. 在 build-and-test/ 子目录创建指导文件
 7. **等待明确批准**：询问"构建和测试指导已完成。确认完成？" - 用户确认前不得继续
