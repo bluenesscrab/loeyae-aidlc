@@ -412,7 +412,7 @@ AI 模型根据以下因素智能评估需要哪些阶段：
 9. 需要最佳实践参考时 → 加载 `common-tech-backend-practices.md`（最佳实践与快速开始）
 
 **前端代码**：
-1. 加载 `common-tech-frontend.md`（前端编码规范）
+1. PC端项目，加载 `common-tech-frontend-PC.md`，微信小程序&APP项目，加载 `common-tech-frontend-uniapp.md`（前端编码规范）
 2. 如有 Figma 设计稿 → 加载 `common-figma-design-standards.md`
 3. 读取项目 `.kiro/steering/structure.md`（前端目录结构，如存在）
 

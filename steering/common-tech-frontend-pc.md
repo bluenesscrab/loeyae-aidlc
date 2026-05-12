@@ -47,7 +47,7 @@ src/
 ├── components/    # 全局组件（优先使用）
 ├── config/        # 全局配置
 ├── directives/    # 全局指令
-├── hooks/         # Composables
+├── hooks/         # Composables 函数
 ├── layouts/       # 布局组件
 ├── locales/       # 国际化文件
 ├── main.ts        # 应用入口
@@ -388,11 +388,31 @@ router.push('/system/user')
 
 ## 国际化
 
+### 翻译规则
+
+1. 所有翻译必须定义在 `locales` 目录下，文件名： `zh-CN.ts`。
+2. 翻译必须符合 `I18n` 类型。
+3. 通用翻译必须定义在 `common` 对象中， 例如：`sitename`、 `login`、`logout`、`register` 等。
+4. 系统翻译必须定义在 `system` 对象中。
+5. 业务模块根据目录菜单定义翻译对象。
+
 ### 定义翻译
 
 ```typescript
 // locales/zh-CN.ts
 export default {
+  common: {
+    login: '登录',
+    logout: '退出登录',
+    register: '注册',
+    confirm: '确认',
+    cancel: '取消',
+    delete: '删除',
+    reset: '重置',
+    search: '搜索',
+    more: '更多',
+    noData: '暂无数据'
+  },
   system: {
     user: {
       title: '用户管理',
@@ -431,11 +451,11 @@ const { t } = useI18n()
 | `Icon` | 图标 | `@/components/Icon` |
 | `Pagination` | 分页 | `@/components/Pagination` |
 
-❌ 尽量避免直接使用 `el-dialog`、`el-form` 等原生组件
+❌ 有公共组件时，尽量避免直接使用 `ElementPlus` 等原生组件
 
 ### 组件提取规则
 
-> 根据组件使用频率，同一组件使用频率大于等于2次，需要提取到 `@/components` 中，并根据组件特性加以区分。
+> 根据组件使用频率，同一组件使用频率 ≥ 2次，需要提取到 `@/components` 中，并根据组件特性加以区分。
 
 ### 业务组件 `@/components/buiness/*` 公共业务组件
 
@@ -484,9 +504,11 @@ const { register, formRef, methods } = useForm()
 
 ## 检查清单
 
-- [ ] 优先使用项目组件
+- [ ] views 中 所有代码样式必须私有化  `<style lang="scss" scoped>`
+- [ ] views 中 所有script必有类型定义  `<script setup lang="ts">`
+- [ ] 优先使用 `@/components` 中现有组件
 - [ ] 使用 windicss 规范
-- [ ] 遵循命名规范
+- [ ] 遵循命名规范 
 - [ ] 使用 TypeScript 类型
 - [ ] 正确处理错误
 - [ ] 国际化文本使用 `t()`

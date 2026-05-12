@@ -51,7 +51,7 @@
 6. 读取项目 `.kiro/steering/tech.md`（技术栈版本，如存在）
 
 ### 前端代码
-1. 加载 common-tech-frontend.md（前端编码规范）
+1. PC端项目，加载 common-tech-frontend-PC.md，微信小程序&APP项目，加载 common-tech-frontend-uniapp.md（前端编码规范）
 2. 如有 Figma 设计稿 → 加载 common-figma-design-standards.md
 3. 读取项目 `.kiro/steering/structure.md`（前端目录结构，如存在）
 
