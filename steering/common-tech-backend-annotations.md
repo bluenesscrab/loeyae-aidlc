@@ -1,5 +1,7 @@
 # 后端框架注解与工具类速查
 
+**适用范围**：仅适用于 Java 项目且引用了 Loeyae Boot Framework（state.md 中 `后端框架 = Loeyae Boot`）。
+
 本文件整合框架注解和工具类索引，按代码层级组织。编码时按需查阅。
 
 完整 API 详见对应 MCP Skill：`loeyae-utils`、`loeyae-validation`、`loeyae-error-handling`、`loeyae-data-access`、`loeyae-data-security`。

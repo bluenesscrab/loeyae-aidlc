@@ -1,5 +1,7 @@
 # 后端最佳实践与快速开始
 
+**适用范围**：仅适用于 Java 项目且引用了 Loeyae Boot Framework（state.md 中 `后端框架 = Loeyae Boot`）。
+
 本文件整合开发最佳实践和新项目初始化指南。分层架构、异常处理、事务、日志等基础规范见 `common-tech-backend.md`。
 
 ---

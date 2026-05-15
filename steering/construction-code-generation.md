@@ -25,30 +25,95 @@
 
 ## 步骤 2：MCP Skill 加载策略
 
+### 前置条件检查
+
+在加载任何 `loeyae-*` MCP Skill 之前，必须：
+1. 从 `docs/aidlc/state.md` 读取 `后端框架` 字段
+2. **仅当 `后端框架 = Loeyae Boot` 时**，才执行下方的 MCP Skill 加载
+3. 如果 `后端框架 ≠ Loeyae Boot`，跳过所有 `loeyae-*` skill 调用，按项目自身规范或通用 Spring Boot 规范生成代码
+
+### Fallback 策略
+
+如果 MCP 服务不可达（调用超时或返回错误）：
+1. 使用 steering 文件中的精简规范作为替代：
+   - `common-tech-backend.md` — 核心编码规范
+   - `common-tech-backend-annotations.md` — 注解与工具类速查
+   - `common-tech-backend-modules.md` — 模块索引与依赖组合
+   - `common-tech-backend-practices.md` — 最佳实践与快速开始
+2. 在代码生成计划中标注"MCP 不可达，使用本地规范"
+3. 生成代码后建议用户在 MCP 恢复后重新验证
+
+### 后端代码（Loeyae Boot 项目）
+
 在创建代码生成计划时，根据代码类型识别需要的 skill：
 
-### 后端代码
 1. 加载 common-tech-backend.md（后端编码规范）
 2. 根据代码类型调用 MCP skill：
-   - CRUD 模块 → `get_skill_summary("loeyae-crud")`
-   - 认证授权 → `get_skill_summary("loeyae-auth")`
-   - 参数校验 → `get_skill_summary("loeyae-validation")`
-   - 异常处理 → `get_skill_summary("loeyae-error-handling")`
-   - 数据访问 → `get_skill_summary("loeyae-data-access")`
-   - Web 基础设施 → `get_skill_summary("loeyae-web-infra")`
-   - 缓存 → `get_skill_summary("loeyae-cache")`
-   - 消息队列 → `get_skill_summary("loeyae-message")`
-   - 定时任务 → `get_skill_summary("loeyae-job")`
-   - 邮件 → `get_skill_summary("loeyae-mail")`
-   - CMS → `get_skill_summary("loeyae-cms")`
-   - Feign → `get_skill_summary("loeyae-feign")`
-   - 数据安全 → `get_skill_summary("loeyae-data-security")`
-   - 测试 → `get_skill_summary("loeyae-test")`
-   - 不确定时 → `search_skill("关键词")`
+
+#### 核心业务开发
+| 代码类型 | MCP Skill | 说明 |
+|---------|-----------|------|
+| CRUD 模块 | `get_skill_summary("loeyae-crud")` | 完整 CRUD 代码模板 |
+| 认证授权 | `get_skill_summary("loeyae-auth")` | JWT、RBAC、会话管理 |
+| 参数校验 | `get_skill_summary("loeyae-validation")` | 自定义校验注解 |
+| 异常处理 | `get_skill_summary("loeyae-error-handling")` | 错误码、断言工具 |
+| 数据访问 | `get_skill_summary("loeyae-data-access")` | Repository、查询构建 |
+| Web 基础设施 | `get_skill_summary("loeyae-web-infra")` | 统一响应、过滤器 |
+| 数据安全 | `get_skill_summary("loeyae-data-security")` | 加密、脱敏、签名 |
+| 数据字典 | `get_skill_summary("loeyae-dict")` | 字典注解、字典工具 |
+
+#### 基础设施能力
+| 代码类型 | MCP Skill | 说明 |
+|---------|-----------|------|
+| 缓存 | `get_skill_summary("loeyae-cache")` | BaseCache、二级缓存 |
+| 消息队列 | `get_skill_summary("loeyae-message")` | 消息抽象、发送/消费 |
+| 消息审计 | `get_skill_summary("loeyae-message-audit")` | 消息日志、状态追踪 |
+| 定时任务 | `get_skill_summary("loeyae-job")` | JobHandler、动态管理 |
+| 邮件 | `get_skill_summary("loeyae-mail")` | 邮件发送、模板 |
+| 服务间调用 | `get_skill_summary("loeyae-feign")` | Feign、认证透传 |
+| 许可证 | `get_skill_summary("loeyae-license")` | 许可证验证集成 |
+| CMS | `get_skill_summary("loeyae-cms")` | 多站点、模板引擎 |
+| 数据变更审计 | `get_skill_summary("loeyae-mybatis-audit")` | 变更快照、审计日志 |
+
+#### 工具类与模式
+| 代码类型 | MCP Skill | 说明 |
+|---------|-----------|------|
+| 通用工具类 | `get_skill_summary("loeyae-utils")` | JsonTool、CollectionUtils 等 |
+| 条件判断（Decide） | `get_skill_summary("loeyae-decide")` | 链式 if-else 替代 |
+| 条件执行（OptionalUtil） | `get_skill_summary("loeyae-optional-util")` | if-null 替代 |
+| 测试 | `get_skill_summary("loeyae-test")` | 测试工具、Mock 配置 |
+| 框架模块选型 | `get_skill_summary("loeyae-framework-modules")` | 模块索引、依赖组合 |
+| 数据库设计 | `get_skill_summary("loeyae-database-design")` | 表设计、DDL 模板 |
+
+#### 低代码开发（仅 state.md 中 `低代码模式 = 是`）
+| 代码类型 | MCP Skill | 说明 |
+|---------|-----------|------|
+| 低代码入门 | `get_skill_summary("loeyae-lowcode-getting-started")` | 快速上手教程 |
+| CRUD 模板 | `get_skill_summary("loeyae-lowcode-crud-template")` | 数据模型+流程+页面 |
+| 流程编排 | `get_skill_summary("loeyae-lowcode-flow")` | LiteFlow EL 表达式 |
+| Groovy 脚本 | `get_skill_summary("loeyae-lowcode-groovy")` | 脚本开发规范 |
+| AMIS 页面 | `get_skill_summary("loeyae-lowcode-amis")` | 页面 JSON Schema |
+| 组件开发 | `get_skill_summary("loeyae-lowcode-component-dev")` | 自定义组件 |
+| API 对接 | `get_skill_summary("loeyae-lowcode-api-integration")` | 接口路径、响应格式 |
+| 低代码最佳实践 | `get_skill_summary("loeyae-lowcode-best-practices")` | 集成模式、故障排查 |
+
+#### 搜索兜底
+- 不确定用哪个 skill 时 → `search_skill("关键词")`
+
 3. 加载 common-tech-security.md（安全编码规范）
 4. 加载 common-database-design.md（数据库设计规范）
 5. 读取项目 `.kiro/steering/structure.md`（项目结构，如存在）
 6. 读取项目 `.kiro/steering/tech.md`（技术栈版本，如存在）
+
+### 后端代码（非 Loeyae Boot 项目）
+
+如果 state.md 中 `后端框架 ≠ Loeyae Boot`：
+1. 不调用任何 `loeyae-*` MCP Skill
+2. 加载 common-tech-security.md（安全编码规范，通用部分仍适用）
+3. 加载 common-database-design.md（数据库设计规范，通用部分仍适用）
+4. 读取项目 `.kiro/steering/structure.md`（项目结构，如存在）
+5. 读取项目 `.kiro/steering/tech.md`（技术栈版本，如存在）
+6. 按项目自身代码风格和框架约定生成代码
 
 ### 前端代码
 1. PC端项目，加载 common-tech-frontend-pc.md，微信小程序&APP项目，加载 common-tech-frontend-uniapp.md（前端编码规范）

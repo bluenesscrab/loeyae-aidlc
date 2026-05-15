@@ -256,6 +256,62 @@ docs/aidlc/inception/application-design/
 
 ---
 
+## 策略 F：模块隔离加载（多模块项目）
+
+### 触发条件
+
+当 state.md 中 `架构模式 = 多模块` 时，启用模块隔离加载策略。
+
+### 加载规则
+
+| 工作层级 | 加载内容 | 禁止加载 |
+|----------|---------|---------|
+| 产品级工作 | `product/` 目录下的产出物 | 任何模块的产出物 |
+| 模块级工作 | `product/contracts.md` + `modules/{当前模块}/` | 其他模块的产出物、`product/product-overview.md` |
+| 模块切换 | 卸载旧模块上下文，加载新模块上下文 | 同时加载两个模块 |
+
+### 模块级恢复的加载清单
+
+```
+恢复到模块 X 的 Inception：
+- core-workflow.md: ~15KB
+- state.md: ~3KB（只看模块进度）
+- audit-summary.md: ~2KB
+- product/contracts.md: ~3-5KB（模块间契约）
+- modules/X/inception/ 下的当前步骤产出物: ~5-10KB
+- 当前步骤的 steering 文件: ~5-10KB
+总计: ~35-45KB
+```
+
+```
+恢复到模块 X 的 Construction unit-N：
+- core-workflow.md: ~15KB
+- state.md: ~3KB
+- audit-summary.md: ~2KB
+- product/contracts.md: ~3-5KB
+- modules/X/inception/ 的需求切片: ~3KB
+- modules/X/inception/ 的故事切片: ~2KB
+- modules/X/inception/ 的设计切片: ~3KB
+- modules/X/construction/ 当前单元设计: ~3KB
+- 当前步骤的 steering 文件: ~8KB
+总计: ~42-50KB
+```
+
+### 关键优势
+
+- 上下文消耗不随产品规模（模块数量）增长
+- 只与当前模块的复杂度相关
+- 模块间物理隔离，不会意外加载无关内容
+
+### 契约变更检查
+
+模块级恢复时，额外执行：
+1. 读取 `product/contracts.md` 的"变更日志"区域
+2. 筛选"状态 = 待同步"且"影响模块"包含当前模块的记录
+3. 如有未同步变更，在恢复后立即提示用户
+
+---
+
 ## 加载策略总览
 
 ### 新会话启动（新项目）
@@ -290,6 +346,46 @@ docs/aidlc/inception/application-design/
 加载：当前步骤的 steering 文件（~5-10KB）
 加载：代码生成计划（如在代码生成阶段，~5KB）
 总计：~45-55KB（vs 当前 ~150KB+）
+```
+
+### 会话恢复（多模块模式，产品级工作）
+
+```
+加载：core-workflow.md（~15KB）
+加载：state.md（~3KB）
+加载：audit-summary.md（~2KB）
+加载：product/product-overview.md（~3KB）
+加载：product/modules.md（~3KB）
+加载：product/contracts.md（~5KB）
+加载：product-inception.md steering（~5KB）
+总计：~36KB
+```
+
+### 会话恢复（多模块模式，模块级 Inception）
+
+```
+加载：core-workflow.md（~15KB）
+加载：state.md（~3KB）
+加载：audit-summary.md（~2KB）
+加载：product/contracts.md（~3-5KB）
+加载：modules/{name}/inception/ 当前步骤产出物（~5-10KB）
+加载：当前步骤的 steering 文件（~5-10KB）
+总计：~35-45KB
+```
+
+### 会话恢复（多模块模式，模块级 Construction）
+
+```
+加载：core-workflow.md（~15KB）
+加载：state.md（~3KB）
+加载：audit-summary.md（~2KB）
+加载：product/contracts.md（~3-5KB）
+加载：modules/{name}/inception/ 需求切片（~3KB）
+加载：modules/{name}/inception/ 故事切片（~2KB）
+加载：modules/{name}/inception/ 设计切片（~3KB）
+加载：modules/{name}/construction/ 当前单元设计（~3KB）
+加载：当前步骤的 steering 文件（~8KB）
+总计：~42-50KB
 ```
 
 ---

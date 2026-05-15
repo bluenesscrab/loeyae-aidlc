@@ -2,7 +2,48 @@
 
 groupId: `com.loeyae.boot`，版本由父POM管理无需指定。
 
+**适用范围**：仅适用于 Java 项目且引用了 Loeyae Boot Framework（state.md 中 `后端框架 = Loeyae Boot`）。
+
 详细API参考: cache/tactic/security/message/flowable/job/mail 见对应 MCP Skill。
+
+---
+
+## 模块选型决策树
+
+根据业务场景选择需要引入的模块：
+
+```
+项目启动
+├─ 所有项目必须引入 → 最小依赖（starter + web + mybatis）
+├─ 需要用户认证？ → + security
+├─ 需要 API 文档？ → + swagger
+├─ 需要缓存？ → + cache
+├─ 需要数据字典？ → + dict
+├─ 需要接口幂等/限流/分布式锁？ → + tactic
+├─ 需要数据脱敏？ → + desensitize
+├─ 需要接口签名验证？ → + signature
+├─ 需要定时任务？ → + job（扩展模块）
+├─ 需要邮件发送？ → + mail（扩展模块）
+├─ 需要消息队列？ → + message + 选择实现（kafka/rabbit/redis）
+├─ 需要消息审计？ → + message-audit（扩展模块）
+├─ 需要数据变更审计？ → + mybatis-audit（扩展模块）
+├─ 需要服务间调用？ → + feign（扩展模块）
+├─ 需要许可证验证？ → + license（扩展模块）
+├─ 需要 CMS 多站点？ → + cms（扩展模块）
+├─ 需要工作流？ → + flowable 系列
+└─ 需要低代码？ → + lowcode 系列
+```
+
+### 场景速查
+
+| 场景 | 推荐模块组合 |
+|------|-------------|
+| 简单 CRUD 后台 | 最小依赖 + security + swagger + cache |
+| 标准业务系统 | 标准Web应用 + dict + tactic + desensitize |
+| 微服务节点 | 标准Web应用 + feign + message + message-audit |
+| 审计合规系统 | 标准业务系统 + mybatis-audit + signature |
+| 低代码平台 | 标准Web应用 + lowcode 系列 |
+| 内容管理系统 | 标准Web应用 + cms |
 
 ---
 
