@@ -474,7 +474,12 @@ D) ...
 **执行**：
 1. **必须**：在 audit.md 中记录此阶段的任何用户输入
 2. 加载 `construction-code-generation.md` 的所有步骤
-3. **第一部分 - 规划**：
+3. **防跳步自检**（每个单元开始代码生成前必须确认）：
+   - [ ] 是否已加载该单元需要的 MCP Skill（至少 1 个业务 Skill + 测试 Skill）
+   - [ ] 是否已确认测试策略和基类选择（BaseMockitoUnitTest / BaseDbUnitTest）
+   - [ ] 快速模式下是否仍保留了不可跳过的步骤（Skill 加载、测试编写、编译验证、框架规范）
+   - 如果任一项为否，停止并补充执行，不得以"用户要求快速"为由跳过
+4. **第一部分 - 规划**：
    - 创建代码生成计划（含 MCP Skill 加载策略）
    - **必须**：计划中包含 TDD 执行序列（参见 `construction-tdd.md` → 与 AI-DLC Construction 阶段的集成）
    - 获得用户批准
