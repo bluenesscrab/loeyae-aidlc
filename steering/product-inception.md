@@ -179,6 +179,7 @@
 > A) [base-infrastructure] — 基础模块（建议优先）
 > B) [module-a] — [一句话摘要]
 > C) [module-b] — [一句话摘要]（需等 base 接口定义）
+> 📋) **新 Session 继续** — 复制 `state.md` 中的交接提示词到新对话继续
 >
 > [回答]:
 ```

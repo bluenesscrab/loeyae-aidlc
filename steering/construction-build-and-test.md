@@ -356,6 +356,8 @@ pnpm preview     # 预览构建结果
 
 请审查摘要：docs/aidlc/construction/build-and-test/build-and-test-summary.md
 
+📋 **新 Session 继续**：如需在新对话中继续，请复制 `state.md` 中的交接提示词。
+
 **项目已完成，准备就绪。**"
 ```
 
