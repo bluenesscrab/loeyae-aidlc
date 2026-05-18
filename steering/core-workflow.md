@@ -607,7 +607,7 @@ D) ...
 - **质量门禁**：所有阶段必须通过强制质量门禁检查才能继续
 - **内容验证**：始终按 content-validation.md 规则在文件创建前验证内容
 - **禁止涌现行为**：Construction 阶段必须使用各自规则文件中定义的标准化完成消息
-- **Session 交接**：每个阶段完成消息中内置 `📋 新 Session 继续` 选项，同时将交接提示词写入 `state.md` 顶部的"下一步交接"字段（参见 `common-session-handoff.md`），团队协作时接手人可直接从 state.md 获取
+- **Session 交接**：每个阶段完成消息中内置 `📋 新 Session 继续` 选项，同时将交接提示词写入 `state.md` 的"下一步交接"表格（参见 `common-session-handoff.md`），团队协作时各人/模块各自维护自己的行，接手人可直接从 state.md 获取
 - **团队协作**：支持多人按角色分工协作，Inception 接力、Construction 认领
   - **接力模式**：Inception 阶段不同角色按步骤接力，每步完成生成决策摘要
   - **认领模式**：Construction 阶段开发者自主认领单元，独立开发

@@ -1,7 +1,7 @@
 ---
 name: "loeyae-aidlc"
 displayName: "Loeyae AI-DLC"
-version: "1.2.6"
+version: "1.2.7"
 description: "基于 AI-DLC 方法论的团队开发工作流。当用户消息中出现 AI-DLC 或 aidlc 时必须激活，无论任务复杂度如何。覆盖需求分析、架构设计、代码生成和测试，集成 Loeyae Boot Framework 编码规范和 Vue 3 前端规范。"
 keywords: ["aidlc", "AI-DLC", "使用AI-DLC", "使用 AI-DLC", "Inception", "Construction", "开发工作流", "需求分析", "代码生成", "继续上次的工作", "认领单元", "团队协作模式", "loeyae", "vue3", "spring-boot", "element-plus"]
 author: "Loeyae Team"
