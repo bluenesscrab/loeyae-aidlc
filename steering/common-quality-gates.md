@@ -112,6 +112,25 @@
 - [ ] 安全扫描通过（如适用）
 - [ ] 性能测试通过（如适用）
 
+### OPERATIONS 阶段
+
+#### 1. Operations 质量门禁
+- [ ] Dockerfile 遵循最佳实践（非 root 用户、层缓存优化、最小基础镜像）
+- [ ] Dockerfile 中无硬编码密码或密钥
+- [ ] Jenkinsfile 包含完整的 build/deploy 流程（Checkout → Build → Package → Push → Deploy → Post）
+- [ ] Jenkinsfile 参数化构建配置正确（IMAGE_HUB、IMAGE_NAME、IMAGE_TAG、TASK_TYPE、ENV_LABEL、BRANCH）
+- [ ] Kubernetes 部署清单包含 Service + Deployment + Ingress
+- [ ] 健康检查已配置（liveness + readiness 探针）
+- [ ] 资源限制已设置（requests + limits）
+- [ ] 环境变量已配置（时区、项目特定变量）
+- [ ] imagePullSecrets 已配置
+- [ ] test 和 prod 部署清单均已生成
+- [ ] .dockerignore 已生成（排除不必要文件）
+- [ ] 部署文档完整（CI/CD 流程说明 + 手动操作指南 + 故障排除）
+- [ ] {TAG} 占位符在部署清单中正确使用
+- [ ] Post 阶段自动触发链配置正确（build → deploy test → deploy prod）
+- [ ] 配置文件与项目类型匹配（Spring Boot/Node.js/Python/Vue 3）
+
 ---
 
 ## 代码实现合规性验证方法

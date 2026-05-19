@@ -381,6 +381,13 @@ D) ...
 - 最终全局审查（必执行 — 所有单元完成后）
 - 构建和测试（必执行 — 全局审查通过后）
 
+**OPERATIONS 阶段的步骤**：
+- Operations（条件 — 构建和测试通过后）：
+  - 部署需求分析
+  - 部署规划问答
+  - CI/CD 配置文件生成（Dockerfile、Jenkinsfile、K8s 部署清单）
+  - 部署文档生成
+
 **注意**：每个单元完整完成（设计 + TDD 实现 + 审查通过）后再进入下一个单元。
 
 ---
@@ -555,6 +562,56 @@ D) ...
 
 ---
 
+# 🟠 OPERATIONS 阶段
+
+**目的**：生成 CI/CD 配置文件和部署文档
+
+**聚焦**：如何运行和维护（HOW to operate）
+
+**OPERATIONS 阶段的步骤**：
+- 部署需求分析（必执行）
+- 部署规划问答（必执行）
+- CI/CD 配置文件生成（必执行）
+- 部署文档生成（必执行）
+
+---
+
+## Operations（条件 — 构建和测试通过后）
+
+**执行条件**（满足任一即执行）：
+- 项目需要部署到测试/生产环境
+- 项目是可独立运行的服务（Web 服务、API 服务、MCP 服务等）
+- 用户明确要求生成部署配置
+
+**跳过条件**（满足任一即跳过）：
+- 纯本地工具/CLI 工具
+- 纯库项目（供其他项目引用，自身不独立部署）
+- 用户明确表示不需要部署
+
+**执行**：
+1. **必须**：在 audit.md 中记录此阶段的任何用户输入
+2. 加载 `operations-operations.md` 的所有步骤
+3. 执行部署需求分析：
+   - 从 state.md 读取项目类型和技术栈
+   - 确定部署类型（Spring Boot / Node.js / Python / Vue 3 等）
+   - 识别项目依赖的外部服务
+4. 生成部署规划问题并等待用户回答
+5. 根据项目类型和用户回答生成 CI/CD 配置文件：
+   - Dockerfile（容器化配置）
+   - Jenkinsfile（CI/CD Pipeline）
+   - deployment-test.yml / deployment-prod.yml（K8s 部署清单）
+   - .dockerignore（Docker 构建排除）
+   - nginx.conf（仅前端项目）
+6. 生成部署文档：
+   - deployment-guide.md（部署指南）
+   - operations-summary.md（Operations 摘要）
+7. **必须**：执行 Operations 质量门禁检查（参见 `common-quality-gates.md` → OPERATIONS）
+8. **必须**：更新 `state.md` 的"下一步交接"字段
+9. **等待明确批准** - 用户确认前不得继续
+10. **必须**：在 audit.md 中记录用户的完整原始输入
+
+---
+
 ## 最终全局审查（必执行 — 所有单元完成后）
 
 **在所有单元的代码生成和审查完成后，构建和测试之前执行。**
@@ -635,6 +692,7 @@ D) ...
 - `docs/aidlc/audit-summary.md` — 极简时间线（每次恢复必加载，控制在 ~2KB）
 - `docs/aidlc/inception/audit-inception.md` — Inception 阶段完整审计
 - `docs/aidlc/construction/audit-construction-{unit-name}.md` — 各单元的审计
+- `docs/aidlc/operations/audit-operations.md` — Operations 阶段审计
 
 ### 写入规则
 - **当前阶段的审计**：写入对应的分段文件
@@ -731,6 +789,12 @@ D) ...
 │       │   │   ├── infrastructure-design/
 │       │   │   └── code/           # 仅 Markdown 摘要
 │       │   └── build-and-test/
+│       ├── operations/             # 🟠 OPERATIONS 阶段（条件）
+│       │   ├── plans/
+│       │   │   └── operations-plan.md    # 部署规划（含问答）
+│       │   ├── audit-operations.md       # Operations 审计日志
+│       │   ├── deployment-guide.md       # 部署指南
+│       │   └── operations-summary.md     # Operations 摘要
 │       ├── state.md
 │       └── audit-summary.md        # 极简审计摘要（必加载）
 ```
@@ -769,6 +833,13 @@ D) ...
 │       │   │   └── ...（同上）
 │       │   └── user-management/      # 业务模块（示例）
 │       │       └── ...（同上）
+│       │
+│       ├── operations/             # 🟠 OPERATIONS 阶段（条件，全局）
+│       │   ├── plans/
+│       │   │   └── operations-plan.md
+│       │   ├── audit-operations.md
+│       │   ├── deployment-guide.md
+│       │   └── operations-summary.md
 │       │
 │       ├── state.md                # 全局状态（含模块进度总览）
 │       └── audit-summary.md        # 极简审计摘要（必加载）
