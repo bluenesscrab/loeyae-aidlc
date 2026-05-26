@@ -73,19 +73,18 @@
 ### Fallback 策略
 
 如果 MCP 服务不可达（调用超时或返回错误）：
-1. 使用 steering 文件中的精简规范作为替代：
-   - `common-tech-backend.md` — 核心编码规范
-   - `common-tech-backend-annotations.md` — 注解与工具类速查
-   - `common-tech-backend-modules.md` — 模块索引与依赖组合
-   - `common-tech-backend-practices.md` — 最佳实践与快速开始
-2. 在代码生成计划中标注"MCP 不可达，使用本地规范"
-3. 生成代码后建议用户在 MCP 恢复后重新验证
+1. 使用 steering 文件中的通用规范作为替代：
+   - `common-tech-security.md` — 安全编码规范（通用部分仍适用）
+   - `common-database-design.md` — 数据库设计规范（通用部分仍适用）
+   - `common-tech-testing.md` — 测试规范（通用部分仍适用）
+2. 在代码生成计划中标注"MCP 不可达，使用通用规范"
+3. 生成代码后建议用户在 MCP 恢复后重新验证框架规范合规性
 
 ### 后端代码（Loeyae Boot 项目）
 
 在创建代码生成计划时，根据代码类型识别需要的 skill：
 
-1. 加载 common-tech-backend.md（后端编码规范）
+1. 加载 common-tech-security.md（安全编码规范）
 2. 根据代码类型调用 MCP skill：
 
 #### 核心业务开发
