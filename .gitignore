@@ -1,2 +1,4 @@
-
 _process/
+node_modules/
+.omo/
+dist/

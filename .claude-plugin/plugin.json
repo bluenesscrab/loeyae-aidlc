@@ -1,0 +1,30 @@
+{
+  "name": "loeyae-aidlc",
+  "description": "AI-DLC development workflow with complete closed-loop execution - Inception (requirements analysis, 5-dimension validation, prioritization), Construction (TDD, two-stage code review, systematic debugging, build/test), Operations (CI/CD config, K8s manifests, deployment docs)",
+  "version": "1.5.0",
+  "author": {
+    "name": "Loeyae Team",
+    "email": "dev@loeyae.com"
+  },
+  "homepage": "https://github.com/loeyae/loeyae-aidlc",
+  "repository": "https://github.com/loeyae/loeyae-aidlc.git",
+  "license": "MIT",
+  "keywords": [
+    "aidlc",
+    "AI-DLC",
+    "完整闭环",
+    "继续上次的工作",
+    "认领单元",
+    "团队协作模式",
+    "loeyae",
+    "功能设计",
+    "用户故事",
+    "架构设计",
+    "单元生成",
+    "代码审查",
+    "逆向工程",
+    "根因分析",
+    "TDD",
+    "两阶段审查"
+  ]
+}

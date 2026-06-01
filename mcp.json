@@ -5,6 +5,7 @@
       "disabled": false,
       "autoApprove": [
         "get_skill_summary",
+        "get_skill_content",
         "search_skill"
       ]
     }

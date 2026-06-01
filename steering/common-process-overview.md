@@ -23,13 +23,13 @@
 • **自主**：仅需求确认和架构决策等待
 
 ## 自适应工作流：
-• **工作区检测**（必执行）→ **复杂度评估** → **逆向工程**（仅存量项目）→ **需求分析**（必执行，自适应深度）→ **条件阶段**（按需）→ **工作流规划**（必执行）→ **代码生成**（必执行，per-unit）→ **构建和测试**（必执行）→ **Operations**（条件）
+• **工作区检测**（必执行）→ **复杂度评估** → **逆向工程**（仅存量项目）→ **需求分析**（必执行，自适应深度）→ **条件阶段**（按需，含用户故事 / UI Mock）→ **工作流规划**（必执行）→ **代码生成**（必执行，per-unit）→ **构建和测试**（必执行）→ **Operations**（条件）
 
 ## 工作原理：
 • **AI 分析**你的请求、工作区和复杂度，确定需要哪些阶段
 • **复杂度评估**决定执行路径：快速通道 / 精简流程 / 完整流程
 • **这些阶段始终执行**：工作区检测、需求分析（自适应深度）、工作流规划、代码生成（per-unit）、构建和测试
-• **所有其他阶段是条件性的**：逆向工程、用户故事、应用设计、单元生成、per-unit 设计阶段（功能设计、NFR 需求、NFR 设计、基础设施设计）、Operations
+• **所有其他阶段是条件性的**：逆向工程、用户故事、UI Mock、应用设计、单元生成、per-unit 设计阶段（功能设计、NFR 需求、NFR 设计、基础设施设计）、Operations
 • **无固定顺序**：阶段按对你的具体任务有意义的顺序执行
 • **手术式变更**：每一行改动追溯到用户请求，不"顺手改进"无关代码
 
@@ -50,6 +50,7 @@ flowchart TD
         RE["逆向工程<br/><b>条件</b>"]
         RA["需求分析<br/><b>必执行</b>"]
         Stories["用户故事<br/><b>条件</b>"]
+        UIMock["UI Mock<br/><b>条件</b>"]
         WP["工作流规划<br/><b>必执行</b>"]
         AppDesign["应用设计<br/><b>条件</b>"]
         UnitsG["单元生成<br/><b>条件</b>"]
@@ -75,7 +76,9 @@ flowchart TD
     
     RA -.-> Stories
     RA --> WP
+    Stories -.-> UIMock
     Stories --> WP
+    UIMock --> WP
     
     WP -.-> AppDesign
     WP -.-> UnitsG
@@ -103,6 +106,7 @@ flowchart TD
     style BT fill:#4CAF50,stroke:#1B5E20,stroke-width:3px,color:#fff
     style RE fill:#FFA726,stroke:#E65100,stroke-width:3px,stroke-dasharray: 5 5,color:#000
     style Stories fill:#FFA726,stroke:#E65100,stroke-width:3px,stroke-dasharray: 5 5,color:#000
+    style UIMock fill:#FFA726,stroke:#E65100,stroke-width:3px,stroke-dasharray: 5 5,color:#000
     style AppDesign fill:#FFA726,stroke:#E65100,stroke-width:3px,stroke-dasharray: 5 5,color:#000
     style UnitsG fill:#FFA726,stroke:#E65100,stroke-width:3px,stroke-dasharray: 5 5,color:#000
     style FD fill:#FFA726,stroke:#E65100,stroke-width:3px,stroke-dasharray: 5 5,color:#000
@@ -126,6 +130,7 @@ flowchart TD
 - 逆向工程：分析现有代码库（条件 - 仅存量项目）
 - 需求分析：收集和验证需求（必执行 - 自适应深度）
 - 用户故事：创建用户故事和角色（条件）
+- UI Mock：生成 HTML 页面原型，用于需求交接和多端开发对齐（条件 - 有前端页面需求时）
 - 工作流规划：创建执行计划（必执行）
 - 应用设计：高层组件识别和服务层设计（条件）
 - 单元生成：分解为工作单元（条件）
