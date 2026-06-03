@@ -50,126 +50,37 @@
 >
 > 无论用户选择何种执行速度（快速推进、跳过 TDD、口头确认计划等），MCP Skill 加载**绝对不可跳过**。
 >
-> **为什么**：Skill 定义了框架的编码规范、注解用法、模块结构和测试基类。跳过 Skill 加载意味着生成的代码"能编译但不符合团队规范"——这比编译失败更危险，因为问题会隐藏到代码审查甚至生产环境才暴露。
->
 > **最低加载要求**：
 > - 快速模式：使用 `get_skill_summary` 获取精简规范
 > - 完整模式：使用 `get_skill_content` 获取完整规范
 >
 > **验证检查点**（加载完成后必须确认）：
-> - [ ] 至少加载了 1 个与当前单元业务相关的 Skill（如 CRUD、认证、缓存等）
-> - [ ] 已确认测试基类选择（BaseMockitoUnitTest / BaseDbUnitTest 等）
+> - [ ] 至少加载了 1 个与当前单元业务相关的 Skill
+> - [ ] 已确认测试基类选择（BaseMockitoUnitTest / BaseDbUnitTest）
 > - [ ] 已确认异常处理方式（错误码定义 + 断言工具）
 >
 > 如果以上任一项未满足，停止代码生成并补充加载。
 
-### 前置条件检查
+### 加载执行
 
-在加载任何 `loeyae-*` MCP Skill 之前，必须：
-1. 从 `docs/aidlc/state.md` 读取 `后端框架` 字段
-2. **仅当 `后端框架 = Loeyae Boot` 时**，才执行下方的 MCP Skill 加载
-3. 如果 `后端框架 ≠ Loeyae Boot`，跳过所有 `loeyae-*` skill 调用，按项目自身规范或通用 Spring Boot 规范生成代码
+**Loeyae Boot 项目**：加载 `construction-loeyae-compliance.md`，按其中的 MCP Skill 加载表执行。
 
-### Fallback 策略
-
-如果 MCP 服务不可达（调用超时或返回错误）：
-1. 使用 steering 文件中的通用规范作为替代：
-   - `common-tech-security.md` — 安全编码规范（通用部分仍适用）
-   - `common-database-design.md` — 数据库设计规范（通用部分仍适用）
-   - `common-tech-testing.md` — 测试规范（通用部分仍适用）
-2. 在代码生成计划中标注"MCP 不可达，使用通用规范"
-3. 生成代码后建议用户在 MCP 恢复后重新验证框架规范合规性
-
-### 后端代码（Loeyae Boot 项目）
-
-在创建代码生成计划时，根据代码类型识别需要的 skill：
-
-1. 加载 common-tech-security.md（安全编码规范）
-2. 根据代码类型调用 MCP skill：
-
-#### 核心业务开发
-| 代码类型 | MCP Skill | 说明 |
-|---------|-----------|------|
-| CRUD 模块 | `get_skill_summary("loeyae-crud")` | 完整 CRUD 代码模板 |
-| 认证授权 | `get_skill_summary("loeyae-auth")` | JWT、RBAC、会话管理 |
-| 参数校验 | `get_skill_summary("loeyae-validation")` | 自定义校验注解 |
-| 异常处理 | `get_skill_summary("loeyae-error-handling")` | 错误码、断言工具 |
-| 数据访问 | `get_skill_summary("loeyae-data-access")` | Repository、查询构建 |
-| Web 基础设施 | `get_skill_summary("loeyae-web-infra")` | 统一响应、过滤器 |
-| 数据安全 | `get_skill_summary("loeyae-data-security")` | 加密、脱敏、签名 |
-| 数据字典 | `get_skill_summary("loeyae-dict")` | 字典注解、字典工具 |
-
-#### 基础设施能力
-| 代码类型 | MCP Skill | 说明 |
-|---------|-----------|------|
-| 缓存 | `get_skill_summary("loeyae-cache")` | BaseCache、二级缓存 |
-| 消息队列 | `get_skill_summary("loeyae-message")` | 消息抽象、发送/消费 |
-| 消息审计 | `get_skill_summary("loeyae-message-audit")` | 消息日志、状态追踪 |
-| 定时任务 | `get_skill_summary("loeyae-job")` | JobHandler、动态管理 |
-| 邮件 | `get_skill_summary("loeyae-mail")` | 邮件发送、模板 |
-| 服务间调用 | `get_skill_summary("loeyae-feign")` | Feign、认证透传 |
-| 许可证 | `get_skill_summary("loeyae-license")` | 许可证验证集成 |
-| CMS | `get_skill_summary("loeyae-cms")` | 多站点、模板引擎 |
-| 数据变更审计 | `get_skill_summary("loeyae-mybatis-audit")` | 变更快照、审计日志 |
-
-#### 工具类与模式
-| 代码类型 | MCP Skill | 说明 |
-|---------|-----------|------|
-| 通用工具类 | `get_skill_summary("loeyae-utils")` | JsonTool、CollectionUtils 等 |
-| 条件判断（Decide） | `get_skill_summary("loeyae-decide")` | 链式 if-else 替代 |
-| 条件执行（OptionalUtil） | `get_skill_summary("loeyae-optional-util")` | if-null 替代 |
-| 测试 | `get_skill_summary("loeyae-test")` | 测试工具、Mock 配置 |
-| 框架模块选型 | `get_skill_summary("loeyae-framework-modules")` | 模块索引、依赖组合 |
-| 数据库设计 | `get_skill_summary("loeyae-database-design")` | 表设计、DDL 模板 |
-
-#### 低代码开发（仅 state.md 中 `低代码模式 = 是`）
-| 代码类型 | MCP Skill | 说明 |
-|---------|-----------|------|
-| 低代码入门 | `get_skill_summary("loeyae-lowcode-getting-started")` | 快速上手教程 |
-| CRUD 模板 | `get_skill_summary("loeyae-lowcode-crud-template")` | 数据模型+流程+页面 |
-| 流程编排 | `get_skill_summary("loeyae-lowcode-flow")` | LiteFlow EL 表达式 |
-| Groovy 脚本 | `get_skill_summary("loeyae-lowcode-groovy")` | 脚本开发规范 |
-| AMIS 页面 | `get_skill_summary("loeyae-lowcode-amis")` | 页面 JSON Schema |
-| 组件开发 | `get_skill_summary("loeyae-lowcode-component-dev")` | 自定义组件 |
-| API 对接 | `get_skill_summary("loeyae-lowcode-api-integration")` | 接口路径、响应格式 |
-| 低代码最佳实践 | `get_skill_summary("loeyae-lowcode-best-practices")` | 集成模式、故障排查 |
-
-#### 搜索兜底
-- 不确定用哪个 skill 时 → `search_skill("关键词")`
-
-3. 加载 common-tech-security.md（安全编码规范）
-4. 加载 common-database-design.md（数据库设计规范）
-5. 读取项目 `.kiro/steering/structure.md`（项目结构，如存在）
-6. 读取项目 `.kiro/steering/tech.md`（技术栈版本，如存在）
-
-### 后端代码（非 Loeyae Boot 项目）
-
-如果 state.md 中 `后端框架 ≠ Loeyae Boot`：
+**非 Loeyae Boot 项目**：
 1. 不调用任何 `loeyae-*` MCP Skill
-2. 加载 common-tech-security.md（安全编码规范，通用部分仍适用）
-3. 加载 common-database-design.md（数据库设计规范，通用部分仍适用）
-4. 读取项目 `.kiro/steering/structure.md`（项目结构，如存在）
-5. 读取项目 `.kiro/steering/tech.md`（技术栈版本，如存在）
-6. 按项目自身代码风格和框架约定生成代码
+2. 加载 `common-tech-security.md`（安全编码规范）
+3. 加载 `common-database-design.md`（数据库设计规范）
+4. 读取项目 `.kiro/steering/structure.md`（如存在）
+5. 读取项目 `.kiro/steering/tech.md`（如存在）
+6. 按项目自身代码风格生成代码
 
-### 前端代码
-1. PC端项目，加载 common-tech-frontend-pc.md，微信小程序&APP项目，加载 common-tech-frontend-uniapp.md（前端编码规范）
-2. 如有 Figma 设计稿 → 加载 common-figma-design-standards.md
-3. 读取项目 `.kiro/steering/structure.md`（前端目录结构，如存在）
+**前端代码**：
+1. PC端 → `common-tech-frontend-pc.md`；小程序/APP → `common-tech-frontend-uniapp.md`
+2. 有 Figma → `common-figma-design-standards.md`
+3. 读取项目 `.kiro/steering/structure.md`（如存在）
 
-### 测试代码
-1. 加载 common-tech-testing.md（测试规范）
-2. 后端测试 → `get_skill_summary("loeyae-test")`
-
-> ⚠️ **测试代码强制规则**（不可跳过，快速模式同样适用）
->
-> 编写测试前必须加载 `loeyae-test` 的 summary，确认以下规范：
-> - Mockito 单元测试**必须继承** `BaseMockitoUnitTest` — 禁止裸写 `@ExtendWith(MockitoExtension.class)`
-> - 使用 `RandomUtils.randomPojo()` 生成测试数据 — 禁止手动 new 对象逐字段赋值
-> - 使用 `AssertUtils.assertServiceException()` 验证业务异常 — 禁止 try-catch 手动断言
-> - **禁止** `mockStatic(SecurityUtil.class)` — 使用框架提供的 `MockUtils.mockLoginUser()` 替代
->
-> **为什么**：手写 mock 和断言不仅代码量大，还会在框架升级时批量失效。使用框架工具类意味着升级时只需改一处。
+**测试代码**：
+1. 加载 `common-tech-testing.md`
+2. Loeyae Boot 测试 → 参见 `construction-loeyae-compliance.md` 的测试强制规则
 
 ## 步骤 2.5：快速模式 vs 完整模式边界定义
 
@@ -214,6 +125,27 @@
 - [ ] 确定代码位置（参见关键规则的结构模式）
 - [ ] **仅存量项目**：审查逆向工程 code-structure.md 了解需修改的现有文件
 - [ ] 记录确切路径（绝对不在 docs/aidlc/ 中）
+- [ ] **定义成功标准清单**（强制，在计划头部）：
+
+### 成功标准清单（目标驱动执行）
+
+在代码生成计划的**最前面**，列出本单元的可验证成功标准：
+
+```markdown
+## 成功标准
+- [ ] {功能1}：{可验证的完成条件}
+- [ ] {功能2}：{可验证的完成条件}
+- [ ] 编译通过（exit 0）
+- [ ] 单元测试全部通过（0 失败）
+- [ ] 规格合规审查通过
+- [ ] 框架规范对照通过（仅 Loeyae Boot）
+```
+
+**规则**：
+- 每个标准必须是可执行验证的（"运行 X 命令得到 Y 结果"），不得写"代码质量好"这种模糊标准
+- 成功标准来源：需求文档的验收标准 + 技术约束（编译、测试、规范）
+- 代码生成完成后，逐项勾选成功标准，全部 [x] 才算单元完成
+
 - [ ] 为单元生成创建明确步骤：
 
 ### 后端单元步骤模板
@@ -317,7 +249,14 @@
 
 ## 步骤 14：继续或完成生成
 - [ ] 如果还有步骤，返回步骤 11
-- [ ] 如果所有步骤完成，进入展示完成消息
+- [ ] 如果所有步骤完成，进入生成微型摘要
+
+## 步骤 14.5：生成单元级微型摘要
+- [ ] 按 `construction-implementation-report.md` 的格式，生成 `docs/aidlc/construction/{unit-name}/implementation-summary.md`
+- [ ] 内容必须包含：变更清单（文件路径+操作类型）、测试结果、规范合规状态
+- [ ] 测试结果必须来自实际执行的命令输出
+- [ ] 框架规范对照结果从步骤 5（代码审查）的对照结果汇总
+- [ ] 在 state.md 中记录微型摘要生成状态
 
 ## 步骤 15：展示完成消息
 - 按以下结构展示完成消息：
@@ -374,6 +313,11 @@
 - **孤儿清理**：自己的改动产生的未使用 import/变量/函数必须清理
 - **不改进无关代码**：发现无关问题时记录到 state.md 的"待优化项"，不在当前单元修复
 
+## 框架规范逐项对照（Loeyae Boot 项目强制）
+
+> 代码审查阶段 2 时，加载 `construction-loeyae-compliance.md` 的第二部分执行逐项对照。
+> 非 Loeyae Boot 项目跳过。
+
 ## 关键规则
 
 ### 代码位置规则
@@ -411,5 +355,8 @@
 - 单元代码生成计划中所有步骤已标记 [x]
 - 所有单元故事已按计划实现
 - 所有代码和测试已生成（测试将在构建和测试阶段执行）
+- 框架规范逐项对照已通过（仅 Loeyae Boot 项目）
+- 单元级微型摘要已生成（参见 `construction-implementation-report.md`）
 - 部署产物已生成
+- state.md 已更新（步骤完成强制协议）
 - 完整单元已准备好进行构建和验证
