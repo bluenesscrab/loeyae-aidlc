@@ -80,6 +80,7 @@ AI 模型根据以下因素智能评估需要哪些阶段：
 - `common-complexity-assessment.md` — 工作区检测后评估复杂度时
 - `common-audit-logging.md` — 首次写审计时
 - `common-directory-structure.md` — 创建目录时
+- `common-test-execution-strategy.md` — TDD 验证阶段、构建和测试阶段
 - `construction-implementation-report.md` — 生成实施报告时
 - 编码规范文件 — 仅在代码生成阶段
 

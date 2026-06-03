@@ -158,18 +158,24 @@ public ValidationResult createUser(CreateUserRequest request) {
 
 **强制执行。**
 
-```bash
-# 运行当前测试
-mvn test -pl module-name -Dtest=TestClassName#testMethodName
+> **测试范围选择**：参见 `common-test-execution-strategy.md` 的分层模型。
 
-# 运行所有测试确保无回归
-mvn test -pl module-name
+```bash
+# 步骤 1：运行 L1 焦点测试（当前测试方法/文件）
+mvn test -pl module-name -Dtest=TestClassName#testMethodName        # Maven
+pnpm test -- --run path/to/test.spec.ts                             # 前端
+
+# 步骤 2：运行 L2 模块测试（当前模块全部测试，确认无回归）
+mvn test -pl module-name                                            # Maven
+pnpm --filter current-package test -- --run                         # 前端
 ```
 
 确认：
-- 当前测试通过
-- 其他测试仍然通过
+- 当前测试通过（L1）
+- 模块内其他测试仍然通过（L2）
 - 输出干净（无错误、无警告）
+
+**注意**：此处无需运行全量测试（L4）。模块级验证（L2）足以保证 TDD 循环的快速反馈。跨模块回归验证在单元完成时通过 L3 执行。
 
 **测试失败？** 修正代码，不是测试。
 
@@ -216,9 +222,11 @@ mvn test -pl module-name
 ```
 1. 写实现代码（GREEN 优先）
 2. 立即为该代码写测试
-3. 运行测试确认通过
-4. 运行全量测试确认无回归
+3. 运行 L1 测试确认通过
+4. 运行 L2 模块测试确认无回归
 ```
+
+> **注意**：快速模式下也遵循 `common-test-execution-strategy.md` 的分层策略。无需全量测试，L2 足以保证模块内无回归。跨模块验证在单元完成时统一执行 L3。
 
 与完整 TDD 的区别仅在于：跳过了"先看测试失败"的 RED 阶段。代码质量和测试覆盖率的要求完全不变。
 
@@ -240,17 +248,20 @@ mvn test -pl module-name
 
 ### 执行顺序
 
+> **测试执行策略**：参见 `common-test-execution-strategy.md`
+
 ```
 对每个单元：
   1. 读取代码生成计划中的 TDD 执行序列
   2. 对序列中的每一行：
      a. RED：写测试
-     b. 验证 RED：运行测试，确认失败
+     b. 验证 RED：运行 L1 测试，确认失败
      c. GREEN：写最少实现代码
-     d. 验证 GREEN：运行测试，确认通过 + 无回归
+     d. 验证 GREEN：运行 L1 确认通过 + 运行 L2 确认模块内无回归
      e. REFACTOR：清理（可选）
-     f. 验证 REFACTOR：确认仍然绿色
-  3. 所有测试通过后，进入代码审查
+     f. 验证 REFACTOR：运行 L2 确认仍然绿色
+  3. 所有 TDD 循环完成后，运行 L3（影响域测试）确认跨模块无回归
+  4. L3 通过后，进入代码审查
 ```
 
 ---
