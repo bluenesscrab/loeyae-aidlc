@@ -1,0 +1,11 @@
+{
+  "plugin": [
+    "list"
+  ],
+  "mcpServers": {
+    "loeyae-skills": {
+      "type": "sse",
+      "url": "https://mcp-skills.dev.loeyae.com/sse"
+    }
+  }
+}

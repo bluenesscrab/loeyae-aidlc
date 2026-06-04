@@ -11,15 +11,20 @@
       "import": "./dist/index.js"
     }
   },
+  "bin": {
+    "loeyae-aidlc": "./scripts/setup.mjs"
+  },
   "files": [
     "dist",
+    "scripts",
     "skills",
     "steering",
     "plugin.json"
   ],
   "scripts": {
     "build": "tsc",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "setup": "node scripts/setup.mjs"
   },
   "keywords": [
     "aidlc",
