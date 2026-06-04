@@ -10,9 +10,9 @@
 
 ```
 loeyae-aidlc/
-├── steering/                 # ★ 唯一事实标准：50 个流程规则文件（三入口共享）
+├── steering/                 # ★ 唯一事实标准：50+ 流程规则文件（三入口共享）
 │   ├── core-workflow.md      #   主工作流定义（所有流程细节以此为准）
-│   ├── core-workflow-slim.md #   精简版（仅 OpenCode 入口注入用）
+│   ├── core-workflow-slim.md #   精简版（OpenCode bootstrap 注入用）
 │   ├── common-*.md           #   通用规范 + 团队编码规范
 │   ├── inception-*.md        #   Inception 阶段
 │   ├── product-*.md          #   产品级 Inception（多模块）
@@ -20,20 +20,25 @@ loeyae-aidlc/
 │   ├── operations-*.md       #   Operations 阶段
 │   └── quality-gate-*.md     #   质量门禁
 │
-├── skills/                   # ★ 平台无关薄入口（Claude Code + OpenCode 共享）
+├── skills/                   # ★ 平台无关薄入口（OpenCode 原生 skill 发现 + Claude Code）
 │   ├── using-aidlc/          #   入口：复杂度路由
 │   ├── aidlc-workflow/       #   三阶段编排
 │   ├── aidlc-inception/      #   Inception 步骤路由
 │   ├── aidlc-construction/   #   Construction 步骤路由
 │   └── aidlc-operations/     #   Operations 步骤路由
 │
+├── .opencode/                # ← OpenCode 插件入口
+│   ├── plugins/
+│   │   └── loeyae-aidlc.js  #   插件主文件（config hook + messages.transform）
+│   └── INSTALL.md            #   OpenCode 安装说明
+│
+├── scripts/
+│   └── setup.mjs            #   MCP 注册脚本（首次安装兜底方案）
+│
 ├── POWER.md                  # ← Kiro 入口
 ├── CLAUDE.md                 # ← Claude Code 入口
 ├── .claude-plugin/           # ← Claude Code 清单（plugin.json + marketplace.json）
-├── plugin.json               # ← OpenCode 清单
-├── package.json              # ← OpenCode 包定义（含 build 脚本）
-├── src/index.ts              # ← OpenCode 运行时（注入 slim 工作流 + 提供加载工具）
-├── tsconfig.json             # ← OpenCode 构建配置
+├── package.json              # ← OpenCode 包定义（main 指向 .opencode/plugins/loeyae-aidlc.js）
 ├── mcp.json                  #   loeyae-skills MCP 服务配置（Kiro 格式）
 └── docs/                     #   设计与分析文档
 ```
@@ -42,21 +47,65 @@ loeyae-aidlc/
 
 | 工具 | 入口文件 | 读取 steering/skills 的方式 | 忽略的文件 |
 |------|----------|---------------------------|-----------|
-| **Kiro** | `POWER.md` + `mcp.json` | IDE 直接读 `steering/` 目录 | `.claude-plugin/`、`plugin.json`、`src/`、`package.json` |
-| **Claude Code** | `.claude-plugin/plugin.json` + `CLAUDE.md` | skill 指示 AI 读 `steering/xxx.md` | `POWER.md`、`plugin.json`、`src/` |
-| **OpenCode** | `plugin.json` + `package.json` + `src/index.ts` | TS 运行时 `readFileSync` 读 `steering/` + `skills/` | `POWER.md`、`CLAUDE.md`、`.claude-plugin/` |
+| **Kiro** | `POWER.md` + `mcp.json` | IDE 直接读 `steering/` 目录 | `.opencode/`、`.claude-plugin/` |
+| **Claude Code** | `.claude-plugin/plugin.json` + `CLAUDE.md` | skill 指示 AI 读 `steering/xxx.md` | `.opencode/`、`POWER.md` |
+| **OpenCode** | `.opencode/plugins/loeyae-aidlc.js` | config hook 注入 `skills.paths` + messages.transform 注入 bootstrap | `POWER.md`、`CLAUDE.md`、`.claude-plugin/` |
 
-每个工具只读取自己的入口清单，忽略其余文件，因此三套入口可以无冲突地并置在同一仓库根目录。
+每个工具只读取自己的入口清单，忽略其余文件，三套入口无冲突并置。
 
 ### 事实标准（Source of Truth）
 
-**所有流程规则只在 `steering/` 中维护，`steering/core-workflow.md` 是主入口。** `skills/` 是薄入口：只负责复杂度路由、阶段编排和平台适配，流程细节一律通过加载对应 steering 文件获得，不重复内容。这保证 skill 永远不会与 steering 脱节。
+**所有流程规则只在 `steering/` 中维护，`steering/core-workflow.md` 是主入口。** `skills/` 是薄入口：只负责复杂度路由、阶段编排和平台适配，流程细节一律通过加载对应 steering 文件获得，不重复内容。
 
 ## 安装
 
+### OpenCode
+
+在 `opencode.json`（全局或项目级）的 `plugin` 数组中添加：
+
+```json
+{
+  "plugin": ["loeyae-aidlc@git+https://github.com/loeyae/loeyae-aidlc.git"]
+}
+```
+
+重启 OpenCode 即可。插件会自动：
+- 注册 skills 目录（通过 `config` hook）
+- 注入 AI-DLC 工作流 bootstrap（通过 `messages.transform` hook）
+- 尝试注册 `loeyae-skills` MCP 服务器
+
+**MCP 服务注册（如果自动注入不生效）：**
+
+```bash
+# 方式 1：运行 setup 脚本（推荐）
+bunx loeyae-aidlc
+
+# 方式 2：手动添加到全局配置
+# ~/.config/opencode/opencode.json (Linux/macOS)
+# %APPDATA%/opencode/opencode.json (Windows)
+{
+  "mcpServers": {
+    "loeyae-skills": {
+      "type": "sse",
+      "url": "https://mcp-skills.dev.loeyae.com/sse"
+    }
+  }
+}
+```
+
+固定版本：
+
+```json
+{
+  "plugin": ["loeyae-aidlc@git+https://github.com/loeyae/loeyae-aidlc.git#v1.8.0"]
+}
+```
+
+详细安装说明见 [.opencode/INSTALL.md](.opencode/INSTALL.md)。
+
 ### Kiro
 
-在 Kiro Powers 面板中添加本 Power（通过本地目录或 Git 仓库 `https://github.com/loeyae/loeyae-aidlc.git`）。安装后 `loeyae-skills` MCP 服务自动配置。
+在 Kiro Powers 面板中添加本 Power（通过本地目录或 Git 仓库）。安装后 `loeyae-skills` MCP 服务自动配置。
 
 ### Claude Code
 
@@ -70,21 +119,13 @@ loeyae-aidlc/
 }
 ```
 
-Claude Code 读取根目录 `.claude-plugin/plugin.json` 和 `skills/`。
-
-### OpenCode
-
-项目级：在 `.opencode/` 配置中引用本插件；或全局安装到 `~/.opencode/plugins/`。OpenCode 运行时需要编译产物 `dist/index.js`，**`dist/` 不提交到仓库**，安装时自动构建：
+MCP 服务通过命令添加：
 
 ```bash
-npm install   # 会自动触发 prepare 脚本执行 tsc 构建（生成 dist/）
-# 如需手动重建：
-npm run build
+claude mcp add --transport sse loeyae-skills https://mcp-skills.dev.loeyae.com/sse
 ```
 
-> 从 Git 仓库作为依赖安装时，npm 会自动安装 devDependencies 并运行 `prepare` 脚本完成构建，无需额外操作。
-
-> **MCP 配置差异**：根 `mcp.json` 采用 Kiro 格式。OpenCode 按其自身约定配置 `loeyae-skills` MCP 服务（`type: "sse"` + `url`），Claude Code 通过 `claude mcp add --transport sse loeyae-skills https://mcp-skills.dev.loeyae.com/sse` 添加。三者连接的是同一个远程 MCP 服务。
+> **MCP 服务统一**：三个入口连接的是同一个远程 MCP 服务 `https://mcp-skills.dev.loeyae.com/sse`，只是配置格式不同。
 
 ## 使用方式
 
@@ -97,7 +138,7 @@ npm run build
 工作流将：
 1. 评估复杂度（简单→快速通道；中等→精简流程；复杂→完整流程）
 2. 执行 Inception 阶段（需求、设计、单元生成）
-3. 执行 Construction 阶段（规划 → TDD → 两阶段审查 → 最终全局审查 → 构建测试）
+3. 执行 Construction 阶段（功能设计 → TDD → 两阶段审查 → 构建测试）
 4. 执行 Operations 阶段（条件 — CI/CD 配置生成、K8s 部署清单、部署文档）
 
 ## 工作流概述
@@ -130,7 +171,43 @@ Inception（规划） → Construction（实现） → Operations（部署，条
 
 ## MCP 集成
 
-使用 `loeyae-skills` MCP 服务获取 Loeyae Boot Framework 编码规范（`get_skill_summary` / `get_skill_content` / `search_skill`）。**仅当项目为 Java + Loeyae Boot Framework 时**在 Construction 阶段调用。后端框架专有规范统一通过 MCP 按需加载，不在 steering 中维护。
+使用 `loeyae-skills` MCP 服务获取 Loeyae Boot Framework 编码规范：
+
+- `search_skill(query)` — 搜索规范
+- `get_skill_summary(name)` — 获取规范摘要
+- `get_skill_content(name)` — 获取规范完整内容
+
+**仅当项目为 Java + Loeyae Boot Framework 时**在 Construction 阶段调用。后端框架专有规范统一通过 MCP 按需加载，不在 steering 中维护。
+
+## 故障排除
+
+### OpenCode 插件不生效
+
+1. 确认 `opencode.json` 中 plugin 配置正确
+2. 检查日志：`opencode run --print-logs "hello" 2>&1 | grep -i aidlc`
+3. 使用 `skill` 工具列出已发现的 skills，确认 aidlc 系列存在
+
+### MCP 工具不可用
+
+1. 运行 `bunx loeyae-aidlc` 注册 MCP 服务器到全局配置
+2. 确认网络可达：`https://mcp-skills.dev.loeyae.com/sse`
+3. 重启 OpenCode
+
+### Windows 安装问题
+
+如果 OpenCode 无法从 git URL 安装，使用本地安装：
+
+```bash
+npm install loeyae-aidlc@git+https://github.com/loeyae/loeyae-aidlc.git --prefix "%USERPROFILE%\.config\opencode"
+```
+
+然后在 `opencode.json` 中使用：
+
+```json
+{
+  "plugin": ["~/.config/opencode/node_modules/loeyae-aidlc"]
+}
+```
 
 ## 参考资源
 
