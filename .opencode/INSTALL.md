@@ -1,0 +1,121 @@
+# 安装 Loeyae AI-DLC for OpenCode
+
+## 前提条件
+
+- [OpenCode.ai](https://opencode.ai/) 已安装
+
+## 安装
+
+将 `loeyae-aidlc` 添加到你的 `opencode.json`（全局或项目级）的 `plugin` 数组中：
+
+```json
+{
+  "plugin": ["loeyae-aidlc@git+https://github.com/loeyae/loeyae-aidlc.git"]
+}
+```
+
+重启 OpenCode。插件会通过 OpenCode 的插件管理器自动安装，并注册所有 skills。
+
+验证方式：输入"使用 AI-DLC"，观察是否进入工作流。
+
+## MCP 服务器配置（首次安装需要）
+
+插件会尝试通过 config hook 自动注册 `loeyae-skills` MCP 服务器。如果 MCP 工具不可用，需要手动注册：
+
+**方式 1：运行 setup 脚本（推荐）**
+
+```bash
+bunx loeyae-aidlc
+# 或
+npx loeyae-aidlc
+```
+
+脚本会自动将 `loeyae-skills` MCP 服务器写入全局配置。
+
+**方式 2：手动添加**
+
+在 `~/.config/opencode/opencode.json`（Linux/macOS）或 `%APPDATA%/opencode/opencode.json`（Windows）中添加：
+
+```json
+{
+  "mcpServers": {
+    "loeyae-skills": {
+      "type": "sse",
+      "url": "https://mcp-skills.dev.loeyae.com/sse"
+    }
+  }
+}
+```
+
+重启 OpenCode 后 MCP 工具即可使用。
+
+## 使用
+
+使用 OpenCode 原生 `skill` 工具：
+
+```
+使用 skill 工具列出 skills
+使用 skill 工具加载 aidlc-inception
+```
+
+或者直接说：
+
+```
+使用 AI-DLC 开发用户认证模块
+```
+
+## 固定版本
+
+```json
+{
+  "plugin": ["loeyae-aidlc@git+https://github.com/loeyae/loeyae-aidlc.git#v1.8.0"]
+}
+```
+
+## 更新
+
+OpenCode 通过 git-backed 包规范安装 Superpowers 类插件。如果更新未生效，清除 OpenCode 的包缓存或重新安装插件。
+
+## 故障排除
+
+### 插件未加载
+
+1. 检查日志：`opencode run --print-logs "hello" 2>&1 | grep -i aidlc`
+2. 确认 `opencode.json` 中的 plugin 行正确
+3. 确保 OpenCode 版本 >= 1.0.110
+
+### MCP 工具不可用
+
+1. 运行 `bunx loeyae-aidlc` 注册 MCP 服务器
+2. 确认网络可达：`https://mcp-skills.dev.loeyae.com/sse`
+3. 重启 OpenCode
+
+### Windows 安装问题
+
+如果 OpenCode 无法从 git URL 安装，使用 npm 本地安装：
+
+```bash
+npm install loeyae-aidlc@git+https://github.com/loeyae/loeyae-aidlc.git --prefix "%USERPROFILE%\.config\opencode"
+```
+
+然后在 `opencode.json` 中使用本地路径：
+
+```json
+{
+  "plugin": ["~/.config/opencode/node_modules/loeyae-aidlc"]
+}
+```
+
+### Skills 未发现
+
+1. 使用 `skill` 工具列出已发现的 skills
+2. 确认插件已加载（见上方）
+
+## 工具映射
+
+当 skills 引用 Claude Code 工具时：
+
+- `TodoWrite` → `todowrite`
+- `Task` with subagents → `@mention` 语法
+- `Skill` tool → OpenCode 原生 `skill` 工具
+- 文件操作 → OpenCode 原生工具
