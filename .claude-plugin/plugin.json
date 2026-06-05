@@ -1,7 +1,7 @@
 {
   "name": "loeyae-aidlc",
   "description": "AI-DLC development workflow with complete closed-loop execution - Inception (requirements analysis, 5-dimension validation, prioritization), Construction (TDD, two-stage code review, systematic debugging, build/test), Operations (CI/CD config, K8s manifests, deployment docs)",
-  "version": "1.9.2",
+  "version": "1.10.0",
   "author": {
     "name": "Loeyae Team",
     "email": "dev@loeyae.com"
@@ -26,5 +26,15 @@
     "根因分析",
     "TDD",
     "两阶段审查"
-  ]
+  ],
+  "mcpServers": {
+    "loeyae-skills": {
+      "type": "sse",
+      "url": "https://mcp-skills.dev.loeyae.com/sse"
+    },
+    "awesome-design": {
+      "type": "sse",
+      "url": "https://mcp-design.dev.loeyae.com/sse"
+    }
+  }
 }

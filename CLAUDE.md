@@ -68,6 +68,8 @@ aidlc-inception → aidlc-construction → aidlc-operations（条件）
 
 ## MCP 集成
 
+### loeyae-skills（编码规范）
+
 使用 `loeyae-skills` MCP 服务获取编码规范：
 
 - `mcp__loeyae-skills__get_skill_summary(name)` — 获取指定编码规范摘要（快速预览）
@@ -76,12 +78,54 @@ aidlc-inception → aidlc-construction → aidlc-operations（条件）
 
 **适用条件**：仅当项目为 Java 且引用了 Loeyae Boot Framework 时，才在 Construction 阶段调用 MCP Skill。工作区检测阶段会自动识别框架并记录到 state.md。
 
+**自动注册**：安装插件后，`loeyae-skills` 和 `awesome-design` MCP 服务器会通过 `plugin.json` 中的 `mcpServers` 字段自动注册，无需手动配置。
+
+**手动配置**（仅在自动注册失败时）：
+
+```bash
+claude mcp add --transport sse loeyae-skills https://mcp-skills.dev.loeyae.com/sse
+claude mcp add --transport sse awesome-design https://mcp-design.dev.loeyae.com/sse
+```
+
+或在项目根目录创建 `.mcp.json`：
+
+```json
+{
+  "mcpServers": {
+    "loeyae-skills": {
+      "type": "sse",
+      "url": "https://mcp-skills.dev.loeyae.com/sse"
+    },
+    "awesome-design": {
+      "type": "sse",
+      "url": "https://mcp-design.dev.loeyae.com/sse"
+    }
+  }
+}
+```
+
 **可用 Skill 分类**：
 - 核心业务：`loeyae-crud`、`loeyae-auth`、`loeyae-validation`、`loeyae-error-handling`、`loeyae-data-access`、`loeyae-web-infra`、`loeyae-data-security`、`loeyae-dict`
 - 基础设施：`loeyae-cache`、`loeyae-message`、`loeyae-message-audit`、`loeyae-job`、`loeyae-mail`、`loeyae-feign`、`loeyae-license`、`loeyae-cms`、`loeyae-mybatis-audit`
 - 工具与模式：`loeyae-utils`、`loeyae-decide`、`loeyae-optional-util`、`loeyae-test`、`loeyae-test-base`、`loeyae-test-utils`、`loeyae-framework-modules`、`loeyae-database-design`
 - 低代码：`loeyae-lowcode-getting-started`、`loeyae-lowcode-crud-template`、`loeyae-lowcode-flow`、`loeyae-lowcode-groovy`、`loeyae-lowcode-amis`、`loeyae-lowcode-component-dev`、`loeyae-lowcode-api-integration`、`loeyae-lowcode-best-practices`
 - 工作流：`loeyae-flowable`、`loeyae-flowable-integration`、`loeyae-flowable-approval`、`loeyae-flowable-deploy`、`loeyae-flowable-instance`、`loeyae-flowable-editor`
+
+### awesome-design（UI 设计风格）
+
+使用 `awesome-design` MCP 服务获取品牌设计风格，用于 UI Mock 阶段：
+
+- `mcp__awesome-design__list_design_styles(category?)` — 列出可用设计风格（支持按分类筛选）
+- `mcp__awesome-design__get_design_style(name)` — 获取指定风格的完整 DESIGN.md
+- `mcp__awesome-design__get_design_tokens(name)` — 获取精简设计 tokens（配色、字体、间距、圆角）
+
+**适用条件**：Inception 阶段的 UI Mock 步骤中，当用户选择使用设计风格时调用。
+
+**自动注册**：与 `loeyae-skills` 一起通过插件自动注册。
+
+**手动验证**：在 Claude Code 中运行 `/mcp` 查看服务器状态。
+
+**可用风格分类**：productivity（后台工具）、consumer（消费者端）、fintech（金融）、developer（开发者工具）、ai（AI 平台）、design（设计工具）、automotive（汽车）、media（媒体/消费电子）
 
 ## 快速开始
 
@@ -114,9 +158,14 @@ aidlc-inception → aidlc-construction → aidlc-operations（条件）
 **症状**：调用 `get_skill_content` 或 `search_skill` 时报错或超时
 
 **解决方案**：
-1. 确认网络可达：`https://mcp-skills.dev.loeyae.com/sse`
-2. 检查 Claude Code MCP 配置中 `loeyae-skills` 状态
-3. 如果持续失败，可跳过 Skill 调用继续开发（退回 steering 文件中的通用规范）
+1. 运行 `/mcp` 查看服务器状态
+2. 确认网络可达：`https://mcp-skills.dev.loeyae.com/sse` 和 `https://mcp-design.dev.loeyae.com/sse`
+3. 如果插件自动注册失败，手动添加：
+   ```bash
+   claude mcp add --transport sse loeyae-skills https://mcp-skills.dev.loeyae.com/sse
+   claude mcp add --transport sse awesome-design https://mcp-design.dev.loeyae.com/sse
+   ```
+4. 如果持续失败，可跳过 Skill 调用继续开发（退回 steering 文件中的通用规范）
 
 ### 工作区检测未识别技术栈
 

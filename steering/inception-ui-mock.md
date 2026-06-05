@@ -46,11 +46,50 @@ Boss，用户故事已完成并通过交叉验证。
 1. 加载需求文档（`docs/aidlc/inception/requirements/requirements.md`）
 2. 加载用户故事（如存在：`docs/aidlc/inception/user-stories/`）
 3. 如为存量项目，加载逆向工程产物中的前端架构信息
-4. 如有 UI 设计风格 Skill，加载对应 Skill 获取设计规范
+4. **询问用户是否选择设计风格**（可选，见下方子流程）
 
-**UI Skill 加载规则**：
-- **存量项目**：读取现有前端代码，提取实际使用的 UI 框架和组件风格（如 Element UI、uView），以现有风格为准
-- **新项目**：如果配置了 UI 设计风格 Skill（如 `ui-design-style`），通过 MCP 加载设计规范；如果没有，使用通用 UI 框架（Element UI / Ant Design）作为基准
+**UI 风格确定规则**：
+- **存量项目**：读取现有前端代码，提取实际使用的 UI 框架和组件风格（如 Element UI、uView），以现有风格为准。不询问设计风格选择。
+- **新项目**：主动询问用户是否需要选择设计风格（见下方询问模板）。用户跳过则使用通用 UI 框架（Element UI / Ant Design）作为基准。
+
+#### 设计风格选择（可选子流程）
+
+**触发条件**：新项目，且不是存量项目的局部改造。
+
+**询问模板**：
+```markdown
+Boss，是否需要为 UI Mock 选择一个设计风格参考？
+
+- 🎨 **选择设计风格** — 我将展示可用的品牌设计风格供你选择，应用其配色和组件样式
+- ⏭️ **使用默认风格** — 使用通用 UI 框架样式（Element UI / Ant Design）
+
+💡 **选择设计风格的场景**：新产品需要统一视觉风格、希望参考知名产品的设计语言
+💡 **使用默认风格的场景**：内部系统、快速验证、已有设计规范
+```
+
+**用户选择"选择设计风格"时的执行流程**：
+
+1. 调用 MCP 工具 `list_design_styles` 获取风格列表，向用户展示：
+```markdown
+可用的设计风格分类：
+
+**后台/工具类（productivity）**：Linear、Notion、Superhuman、Miro、Zapier、Slack、Cal.com、Intercom
+**消费者端（consumer）**：Airbnb、Nike、Shopify、Starbucks、Uber、Spotify、Pinterest
+**金融类（fintech）**：Stripe、Wise、Revolut、Binance、Coinbase、Kraken、Mastercard
+**开发者工具（developer）**：Cursor、Vercel、Supabase、Warp、Expo、Raycast、Sentry、PostHog 等
+**AI 平台（ai）**：Claude、OpenCode、xAI、Cohere、Mistral、VoltAgent 等
+**设计工具（design）**：Figma、Framer、Webflow、Airtable、Clay
+**汽车品牌（automotive）**：BMW、Ferrari、Lamborghini、Tesla、Bugatti
+**媒体/消费电子（media）**：Apple、NVIDIA、SpaceX、PlayStation、The Verge
+
+请选择一个风格名称，或告诉我想要的视觉方向（如"暗色极简"、"温暖友好"），我来推荐。
+```
+
+2. 用户选定后，调用 MCP 工具 `get_design_tokens(name)` 获取精简设计 tokens
+3. 将 tokens 记录到 `state.md` 中（字段：`designStyle`）
+4. 后续步骤 4 制作 HTML 时，使用 tokens 中的配色、字体、圆角替代默认样式
+
+**用户选择"使用默认风格"或跳过时**：使用本文件中定义的默认样式模板，不调用 awesome-design MCP。
 
 ### 步骤 2：确定涉及的端
 
@@ -328,7 +367,7 @@ ui-mock/
 ### 结构与布局
 1. **页面和说明不分离**：每个 mock-box 内部包含 body + desc，形成自包含单元。禁止"页面一排、说明另一排"的布局。
 2. **flex-wrap 自动排列**：不固定一排几个，由浏览器窗口宽度决定。
-3. **引入实际 UI 框架 CSS**：PC 端引入 Element UI CDN CSS 使用真实 class name，不要用自定义 CSS 模拟。
+3. **引入实际 UI 框架 CSS**：PC 端引入 Element UI CDN CSS 使用真实 class name，不要用自定义 CSS 模拟。如选择了设计风格，可不引入 UI 框架 CSS，改用 design tokens 生成的自定义样式。
 4. **Mock 专用 class 加前缀**：使用 `mock-`、`phone-` 等前缀，避免与引入的 UI 框架 CSS class 冲突。
 5. **底部固定栏放在滚动容器外面**：APP 端的底部操作栏放在 phone-body 外面，避免跟随滚动。
 6. **手机框不加圆角**：标题栏和手机框之间不要有圆角间隙。
@@ -361,18 +400,70 @@ ui-mock/
 
 ---
 
-## 与 UI Skill 的集成（新项目）
+## 与 awesome-design MCP 的集成（设计风格应用）
 
-当项目配置了 UI 设计风格 Skill 时：
+当用户在步骤 1 中选择了设计风格时，按以下规则应用到 HTML Mock：
 
-1. **在步骤 1 中加载 Skill**：通过 MCP 调用 `get_skill_content("ui-design-style")` 获取设计规范
-2. **应用设计规范**：
-   - 使用 Skill 中定义的配色方案替代默认配色
-   - 使用 Skill 中定义的组件样式
-   - 遵循 Skill 中定义的间距和字体规范
-3. **Skill 不可用时的降级**：使用本文件中定义的默认样式模板
+### 配色应用规则
 
-**注意**：UI Skill 的具体名称和内容由项目配置决定，本文件不硬编码 Skill 名称。在 `state.md` 中记录实际使用的 UI Skill。
+从 `get_design_tokens` 返回的 `colors` 对象中提取颜色，映射到 Mock CSS 变量：
+
+| Design Token | Mock 中的用途 |
+|-------------|--------------|
+| `colors.primary` | 主操作按钮背景、链接颜色、强调色 |
+| `colors.canvas` / `colors.background` | 页面背景色 |
+| `colors.surface-1` / `colors.surface` | 卡片和容器背景 |
+| `colors.ink` / `colors.text` | 正文文字颜色 |
+| `colors.ink-muted` / `colors.textSecondary` | 次要文字颜色 |
+| `colors.hairline` / `colors.border` | 边框和分割线 |
+
+### 字体应用规则
+
+- 优先使用 tokens 中的 `typography.fontFamilies`
+- 如果是私有字体（如 Linear Display），使用文档中建议的替代字体（如 Inter）
+- 字体权重和字号遵循 tokens 定义的层级
+
+### 圆角应用规则
+
+- 按钮圆角：使用 `rounded.md` 或 `rounded.sm`
+- 卡片圆角：使用 `rounded.lg`
+- 输入框圆角：使用 `rounded.md`
+
+### CSS 变量注入方式
+
+在 HTML `<style>` 的 `:root` 中定义变量，Mock 样式引用这些变量：
+
+```css
+:root {
+  /* 来自 awesome-design tokens */
+  --mock-primary: #5e6ad2;        /* colors.primary */
+  --mock-bg: #010102;             /* colors.canvas */
+  --mock-surface: #0f1011;        /* colors.surface-1 */
+  --mock-text: #f7f8f8;           /* colors.ink */
+  --mock-text-muted: #8a8f98;     /* colors.ink-subtle */
+  --mock-border: #23252a;         /* colors.hairline */
+  --mock-radius-sm: 6px;          /* rounded.sm */
+  --mock-radius-md: 8px;          /* rounded.md */
+  --mock-radius-lg: 12px;         /* rounded.lg */
+  --mock-font: Inter, -apple-system, sans-serif;
+}
+```
+
+### 降级规则
+
+- MCP 不可用时：使用 `inception-ui-mock-styles.md` 中的默认样式
+- tokens 字段缺失时：缺失的字段使用默认值（Element UI / Ant Design 配色）
+- 存量项目：始终以现有代码中的实际框架样式为准，不使用 design tokens
+
+### state.md 记录
+
+选择设计风格后，在 `state.md` 中记录：
+```yaml
+designStyle:
+  name: "linear.app"
+  source: "awesome-design MCP"
+  appliedTokens: ["colors", "typography", "rounded"]
+```
 
 ---
 
@@ -387,5 +478,5 @@ ui-mock/
 ### 不适合的场景（应跳过 UI Mock，使用其他方式）
 1. **需要精确视觉还原**：应该用 Figma
 2. **复杂交互动效**：HTML Mock 无法展示动画、手势等
-3. **全新产品从 0 设计且无 UI 框架参考**：应该先做设计系统
+3. **全新产品从 0 设计且无任何参考**：可通过 awesome-design MCP 选择一个品牌风格作为参考起点
 4. **用户测试/可用性验证**：需要可交互的高保真原型

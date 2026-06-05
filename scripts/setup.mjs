@@ -21,6 +21,12 @@ const MCP_SERVER_CONFIG = {
   url: "https://mcp-skills.dev.loeyae.com/sse",
 }
 
+const DESIGN_MCP_SERVER_NAME = "awesome-design"
+const DESIGN_MCP_SERVER_CONFIG = {
+  type: "remote",
+  url: "https://mcp-design.dev.loeyae.com/sse",
+}
+
 const PLUGIN_NAME = "loeyae-aidlc"
 
 /**
@@ -153,6 +159,31 @@ function registerMcpServer(configPath) {
 }
 
 /**
+ * 注册通用 MCP 服务器
+ */
+function registerMcpServerGeneric(configPath, serverName, serverConfig) {
+  let config = readJsonc(configPath)
+
+  if (!config) {
+    config = {}
+  }
+
+  if (config.mcp && config.mcp[serverName]) {
+    console.log(`✓ ${serverName} MCP 服务器已存在，跳过注册`)
+    return false
+  }
+
+  if (!config.mcp) {
+    config.mcp = {}
+  }
+  config.mcp[serverName] = serverConfig
+
+  writeConfig(configPath, config)
+  console.log(`✓ 已注册 ${serverName} MCP 服务器 (${serverConfig.url})`)
+  return true
+}
+
+/**
  * 注册插件到 plugin 列表
  */
 function registerPlugin(configPath) {
@@ -196,16 +227,25 @@ function main() {
   // 1. 注册插件
   registerPlugin(configPath)
 
-  // 2. 注册 MCP 服务器
+  // 2. 注册 MCP 服务器（loeyae-skills）
   registerMcpServer(configPath)
+
+  // 3. 注册 MCP 服务器（awesome-design）
+  registerMcpServerGeneric(configPath, DESIGN_MCP_SERVER_NAME, DESIGN_MCP_SERVER_CONFIG)
 
   console.log("")
   console.log("安装完成！重启 OpenCode 后生效。")
   console.log("")
   console.log("可用的 MCP 工具:")
+  console.log("  loeyae-skills:")
   console.log("  - search_skill(query)       搜索开发规范")
   console.log("  - get_skill_summary(name)   获取规范摘要")
   console.log("  - get_skill_content(name)   获取规范完整内容")
+  console.log("")
+  console.log("  awesome-design:")
+  console.log("  - list_design_styles(category?)  列出设计风格")
+  console.log("  - get_design_style(name)         获取完整 DESIGN.md")
+  console.log("  - get_design_tokens(name)        获取精简设计 tokens")
   console.log("")
 }
 

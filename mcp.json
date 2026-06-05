@@ -8,6 +8,15 @@
         "get_skill_content",
         "search_skill"
       ]
+    },
+    "awesome-design": {
+      "url": "https://mcp-design.dev.loeyae.com/sse",
+      "disabled": false,
+      "autoApprove": [
+        "list_design_styles",
+        "get_design_style",
+        "get_design_tokens"
+      ]
     }
   }
 }

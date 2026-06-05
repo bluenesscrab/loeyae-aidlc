@@ -7,6 +7,10 @@
     "loeyae-skills": {
       "type": "remote",
       "url": "https://mcp-skills.dev.loeyae.com/sse"
+    },
+    "awesome-design": {
+      "type": "remote",
+      "url": "https://mcp-design.dev.loeyae.com/sse"
     }
   }
 }

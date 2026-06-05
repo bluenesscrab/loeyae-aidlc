@@ -42,6 +42,10 @@ npx loeyae-aidlc
     "loeyae-skills": {
       "type": "remote",
       "url": "https://mcp-skills.dev.loeyae.com/sse"
+    },
+    "awesome-design": {
+      "type": "remote",
+      "url": "https://mcp-design.dev.loeyae.com/sse"
     }
   }
 }
@@ -68,7 +72,7 @@ npx loeyae-aidlc
 
 ```json
 {
-  "plugin": ["loeyae-aidlc@git+https://github.com/loeyae/loeyae-aidlc.git#v1.9.2"]
+  "plugin": ["loeyae-aidlc@git+https://github.com/loeyae/loeyae-aidlc.git#v1.10.0"]
 }
 ```
 
@@ -101,7 +105,7 @@ rmdir /s /q "%APPDATA%\opencode\.cache\plugins\loeyae-aidlc"
 
 ```json
 {
-  "plugin": ["loeyae-aidlc@git+https://github.com/loeyae/loeyae-aidlc.git#v1.9.2"]
+  "plugin": ["loeyae-aidlc@git+https://github.com/loeyae/loeyae-aidlc.git#v1.10.0"]
 }
 ```
 
