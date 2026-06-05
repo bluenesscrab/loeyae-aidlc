@@ -84,9 +84,9 @@ bunx loeyae-aidlc
 # ~/.config/opencode/opencode.json (Linux/macOS)
 # %APPDATA%/opencode/opencode.json (Windows)
 {
-  "mcpServers": {
+  "mcp": {
     "loeyae-skills": {
-      "type": "sse",
+      "type": "remote",
       "url": "https://mcp-skills.dev.loeyae.com/sse"
     }
   }

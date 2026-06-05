@@ -109,10 +109,10 @@ export const LoeyaeAidlcPlugin = async ({ client, directory }) => {
       }
 
       // 尝试注入 mcpServers（不确定是否生效，但不会报错）
-      config.mcpServers = config.mcpServers || {};
-      if (!config.mcpServers['loeyae-skills']) {
-        config.mcpServers['loeyae-skills'] = {
-          type: 'sse',
+      config.mcp = config.mcp || {};
+      if (!config.mcp['loeyae-skills']) {
+        config.mcp['loeyae-skills'] = {
+          type: 'remote',
           url: 'https://mcp-skills.dev.loeyae.com/sse',
         };
       }

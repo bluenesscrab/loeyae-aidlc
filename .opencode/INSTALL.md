@@ -38,9 +38,9 @@ npx loeyae-aidlc
 
 ```json
 {
-  "mcpServers": {
+  "mcp": {
     "loeyae-skills": {
-      "type": "sse",
+      "type": "remote",
       "url": "https://mcp-skills.dev.loeyae.com/sse"
     }
   }

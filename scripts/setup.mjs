@@ -17,7 +17,7 @@ import { homedir, platform } from "os"
 
 const MCP_SERVER_NAME = "loeyae-skills"
 const MCP_SERVER_CONFIG = {
-  type: "sse",
+  type: "remote",
   url: "https://mcp-skills.dev.loeyae.com/sse",
 }
 
@@ -131,17 +131,17 @@ function registerMcpServer(configPath) {
     created = true
   }
 
-  // 检查是否已注册
-  if (config.mcpServers && config.mcpServers[MCP_SERVER_NAME]) {
+  // 检查是否已注册（OpenCode 使用 "mcp" 而非 "mcpServers"）
+  if (config.mcp && config.mcp[MCP_SERVER_NAME]) {
     console.log(`✓ ${MCP_SERVER_NAME} MCP 服务器已存在，跳过注册`)
     return false
   }
 
   // 注入 MCP 配置
-  if (!config.mcpServers) {
-    config.mcpServers = {}
+  if (!config.mcp) {
+    config.mcp = {}
   }
-  config.mcpServers[MCP_SERVER_NAME] = MCP_SERVER_CONFIG
+  config.mcp[MCP_SERVER_NAME] = MCP_SERVER_CONFIG
 
   writeConfig(configPath, config)
 
