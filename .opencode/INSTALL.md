@@ -68,13 +68,61 @@ npx loeyae-aidlc
 
 ```json
 {
-  "plugin": ["loeyae-aidlc@git+https://github.com/loeyae/loeyae-aidlc.git#v1.8.0"]
+  "plugin": ["loeyae-aidlc@git+https://github.com/loeyae/loeyae-aidlc.git#v1.9.1"]
 }
 ```
 
 ## 更新
 
-OpenCode 通过 git-backed 包规范安装 Superpowers 类插件。如果更新未生效，清除 OpenCode 的包缓存或重新安装插件。
+### 方式 1：使用 latest（推荐，始终获取最新版本）
+
+`opencode.json` 中不指定版本号：
+
+```json
+{
+  "plugin": ["loeyae-aidlc@git+https://github.com/loeyae/loeyae-aidlc.git"]
+}
+```
+
+清除缓存并重启：
+
+```bash
+# Linux/macOS
+rm -rf ~/.config/opencode/.cache/plugins/loeyae-aidlc
+# Windows
+rmdir /s /q "%APPDATA%\opencode\.cache\plugins\loeyae-aidlc"
+```
+
+重启 OpenCode 即可拉取最新版本。
+
+### 方式 2：指定版本号更新
+
+修改 `opencode.json` 中的版本标签：
+
+```json
+{
+  "plugin": ["loeyae-aidlc@git+https://github.com/loeyae/loeyae-aidlc.git#v1.9.1"]
+}
+```
+
+然后清除缓存并重启 OpenCode。
+
+### 方式 3：npm 本地安装更新
+
+```bash
+# 重新安装（覆盖旧版本）
+npm install loeyae-aidlc@git+https://github.com/loeyae/loeyae-aidlc.git --prefix ~/.config/opencode
+```
+
+### 验证更新
+
+重启 OpenCode 后输入：
+
+```
+使用 AI-DLC，展示欢迎消息
+```
+
+观察欢迎消息是否正常显示，确认版本已更新。
 
 ## 故障排除
 

@@ -118,23 +118,23 @@ AI 模型根据以下因素智能评估需要哪些阶段：
 | # | 步骤 | 条件 | 审批 | 加载文件 |
 |---|------|------|------|----------|
 | 1 | 工作区检测 | 始终 | 🟢 自动继续 | `inception-workspace-detection.md` + `common-complexity-assessment.md` |
-| 1.5 | 产品级 Inception | 多模块模式 | 🔴 强制 | `product-inception.md` + `product-module-division.md` + `product-contracts.md` |
-| 1.6 | 模块选择 | 多模块 + 产品级完成 | 🔴 强制 | （展示菜单） |
+| 1.1 | 产品级 Inception | 多模块模式 | 🔴 强制 | `product-inception.md` + `product-module-division.md` + `product-contracts.md` |
+| 1.2 | 模块选择 | 多模块 + 产品级完成 | 🔴 强制 | （展示菜单） |
 | 2 | 逆向工程 | 存量项目 + 无现有产物 | 🟡 默认 | `inception-reverse-engineering.md` |
 | 3 | 需求分析 | 始终（自适应深度） | 🔴 强制 | `inception-requirements-analysis.md` |
 | 3.1 | 🔍 需求审查 | 始终（需求分析完成后） | 🔴 强制 | `inception-cross-validation.md`（审查项 a/b） |
 | 4 | 用户故事 | 始终（有需求文档则必须生成） | 🔴 强制 | `inception-user-stories.md` |
 | 4.1 | 🔍 用户故事审查 | 始终（用户故事完成后） | 🔴 强制 | `inception-cross-validation.md`（审查项 c/d） |
-| 4.5 | UI Mock | 询问用户选择 | 🔴 强制 | `inception-ui-mock.md` |
-| 4.6 | 🔍 UI Mock 审查 | 执行了 UI Mock 后 | 🔴 强制 | `inception-cross-validation.md`（审查项 e） |
-| 5 | 工作流规划 | 始终 | 🔴 强制 | `inception-workflow-planning.md` + `common-content-validation.md` |
-| 6 | 应用设计 | 条件（新组件/服务） | 🟡 默认 | `inception-application-design.md` |
-| 7 | 单元生成 | 条件（需分解） | 🟡 默认 | `inception-units-generation.md` |
+| 5 | UI Mock | 询问用户选择 | 🔴 强制 | `inception-ui-mock.md` |
+| 5.1 | 🔍 UI Mock 审查 | 执行了 UI Mock 后 | 🔴 强制 | `inception-cross-validation.md`（审查项 e） |
+| 6 | 工作流规划 | 始终 | 🔴 强制 | `inception-workflow-planning.md` + `common-content-validation.md` |
+| 7 | 应用设计 | 条件（新组件/服务） | 🟡 默认 | `inception-application-design.md` |
+| 8 | 单元生成 | 条件（需分解） | 🟡 默认 | `inception-units-generation.md` |
 
 **执行规则**：
 - 进入每个步骤时加载对应 steering 文件，按其内部步骤执行
 - 每个步骤完成后执行步骤完成强制协议（`common-step-completion-protocol.md`）
-- 多模块模式下，步骤 2-7 在模块级执行，路径从 `docs/aidlc/inception/` 变为 `docs/aidlc/modules/{module-name}/inception/`
+- 多模块模式下，步骤 2-8 在模块级执行，路径从 `docs/aidlc/inception/` 变为 `docs/aidlc/modules/{module-name}/inception/`
 
 ---
 
@@ -191,7 +191,7 @@ AI 模型根据以下因素智能评估需要哪些阶段：
 - 用户选择跳过 → 直接进入工作流规划
 - 审批级别保持 🔴 强制（产物需用户确认）
 
-### 🔍 UI Mock 审查（步骤 4.6）
+### 🔍 UI Mock 审查（步骤 5.1）
 - **条件执行**：仅在执行了 UI Mock 步骤后执行
 - 加载 `inception-cross-validation.md`，执行审查项 e：
   - **e) UI Mock ↔ 用户故事+需求**：检查 UI Mock 是否与用户故事和需求文档保持一致
