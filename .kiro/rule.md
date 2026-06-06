@@ -1,6 +1,7 @@
 ---
 inclusion: always
 ---
+
 # AIDLC 项目规范
 
 > **定位**：本文件是 loeyae-aidlc 仓库自身的设计准则。  

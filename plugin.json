@@ -30,7 +30,7 @@
     "两阶段审查",
     "Operations"
   ],
-  "version": "1.10.0",
+  "version": "1.10.1",
   "engines": {
     "opencode": ">=1.0.110"
   },
