@@ -68,7 +68,9 @@ const getBootstrapContent = () => {
 **OpenCode 工具映射：**
 - \`skill\` 工具 → 使用 OpenCode 原生 \`skill\` 工具加载和列出 skills
 - 文件操作 → 使用 OpenCode 原生工具（read, write, edit, bash）
-- MCP 工具 → 使用 \`mcp__loeyae-skills__get_skill_content\`、\`mcp__loeyae-skills__search_skill\` 等
+- MCP 工具 → 使用 \`mcp__loeyae-skills__get_skill_outline\`、\`mcp__loeyae-skills__get_skill_section\`、\`mcp__loeyae-skills__search_skill\` 等
+
+**渐进式披露策略**：优先 \`outline\` → \`section\`，避免直接调用 \`get_skill_content\` 导致 token 浪费。
 
 **加载更多 steering 文件：**
 使用 OpenCode 原生 \`skill\` 工具加载 aidlc-inception、aidlc-construction、aidlc-operations 等 skill，或直接读取 steering/ 目录下的文件。

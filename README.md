@@ -171,11 +171,15 @@ Inception（规划） → Construction（实现） → Operations（部署，条
 
 ## MCP 集成
 
-使用 `loeyae-skills` MCP 服务获取 Loeyae Boot Framework 编码规范：
+使用 `loeyae-skills` MCP 服务获取 Loeyae Boot Framework 编码规范（渐进式披露 v2.0）：
 
-- `search_skill(query)` — 搜索规范
-- `get_skill_summary(name)` — 获取规范摘要
-- `get_skill_content(name)` — 获取规范完整内容
+- `get_skill_outline(name)` — 获取 Skill 的章节大纲（导航用，极低 token）
+- `get_skill_section(name, section)` — 获取指定章节内容（**优先使用**，按需加载）
+- `get_skill_summary(name)` — 获取规范摘要（大纲 + 核心章节预览）
+- `get_skill_content(name)` — 获取规范完整内容（谨慎使用，可能消耗大量 token）
+- `search_skill(query)` — 搜索规范（返回章节级定位）
+
+**渐进式披露策略**：优先 `outline` → `section`，避免直接调用 `get_skill_content` 导致 token 浪费。
 
 **仅当项目为 Java + Loeyae Boot Framework 时**在 Construction 阶段调用。后端框架专有规范统一通过 MCP 按需加载，不在 steering 中维护。
 

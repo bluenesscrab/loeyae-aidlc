@@ -49,7 +49,16 @@
 
 > ⚠️ **强制 — 不可跳过**（仅 Loeyae Boot 项目需要 MCP Skill，非 Loeyae Boot 项目见下方分支）
 >
-> 详细的加载要求、验证检查点和 Fallback 策略见 `construction-loeyae-compliance.md` 第一部分。
+> 详细的加载要求、渐进式披露策略、验证检查点和 Fallback 策略见 `construction-loeyae-compliance.md` 第一部分。
+
+### 渐进式披露原则
+
+MCP Skill 服务采用**三层披露**：`outline`（大纲导航）→ `section`（章节加载）→ `content`（全文兜底）。
+
+- **优先 `get_skill_section`**：只加载当前单元需要的章节，避免 token 浪费
+- **`get_skill_outline` 导航**：先查大纲，再选择需要的章节
+- **`get_skill_content` 兜底**：仅在章节粒度不够时使用
+- **`search_skill` 定位**：搜索返回章节级定位，可直接用章节标题调用 `get_skill_section`
 
 ### 加载执行
 

@@ -4,6 +4,8 @@
       "url": "https://mcp-skills.dev.loeyae.com/sse",
       "disabled": false,
       "autoApprove": [
+        "get_skill_outline",
+        "get_skill_section",
         "get_skill_summary",
         "get_skill_content",
         "search_skill"

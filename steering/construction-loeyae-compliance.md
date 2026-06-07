@@ -14,12 +14,34 @@
 
 **为什么**：Skill 定义了框架的编码规范、注解用法、模块结构和测试基类。跳过意味着代码"能编译但不符合团队规范"——问题会隐藏到代码审查甚至生产环境。
 
-**最低加载要求**：
-- 快速模式：`get_skill_summary` 获取精简规范
-- 完整模式：`get_skill_content` 获取完整规范
+### 渐进式披露策略（v2.0）
+
+MCP Skill 服务已升级为渐进式披露版本，遵循**三层加载**原则：
+
+```
+索引（outline）→ 章节（section）→ 全文（content）
+```
+
+| 层级 | API | 用途 | Token 消耗 |
+|------|-----|------|-----------|
+| 1. 大纲 | `get_skill_outline(name)` | 查看章节结构，决定加载哪些 | 极低 |
+| 2. 章节 | `get_skill_section(name, section)` | 按需加载指定章节 | 低-中 |
+| 3. 全文 | `get_skill_content(name)` | 获取完整规范（谨慎使用） | 高 |
+
+**加载优先级**：
+1. **优先使用 `get_skill_section`**：只加载当前单元需要的章节（如 CRUD 单元只加载 Entity/Controller/Service 章节）
+2. **`get_skill_outline` 用于导航**：不确定需要哪个章节时，先查大纲再选择
+3. **`get_skill_content` 仅作兜底**：当章节粒度不够或需要跨章节对照时使用
+4. **`get_skill_summary` 用于快速预览**：返回大纲 + 前 3 个章节摘要，适合快速了解规范范围
+
+**快速模式 vs 完整模式**：
+- 快速模式：`get_skill_outline` → `get_skill_section`（只加载相关章节）
+- 完整模式：`get_skill_outline` → `get_skill_section`（逐章节加载，需要时用 `get_skill_content` 兜底）
+
+**搜索定位**：`search_skill(query)` 现在返回**章节级定位**（而非整个文件），可直接用返回的章节标题调用 `get_skill_section`。
 
 **验证检查点**（加载完成后必须确认）：
-- [ ] 至少加载了 1 个与当前单元业务相关的 Skill
+- [ ] 至少加载了 1 个与当前单元业务相关的 Skill 章节
 - [ ] 已确认测试基类选择（BaseMockitoUnitTest / BaseDbUnitTest）
 - [ ] 已确认异常处理方式（错误码定义 + 断言工具）
 
@@ -43,54 +65,56 @@ MCP 服务不可达时：
 根据代码类型选择对应 Skill：
 
 ### 核心业务开发
-| 代码类型 | MCP Skill | 说明 |
-|---------|-----------|------|
-| CRUD 模块 | `get_skill_summary("loeyae-crud")` | 完整 CRUD 代码模板 |
-| 认证授权 | `get_skill_summary("loeyae-auth")` | JWT、RBAC、会话管理 |
-| 参数校验 | `get_skill_summary("loeyae-validation")` | 自定义校验注解 |
-| 异常处理 | `get_skill_summary("loeyae-error-handling")` | 错误码、断言工具 |
-| 数据访问 | `get_skill_summary("loeyae-data-access")` | Repository、查询构建 |
-| Web 基础设施 | `get_skill_summary("loeyae-web-infra")` | 统一响应、过滤器 |
-| 数据安全 | `get_skill_summary("loeyae-data-security")` | 加密、脱敏、签名 |
-| 数据字典 | `get_skill_summary("loeyae-dict")` | 字典注解、字典工具 |
+| 代码类型 | MCP Skill | 常用章节 |
+|---------|-----------|---------|
+| CRUD 模块 | `get_skill_outline("loeyae-crud")` → 按需 `get_skill_section` | Entity、Controller、Service、Repository、Convert |
+| 认证授权 | `get_skill_outline("loeyae-auth")` → 按需 `get_skill_section` | JWT、RBAC、会话管理 |
+| 参数校验 | `get_skill_outline("loeyae-validation")` → 按需 `get_skill_section` | 自定义校验注解 |
+| 异常处理 | `get_skill_outline("loeyae-error-handling")` → 按需 `get_skill_section` | 错误码、断言工具 |
+| 数据访问 | `get_skill_outline("loeyae-data-access")` → 按需 `get_skill_section` | Repository、查询构建 |
+| Web 基础设施 | `get_skill_outline("loeyae-web-infra")` → 按需 `get_skill_section` | 统一响应、过滤器 |
+| 数据安全 | `get_skill_outline("loeyae-data-security")` → 按需 `get_skill_section` | 加密、脱敏、签名 |
+| 数据字典 | `get_skill_outline("loeyae-dict")` → 按需 `get_skill_section` | 字典注解、字典工具 |
 
 ### 基础设施能力
-| 代码类型 | MCP Skill | 说明 |
-|---------|-----------|------|
-| 缓存 | `get_skill_summary("loeyae-cache")` | BaseCache、二级缓存 |
-| 消息队列 | `get_skill_summary("loeyae-message")` | 消息抽象、发送/消费 |
-| 消息审计 | `get_skill_summary("loeyae-message-audit")` | 消息日志、状态追踪 |
-| 定时任务 | `get_skill_summary("loeyae-job")` | JobHandler、动态管理 |
-| 邮件 | `get_skill_summary("loeyae-mail")` | 邮件发送、模板 |
-| 服务间调用 | `get_skill_summary("loeyae-feign")` | Feign、认证透传 |
-| 许可证 | `get_skill_summary("loeyae-license")` | 许可证验证集成 |
-| CMS | `get_skill_summary("loeyae-cms")` | 多站点、模板引擎 |
-| 数据变更审计 | `get_skill_summary("loeyae-mybatis-audit")` | 变更快照、审计日志 |
+| 代码类型 | MCP Skill | 常用章节 |
+|---------|-----------|---------|
+| 缓存 | `get_skill_outline("loeyae-cache")` → 按需 `get_skill_section` | BaseCache、二级缓存 |
+| 消息队列 | `get_skill_outline("loeyae-message")` → 按需 `get_skill_section` | 消息抽象、发送/消费 |
+| 消息审计 | `get_skill_outline("loeyae-message-audit")` → 按需 `get_skill_section` | 消息日志、状态追踪 |
+| 定时任务 | `get_skill_outline("loeyae-job")` → 按需 `get_skill_section` | JobHandler、动态管理 |
+| 邮件 | `get_skill_outline("loeyae-mail")` → 按需 `get_skill_section` | 邮件发送、模板 |
+| 服务间调用 | `get_skill_outline("loeyae-feign")` → 按需 `get_skill_section` | Feign、认证透传 |
+| 许可证 | `get_skill_outline("loeyae-license")` → 按需 `get_skill_section` | 许可证验证集成 |
+| CMS | `get_skill_outline("loeyae-cms")` → 按需 `get_skill_section` | 多站点、模板引擎 |
+| 数据变更审计 | `get_skill_outline("loeyae-mybatis-audit")` → 按需 `get_skill_section` | 变更快照、审计日志 |
 
 ### 工具类与模式
-| 代码类型 | MCP Skill | 说明 |
-|---------|-----------|------|
-| 通用工具类 | `get_skill_summary("loeyae-utils")` | JsonTool、CollectionUtils |
-| 条件判断 | `get_skill_summary("loeyae-decide")` | 链式 if-else 替代 |
-| 条件执行 | `get_skill_summary("loeyae-optional-util")` | if-null 替代 |
-| 测试 | `get_skill_summary("loeyae-test")` | 测试工具、Mock 配置 |
-| 框架模块选型 | `get_skill_summary("loeyae-framework-modules")` | 模块索引、依赖组合 |
-| 数据库设计 | `get_skill_summary("loeyae-database-design")` | 表设计、DDL 模板 |
+| 代码类型 | MCP Skill | 常用章节 |
+|---------|-----------|---------|
+| 通用工具类 | `get_skill_outline("loeyae-utils")` → 按需 `get_skill_section` | JsonTool、CollectionUtils |
+| 条件判断 | `get_skill_outline("loeyae-decide")` → 按需 `get_skill_section` | 链式 if-else 替代 |
+| 条件执行 | `get_skill_outline("loeyae-optional-util")` → 按需 `get_skill_section` | if-null 替代 |
+| 测试 | `get_skill_outline("loeyae-test")` → 按需 `get_skill_section` | 测试工具、Mock 配置 |
+| 框架模块选型 | `get_skill_outline("loeyae-framework-modules")` → 按需 `get_skill_section` | 模块索引、依赖组合 |
+| 数据库设计 | `get_skill_outline("loeyae-database-design")` → 按需 `get_skill_section` | 表设计、DDL 模板 |
+| 数据库命名 | `get_skill_outline("loeyae-database-naming")` → 按需 `get_skill_section` | 表/字段命名规范 |
+| 项目结构 | `get_skill_outline("loeyae-project-structure")` → 按需 `get_skill_section` | 模块目录、包结构 |
 
 ### 低代码开发（仅 state.md 中 `低代码模式 = 是`）
-| 代码类型 | MCP Skill | 说明 |
-|---------|-----------|------|
-| 低代码入门 | `get_skill_summary("loeyae-lowcode-getting-started")` | 快速上手 |
-| CRUD 模板 | `get_skill_summary("loeyae-lowcode-crud-template")` | 数据模型+流程+页面 |
-| 流程编排 | `get_skill_summary("loeyae-lowcode-flow")` | LiteFlow EL |
-| Groovy 脚本 | `get_skill_summary("loeyae-lowcode-groovy")` | 脚本规范 |
-| AMIS 页面 | `get_skill_summary("loeyae-lowcode-amis")` | JSON Schema |
-| 组件开发 | `get_skill_summary("loeyae-lowcode-component-dev")` | 自定义组件 |
-| API 对接 | `get_skill_summary("loeyae-lowcode-api-integration")` | 接口路径 |
-| 最佳实践 | `get_skill_summary("loeyae-lowcode-best-practices")` | 集成模式 |
+| 代码类型 | MCP Skill | 常用章节 |
+|---------|-----------|---------|
+| 低代码入门 | `get_skill_outline("loeyae-lowcode-getting-started")` → 按需 `get_skill_section` | 快速上手 |
+| CRUD 模板 | `get_skill_outline("loeyae-lowcode-crud-template")` → 按需 `get_skill_section` | 数据模型+流程+页面 |
+| 流程编排 | `get_skill_outline("loeyae-lowcode-flow")` → 按需 `get_skill_section` | LiteFlow EL |
+| Groovy 脚本 | `get_skill_outline("loeyae-lowcode-groovy")` → 按需 `get_skill_section` | 脚本规范 |
+| AMIS 页面 | `get_skill_outline("loeyae-lowcode-amis")` → 按需 `get_skill_section` | JSON Schema |
+| 组件开发 | `get_skill_outline("loeyae-lowcode-component-dev")` → 按需 `get_skill_section` | 自定义组件 |
+| API 对接 | `get_skill_outline("loeyae-lowcode-api-integration")` → 按需 `get_skill_section` | 接口路径 |
+| 最佳实践 | `get_skill_outline("loeyae-lowcode-best-practices")` → 按需 `get_skill_section` | 集成模式 |
 
 ### 搜索兜底
-- 不确定用哪个 skill → `search_skill("关键词")`
+- 不确定用哪个 skill → `search_skill("关键词")`（返回章节级定位，可直接用返回的章节标题调用 `get_skill_section`）
 
 ---
 

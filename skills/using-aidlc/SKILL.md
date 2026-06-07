@@ -63,7 +63,15 @@ AIDLC skills 覆盖默认行为，但 **用户指令始终优先**：
 
 ## MCP Skill 集成
 
-生成代码时，仅当项目为 Loeyae Boot 时调用 `loeyae-skills` MCP 服务获取编码规范（`get_skill_summary` / `get_skill_content` / `search_skill`）。详见 `steering/construction-code-generation.md` 的 MCP Skill 加载策略。
+生成代码时，仅当项目为 Loeyae Boot 时调用 `loeyae-skills` MCP 服务获取编码规范。MCP Skill 服务采用**渐进式披露**策略：
+
+1. `get_skill_outline(name)` — 查看规范章节结构（导航用，极低 token）
+2. `get_skill_section(name, section)` — 按需加载指定章节（**优先使用**，低-中 token）
+3. `get_skill_summary(name)` — 获取大纲 + 前 3 个章节摘要（快速预览）
+4. `get_skill_content(name)` — 获取完整规范（谨慎使用，高 token）
+5. `search_skill(query)` — 搜索关键词，返回章节级定位
+
+详见 `steering/construction-code-generation.md` 的 MCP Skill 加载策略。
 
 ## 警示信号
 

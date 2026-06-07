@@ -70,15 +70,17 @@ aidlc-inception → aidlc-construction → aidlc-operations（条件）
 
 ### loeyae-skills（编码规范）
 
-使用 `loeyae-skills` MCP 服务获取编码规范：
+使用 `loeyae-skills` MCP 服务获取编码规范（渐进式披露 v2.0）：
 
-- `mcp__loeyae-skills__get_skill_summary(name)` — 获取指定编码规范摘要（快速预览）
-- `mcp__loeyae-skills__get_skill_content(name)` — 获取指定编码规范完整内容（编码时使用）
-- `mcp__loeyae-skills__search_skill(query)` — 搜索规范
+- `mcp__loeyae-skills__get_skill_outline(name)` — 获取 Skill 的章节大纲（导航用，极低 token）
+- `mcp__loeyae-skills__get_skill_section(name, section)` — 获取指定章节内容（**优先使用**，按需加载）
+- `mcp__loeyae-skills__get_skill_summary(name)` — 获取摘要信息（大纲 + 核心章节预览）
+- `mcp__loeyae-skills__get_skill_content(name)` — 获取完整内容（谨慎使用，可能消耗大量 token）
+- `mcp__loeyae-skills__search_skill(query)` — 搜索规范（返回章节级定位）
+
+**渐进式披露策略**：优先 `outline` → `section`，避免直接调用 `get_skill_content` 导致 token 浪费。
 
 **适用条件**：仅当项目为 Java 且引用了 Loeyae Boot Framework 时，才在 Construction 阶段调用 MCP Skill。工作区检测阶段会自动识别框架并记录到 state.md。
-
-**自动注册**：安装插件后，`loeyae-skills` 和 `awesome-design` MCP 服务器会通过 `plugin.json` 中的 `mcpServers` 字段自动注册，无需手动配置。
 
 **手动配置**（仅在自动注册失败时）：
 
@@ -107,7 +109,7 @@ claude mcp add --transport sse awesome-design https://mcp-design.dev.loeyae.com/
 **可用 Skill 分类**：
 - 核心业务：`loeyae-crud`、`loeyae-auth`、`loeyae-validation`、`loeyae-error-handling`、`loeyae-data-access`、`loeyae-web-infra`、`loeyae-data-security`、`loeyae-dict`
 - 基础设施：`loeyae-cache`、`loeyae-message`、`loeyae-message-audit`、`loeyae-job`、`loeyae-mail`、`loeyae-feign`、`loeyae-license`、`loeyae-cms`、`loeyae-mybatis-audit`
-- 工具与模式：`loeyae-utils`、`loeyae-decide`、`loeyae-optional-util`、`loeyae-test`、`loeyae-test-base`、`loeyae-test-utils`、`loeyae-framework-modules`、`loeyae-database-design`
+- 工具与模式：`loeyae-utils`、`loeyae-decide`、`loeyae-optional-util`、`loeyae-test`、`loeyae-test-base`、`loeyae-test-utils`、`loeyae-framework-modules`、`loeyae-database-design`、`loeyae-database-naming`、`loeyae-project-structure`
 - 低代码：`loeyae-lowcode-getting-started`、`loeyae-lowcode-crud-template`、`loeyae-lowcode-flow`、`loeyae-lowcode-groovy`、`loeyae-lowcode-amis`、`loeyae-lowcode-component-dev`、`loeyae-lowcode-api-integration`、`loeyae-lowcode-best-practices`
 - 工作流：`loeyae-flowable`、`loeyae-flowable-integration`、`loeyae-flowable-approval`、`loeyae-flowable-deploy`、`loeyae-flowable-instance`、`loeyae-flowable-editor`
 
@@ -155,7 +157,7 @@ claude mcp add --transport sse awesome-design https://mcp-design.dev.loeyae.com/
 
 ### MCP 服务连接失败
 
-**症状**：调用 `get_skill_content` 或 `search_skill` 时报错或超时
+**症状**：调用 MCP Skill 工具时报错或超时
 
 **解决方案**：
 1. 运行 `/mcp` 查看服务器状态
