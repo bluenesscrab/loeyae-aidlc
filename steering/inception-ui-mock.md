@@ -388,6 +388,19 @@ ui-mock/
 
 ---
 
+## 关联规范文件
+
+> **按需加载**：以下文件提供 UI Mock 的细化规范，按场景自动或手动加载。
+
+| 文件 | 触发方式 | 职责 |
+|------|---------|------|
+| `inception-ui-mock-styles.md` | 制作 HTML 时手动加载 | CSS 样式模板 |
+| `inception-ui-mock-design-spec.md` | fileMatch: `**/*.html` | 设计规范：条件表生成、交互模式映射、表单联动、空状态 |
+| `inception-ui-mock-reasoning-principles.md` | fileMatch: `**/*.html` | 推导原则：三层分离、内容决策、自检清单 |
+| `inception-ui-mock-workflow.md` | manual inclusion | 两阶段工作流：骨架确认 → 内容填充（复杂项目推荐） |
+
+---
+
 ## 样式模板
 
 > **加载模板**：制作 HTML Mock 时，加载 `inception-ui-mock-styles.md` 获取完整的 CSS 样式模板。
