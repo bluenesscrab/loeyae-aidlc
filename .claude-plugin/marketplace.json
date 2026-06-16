@@ -10,7 +10,7 @@
     {
       "name": "loeyae-aidlc",
       "description": "AI-DLC development workflow with complete closed-loop execution",
-      "version": "1.10.3",
+      "version": "1.11.0",
       "source": {
         "source": "url",
         "url": "https://github.com/loeyae/loeyae-aidlc.git"
