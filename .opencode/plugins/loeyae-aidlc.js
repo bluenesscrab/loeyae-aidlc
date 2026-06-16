@@ -115,7 +115,7 @@ export const LoeyaeAidlcPlugin = async ({ client, directory }) => {
       if (!config.mcp['loeyae-skills']) {
         config.mcp['loeyae-skills'] = {
           type: 'remote',
-          url: 'https://mcp-skills.dev.loeyae.com/sse',
+          url: 'https://mcp-skills.allbelieves.com/sse',
         };
       }
     },

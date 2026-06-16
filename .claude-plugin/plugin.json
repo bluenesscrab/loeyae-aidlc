@@ -30,11 +30,11 @@
   "mcpServers": {
     "loeyae-skills": {
       "type": "sse",
-      "url": "https://mcp-skills.dev.loeyae.com/sse"
+      "url": "https://mcp-skills.allbelieves.com/sse"
     },
     "awesome-design": {
       "type": "sse",
-      "url": "https://mcp-design.dev.loeyae.com/sse"
+      "url": "https://mcp-design.allbelieves.com/sse"
     }
   }
 }

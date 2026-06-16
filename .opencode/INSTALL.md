@@ -41,11 +41,11 @@ npx loeyae-aidlc
   "mcp": {
     "loeyae-skills": {
       "type": "remote",
-      "url": "https://mcp-skills.dev.loeyae.com/sse"
+      "url": "https://mcp-skills.allbelieves.com/sse"
     },
     "awesome-design": {
       "type": "remote",
-      "url": "https://mcp-design.dev.loeyae.com/sse"
+      "url": "https://mcp-design.allbelieves.com/sse"
     }
   }
 }
@@ -139,7 +139,7 @@ npm install loeyae-aidlc@git+https://github.com/loeyae/loeyae-aidlc.git --prefix
 ### MCP 工具不可用
 
 1. 运行 `bunx loeyae-aidlc` 注册 MCP 服务器
-2. 确认网络可达：`https://mcp-skills.dev.loeyae.com/sse`
+2. 确认网络可达：`https://mcp-skills.allbelieves.com/sse`
 3. 重启 OpenCode
 
 ### Windows 安装问题

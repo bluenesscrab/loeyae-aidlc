@@ -87,7 +87,7 @@ bunx loeyae-aidlc
   "mcp": {
     "loeyae-skills": {
       "type": "remote",
-      "url": "https://mcp-skills.dev.loeyae.com/sse"
+      "url": "https://mcp-skills.allbelieves.com/sse"
     }
   }
 }
@@ -122,10 +122,10 @@ bunx loeyae-aidlc
 MCP 服务通过命令添加：
 
 ```bash
-claude mcp add --transport sse loeyae-skills https://mcp-skills.dev.loeyae.com/sse
+claude mcp add --transport sse loeyae-skills https://mcp-skills.allbelieves.com/sse
 ```
 
-> **MCP 服务统一**：三个入口连接的是同一个远程 MCP 服务 `https://mcp-skills.dev.loeyae.com/sse`，只是配置格式不同。
+> **MCP 服务统一**：三个入口连接的是同一个远程 MCP 服务 `https://mcp-skills.allbelieves.com/sse`，只是配置格式不同。
 
 ## 使用方式
 
@@ -194,7 +194,7 @@ Inception（规划） → Construction（实现） → Operations（部署，条
 ### MCP 工具不可用
 
 1. 运行 `bunx loeyae-aidlc` 注册 MCP 服务器到全局配置
-2. 确认网络可达：`https://mcp-skills.dev.loeyae.com/sse`
+2. 确认网络可达：`https://mcp-skills.allbelieves.com/sse`
 3. 重启 OpenCode
 
 ### Windows 安装问题

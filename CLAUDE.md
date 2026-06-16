@@ -85,8 +85,8 @@ aidlc-inception → aidlc-construction → aidlc-operations（条件）
 **手动配置**（仅在自动注册失败时）：
 
 ```bash
-claude mcp add --transport sse loeyae-skills https://mcp-skills.dev.loeyae.com/sse
-claude mcp add --transport sse awesome-design https://mcp-design.dev.loeyae.com/sse
+claude mcp add --transport sse loeyae-skills https://mcp-skills.allbelieves.com/sse
+claude mcp add --transport sse awesome-design https://mcp-design.allbelieves.com/sse
 ```
 
 或在项目根目录创建 `.mcp.json`：
@@ -96,11 +96,11 @@ claude mcp add --transport sse awesome-design https://mcp-design.dev.loeyae.com/
   "mcpServers": {
     "loeyae-skills": {
       "type": "sse",
-      "url": "https://mcp-skills.dev.loeyae.com/sse"
+      "url": "https://mcp-skills.allbelieves.com/sse"
     },
     "awesome-design": {
       "type": "sse",
-      "url": "https://mcp-design.dev.loeyae.com/sse"
+      "url": "https://mcp-design.allbelieves.com/sse"
     }
   }
 }
@@ -161,11 +161,11 @@ claude mcp add --transport sse awesome-design https://mcp-design.dev.loeyae.com/
 
 **解决方案**：
 1. 运行 `/mcp` 查看服务器状态
-2. 确认网络可达：`https://mcp-skills.dev.loeyae.com/sse` 和 `https://mcp-design.dev.loeyae.com/sse`
+2. 确认网络可达：`https://mcp-skills.allbelieves.com/sse` 和 `https://mcp-design.allbelieves.com/sse`
 3. 如果插件自动注册失败，手动添加：
    ```bash
-   claude mcp add --transport sse loeyae-skills https://mcp-skills.dev.loeyae.com/sse
-   claude mcp add --transport sse awesome-design https://mcp-design.dev.loeyae.com/sse
+   claude mcp add --transport sse loeyae-skills https://mcp-skills.allbelieves.com/sse
+   claude mcp add --transport sse awesome-design https://mcp-design.allbelieves.com/sse
    ```
 4. 如果持续失败，可跳过 Skill 调用继续开发（退回 steering 文件中的通用规范）
 

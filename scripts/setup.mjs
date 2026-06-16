@@ -18,13 +18,13 @@ import { homedir, platform } from "os"
 const MCP_SERVER_NAME = "loeyae-skills"
 const MCP_SERVER_CONFIG = {
   type: "remote",
-  url: "https://mcp-skills.dev.loeyae.com/sse",
+  url: "https://mcp-skills.allbelieves.com/sse",
 }
 
 const DESIGN_MCP_SERVER_NAME = "awesome-design"
 const DESIGN_MCP_SERVER_CONFIG = {
   type: "remote",
-  url: "https://mcp-design.dev.loeyae.com/sse",
+  url: "https://mcp-design.allbelieves.com/sse",
 }
 
 const PLUGIN_NAME = "loeyae-aidlc"

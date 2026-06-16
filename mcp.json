@@ -1,7 +1,7 @@
 {
   "mcpServers": {
     "loeyae-skills": {
-      "url": "https://mcp-skills.dev.loeyae.com/sse",
+      "url": "https://mcp-skills.allbelieves.com/sse",
       "disabled": false,
       "autoApprove": [
         "get_skill_outline",
@@ -12,7 +12,7 @@
       ]
     },
     "awesome-design": {
-      "url": "https://mcp-design.dev.loeyae.com/sse",
+      "url": "https://mcp-design.allbelieves.com/sse",
       "disabled": false,
       "autoApprove": [
         "list_design_styles",
