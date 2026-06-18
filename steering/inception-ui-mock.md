@@ -144,9 +144,20 @@ Boss，是否需要为 UI Mock 选择一个设计风格参考？
 
 ### 步骤 4：逐端制作 HTML
 
-**按端拆分文件**，每端一个 HTML 文件。
+**按端拆分文件**，每端一个 HTML 文件。大型项目按功能模块进一步拆分。
 
-#### 文件命名规范
+#### 文件组织策略
+
+**判断标准**：根据步骤 3 页面清单中某端的页面数量选择策略：
+
+| 项目规模 | 判断条件 | 文件策略 |
+|---------|---------|---------|
+| 标准 | 某端 ≤10 个页面 | 该端一个 HTML 文件 |
+| 大型 | 某端 >10 个页面 | 该端按功能模块拆分为多个 HTML 文件 |
+
+**注意**：判断粒度是**每个端独立判断**。同一项目中，平台后台可能需要拆分（30 页面），而用户 APP 可能不需要（8 页面）。
+
+#### 文件命名规范 — 标准模式（≤10 页面/端）
 ```
 ui-mock/
 ├── platform-admin.html    # 平台运营后台
@@ -154,6 +165,52 @@ ui-mock/
 ├── merchant-app.html      # 商户APP
 ├── user-app.html          # 用户APP/小程序
 └── [其他端].html          # 按实际情况
+```
+
+#### 文件命名规范 — 大型模式（>10 页面/端）
+```
+ui-mock/
+├── platform-admin/                # 平台运营后台（拆分）
+│   ├── index.html                 # 导航页：列出所有模块链接
+│   ├── order-management.html      # 订单管理模块
+│   ├── user-management.html       # 用户管理模块
+│   ├── ai-center.html             # AI 中心模块
+│   └── system-settings.html       # 系统设置模块
+├── user-app.html                  # 用户APP（标准模式，≤10 页面）
+└── merchant-pc.html               # 商户PC后台（标准模式）
+```
+
+**大型模式规则**：
+1. **模块划分**：按功能域拆分（如订单管理、用户管理、商品管理），同一功能域的页面放在同一个 HTML 文件中
+2. **index.html 必需**：每个拆分目录必须有 index.html，包含所有模块的链接和简述
+3. **每个模块文件独立完整**：每个 HTML 文件独立引入 CSS 和样式，可单独在浏览器打开
+4. **跨模块页面归属**：页面归属于其主要功能域。如果一个页面在多个模块中被引用，放在主导模块中，其他模块在业务说明中注明"参见 {模块名}.html"
+5. **单文件不超过 15 个 mock-box**：如果某个模块超过 15 个页面，继续按子功能拆分
+
+**index.html 模板**：
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>[端名称] UI Mock 导航</title>
+  <style>
+    body { font-family: -apple-system, sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; }
+    .module-list { list-style: none; padding: 0; }
+    .module-list li { padding: 12px 16px; border: 1px solid #eee; margin-bottom: 8px; border-radius: 6px; }
+    .module-list a { text-decoration: none; color: #333; font-weight: 500; }
+    .module-list .desc { color: #666; font-size: 14px; margin-top: 4px; }
+  </style>
+</head>
+<body>
+  <h1>📋 [端名称] UI Mock</h1>
+  <p>共 [N] 个功能模块，[M] 个页面</p>
+  <ul class="module-list">
+    <li><a href="order-management.html">订单管理</a><div class="desc">[页面数] 个页面：订单列表、订单详情、退款处理...</div></li>
+    <li><a href="user-management.html">用户管理</a><div class="desc">[页面数] 个页面：用户列表、用户详情...</div></li>
+  </ul>
+</body>
+</html>
 ```
 
 #### HTML 整体结构
@@ -353,7 +410,9 @@ ui-mock/
 
 | 产出物 | 路径 | 说明 |
 |--------|------|------|
-| UI Mock HTML 文件 | `docs/aidlc/inception/ui-mock/[端名称].html` | 按端拆分 |
+| UI Mock HTML 文件（标准） | `docs/aidlc/inception/ui-mock/[端名称].html` | 按端拆分，≤10 页面/端 |
+| UI Mock HTML 文件（大型） | `docs/aidlc/inception/ui-mock/[端名称]/[模块名].html` | 按端+模块拆分，>10 页面/端 |
+| 导航页（大型模式） | `docs/aidlc/inception/ui-mock/[端名称]/index.html` | 大型模式必需 |
 | 页面清单（嵌入 HTML header） | 每个 HTML 文件的 `<p>` 标签中 | 涉及页面列表 |
 
 **多模块模式路径**：`docs/aidlc/modules/{module-name}/inception/ui-mock/`
