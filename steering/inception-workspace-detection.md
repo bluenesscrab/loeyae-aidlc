@@ -126,6 +126,28 @@
   - 优先使用项目现有组件：ContentWrap, Dialog, Form, Table, UploadFile, UploadImg, Icon, Pagination
   - TypeScript 使用：避免 any 类型，使用 type 关键字导入类型
 
+### 前端平台规范检查（存量项目）
+
+**触发条件**：前端代码扫描检测到非纯 Web 技术栈（即技术栈非 Vue3+ElementPlus / React+AntDesign 等纯浏览器方案），如检测到 Taro、React Native、UniApp（跨端模式）、Flutter、duxapp 等跨端框架。
+
+**检查流程**：
+1. 检查 `docs/aidlc/frontend-platform-spec.md` 是否存在
+2. **存在** → 记录到 state.md：`前端平台规范: 已就绪`
+3. **不存在** → 在步骤 5 的完成消息中追加提示：
+
+```markdown
+• ⚠️ **前端平台规范缺失**：检测到跨端前端项目（{框架名}），但未找到 `docs/aidlc/frontend-platform-spec.md`。
+  此文档用于约束 UI Mock → 代码的翻译（组件选择、CSS 限制等），Construction 阶段代码生成前会强制检查。
+  建议在 Inception 的应用设计阶段创建，或现在就建立：
+  A) 我来基于 package.json 和组件库文档生成初稿，你审核
+  B) 稍后在应用设计阶段再创建
+```
+
+4. 用户选择 A → 按 `construction-ui-implementation-bridge.md` 第一部分的创建引导流程执行
+5. 用户选择 B → 记录到 state.md：`前端平台规范: 待创建（应用设计阶段）`，继续后续流程
+
+**纯 Web 项目**：跳过此检查，不需要 frontend-platform-spec.md。
+
 ### 通用检查
 - 查找项目结构指标
 - 确定工作区根目录（非 docs/aidlc/）
@@ -143,6 +165,8 @@
 - **前端技术栈**：[Vue 3/React/其他/无]
 - **前端 UI 框架**：[Element Plus/Ant Design Vue/其他/无]
 - **前端构建工具**：[Vite/Webpack/其他/无]
+- **前端类型**：[纯Web/跨端/小程序/APP/混合/无]
+- **前端平台规范**：[已就绪/待创建/不需要]
 - **项目结构**：[单体/微服务/库/空]
 - **工作区根目录**：[绝对路径]
 ```

@@ -54,6 +54,11 @@
     - Pinia Store 划分策略
     - 全局状态 vs 局部状态
     - Store 间依赖关系
+  - [ ] **前端平台规范**（跨端项目必须）：生成 `docs/aidlc/frontend-platform-spec.md`
+    - 触发条件：前端目标平台为跨端（Taro/RN/Flutter/UniApp 跨端模式等），且该文件尚不存在或 state.md 标记为"待创建"
+    - 跳过条件：纯 Web 项目（PC 端 Vue3/React SPA），或文件已存在且 state.md 标记为"已就绪"
+    - 执行方式：按 `construction-ui-implementation-bridge.md` 第一部分的创建引导流程
+    - 产出后更新 state.md：`前端平台规范: 已就绪`
 
 ### 4. 生成上下文相关的问题
 **指令**：分析需求和故事，仅生成与此特定应用设计相关的问题。使用以下类别作为灵感，而非强制清单。如不适用则跳过整个类别。
@@ -142,6 +147,16 @@
   - Pinia Store 划分方案
   - 状态管理模式
   - Store 间依赖关系
+
+**前端平台规范**（跨端项目，按条件执行）：
+- 条件：state.md 中 `前端平台规范` ≠ `已就绪`，且前端目标平台为跨端
+- 按 `construction-ui-implementation-bridge.md` 第一部分执行创建引导
+- 创建 `docs/aidlc/frontend-platform-spec.md`，包含：
+  - 平台声明（运行时、组件库、样式方案）
+  - 布局原语映射表
+  - 组件映射参考表
+  - CSS/样式约束清单
+- 产出后更新 state.md：`前端平台规范: 已就绪`
 
 ### 11. 记录审批
 - 在 `docs/aidlc/audit.md` 中记录审批提示及时间戳

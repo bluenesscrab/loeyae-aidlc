@@ -45,6 +45,22 @@
 - [ ] 识别单元依赖和接口
 - [ ] 验证单元已准备好进行代码生成
 
+## 步骤 1.5：前端平台规范门禁（跨端项目）
+
+> **触发条件**：state.md 中 `前端类型` ∈ {跨端, 小程序, APP, 混合}（即非纯 Web）
+> **跳过条件**：纯 Web 项目或无前端的纯后端单元
+
+- [ ] 检查 `docs/aidlc/frontend-platform-spec.md` 是否存在
+- [ ] 验证文件包含四个必填章节（平台声明 / 布局原语 / 组件映射参考 / CSS 约束）
+- [ ] 验证各章节非空（布局原语 ≥3 行、组件映射 ≥5 行、CSS 约束 ≥3 条）
+
+**通过** → 继续步骤 2
+
+**不通过** → ❌ 阻断，按以下处理：
+- 文件不存在：提示用户创建（按 `construction-ui-implementation-bridge.md` 第一部分引导）
+- 文件存在但章节不完整：列出缺失项，要求补充
+- 补充完成后重新验证，通过后继续
+
 ## 步骤 2：MCP Skill 加载策略
 
 > ⚠️ **强制 — 不可跳过**（仅 Loeyae Boot 项目需要 MCP Skill，非 Loeyae Boot 项目见下方分支）
@@ -76,6 +92,7 @@ MCP Skill 服务采用**三层披露**：`outline`（大纲导航）→ `section
 1. PC端 → `common-tech-frontend-pc.md`；小程序/APP → `common-tech-frontend-uniapp.md`
 2. 有 Figma → `common-figma-design-standards.md`
 3. 读取项目 `.kiro/steering/structure.md`（如存在）
+4. 跨端项目 → 加载 `construction-ui-implementation-bridge.md` + 读取 `docs/aidlc/frontend-platform-spec.md`
 
 **测试代码**：
 1. 加载 `common-tech-testing.md`
@@ -99,6 +116,7 @@ MCP Skill 服务采用**三层披露**：`outline`（大纲导航）→ `section
 | 步骤 | 原因 |
 |------|------|
 | MCP Skill 加载 | 跳过 = 代码不符合框架规范，后续全部返工 |
+| 前端平台规范门禁（跨端项目） | 跳过 = Mock 翻译无约束，实现必然偏离设计 |
 | 测试编写 | 跳过 = 无法验证正确性，bug 隐藏到生产环境 |
 | 编译验证 | 跳过 = 可能交付无法运行的代码 |
 | 框架规范遵循 | 跳过 = 技术债累积，团队协作成本上升 |
@@ -163,6 +181,7 @@ MCP Skill 服务采用**三层披露**：`outline`（大纲导航）→ `section
   - 部署产物生成
 
 ### 前端单元步骤模板
+  - **组件映射表**（跨端项目必须，首步）— 对照 Mock + frontend-platform-spec.md 生成本单元的组件映射（格式见 `construction-ui-implementation-bridge.md` 第二部分）
   - 类型定义（types/）— API 接口类型
   - API 接口定义（api/）— 调用后端接口
   - Store 定义（store/）— Pinia 状态管理
