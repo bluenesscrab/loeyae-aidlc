@@ -144,6 +144,7 @@ claude mcp add --transport sse awesome-design https://mcp-design.allbelieves.com
 | File | Purpose |
 |------|---------|
 | `core-workflow.md` | 主工作流定义（事实标准） |
+| `common-context-optimization.md` | 长任务自动分段执行（上下文管理） |
 | `common-tech-frontend-pc.md` | 前端编码规范（Vue 3 / Element Plus - PC） |
 | `common-tech-frontend-uniapp.md` | 前端编码规范（Vue 3 / UniApp） |
 | `common-tech-security.md` | 安全编码规范 |

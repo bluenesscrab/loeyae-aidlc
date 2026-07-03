@@ -1,0 +1,14 @@
+{
+  "version": "v1",
+  "description": "Kiro Hook 模板：Construction 批次进度自动更新。将此文件复制到目标项目的 .kiro/hooks/ 目录使用。",
+  "hooks": [
+    {
+      "name": "AI-DLC Batch Progress Update",
+      "trigger": "PostTaskExec",
+      "action": {
+        "type": "agent",
+        "prompt": "检查 docs/aidlc/state.md 中的「批次进度」表。如果当前批次的所有单元已标记为完成，则：1) 将该批次状态更新为「✅ 完成」并记录当前时间；2) 将「当前批次」字段 +1；3) 输出进度提示（格式：✅ 批次 X/N 完成 · 进度 XX% · 产出 X 文件）。如果 state.md 中没有「批次进度」表或执行模式为 continuous，则不做任何操作。"
+      }
+    }
+  ]
+}
