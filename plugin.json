@@ -32,7 +32,7 @@
     "需求澄清",
     "Operations"
   ],
-  "version": "1.15.0",
+  "version": "1.15.1",
   "engines": {
     "opencode": ">=1.0.110"
   },
