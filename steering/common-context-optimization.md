@@ -100,20 +100,23 @@
 
 ### 连续模式（< 5 单元）
 
-正常执行，无特殊处理。按 `construction-subagent-execution.md` 的流程执行。
+正常执行，每个单元派发独立 subagent。按 `agents/batch-executor.md` 的流程执行。
 
 ### 分段模式（≥ 5 单元）
 
 ```
 1. 确定分段策略，更新 state.md 执行策略字段
 2. 输出启动提示
-3. 对每个批次：
-   a. 在独立上下文中执行（平台适配，见下方）
-   b. 完成后更新 state.md 批次进度
-   c. 输出批次完成提示
-   d. 如果批次失败，停止后续批次，记录失败信息
-4. 所有批次完成后，输出最终完成提示
+3. 对每个单元：
+   a. 派发独立 subagent 执行（平台适配，见上方）
+   b. subagent 完成后更新 progress.md
+   c. 主 agent 输出单行状态（如"U03 完成，继续 U04"）
+   d. 如果单元失败，决定重试/跳过/停止
+4. 按批次边界检查进度（用于提示）
+5. 所有单元完成后，输出最终完成提示
 ```
+
+**注意**：分段模式下，"批次"仅用于进度提示和状态记录，实际执行粒度是**每单元一个 subagent**。
 
 ---
 
@@ -123,38 +126,129 @@
 
 | 平台 | 机制 | 用法 |
 |------|------|------|
-| Claude Code | Task 工具 / Workflow | 每个批次派发为独立 Task，传入 `agents/batch-executor.md` 指令 |
-| Kiro | invoke_sub_agent | 每个批次委托给 `general-task-execution` sub-agent |
+| Claude Code | Task 工具 / Workflow | **每个单元**派发为独立 Task，传入 `agents/batch-executor.md` 指令 |
+| Kiro | invoke_sub_agent | **每个单元**委托给 `general-task-execution` sub-agent |
 
-**独立上下文的优势**：
-- 主 Agent 保持轻量，只负责调度和 state.md 更新
-- 每个批次 Agent 拥有新鲜上下文，不累积历史
-- 批次失败不污染主 Agent 上下文
+**每单元 subagent 的优势**：
+- 单个 subagent 上下文小，不会爆
+- 主 Agent 负载轻，只做调度 + 写 progress.md
+- 即使主 Agent compact，progress.md 已持久化
+- 单元失败不污染主 Agent 上下文
 
 ### 不支持独立上下文的平台
 
 | 平台 | 降级策略 |
 |------|----------|
-| OpenCode | AI 在当前上下文中连续执行，但严格遵守批次间状态更新。在 70% 进度时主动建议用户 `/clear` + state.md 恢复。 |
+| OpenCode | AI 在当前上下文中连续执行，但严格遵守**每单元**状态更新。在 70% 进度时主动建议用户 `/clear` + progress.md 恢复。 |
+
+---
+
+## 文件传递规则（防上下文膨胀）
+
+### 强制规则
+
+| 规则 | 说明 |
+|------|------|
+| ❌ 禁止 paste 内容 | 禁止将需求/设计/代码内容直接 paste 到 subagent dispatch prompt |
+| ✅ 路径传递 | 所有 artifact 通过文件路径传递，subagent 自行读取 |
+| ❌ 禁止累积摘要 | 禁止在主 agent 中累积前序批次/单元的执行摘要 |
+| ✅ 最小状态 | 主 agent 只保持：state.md 路径 + progress.md 路径 + 当前单元编号 + todo list |
+
+### Narration 限制
+
+- 主 agent 在工具调用之间**最多输出一行**状态说明
+- ❌ 禁止在 session 中输出完整的"已完成工作回顾"
+- ❌ 禁止在调度下一单元前总结上一单元的详细执行过程
+
+### 正确示例
+
+```
+# 正确：dispatch 时只传路径
+invoke_sub_agent(
+  prompt="执行单元 U03，读取 docs/aidlc/inception/requirements/unit-order-requirements.md"
+)
+
+# 正确：单行状态
+"U03 完成，继续 U04"
+```
+
+### 错误示例
+
+```
+# 错误：paste 内容
+invoke_sub_agent(
+  prompt="执行以下需求：1. 用户可以下单 2. 订单包含商品列表..."  # ❌ 内容 paste
+)
+
+# 错误：长篇回顾
+"U03 已完成！我们实现了以下功能：订单创建、订单查询、订单取消，
+共生成 8 个文件，测试覆盖率 85%，审查通过..."  # ❌ 累积摘要
+```
 
 ---
 
 ## 批次间上下文传递
 
-批次执行者**只接收**以下上下文：
+批次/单元执行者**只接收**以下上下文：
 
 | 内容 | 来源 |
 |------|------|
-| 批次内单元的需求切片 | `docs/aidlc/inception/requirements/unit-{name}-requirements.md` |
-| 批次内单元的故事切片 | `docs/aidlc/inception/user-stories/unit-{name}-stories.md` |
-| 批次内单元的设计切片 | `docs/aidlc/inception/application-design/unit-{name}-design.md` |
-| 共享接口 | `shared-interfaces.md` |
-| 编码规范 | MCP Skill 或 steering |
+| 单元的需求切片路径 | `docs/aidlc/inception/requirements/unit-{name}-requirements.md` |
+| 单元的故事切片路径 | `docs/aidlc/inception/user-stories/unit-{name}-stories.md` |
+| 单元的设计切片路径 | `docs/aidlc/inception/application-design/unit-{name}-design.md` |
+| 共享接口路径 | `shared-interfaces.md` |
+| 编码规范引用 | MCP Skill 名称或 steering 文件名 |
 
 **禁止传递**：
-- 其他批次的执行历史
-- 完整的 Inception 产出物
+- 其他批次/单元的执行历史
+- 完整的 Inception 产出物内容
 - 主 Agent 的会话历史
+- 任何文件的完整内容（只传路径）
+
+---
+
+## 实时进度账本（Progress Ledger）
+
+### 位置
+
+`docs/aidlc/construction/progress.md`
+
+### 格式
+
+```markdown
+# Construction 进度账本
+
+| 单元 | 状态 | 完成时间 | 文件数 | 执行者 |
+|------|------|----------|--------|--------|
+| U01 | ✅ complete | 2024-01-15T10:30:00 | 6 | subagent |
+| U02 | ✅ complete | 2024-01-15T10:45:00 | 8 | subagent |
+| U03 | 🔄 in_progress | - | - | subagent |
+| U04 | ⏳ pending | - | - | - |
+```
+
+### 更新规则
+
+1. **更新时机**：每个单元代码生成 + 审查通过后，**立即**追加/更新一行
+2. **更新责任**：
+   - 子 Agent 模式：子 Agent 完成单元后更新
+   - 单 Agent 模式：主 Agent 在单元完成后更新
+3. **格式约束**：`Unit-{id}: complete ({ISO8601 timestamp}, files: {count})`
+4. **原子性**：每次只更新一行，不重写整个文件
+
+### 恢复规则（优先级从高到低）
+
+```
+1. 信任 progress.md      ← 最高优先级（持久化的真实执行记录）
+2. 信任 state.md 批次进度 ← 次优先级（可能略滞后）
+3. 信任自身记忆          ← 最低优先级（compact 后丢失）
+```
+
+### Compact/恢复后行为
+
+1. 先读 `progress.md`
+2. 找到第一个状态不是 `complete` 的单元
+3. 从该单元继续执行
+4. **不要**重新执行已标记 `complete` 的单元
 
 ---
 
@@ -176,13 +270,15 @@
 
 ---
 
-## 与子 Agent 执行的关系
+## 与单元执行者的关系
 
-本文件定义**批次级别**的分段策略。在每个批次内部，仍按 `construction-subagent-execution.md` 的规则执行：
+本文件定义**整体分段策略**和**上下文优化规则**。具体单元执行按 `agents/batch-executor.md` 的规则：
 
-- 子 Agent 模式：派发实现者 + 两阶段审查
-- 单 Agent 模式：TDD 循环 + 两阶段自审
+- 每个单元一个独立 subagent
+- subagent 自行读取文件（主 agent 只传路径）
+- subagent 完成后更新 progress.md
+- 主 agent 保持轻量，只做调度
 
 两者是不同层级的上下文管理：
-- **本文件**：批次间隔离（宏观）
-- **subagent-execution**：单元内隔离（微观）
+- **本文件**：宏观策略（分段、进度、恢复）
+- **batch-executor.md**：单元执行细节（TDD、审查、验证）
