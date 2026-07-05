@@ -84,6 +84,8 @@ AIDLC skills 覆盖默认行为，但 **用户指令始终优先**：
 | "我记得工作流" | 工作流会演进。读取 `steering/core-workflow.md`。 |
 | "跳过 Construction 设计" | 没有功能设计的代码缺少业务规则细节。 |
 | "跳过代码审查" | 审查未通过 = 任务未完成。 |
+| "会话恢复了，我直接继续编码" | 先执行恢复检查点：读 state.md → 激活 skill → 宣布状态。见 `common-session-continuity.md`。 |
+| "会话摘要已告诉我任务了" | 会话摘要不含 AI-DLC 流程状态。以 state.md 为唯一事实来源。 |
 
 ## 团队规则
 
