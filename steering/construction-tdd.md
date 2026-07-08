@@ -28,6 +28,43 @@
 
 ---
 
+## 用例点溯源铁律
+
+```
+每个测试必须标注它对应哪个测试用例点。
+没有 @TestCaseId 的测试 = 不知所云的测试。
+```
+
+**规则**：
+- 每个新增/修改的公共方法，其测试**必须**关联到 `docs/aidlc/inception/application-design/test-cases/` 中的某个 UC-D-xxx
+- 关联方式：测试方法名或注解/标签携带用例点编号
+
+**后端示例**（Java/Kotlin）：
+```java
+@Tag("UC-D-003")  // JUnit 5 原生标签，或自定义 @TestCaseId 注解
+@Test
+void shouldRejectRequestWhenQuotaExceeded() {
+    // ...
+}
+```
+
+**前端示例**（TypeScript/JavaScript）：
+```typescript
+describe('UC-D-003 超出配额拒绝请求', () => {
+  it('超过限额时返回拒绝', () => { ... })
+})
+```
+
+**为什么强制**：
+- Construction 末尾对账（见 `construction-code-review.md` 全局审查）要校验"每个 UC-D 都有对应测试且通过"，没有标记就无法校验
+- 没有溯源的测试回答"代码做了什么"，有溯源的测试回答"产品要的有没有被验证"——这是本质区别
+
+**豁免**（需用户明确许可）：纯重构不新增行为、纯配置文件。豁免时必须在审计文件记录"本测试无 UC-D 关联，理由：XXX"。
+
+**违反处理**：测试没有用例点标记 = 红旗信号，按"跳过 TDD"同等处理——补标记或删除测试重写。
+
+---
+
 ## 适用时机
 
 **始终适用：**

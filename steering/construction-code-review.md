@@ -135,6 +135,8 @@
 - [ ] 用户故事中的每个验收标准都已满足
 - [ ] 接口契约中定义的每个端点/方法都已实现
 - [ ] 错误处理覆盖了规格中定义的所有异常场景
+- [ ] **测试用例点覆盖**：本单元涉及的每个 UC-D-xxx（来自 `inception/application-design/test-cases/`）都有对应的 @TestCaseId 测试
+- [ ] **用例点状态**：所有涉及的 UC-D 的 `status` 非 `blocked`（blocked 的须已在步骤 6.5 列入待产品决策清单）
 
 ### 准确性（偏差检查）
 - [ ] 实现的行为与规格描述一致
@@ -286,6 +288,63 @@
 - [ ] 单元测试覆盖率达标
 - [ ] 集成测试覆盖关键路径
 - [ ] 边界情况已测试
+
+### 用例点对账（强制门禁，未通过 = Construction 未完成）
+
+#### 对账① 设计覆盖（每个单元功能设计阶段执行，此处全局复核）
+- [ ] 步骤 6.5 产出的每个 UC-D-xxx，都能在功能设计文档中找到对应的实现设计
+- [ ] 无 UC-D 处于 `blocked` 状态未裁决（blocked 须有产品决策记录）
+
+#### 对账② 测试映射（末尾强制）
+- [ ] 每个 UC-D-xxx 都有至少一个带用例点标记的测试
+- [ ] 所有标记测试全部通过（0 失败）
+- [ ] 用例点覆盖统计：`已覆盖 UC-D 数 / 总 UC-D 数 = X/Y`，X=Y 才通过
+
+**对账未通过处理**：
+- 缺测试：回 TDD 补 RED 测试（带 @TestCaseId）
+- 测试失败：修复实现，不是改测试期望
+- 用例点 blocked：回步骤 6.5 待产品决策清单，不得绕过
+
+**对账产物**：生成 `docs/aidlc/construction/audit/test-case-reconciliation.md`，列出每个 UC-D 的覆盖状态（已覆盖/缺测试/测试失败/blocked），作为 Construction 完成证据。
+
+**机器校验辅助**（推荐实施，降低纯纪律门禁风险）：
+
+项目中可添加如下最小校验脚本，在对账②时执行：
+
+```bash
+#!/bin/bash
+# test-case-reconciliation-check.sh
+# 用途：对比 _index.md 中的 UC-D 清单与测试文件中的标记，输出差集
+
+# 1. 从 _index.md 提取所有 UC-D 编号
+INDEX_FILE="docs/aidlc/inception/application-design/test-cases/_index.md"
+EXPECTED=$(grep -oP 'UC-D-\d+' "$INDEX_FILE" | sort -u)
+
+# 2. 从测试文件中提取所有已标记的 UC-D 编号
+# 后端（Java/Kotlin）
+BACKEND=$(grep -rhoP 'UC-D-\d+' src/test/ | sort -u)
+# 前端（TypeScript/JavaScript）
+FRONTEND=$(grep -rhoP 'UC-D-\d+' tests/ src/**/*.spec.* | sort -u)
+
+COVERED=$(echo -e "${BACKEND}\n${FRONTEND}" | sort -u)
+
+# 3. 输出差集
+echo "=== 未覆盖的 UC-D ==="
+comm -23 <(echo "$EXPECTED") <(echo "$COVERED")
+
+echo "=== 覆盖统计 ==="
+TOTAL=$(echo "$EXPECTED" | wc -l)
+HIT=$(comm -12 <(echo "$EXPECTED") <(echo "$COVERED") | wc -l)
+echo "已覆盖: $HIT / $TOTAL"
+[ "$HIT" -eq "$TOTAL" ] && echo "✅ 对账通过" || echo "🔴 对账未通过"
+```
+
+> 此脚本为参考实现，项目可根据技术栈调整路径和正则。后续可升级为 MCP skill 提供更精确的 AST 级校验。
+
+**对账纪律**：
+- ❌ 不得为通过对账而删除/跳过 UC-D
+- ❌ 不得为通过对账而改写 UC-D 的期望结果（改期望 = 改产品意图，走 CR）
+- ❌ 不得用"代码逆向回规格"代替正向映射对账（逆向不可靠）
 
 ### 部署就绪
 - [ ] 无硬编码配置
