@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APP端 UI Mock 模板 · 手机壳+条件表布局演示</title>
+<style>
+body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; background: #f0f2f5; margin: 0; }
+.mock-header { background: #fff; border-bottom: 1px solid #e4e7ed; padding: 16px 24px; position: sticky; top: 0; z-index: 100; }
+.mock-header h1 { font-size: 18px; font-weight: 600; margin: 0; color: #303133; }
+.mock-header p { font-size: 13px; color: #909399; margin: 4px 0 0; }
+.mock-container { max-width: 1800px; margin: 0 auto; padding: 20px; display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start; overflow-x: auto; }
+.mock-box { background: #fff; border-radius: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); overflow: hidden; }
+.mock-box-title { background: #304156; color: #fff; font-weight: 500; padding: 8px 12px; font-size: 12px; display: flex; align-items: center; gap: 6px; }
+.mock-box-title .tag { background: rgba(255,255,255,0.15); padding: 2px 6px; border-radius: 3px; font-size: 10px; }
+.mock-box-title .btn-open { margin-left: 8px; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); color: #fff; padding: 1px 8px; border-radius: 3px; font-size: 10px; cursor: pointer; text-decoration: none; }
+.mock-box-title .btn-open:hover { background: rgba(255,255,255,0.35); }
+.mock-box-body { background: #f5f5f5; }
+.mock-box-desc { padding: 10px 12px; font-size: 11px; color: #606266; border-top: 1px solid #ebeef5; background: #fafafa; }
+.mock-box-desc h4 { font-size: 12px; margin: 0 0 6px; color: #303133; }
+.mock-box-desc ul { padding-left: 14px; margin: 0; }
+.mock-box-desc li { margin-bottom: 3px; }
+.mock-box-desc .hl { color: #e6a23c; font-weight: 500; }
+.mock-box-desc .dg { color: #f56c6c; font-weight: 500; }
+
+/* ===== APP手机壳容器样式 ===== */
+.iframe-wrapper-mobile {
+  border: 8px solid #1a1a2e;
+  border-radius: 24px;
+  overflow: hidden;
+  width: 375px;
+  height: 812px;
+}
+.iframe-wrapper-mobile iframe {
+  width: 375px;
+  height: 812px;
+  border: none;
+}
+
+/* ===== 无条件表时：固定宽度420px ===== */
+.mock-box-app {
+  width: 420px;
+}
+.mock-box-app .mock-box-body {
+  overflow: auto;
+}
+
+/* ===== 有条件表时：全宽左右并排 ===== */
+.mock-box-full {
+  width: 100%;
+}
+
+/* ===== 条件表样式 ===== */
+.condition-panel { overflow-x: auto; }
+.condition-panel table { min-width: 400px; border-collapse: collapse; font-size: 11px; width: 100%; }
+.condition-panel th, .condition-panel td { border: 1px solid #ebeef5; padding: 6px 8px; text-align: left; }
+.condition-panel thead tr { background: #f5f7fa; }
+
+/* ===== 缩放控制器 ===== */
+.zoom-control { display: flex; align-items: center; gap: 12px; }
+.zoom-label { font-size: 14px; color: #606266; }
+.zoom-btn { width: 36px; height: 36px; border: 1px solid #dcdfe6; border-radius: 4px; background: #fff; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; color: #606266; }
+.zoom-btn:hover { border-color: #409eff; color: #409eff; }
+#zoomRange { width: 400px; height: 6px; cursor: pointer; }
+.zoom-value { font-size: 14px; color: #409eff; font-weight: 500; min-width: 48px; text-align: center; }
+</style>
+</head>
+<body>
+
+<!-- ===== 页面头部（含缩放控制器） ===== -->
+<div class="mock-header">
+  <div style="display:flex; justify-content:space-between; align-items:center;">
+    <div>
+      <h1>【项目名】APP端 · 功能名称</h1>
+      <p>UI Mock · #1页面A✅ #2页面B✅ #3页面C（多状态）✅ · 进度说明</p>
+    </div>
+    <div class="zoom-control">
+      <button class="zoom-btn" onclick="setZoom(1)" style="width:auto; padding:0 16px; font-size:13px;">重置</button>
+      <span class="zoom-label">页面缩放</span>
+      <button class="zoom-btn" onclick="adjustZoom(-0.1)">−</button>
+      <input type="range" id="zoomRange" min="0.3" max="3" step="0.05" value="1" oninput="setZoom(this.value)">
+      <button class="zoom-btn" onclick="adjustZoom(0.1)">+</button>
+      <span class="zoom-value" id="zoomValue">100%</span>
+    </div>
+  </div>
+</div>
+
+<div class="mock-container">
+
+<!-- ==================== 布局A：无条件表（纯表单/简单页面） ==================== -->
+<div class="mock-box mock-box-app">
+  <div class="mock-box-title">
+    <span class="tag">新增页面</span>
+    #1 表单页示例
+    <span style="margin-left:auto;font-size:11px;opacity:0.7">关联: US-01</span>
+    <a class="btn-open" href="app-demo/01-example-form.html" target="_blank">新窗口打开 ↗</a>
+  </div>
+  <div class="mock-box-body" style="display:flex; justify-content:center; padding:12px;">
+    <div class="iframe-wrapper-mobile">
+      <iframe src="app-demo/01-example-form.html"></iframe>
+    </div>
+  </div>
+  <div class="mock-box-desc">
+    <h4>推导说明</h4>
+    <ul>
+      <li><b>纯表单页</b>：无多状态差异，直接画完整页面</li>
+      <li><b>底部固定按钮</b>：提交按钮固定在页面底部</li>
+    </ul>
+    <h4>业务规则</h4>
+    <ul>
+      <li><b>校验规则</b>：所有必填项不为空时按钮可点</li>
+      <li><b>提交后跳转</b>：成功后返回上一页</li>
+    </ul>
+  </div>
+</div>
+
+<div class="mock-box mock-box-app">
+  <div class="mock-box-title">
+    <span class="tag">新增页面</span>
+    #2 列表页示例
+    <span style="margin-left:auto;font-size:11px;opacity:0.7">关联: US-02</span>
+    <a class="btn-open" href="app-demo/02-example-list.html" target="_blank">新窗口打开 ↗</a>
+  </div>
+  <div class="mock-box-body" style="display:flex; justify-content:center; padding:12px;">
+    <div class="iframe-wrapper-mobile">
+      <iframe src="app-demo/02-example-list.html"></iframe>
+    </div>
+  </div>
+  <div class="mock-box-desc">
+    <h4>推导说明</h4>
+    <ul>
+      <li><b>列表项字段</b>：标题+状态标签+时间</li>
+      <li><b>点击跳转</b>：点击列表项进入详情页</li>
+    </ul>
+    <h4>业务规则</h4>
+    <ul>
+      <li><b>排序</b>：按时间倒序</li>
+      <li><b>空状态</b>：列表为空时展示空状态占位</li>
+    </ul>
+  </div>
+</div>
+
+
+<!-- ==================== 布局B：有条件表 × 全宽左右并排（860px高度） ==================== -->
+<div class="mock-box mock-box-full" style="display:flex; align-items:stretch; flex-wrap:nowrap; height:860px;">
+
+  <!-- ===== 左边：标题 + 手机壳iframe + 说明 ===== -->
+  <div class="phone-col" style="width:420px; min-width:420px; display:flex; flex-direction:column; overflow-y:auto; overflow-x:auto;">
+    <div class="mock-box-title">
+      <span class="tag">局部改动</span>
+      #3 详情页（多状态）
+      <span style="margin-left:auto;font-size:11px;opacity:0.7">关联: US-03, US-04</span>
+      <a class="btn-open" href="app-demo/03-example-detail.html" target="_blank">新窗口打开 ↗</a>
+    </div>
+    <div class="mock-box-body" style="flex:1; display:flex; justify-content:center; padding:12px; overflow-y:auto;">
+      <div class="iframe-wrapper-mobile">
+        <iframe src="app-demo/03-example-detail.html"></iframe>
+      </div>
+    </div>
+    <div class="mock-box-desc">
+      <h4>推导说明</h4>
+      <ul>
+        <li><b>组件库展览模式</b>：每个区块画一个"最大集"，配合右侧条件表描述各状态下的显隐</li>
+        <li><b>排列顺序</b>：状态区→核心内容→操作信息→时间线→系统信息→底部操作栏</li>
+      </ul>
+      <h4>业务规则</h4>
+      <ul>
+        <li><b>操作按钮在底部</b>：方案A，所有操作统一放底部操作栏</li>
+        <li><b>终态隐藏操作栏</b>：完成/关闭/取消状态时底部操作栏不展示</li>
+      </ul>
+    </div>
+  </div><!-- 左边结束 -->
+
+  <!-- ===== 右边：条件差异表 ===== -->
+  <div style="flex:1; min-width:0; padding:12px; background:#fafafa; border-left:1px solid #ebeef5; overflow-y:auto;">
+    <details open>
+      <summary style="cursor:pointer; font-size:13px; font-weight:600; color:#303133; margin-bottom:8px;">📋 B 头部状态区 · 各状态下元素显隐</summary>
+      <div class="condition-panel">
+        <table>
+          <thead>
+            <tr>
+              <th style="min-width:120px;">状态（=状态文案）</th>
+              <th style="min-width:80px;">① 文案颜色</th>
+              <th style="min-width:150px;">② 原因/提示文案</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>处理中</td>
+              <td>#ff9900</td>
+              <td>隐藏</td>
+            </tr>
+            <tr>
+              <td>已完成</td>
+              <td>#67c23a</td>
+              <td>隐藏</td>
+            </tr>
+            <tr>
+              <td>已拒绝</td>
+              <td>#ff9900</td>
+              <td>拒绝原因：{reason}</td>
+            </tr>
+            <tr style="background:#f4f4f5;">
+              <td>已关闭</td>
+              <td>#909399</td>
+              <td>隐藏</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
+
+    <details open style="margin-top:16px;">
+      <summary style="cursor:pointer; font-size:13px; font-weight:600; color:#303133; margin-bottom:8px;">📋 H 底部操作栏 · 各状态下按钮组合</summary>
+      <div class="condition-panel">
+        <table>
+          <thead>
+            <tr>
+              <th style="min-width:100px;">状态</th>
+              <th style="min-width:200px;">底部按钮</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>处理中</td>
+              <td>[取消]</td>
+            </tr>
+            <tr>
+              <td>已拒绝</td>
+              <td>[申请介入] [关闭]</td>
+            </tr>
+            <tr>
+              <td>已完成 / 已关闭</td>
+              <td>操作栏隐藏</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
+
+    <details style="margin-top:16px;">
+      <summary style="cursor:pointer; font-size:13px; font-weight:600; color:#303133; margin-bottom:8px;">📋 C 信息列表 · 各字段显隐条件</summary>
+      <div class="condition-panel">
+        <table>
+          <thead>
+            <tr>
+              <th style="min-width:100px;">字段</th>
+              <th style="min-width:200px;">展示条件</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>单号</td>
+              <td>始终展示</td>
+            </tr>
+            <tr>
+              <td>审核时间</td>
+              <td>审核后展示（有值时）</td>
+            </tr>
+            <tr>
+              <td>完成时间</td>
+              <td>已完成后展示（有值时）</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
+  </div><!-- 右边结束 -->
+
+</div><!-- mock-box 结束 -->
+
+</div><!-- mock-container 结束 -->
+
+<!-- ===== 缩放控制脚本 ===== -->
+<script>
+let currentZoom = 1;
+
+function scalePhones() {
+  document.querySelectorAll('.iframe-wrapper-mobile').forEach(wrapper => {
+    wrapper.style.transform = `scale(${currentZoom})`;
+    wrapper.style.transformOrigin = 'top center';
+  });
+  // 调整所有包含手机壳的容器宽度和高度
+  const scaledWidth = 375 * currentZoom + 16 + 24 + 16; // 手机壳宽+border(16)+borderRadius间距+padding
+  const boxWidth = Math.max(420, scaledWidth);
+  const scaledHeight = 812 * currentZoom + 16 + 24;
+
+  document.querySelectorAll('.mock-box-app').forEach(box => {
+    box.style.width = boxWidth + 'px';
+  });
+  document.querySelectorAll('.mock-box-app .mock-box-body').forEach(body => {
+    body.style.height = scaledHeight + 'px';
+    body.style.overflowX = 'auto';
+  });
+  // 布局B左侧也跟随缩放
+  document.querySelectorAll('.mock-box-full .phone-col').forEach(col => {
+    col.style.width = boxWidth + 'px';
+    col.style.minWidth = boxWidth + 'px';
+  });
+  document.querySelectorAll('.mock-box-full .phone-col .mock-box-body').forEach(body => {
+    body.style.height = scaledHeight + 'px';
+    body.style.overflowX = 'auto';
+  });
+  // 放大时让外层容器可以横向滚动
+  const container = document.querySelector('.mock-container');
+  if (container) {
+    if (currentZoom > 1) {
+      container.style.maxWidth = 'none';
+    } else {
+      container.style.maxWidth = '1800px';
+    }
+  }
+}
+
+function setZoom(value) {
+  currentZoom = parseFloat(value);
+  document.getElementById('zoomRange').value = currentZoom;
+  document.getElementById('zoomValue').textContent = Math.round(currentZoom * 100) + '%';
+  scalePhones();
+}
+
+function adjustZoom(delta) {
+  let newZoom = Math.round((currentZoom + delta) * 100) / 100;
+  newZoom = Math.max(0.3, Math.min(3, newZoom));
+  setZoom(newZoom);
+}
+</script>
+
+</body>
+</html>

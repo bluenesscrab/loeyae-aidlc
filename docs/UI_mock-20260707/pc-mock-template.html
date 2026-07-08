@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PC端 UI Mock 模板 · 左右并排布局演示</title>
+<style>
+body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; background: #f0f2f5; margin: 0; }
+.mock-header { background: #fff; border-bottom: 1px solid #e4e7ed; padding: 16px 24px; position: sticky; top: 0; z-index: 100; }
+.mock-header h1 { font-size: 18px; font-weight: 600; margin: 0; color: #303133; }
+.mock-header p { font-size: 13px; color: #909399; margin: 4px 0 0; }
+.mock-container { max-width: 1800px; margin: 0 auto; padding: 20px; display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start; overflow-x: auto; }
+.mock-box { background: #fff; border-radius: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); overflow: hidden; }
+.mock-box-title { background: #304156; color: #fff; font-weight: 500; padding: 8px 12px; font-size: 12px; display: flex; align-items: center; gap: 6px; }
+.mock-box-title .tag { background: rgba(255,255,255,0.15); padding: 2px 6px; border-radius: 3px; font-size: 10px; }
+.mock-box-title .btn-open { margin-left: 8px; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); color: #fff; padding: 1px 8px; border-radius: 3px; font-size: 10px; cursor: pointer; text-decoration: none; }
+.mock-box-title .btn-open:hover { background: rgba(255,255,255,0.35); }
+.mock-box-body { background: #f5f5f5; }
+.mock-box-desc { padding: 10px 12px; font-size: 11px; color: #606266; border-top: 1px solid #ebeef5; background: #fafafa; }
+.mock-box-desc h4 { font-size: 12px; margin: 0 0 6px; color: #303133; }
+.mock-box-desc ul { padding-left: 14px; margin: 0; }
+.mock-box-desc li { margin-bottom: 3px; }
+.mock-box-desc .hl { color: #e6a23c; font-weight: 500; }
+.mock-box-desc .dg { color: #f56c6c; font-weight: 500; }
+
+/* ===== PC iframe 容器样式（16:9 固定比例） ===== */
+.iframe-wrapper-pc {
+  width: 100%;
+  position: relative;
+  overflow: auto;
+  background: #e8e8e8;
+  border-radius: 4px;
+  border: 1px solid #dcdfe6;
+  padding-bottom: 56.25%; /* 16:9 比例 */
+  height: 0;
+}
+.iframe-wrapper-pc iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 1080px;
+  border: none;
+  transform-origin: top left;
+}
+
+/* ===== 无条件表时：一排两个 mock-box ===== */
+.mock-box-half {
+  width: calc(50% - 10px);
+}
+
+/* ===== 有条件表时：全宽 ===== */
+.mock-box-full {
+  width: 100%;
+}
+
+/* ===== 条件表样式 ===== */
+.condition-panel { overflow-x: auto; }
+.condition-panel table { min-width: 500px; border-collapse: collapse; font-size: 11px; width: 100%; }
+.condition-panel th, .condition-panel td { border: 1px solid #ebeef5; padding: 6px 8px; text-align: left; }
+.condition-panel thead tr { background: #f5f7fa; }
+
+/* ===== 缩放控制器 ===== */
+.zoom-control { display: flex; align-items: center; gap: 12px; }
+.zoom-label { font-size: 14px; color: #606266; }
+.zoom-btn { width: 36px; height: 36px; border: 1px solid #dcdfe6; border-radius: 4px; background: #fff; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; color: #606266; }
+.zoom-btn:hover { border-color: #409eff; color: #409eff; }
+#zoomRange { width: 400px; height: 6px; cursor: pointer; }
+.zoom-value { font-size: 14px; color: #409eff; font-weight: 500; min-width: 48px; text-align: center; }
+</style>
+</head>
+<body>
+
+<!-- ===== 页面头部（含缩放控制器） ===== -->
+<div class="mock-header">
+  <div style="display:flex; justify-content:space-between; align-items:center;">
+    <div>
+      <h1>【项目名】PC端 · 功能名称</h1>
+      <p>UI Mock · #1列表页✅ #2弹窗表单✅ #3详情页（多状态）✅ · 进度说明</p>
+    </div>
+    <div class="zoom-control">
+      <button class="zoom-btn" onclick="setZoom(1)" style="width:auto; padding:0 16px; font-size:13px;">重置</button>
+      <span class="zoom-label">页面缩放</span>
+      <button class="zoom-btn" onclick="adjustZoom(-0.1)">−</button>
+      <input type="range" id="zoomRange" min="0.3" max="5" step="0.05" value="1" oninput="setZoom(this.value)">
+      <button class="zoom-btn" onclick="adjustZoom(0.1)">+</button>
+      <span class="zoom-value" id="zoomValue">100%</span>
+    </div>
+  </div>
+</div>
+
+<div class="mock-container">
+
+<!-- ==================== 布局A：无条件表 × 半宽（一排两个） ==================== -->
+<div class="mock-box mock-box-half">
+  <div class="mock-box-title">
+    <span class="tag">新增页面</span>
+    #1 规则列表
+    <span style="margin-left:auto;font-size:11px;opacity:0.7">关联: US-01</span>
+    <a class="btn-open" href="pc-demo/01-example-list.html" target="_blank">新窗口打开 ↗</a>
+  </div>
+  <div class="mock-box-body" style="padding:10px;">
+    <div class="iframe-wrapper-pc">
+      <iframe src="pc-demo/01-example-list.html"></iframe>
+    </div>
+  </div>
+  <div class="mock-box-desc">
+    <h4>推导说明</h4>
+    <ul>
+      <li><b>列的选择逻辑</b>：运营人员核心任务是快速定位目标记录并执行操作，列选择优先展示业务标识字段</li>
+      <li><b>搜索栏设计</b>：高频筛选项直接展示，低频项收入「更多筛选」折叠区</li>
+    </ul>
+    <h4>业务规则</h4>
+    <ul>
+      <li><b>状态流转</b>：草稿→审核中→已通过→已上线</li>
+      <li><b>删除限制</b>：已上线状态不可删除，需先下线</li>
+    </ul>
+  </div>
+</div>
+
+<div class="mock-box mock-box-half">
+  <div class="mock-box-title">
+    <span class="tag">新增页面</span>
+    #2 新增规则弹窗
+    <span style="margin-left:auto;font-size:11px;opacity:0.7">关联: US-02</span>
+    <a class="btn-open" href="pc-demo/02-example-form.html" target="_blank">新窗口打开 ↗</a>
+  </div>
+  <div class="mock-box-body" style="padding:10px;">
+    <div class="iframe-wrapper-pc">
+      <iframe src="pc-demo/02-example-form.html"></iframe>
+    </div>
+  </div>
+  <div class="mock-box-desc">
+    <h4>推导说明</h4>
+    <ul>
+      <li><b>弹窗宽度</b>：表单字段≤6个时用 560px 宽弹窗，&gt;6个用 720px</li>
+      <li><b>校验时机</b>：失焦校验 + 提交校验双重</li>
+    </ul>
+    <h4>业务规则</h4>
+    <ul>
+      <li><b>名称唯一性</b>：提交时后端校验，重名返回错误提示</li>
+      <li><b>必填项</b>：名称、分类、状态为必填</li>
+    </ul>
+  </div>
+</div>
+
+
+<!-- ==================== 布局B：有条件表 × 全宽左右并排 ==================== -->
+<div class="mock-box mock-box-full" style="display:flex; align-items:stretch; flex-wrap:nowrap; height:560px;">
+
+  <!-- ===== 左边：标题 + PC iframe（16:9，与半宽mock-box等宽）+ 说明 ===== -->
+  <div style="width:calc(50% - 10px); min-width:0; display:flex; flex-direction:column; overflow-y:auto;">
+    <div class="mock-box-title">
+      <span class="tag">局部改动</span>
+      #3 规则详情页（多状态）
+      <span style="margin-left:auto;font-size:11px;opacity:0.7">关联: US-03, US-04</span>
+    <a class="btn-open" href="pc-demo/01-example-list.html" target="_blank">新窗口打开 ↗</a>
+    </div>
+    <div class="mock-box-body" style="flex:1; padding:10px; overflow-y:auto;">
+      <div class="iframe-wrapper-pc">
+        <iframe src="pc-demo/01-example-list.html"></iframe>
+      </div>
+    </div>
+    <div class="mock-box-desc">
+      <h4>推导说明</h4>
+      <ul>
+        <li><b>基准状态选择</b>：选择「已上线」状态作为基准，因为信息量最丰富</li>
+        <li><b>操作按钮差异</b>：5种状态各自有不同的操作组合，通过条件表列出</li>
+      </ul>
+      <h4>业务规则</h4>
+      <ul>
+        <li><b>打回规则</b>：已通过可打回到草稿，需填写打回原因</li>
+        <li><b>上线校验</b>：上线前校验关联商品是否就绪</li>
+      </ul>
+    </div>
+  </div><!-- 左边结束 -->
+
+  <!-- ===== 右边：条件差异表（剩余空间全部给条件表） ===== -->
+  <div class="mock-box-condition" style="flex:1; min-width:0; padding:12px; background:#fafafa; border-left:1px solid #ebeef5; overflow-y:auto;">
+    <details open class="state-condition-panel">
+      <summary style="cursor:pointer; font-size:13px; font-weight:600; color:#303133; margin-bottom:8px;">📋 操作按钮差异（按状态）</summary>
+      <div class="condition-panel" style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th style="min-width:70px;">状态</th>
+              <th style="min-width:200px;">操作列按钮</th>
+              <th style="min-width:120px;">特殊说明</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>草稿<br><code style="font-size:9px;color:#909399;">status=draft</code></td>
+              <td>[编辑] [删除] [提交审核]</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td>审核中<br><code style="font-size:9px;color:#909399;">status=reviewing</code></td>
+              <td>[查看] [撤回]</td>
+              <td>编辑/删除 disabled</td>
+            </tr>
+            <tr>
+              <td>已通过<br><code style="font-size:9px;color:#909399;">status=approved</code></td>
+              <td>[查看] [上线] [打回]</td>
+              <td>打回需填原因→回到草稿</td>
+            </tr>
+            <tr>
+              <td>已上线（基准）<br><code style="font-size:9px;color:#909399;">status=online</code></td>
+              <td>[查看] [下线]</td>
+              <td>不可删除/编辑</td>
+            </tr>
+            <tr>
+              <td>已下线<br><code style="font-size:9px;color:#909399;">status=offline</code></td>
+              <td>[查看] [编辑] [删除] [重新上线]</td>
+              <td>重新上线需二次确认</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
+
+    <details style="margin-top:12px;">
+      <summary style="cursor:pointer; font-size:13px; font-weight:600; color:#303133; margin-bottom:8px;">📋 页面区块显隐（按状态）</summary>
+      <div class="condition-panel" style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th style="min-width:100px;">区块</th>
+              <th style="min-width:60px;">草稿</th>
+              <th style="min-width:60px;">审核中</th>
+              <th style="min-width:60px;">已通过</th>
+              <th style="min-width:60px;">已上线</th>
+              <th style="min-width:60px;">已下线</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>基本信息</td>
+              <td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td>
+            </tr>
+            <tr>
+              <td>审核记录</td>
+              <td>隐藏</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td>
+            </tr>
+            <tr>
+              <td>关联商品列表</td>
+              <td>隐藏</td><td>隐藏</td><td>✅</td><td>✅</td><td>✅</td>
+            </tr>
+            <tr>
+              <td>数据统计</td>
+              <td>隐藏</td><td>隐藏</td><td>隐藏</td><td>✅</td><td>✅</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
+  </div><!-- 右边结束 -->
+
+</div><!-- mock-box 结束 -->
+
+</div><!-- mock-container 结束 -->
+
+<!-- ===== iframe缩放 + 用户缩放控制 ===== -->
+<script>
+let currentZoom = 1;
+
+function scaleIframes() {
+  document.querySelectorAll('.iframe-wrapper-pc').forEach(wrapper => {
+    const iframe = wrapper.querySelector('iframe');
+    if (!iframe) return;
+    const containerWidth = wrapper.clientWidth;
+    const baseScale = containerWidth / 1920;
+    const finalScale = baseScale * currentZoom;
+    iframe.style.transform = `scale(${finalScale})`;
+    const baseHeight = containerWidth * 9 / 16;
+    const finalHeight = baseHeight * currentZoom;
+    wrapper.style.paddingBottom = '0';
+    wrapper.style.height = finalHeight + 'px';
+    wrapper.style.overflowX = 'auto';
+  });
+  // 放大时让外层容器可以横向滚动
+  const container = document.querySelector('.mock-container');
+  if (container) {
+    if (currentZoom > 1) {
+      container.style.maxWidth = 'none';
+    } else {
+      container.style.maxWidth = '1800px';
+    }
+  }
+}
+
+function setZoom(value) {
+  currentZoom = parseFloat(value);
+  document.getElementById('zoomRange').value = currentZoom;
+  document.getElementById('zoomValue').textContent = Math.round(currentZoom * 100) + '%';
+  scaleIframes();
+}
+
+function adjustZoom(delta) {
+  let newZoom = Math.round((currentZoom + delta) * 100) / 100;
+  newZoom = Math.max(0.3, Math.min(5, newZoom));
+  setZoom(newZoom);
+}
+
+window.addEventListener('load', () => setTimeout(scaleIframes, 200));
+window.addEventListener('resize', scaleIframes);
+</script>
+
+</body>
+</html>

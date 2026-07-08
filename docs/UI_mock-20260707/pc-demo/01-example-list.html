@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920">
+  <title>示例列表页</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      width: 1920px;
+      min-height: 1080px;
+      background: #f0f2f5;
+      padding: 20px;
+    }
+    .page-card { background: #fff; border-radius: 4px; padding: 20px; margin-bottom: 16px; }
+    .page-title { font-size: 16px; font-weight: 600; color: #303133; margin-bottom: 16px; }
+    
+    /* 搜索栏 */
+    .search-bar { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 20px; }
+    .search-item { display: flex; align-items: center; gap: 6px; }
+    .search-item label { font-size: 13px; color: #606266; white-space: nowrap; }
+    .search-item input, .search-item select {
+      height: 32px; border: 1px solid #dcdfe6; border-radius: 4px; padding: 0 10px; font-size: 13px; min-width: 180px;
+    }
+    .search-item select { min-width: 140px; }
+    .btn { height: 32px; padding: 0 16px; border-radius: 4px; font-size: 13px; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
+    .btn-primary { background: #409eff; color: #fff; }
+    .btn-default { background: #fff; border: 1px solid #dcdfe6; color: #606266; }
+    .btn-success { background: #67c23a; color: #fff; }
+    .btn-text { background: none; border: none; color: #409eff; padding: 0 4px; font-size: 12px; cursor: pointer; }
+    .btn-text.danger { color: #f56c6c; }
+    
+    /* 工具栏 */
+    .toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .toolbar-left { display: flex; gap: 8px; }
+    .toolbar-right { font-size: 12px; color: #909399; }
+    
+    /* 表格 */
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th { background: #fafafa; font-weight: 500; color: #606266; text-align: left; padding: 10px 12px; border-bottom: 1px solid #ebeef5; }
+    td { padding: 10px 12px; border-bottom: 1px solid #ebeef5; color: #303133; }
+    tr:hover td { background: #f5f7fa; }
+    .status-tag { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 11px; }
+    .status-tag.success { background: #f0f9eb; color: #67c23a; }
+    .status-tag.warning { background: #fdf6ec; color: #e6a23c; }
+    .status-tag.info { background: #f4f4f5; color: #909399; }
+    .status-tag.primary { background: #ecf5ff; color: #409eff; }
+    
+    /* 分页 */
+    .pagination { display: flex; justify-content: flex-end; align-items: center; gap: 8px; margin-top: 16px; font-size: 13px; color: #606266; }
+    .page-btn { width: 28px; height: 28px; border: 1px solid #dcdfe6; border-radius: 4px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+    .page-btn.active { background: #409eff; color: #fff; border-color: #409eff; }
+  </style>
+</head>
+<body>
+
+<div class="page-card">
+  <div class="page-title">规则管理</div>
+  
+  <!-- 搜索栏 -->
+  <div class="search-bar">
+    <div class="search-item">
+      <label>规则名称</label>
+      <input type="text" placeholder="请输入规则名称">
+    </div>
+    <div class="search-item">
+      <label>状态</label>
+      <select>
+        <option>全部</option>
+        <option>草稿</option>
+        <option>审核中</option>
+        <option>已通过</option>
+        <option>已上线</option>
+        <option>已下线</option>
+      </select>
+    </div>
+    <div class="search-item">
+      <label>分类</label>
+      <select>
+        <option>全部</option>
+        <option>餐饮</option>
+        <option>商超</option>
+        <option>景区</option>
+      </select>
+    </div>
+    <div class="search-item">
+      <label>创建时间</label>
+      <input type="text" placeholder="开始日期" style="min-width:130px">
+      <span style="color:#909399;">~</span>
+      <input type="text" placeholder="结束日期" style="min-width:130px">
+    </div>
+    <button class="btn btn-primary">查询</button>
+    <button class="btn btn-default">重置</button>
+  </div>
+  
+  <!-- 工具栏 -->
+  <div class="toolbar">
+    <div class="toolbar-left">
+      <button class="btn btn-success">+ 新增规则</button>
+      <button class="btn btn-default">导出</button>
+    </div>
+    <div class="toolbar-right">共 56 条记录</div>
+  </div>
+  
+  <!-- 表格 -->
+  <table>
+    <thead>
+      <tr>
+        <th style="width:50px;">序号</th>
+        <th style="width:200px;">规则名称</th>
+        <th style="width:100px;">分类</th>
+        <th style="width:100px;">状态</th>
+        <th style="width:160px;">创建时间</th>
+        <th style="width:120px;">创建人</th>
+        <th style="width:160px;">最后修改时间</th>
+        <th style="width:200px;">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>暑期联票优惠A规则</td>
+        <td>景区</td>
+        <td><span class="status-tag success">已上线</span></td>
+        <td>2026-06-15 10:30</td>
+        <td>张三</td>
+        <td>2026-06-20 14:22</td>
+        <td>
+          <button class="btn-text">查看</button>
+          <button class="btn-text">下线</button>
+        </td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>商超满减活动规则</td>
+        <td>商超</td>
+        <td><span class="status-tag primary">审核中</span></td>
+        <td>2026-06-18 09:15</td>
+        <td>李四</td>
+        <td>2026-06-18 09:15</td>
+        <td>
+          <button class="btn-text">查看</button>
+          <button class="btn-text">撤回</button>
+        </td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>餐饮券核销规则</td>
+        <td>餐饮</td>
+        <td><span class="status-tag warning">已通过</span></td>
+        <td>2026-06-10 16:00</td>
+        <td>王五</td>
+        <td>2026-06-19 11:30</td>
+        <td>
+          <button class="btn-text">查看</button>
+          <button class="btn-text">上线</button>
+          <button class="btn-text danger">打回</button>
+        </td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>景区门票分账规则V2</td>
+        <td>景区</td>
+        <td><span class="status-tag info">草稿</span></td>
+        <td>2026-06-22 08:45</td>
+        <td>张三</td>
+        <td>2026-06-25 17:00</td>
+        <td>
+          <button class="btn-text">编辑</button>
+          <button class="btn-text danger">删除</button>
+          <button class="btn-text">提交审核</button>
+        </td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td>商超配送费规则</td>
+        <td>商超</td>
+        <td><span class="status-tag info">已下线</span></td>
+        <td>2026-05-01 12:00</td>
+        <td>赵六</td>
+        <td>2026-06-01 09:00</td>
+        <td>
+          <button class="btn-text">查看</button>
+          <button class="btn-text">编辑</button>
+          <button class="btn-text danger">删除</button>
+          <button class="btn-text">重新上线</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <!-- 分页 -->
+  <div class="pagination">
+    <span>共 56 条</span>
+    <div class="page-btn">&lt;</div>
+    <div class="page-btn active">1</div>
+    <div class="page-btn">2</div>
+    <div class="page-btn">3</div>
+    <div class="page-btn">4</div>
+    <div class="page-btn">5</div>
+    <div class="page-btn">6</div>
+    <div class="page-btn">&gt;</div>
+    <span>10条/页</span>
+  </div>
+</div>
+
+</body>
+</html>

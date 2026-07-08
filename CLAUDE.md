@@ -68,6 +68,30 @@ aidlc-inception → aidlc-construction → aidlc-operations（条件）
 
 ## MCP 集成
 
+### Hooks（UI Mock 标准体系）
+
+Claude Code Hook 文件位于 `hooks/claude-code/`，用于 Inception 阶段的 UI Mock 质量保障：
+
+| 文件 | 触发 | 用途 |
+|------|------|------|
+| `ui-mock-one-page.sh` | PreToolUse (Write/Create/Edit) | 阶段2逐页确认，防止批量生成 |
+| `ui-mock-principles-check.sh` | PostToolUse (Write/Create/Edit) | 创建/编辑 HTML 后三层推导自检 |
+| `settings-hooks.jsonc` | — | 配置示例，合并到 `.claude/settings.local.json` |
+
+**安装到业务项目**：
+```bash
+# macOS / Linux
+mkdir -p .claude/hooks
+cp <aidlc-repo>/hooks/claude-code/*.sh .claude/hooks/
+chmod +x .claude/hooks/*.sh
+# 将 settings-hooks.jsonc 内容合并到 .claude/settings.local.json
+
+# Windows (PowerShell)
+New-Item -ItemType Directory -Force -Path .claude\hooks
+Copy-Item <aidlc-repo>\hooks\claude-code\*.sh .claude\hooks\
+# 将 settings-hooks.jsonc 内容合并到 .claude\settings.local.json
+```
+
 ### loeyae-skills（编码规范）
 
 使用 `loeyae-skills` MCP 服务获取编码规范（渐进式披露 v2.0）：

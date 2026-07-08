@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920">
+  <title>示例表单弹窗页</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      width: 1920px;
+      min-height: 1080px;
+      background: rgba(0,0,0,0.3);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 80px 20px;
+    }
+    
+    /* 弹窗 */
+    .dialog { background: #fff; border-radius: 8px; width: 640px; box-shadow: 0 8px 32px rgba(0,0,0,0.15); }
+    .dialog-header { padding: 16px 20px; border-bottom: 1px solid #ebeef5; display: flex; justify-content: space-between; align-items: center; }
+    .dialog-title { font-size: 16px; font-weight: 600; color: #303133; }
+    .dialog-close { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; color: #909399; cursor: pointer; font-size: 18px; }
+    .dialog-body { padding: 20px; }
+    .dialog-footer { padding: 12px 20px; border-top: 1px solid #ebeef5; display: flex; justify-content: flex-end; gap: 8px; }
+    
+    /* 表单 */
+    .form-row { display: flex; align-items: flex-start; margin-bottom: 16px; }
+    .form-label { width: 100px; text-align: right; padding-right: 12px; font-size: 13px; color: #606266; line-height: 32px; }
+    .form-label .required { color: #f56c6c; margin-right: 2px; }
+    .form-content { flex: 1; }
+    .form-input { width: 100%; height: 32px; border: 1px solid #dcdfe6; border-radius: 4px; padding: 0 10px; font-size: 13px; }
+    .form-select { width: 100%; height: 32px; border: 1px solid #dcdfe6; border-radius: 4px; padding: 0 10px; font-size: 13px; }
+    .form-textarea { width: 100%; min-height: 80px; border: 1px solid #dcdfe6; border-radius: 4px; padding: 8px 10px; font-size: 13px; resize: vertical; }
+    .form-hint { font-size: 11px; color: #909399; margin-top: 4px; }
+    .form-radio-group { display: flex; gap: 16px; line-height: 32px; font-size: 13px; color: #606266; }
+    .form-radio-group input[type="radio"] { margin-right: 4px; }
+    
+    /* 按钮 */
+    .btn { height: 32px; padding: 0 16px; border-radius: 4px; font-size: 13px; border: none; cursor: pointer; }
+    .btn-primary { background: #409eff; color: #fff; }
+    .btn-default { background: #fff; border: 1px solid #dcdfe6; color: #606266; }
+    
+    /* 条件分支展示 */
+    .condition-branch { border: 1px dashed #409eff; border-radius: 4px; padding: 12px; margin-top: 8px; position: relative; }
+    .condition-branch-label { position: absolute; top: -9px; left: 8px; background: #409eff; color: #fff; font-size: 9px; padding: 0 4px; border-radius: 2px; }
+  </style>
+</head>
+<body>
+
+<div class="dialog">
+  <div class="dialog-header">
+    <span class="dialog-title">新增规则</span>
+    <span class="dialog-close">×</span>
+  </div>
+  <div class="dialog-body">
+    <div class="form-row">
+      <div class="form-label"><span class="required">*</span>规则名称</div>
+      <div class="form-content">
+        <input class="form-input" type="text" placeholder="请输入规则名称（最多30字）">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-label"><span class="required">*</span>分类</div>
+      <div class="form-content">
+        <select class="form-select">
+          <option value="">请选择分类</option>
+          <option>餐饮</option>
+          <option>商超</option>
+          <option>景区</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-label"><span class="required">*</span>有效期</div>
+      <div class="form-content">
+        <!-- 基准选项 -->
+        <div class="form-radio-group">
+          <label><input type="radio" name="validity" checked> 购买后 <input class="form-input" style="width:60px; display:inline-block; margin: 0 4px;" value="30"> 天</label>
+        </div>
+        <!-- 条件分支：选中「固定日期范围」时 -->
+        <div class="condition-branch">
+          <span class="condition-branch-label">选中「固定日期范围」时</span>
+          <div class="form-radio-group">
+            <label><input type="radio" name="validity2" checked> 固定日期范围</label>
+          </div>
+          <div style="display:flex; gap:8px; align-items:center; margin-top:8px;">
+            <input class="form-input" type="text" value="2026-07-01" style="width:140px;">
+            <span style="color:#909399;">至</span>
+            <input class="form-input" type="text" value="2026-12-31" style="width:140px;">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-label">备注</div>
+      <div class="form-content">
+        <textarea class="form-textarea" placeholder="请输入备注信息（选填）"></textarea>
+        <div class="form-hint">最多200字</div>
+      </div>
+    </div>
+  </div>
+  <div class="dialog-footer">
+    <button class="btn btn-default">取消</button>
+    <button class="btn btn-primary">确认</button>
+  </div>
+</div>
+
+</body>
+</html>
