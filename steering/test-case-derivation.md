@@ -1,21 +1,21 @@
-# 测试用例派生规范（步骤 6.5）
+# 测试用例派生规范（I13）
 
 ## 目的
 
 **将产品用户故事（Gherkin）翻译为可执行测试用例点 UC-D**
 
-这是"产品要什么"到"怎么验证"的翻译点。产品在步骤 4 用 Gherkin 写场景（用户语义），本步骤在应用设计产出 API 契约后，把场景锚定到具体的 endpoint/page/steps，产出 Construction 和 Operations 都能消费的可执行用例。
+这是"产品要什么"到"怎么验证"的翻译点。产品在I7 用 Gherkin 写场景（用户语义），本步骤在应用设计产出 API 契约后，把场景锚定到具体的 endpoint/page/steps，产出 Construction 和 Operations 都能消费的可执行用例。
 
 ## 前置条件
 
-- 步骤 4 用户故事已完成（Gherkin 场景就绪）
-- 步骤 6 应用设计已完成（`api-contracts.md` 或前端路由/页面结构就绪）
+- I7 用户故事已完成（Gherkin 场景就绪）
+- I12 应用设计已完成（`api-contracts.md` 或前端路由/页面结构就绪）
 
 ## 产品故事基线规则（派生前校验）
 
 ### 产品故事是不可变基线
 
-步骤 4 产出的用户故事（含 Gherkin 场景）是**产品基线**，本步骤及后续阶段不得擅自修改其语义。
+I7 产出的用户故事（含 Gherkin 场景）是**产品基线**，本步骤及后续阶段不得擅自修改其语义。
 
 - 派生测试用例时，**原样复制** Gherkin 到用例文件的"产品故事溯源"段，不得改写
 - Construction 阶段若发现实现与产品故事不一致，**不得**自产"开发版故事"替代，必须走 CR 流程（见 `change-request-process.md`）
@@ -23,7 +23,7 @@
 
 ### 烂基线自检（派生时暴露）
 
-派生过程中对每个 Gherkin 场景自检以下三类问题，不通过则**回退步骤 4 找产品补场景**，不得带着模糊基线继续：
+派生过程中对每个 Gherkin 场景自检以下三类问题，不通过则**回退 I7 用户故事 找产品补场景**，不得带着模糊基线继续：
 
 | 问题类型 | 判定 | 处理 |
 |---|---|---|
@@ -50,7 +50,7 @@
 ---
 id: UC-D-{编号}
 title: {用例标题，描述行为}
-story_ref: US-{故事编号}               # 步骤 4 的用户故事编号
+story_ref: US-{故事编号}               # I7 的用户故事编号
 scenario_ref: "{Gherkin 场景名}"        # 故事内的 Gherkin 场景名
 type: api                              # api | e2e | unit
 priority: P0                           # P0 阻塞 | P1 重要 | P2 可选
@@ -59,7 +59,7 @@ status: ready                          # ready | blocked | deprecated
 
 # UC-D-{编号} {用例标题}
 
-## 产品故事溯源（不可修改，从步骤 4 原样复制）
+## 产品故事溯源（不可修改，从I7 原样复制）
 
 ```gherkin
 Scenario: {场景名}
@@ -88,19 +88,19 @@ Scenario: {场景名}
 ## 派生日志
 - 派生自: US-{编号} / 场景"{场景名}"
 - 派生时间: {ISO 时间戳}
-- 派生者: 开发（步骤 6.5）
+- 派生者: 开发（I13）
 - 变更记录: （走 CR 时追加，注明 CR 编号、原因、产品批准）
 ```
 
 ## type 语义
 
-| type | 含义 | Construction 消费 | Operations 消费 |
-|---|---|---|---|
-| `api` | 后端接口级 | @TestCaseId 单测/集成测试 | 测试执行 skill 走接口测试框架 |
-| `e2e` | 前端页面级 | 可选 | 测试执行 skill 走 E2E 框架 |
-| `unit` | 纯逻辑级 | @TestCaseId 单测 | 不重复跑 |
+| type | 含义 | Construction 消费方式 |
+|---|---|---|
+| `api` | 后端接口级 | 在 TDD 或 C8 集成/契约测试中实现并执行 |
+| `e2e` | 前端页面级 | 在 C8 使用项目已有 E2E 工具执行 |
+| `unit` | 纯逻辑级 | 在单元 TDD 中实现并执行 |
 
-> **loeyae-boot-framework 项目**：Operations 消费方使用 `loeyae-service-testing` skill（loeyae-mcp 提供），api 走 pytest，e2e 走 Playwright MCP。其他技术栈项目使用自定义测试执行 skill。
+测试工具必须来自项目现有配置或经用户确认；不得因派生用例擅自引入测试框架。所有 ready 用例在 Construction 完成前必须有执行证据或明确的不适用依据。
 
 ## 强制字段
 
@@ -123,7 +123,7 @@ Scenario: {场景名}
    | 覆盖性 | 每个产品 Gherkin 场景都有对应 UC-D？ | 🔴 补派生 |
    | 锚点存在 | type/endpoint/page 已填？ | 🔴 补锚点 |
    | GWT 映射完整 | Given/When/Then 覆盖映射无空缺？ | 🔴 补步骤 |
-   | 宽泛暴露 | 场景拆不出单步执行步骤？ | 回退步骤 4，带具体问题找产品补场景 |
+   | 宽泛暴露 | 场景拆不出单步执行步骤？ | 回退 I7 用户故事，带具体问题找产品补场景 |
    | 技术可行 | Gherkin 期望能否按字面实现？ | 不可行→status=blocked，记回执，列待产品决策 |
 
 4. **技术可行性回执**：派生时发现某产品场景技术上无法按 Gherkin 期望实现，**不得默默改用例期望**：

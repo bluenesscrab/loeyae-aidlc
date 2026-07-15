@@ -2,278 +2,48 @@
 name: "loeyae-aidlc"
 displayName: "Loeyae AI-DLC"
 version: "1.19.0"
-description: "基于 AI-DLC 方法论的团队开发工作流。当用户消息中出现 AI-DLC 或 aidlc 时必须激活，无论任务复杂度如何。覆盖需求分析、架构设计、代码生成和测试，集成 Loeyae Boot Framework 编码规范和 Vue 3 前端规范。"
+description: "基于 AI-DLC 方法论的完整开发流程闭环。当用户消息中出现 AI-DLC 或 aidlc 时必须激活。覆盖 Inception 规划、Construction 实现与验证，以及按条件执行的 Operations 部署准备；不覆盖部署后的生产运维。"
 keywords: ["aidlc", "AI-DLC", "继续上次的工作", "认领单元", "团队协作模式", "loeyae", "功能设计", "用户故事", "架构设计", "单元生成", "代码审查", "逆向工程", "根因分析", "修改功能", "变更需求", "调整功能", "改动需求", "需求变更"]
 author: "Loeyae Team"
 ---
 
-# Loeyae AI-DLC
+# Loeyae AI-DLC（Kiro Power 入口）
 
-**关键首步**：必须先读取并加载 `steering/core-workflow.md`，然后再执行任何其他操作。这是不可协商的。在加载此文件之前，不要回复用户，不要启动任何工作流。
+**关键首步**：激活后必须先读取 `steering/core-workflow.md`，再执行其他操作。阶段路由、执行条件、审批级别和完成标准均以该文件为准，本入口不重复共享流程细节。
 
-Loeyae AI-DLC 是基于 AI-DLC 方法论定制的团队开发工作流，自适应地调整工作流程以匹配项目需求，同时集成团队编码规范。
+## Kiro 接入
 
-> **单仓库三入口**：本仓库同时是 Kiro Power、Claude Code 插件、OpenCode 插件的统一源。三个入口共享同一份 `steering/`（流程规则事实标准）和 `skills/`（平台无关薄入口）。Kiro 入口为本 `POWER.md`，Claude Code 入口为 `CLAUDE.md` + `.claude-plugin/`，OpenCode 入口为 `plugin.json` + `src/`。详见 `README.md`。
+1. 在 Kiro Powers 面板中通过本地目录或 Git 仓库添加本 Power。
+2. Power 激活后，Kiro 按需读取共享的 `steering/`、`skills/`、`agents/` 和 `hooks/kiro/`。
+3. 在聊天中输入 `使用 AI-DLC，展示欢迎消息` 验证接入。
 
-## 概述
+本仓库同时支持 Claude Code 和 OpenCode；各平台入口与安装总览见 `README.md`。OpenCode 的真实入口是 `package.json` 及其 `main` 指向的 `.opencode/plugins/loeyae-aidlc.js`。
 
-两阶段自适应开发工作流，支持团队协作和多模块并行开发：
+## Kiro 能力适配
 
-- **产品级 Inception（多模块模式）** — 模块划分、接口契约（产品边界）
-- **Inception（规划阶段）** — 需求分析、用户故事、架构设计（做什么、为什么做）
-  - 支持**接力模式**：PM 和架构师按步骤接力完成
-- **Construction（实现阶段）** — 功能设计、TDD 代码生成、两阶段审查、构建测试（怎么做）
-  - 支持**认领模式**：开发者自主认领单元，独立开发
-  - **强制 TDD**：RED-GREEN-REFACTOR 循环，没有失败测试就没有生产代码
-  - **平台自适应子 Agent**：支持子 Agent 的平台派发独立实现者，不支持则单 Agent 两阶段自审
-  - **两阶段代码审查**：规格合规审查 → 代码质量审查
-  - **系统化调试**：四阶段根因分析，3+ 次修复失败则质疑架构
-  - **说服式防护**：通过内化原因阻止跳步，替代硬规则
-- **Operations（运维阶段，条件）** — CI/CD 配置文件生成、K8s 部署清单、部署文档（如何运行和维护）
-  - 根据项目类型自动选择模板（Spring Boot / Node.js / Python / Vue 3）
-  - 生成完整 Jenkins Pipeline（build → push → deploy 自动触发链）
-  - 生成 Kubernetes 部署清单（test/prod 双环境）
+- **工作流加载**：首先加载 `steering/core-workflow.md`，随后按其中路由按需读取规则，禁止预加载全部 steering。
+- **会话延续**：工作流状态记录在业务项目的 `docs/aidlc/state.md`。
+- **子 Agent**：读取 `agents/` 中的平台无关指令，通过 Kiro `invoke_sub_agent` 能力执行；不可用时按共享规则降级。
+- **Hooks**：Kiro 模板位于 `hooks/kiro/`，复制与使用说明见 `hooks/README.md`。
+- **MCP**：`mcp.json` 声明 `loeyae-skills` 和可选的 `awesome-design` 服务。
 
-**架构模式**：
-- **单模块模式**：小项目，传统流程
-- **多模块模式**：大项目，先产品级规划，再按模块并行开发
+## MCP 使用边界
 
-## Onboarding
+- `loeyae-skills`：仅在 Java + Loeyae Boot Framework 项目的 Construction 阶段按需加载框架编码规范；优先使用 outline 和 section 类工具。
+- `awesome-design`：仅在 UI Mock 场景且用户选择设计风格时使用。
+- MCP 不可用时，应明确告知用户，并仅依赖仓库中已存在的通用规则继续可执行部分。
 
-### 前置条件
+## 三阶段术语
 
-- **Kiro IDE** 已安装并正常运行
-- **MCP 服务可用**：`loeyae-skills` MCP 服务（`https://mcp-skills.allbelieves.com/sse`）需要网络可达；`awesome-design` MCP 服务（`https://mcp-design.allbelieves.com/sse`）可选（UI Mock 设计风格选择时使用）
-- **项目类型**：适用于任何软件开发项目；如果是 Java + Loeyae Boot Framework 项目，将自动启用编码规范集成
-
-### 安装
-
-1. 在 Kiro Powers 面板中添加本 Power（通过本地目录或 Git 仓库）
-2. 安装后 `loeyae-skills` 和 `awesome-design` MCP 服务会自动配置
-3. 验证：在聊天中输入 `使用 AI-DLC，展示欢迎消息` 确认 Power 正常激活
-
-### 基本配置
-
-无需额外配置。Power 激活后会自动检测工作区环境（技术栈、框架版本、项目结构），并将检测结果记录到 `docs/aidlc/state.md`。
-
-## 激活方式
-
-用户以以下方式开始请求时激活：
-```
-使用 AI-DLC，[描述你的开发需求]
+```text
+Inception（规划） → Construction（实现与验证） → Operations（部署准备，条件）
 ```
 
-## MCP 工具
+Operations 只为已确认的目标环境生成交付配置和可执行部署说明，不覆盖部署后的生产运维。具体流程统一见 `steering/core-workflow.md`。
 
-### loeyae-skills（编码规范）
+## 故障排除
 
-本 Power 集成了 `loeyae-skills` MCP 服务，提供 Loeyae Boot Framework 编码规范（渐进式披露 v2.0）：
-
-- `get_skill_outline(name)` — 获取 Skill 的章节大纲（导航用，极低 token）
-- `get_skill_section(name, section)` — 获取指定章节内容（**优先使用**，按需加载，避免 token 浪费）
-- `get_skill_summary(name)` — 获取摘要信息（大纲 + 核心章节预览）
-- `get_skill_content(name)` — 获取完整内容（谨慎使用，可能消耗大量 token）
-- `search_skill(query)` — 按关键词搜索相关规范（返回章节级定位）
-
-**渐进式披露策略**：优先 `outline` → `section`，避免直接调用 `get_skill_content` 导致 token 浪费。
-
-**适用条件**：仅当项目为 Java 且引用了 Loeyae Boot Framework 时，才在 Construction 阶段调用 MCP Skill。工作区检测阶段会自动识别框架并记录到 state.md。
-
-**可用 Skill 分类**：
-- 核心业务：`loeyae-crud`、`loeyae-auth`、`loeyae-validation`、`loeyae-error-handling`、`loeyae-data-access`、`loeyae-web-infra`、`loeyae-data-security`、`loeyae-dict`
-- 基础设施：`loeyae-cache`、`loeyae-message`、`loeyae-message-audit`、`loeyae-job`、`loeyae-mail`、`loeyae-feign`、`loeyae-license`、`loeyae-cms`、`loeyae-mybatis-audit`
-- 工具与模式：`loeyae-utils`、`loeyae-decide`、`loeyae-optional-util`、`loeyae-test`、`loeyae-test-base`、`loeyae-test-utils`、`loeyae-framework-modules`、`loeyae-database-design`、`loeyae-database-naming`、`loeyae-project-structure`
-- 低代码：`loeyae-lowcode-getting-started`、`loeyae-lowcode-crud-template`、`loeyae-lowcode-flow`、`loeyae-lowcode-groovy`、`loeyae-lowcode-amis`、`loeyae-lowcode-component-dev`、`loeyae-lowcode-api-integration`、`loeyae-lowcode-best-practices`
-- 工作流：`loeyae-flowable`、`loeyae-flowable-integration`、`loeyae-flowable-approval`、`loeyae-flowable-deploy`、`loeyae-flowable-instance`、`loeyae-flowable-editor`
-
-### awesome-design（UI 设计风格）
-
-集成 `awesome-design` MCP 服务，提供品牌设计风格查询，用于 UI Mock 阶段：
-
-- `list_design_styles(category?)` — 列出可用设计风格（支持按分类筛选：productivity、consumer、fintech、developer、ai、design、automotive、media）
-- `get_design_style(name)` — 获取指定风格的完整 DESIGN.md 内容
-- `get_design_tokens(name)` — 获取精简设计 tokens（配色、字体、间距、圆角、关键组件）
-
-**适用条件**：Inception 阶段 UI Mock 步骤中，当用户选择使用设计风格时调用。存量项目沿用现有框架风格，不调用此服务。
-
-## Agents（子 Agent 指令）
-
-平台无关的子 Agent 指令定义，位于 `agents/` 目录：
-
-| 文件 | 用途 |
-|------|------|
-| `orchestrator.md` | Construction 分段调度器（确定批次策略、调度执行、更新进度） |
-| `batch-executor.md` | Construction 批次执行者（在独立上下文中执行 TDD + 审查） |
-
-**平台适配**：
-- **Kiro**：通过 `invoke_sub_agent`（`general-task-execution`）调用，传入指令内容
-- **Claude Code**：通过 Workflow（`.claude/workflows/aidlc-construction-batch.js`）调用
-- **OpenCode**：AI 读取指令后自律执行
-
-## Hooks（平台 Hook 模板）
-
-Hook 模板文件需复制到目标项目使用。不同平台安装方式不同：
-
-### Construction Hooks
-
-| 文件 | 用途 |
-|------|------|
-| `hooks/kiro/kiro-batch-progress.json` | PostTaskExec 自动更新 state.md 批次进度 |
-
-### UI Mock Hooks（Inception 阶段）
-
-UI Mock 标准体系的 Hook 文件位于 `hooks/kiro/`：
-
-| 文件 | 用途 |
-|------|------|
-| `ui-mock-one-page.json` | PreToolUse: 阶段2逐页确认，防止批量生成 |
-| `ui-mock-principles-check.json` | PostFileCreate: 创建 HTML 后三层推导自检 |
-| `ui-mock-principles-edit-check.json` | PostFileSave: 编辑 HTML 后三层推导自检 |
-
-### 安装 UI Mock Hooks 到业务项目
-
-当用户要求安装 UI Mock 标准体系到当前项目时，AI 应自动执行以下操作：
-
-1. 读取本 Power 中 `hooks/kiro/ui-mock-*.json` 的内容
-2. 写入到当前项目的 `.kiro/hooks/` 目录（不存在则创建）
-3. 读取本 Power 中 `steering/inception-ui-mock-*.md` 的内容
-4. 写入到当前项目的 `.kiro/steering/` 目录
-5. 文件就位即生效，无需重启
-
-> AI 直接用文件工具完成安装，用户无需手动操作。
-
-## Steering 文件
-
-所有 steering 文件位于 `steering/` 目录：
-
-### 核心工作流
-- `core-workflow.md` — 主工作流定义（必须首先加载）
-- `core-workflow-slim.md` — 精简版工作流（仅 OpenCode 入口每次对话注入使用；Kiro 不使用）
-
-### 通用规范（common-*）
-- `common-context-optimization.md` — 长任务自动分段执行（上下文管理）
-- `common-process-overview.md` — 流程概览
-- `common-welcome-message.md` — 欢迎消息
-- `common-question-format-guide.md` — 问题格式指南
-- `common-content-validation.md` — 内容验证规则
-- `common-quality-gates.md` — 质量门禁规则（检查清单）
-- `common-complexity-assessment.md` — 复杂度评估与快速通道（分级 + 阈值）
-- `common-step-completion-protocol.md` — 步骤完成强制协议（state.md 更新 + 微型摘要 + 审计）
-- `common-audit-logging.md` — 审计日志规范（分段化 + 格式 + 工具使用）
-- `common-directory-structure.md` — 目录结构规范（单模块 + 多模块）
-- `common-persuasion-defense.md` — 说服式防护与验证纪律（替代硬规则的执行方式）
-- `common-systematic-debugging.md` — 系统化调试（四阶段根因分析流程）
-- `common-session-continuity.md` — 会话连续性
-- `common-session-handoff.md` — Session 交接提示词（写入 state.md + 完成消息内置选项）
-- `common-team-collaboration.md` — 团队协作模型（接力模式 + 认领模式）
-- `common-token-management.md` — Token 管理策略（分层摘要 + 审计分段 + 按需加载 + 文档切片）
-- `common-terminology.md` — 术语表
-- `common-depth-levels.md` — 自适应深度说明
-- `common-error-handling.md` — 错误处理
-- `common-overconfidence-prevention.md` — 过度自信防范
-- `common-workflow-changes.md` — 工作流变更管理（变更入口 + 影响评估 + 8 种变更类型处理）
-- `common-ascii-diagram-standards.md` — ASCII 图标准
-
-### 团队编码规范（common-*）
-- `common-tech-frontend-pc.md` — 前端编码规范（PC端 / Vue 3 / Element Plus）
-- `common-tech-frontend-uniapp.md` — 前端编码规范（微信小程序&APP / UniApp）
-- `common-tech-security.md` — 安全编码规范
-- `common-tech-testing.md` — 测试规范
-- `common-database-design.md` — 数据库设计规范
-- `common-figma-design-standards.md` — Figma 设计稿还原规范
-
-### Inception 阶段
-- `inception-workspace-detection.md` — 工作区检测
-- `inception-reverse-engineering.md` — 逆向工程
-- `inception-requirements-analysis.md` — 需求分析主流程（按需加载子文件）
-  - `inception-requirements-methods.md` — 专业方法论（仅全面深度加载）
-  - `inception-requirements-prioritization.md` — 优先级排序（标准+全面深度加载）
-  - `inception-requirements-validation.md` — 5维度验证+迭代回退（标准+全面深度加载）
-  - `inception-requirements-data-model.md` — 数据建模（仅全面深度加载）
-- `inception-user-stories.md` — 用户故事
-- `inception-ui-mock.md` — UI Mock（HTML 页面原型制作）
-- `inception-workflow-planning.md` — 工作流规划
-- `inception-application-design.md` — 应用设计
-- `inception-units-generation.md` — 单元生成
-
-### 产品级 Inception（多模块模式）
-- `product-inception.md` — 产品级 Inception 步骤定义
-- `product-module-division.md` — 模块划分规则和问题模板
-- `product-contracts.md` — 模块间接口契约规范
-
-### Construction 阶段
-- `construction-tdd.md` — 测试驱动开发（强制 TDD 规范）
-- `construction-subagent-execution.md` — 平台自适应子 Agent 执行
-- `construction-code-review.md` — 两阶段代码审查（规格合规 → 代码质量）
-- `construction-functional-design.md` — 功能设计
-- `construction-nfr-requirements.md` — NFR 需求
-- `construction-nfr-design.md` — NFR 设计
-- `construction-infrastructure-design.md` — 基础设施设计
-- `construction-code-generation.md` — 代码生成（流程编排）
-- `construction-ui-implementation-bridge.md` — UI 实现桥接（Mock→跨端代码翻译流程 + 前端平台规范模板 + 门禁）
-- `construction-loeyae-compliance.md` — Loeyae Boot 编码规范加载与合规验证（MCP Skill 表 + 逐项对照）
-- `construction-build-and-test.md` — 构建和测试
-- `construction-implementation-report.md` — 实施与验收报告（单元级微型摘要 + 阶段级完整报告）
-
-### Operations 阶段
-- `operations-operations.md` — CI/CD 配置生成与部署文档（流程编排）
-- `operations-templates.md` — 配置模板（Dockerfile + Jenkinsfile + K8s + Nginx，按需加载）
-
-### Change Request（变更请求）
-- `change-request-process.md` — 变更请求详细流程（CR1-CR5 步骤定义、模板、执行规则）
-
-### 质量门禁
-- `quality-gate-implementation.md` — 质量门禁实现细则（各阶段检查项的具体执行标准）
-
-## 参考资源
-
-- **方法论来源**: [AI-DLC (AWS)](https://aws.amazon.com/blogs/devops/ai-driven-development-life-cycle/)
-- **原始仓库**: [aidlc-workflows](https://github.com/awslabs/aidlc-workflows)
-
-## Troubleshooting
-
-### MCP 服务连接失败
-
-**症状**：调用 MCP Skill 工具时报错 "Connection refused" 或超时
-
-**解决方案**：
-1. 确认网络可达：检查是否能访问 `https://mcp-skills.allbelieves.com/sse`
-2. 检查 Kiro MCP 面板中 `loeyae-skills` 服务状态是否为 "Connected"
-3. 如果显示断开，点击重新连接或重启 Kiro
-4. 如果持续失败，MCP 服务可能暂时不可用，可以跳过 Skill 调用继续开发（编码规范将依赖 steering 文件中的通用规范）
-
-### Steering 文件加载失败
-
-**症状**：AI 提示无法读取某个 steering 文件
-
-**解决方案**：
-1. 确认 Power 安装路径正确且文件完整
-2. 检查 `steering/` 目录下是否存在对应文件
-3. 尝试重新安装 Power（移除后重新添加）
-
-### 工作区检测未识别技术栈
-
-**症状**：`state.md` 中技术栈信息为空或不正确
-
-**解决方案**：
-1. 确认项目根目录包含标识文件（如 `pom.xml`、`package.json`、`build.gradle`）
-2. 手动告知 AI 技术栈信息：`技术栈是 Spring Boot + Loeyae Boot Framework`
-3. AI 会更新 `state.md` 中的技术栈记录
-
-### 会话恢复时上下文丢失
-
-**症状**：使用"继续上次的工作"后 AI 不知道当前进度
-
-**解决方案**：
-1. 确认 `docs/aidlc/state.md` 文件存在且内容是最新的
-2. 如果 state.md 丢失，检查 Git 历史恢复
-3. 手动提供上下文：`当前在 Construction 阶段，正在开发 [unit-name] 单元，已完成功能设计`
-
-### 多模块模式下模块间接口不一致
-
-**症状**：开发时发现实际接口与 `contracts.md` 定义不匹配
-
-**解决方案**：
-1. 以 `contracts.md` 为准，修改代码适配契约
-2. 如果确实需要变更接口，使用：`更新 contracts.md，[变更描述]`
-3. 通知其他模块开发者拉取最新 contracts.md
+- **Power 未激活**：确认 Power 安装目录完整，并重新在 Kiro Powers 面板加载。
+- **MCP 连接失败**：检查 Kiro MCP 面板连接状态及远程服务网络可达性。
+- **Steering 加载失败**：确认安装包包含 `steering/core-workflow.md`，必要时重新安装 Power。
+- **会话恢复失败**：确认业务项目中的 `docs/aidlc/state.md` 存在且为最新状态。

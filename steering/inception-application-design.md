@@ -160,9 +160,9 @@
 
 ### 10.5 过渡：测试用例派生
 
-> 应用设计产物就绪后，进入步骤 6.5（测试用例派生）。该步骤由独立 steering 文件 `test-case-derivation.md` 驱动，按路由表顺序执行。
+> 应用设计产物就绪后，进入I13（测试用例派生）。该步骤由独立 steering 文件 `test-case-derivation.md` 驱动，按路由表顺序执行。
 >
-> 本步骤不在 `inception-application-design.md` 内部执行——完成应用设计审批后，路由表自动跳转步骤 6.5。
+> 本步骤不在 `inception-application-design.md` 内部执行——完成应用设计审批后，路由表自动跳转I13。
 
 ### 11. 记录审批
 - 在 `docs/aidlc/audit.md` 中记录审批提示及时间戳

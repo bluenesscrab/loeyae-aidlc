@@ -1,6 +1,6 @@
 {
   "name": "loeyae-aidlc",
-  "description": "AI-DLC development workflow with complete closed-loop execution - Inception (requirements analysis, 5-dimension validation, prioritization), Construction (TDD, two-stage code review, systematic debugging, build/test), Operations (CI/CD config, K8s manifests, deployment docs)",
+  "description": "Complete AI-DLC development lifecycle: Inception planning, Construction implementation and validation, and conditional Operations deployment preparation; excludes post-deployment production operations.",
   "version": "1.19.0",
   "author": {
     "name": "Loeyae Team",

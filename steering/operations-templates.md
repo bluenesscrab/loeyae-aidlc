@@ -1,6 +1,6 @@
 # Operations 配置模板
 
-> **加载时机**：仅在 `operations-operations.md` 步骤 5（生成 CI/CD 配置文件）时加载。
+> **加载时机**：仅在 `operations-operations.md` O2 交付配置生成时加载。
 > **不要在其他阶段预加载此文件。**
 
 ---
@@ -178,28 +178,14 @@ node {
             }
             def source = "deployment-${params.ENV_LABEL}.yml"
             sh "sed -e 's#{TAG}#${buildId}#g' ${source} > deployment-{服务名}.yml"
-            if (params.ENV_LABEL == 'prod') {
-                sh "kubectl apply -f deployment-{服务名}.yml --kubeconfig=/home/bys/.kube/hq.config"
-            } else {
-                sh "kubectl apply -f deployment-{服务名}.yml"
+            withCredentials([file(credentialsId: '{集群凭据ID}', variable: 'KUBECONFIG')]) {
+                sh "kubectl apply -f deployment-{服务名}.yml --kubeconfig=$KUBECONFIG"
             }
         }
     }
     stage("Post") {
-        echo "success"
-        def jobName = JOB_NAME
-        if (params.TASK_TYPE == 'build' && currentBuild.currentResult == 'SUCCESS') {
-            try {
-                def nextJobName = jobName.replaceAll("assembly", "deploy")
-                build job: nextJobName, parameters: [text(name: 'IMAGE_TAG', value: BUILD_ID), text(name: 'ENV_LABEL', value: 'test'), text(name: 'TASK_TYPE', value: 'deploy')], propagate: false, quietPeriod: 9, wait: false
-            } catch (exc) { print(exc.getMessage()) }
-        }
-        if (params.TASK_TYPE == 'deploy' && params.ENV_LABEL == 'test' && currentBuild.currentResult == 'SUCCESS') {
-            try {
-                def nextJobName = jobName + "-prod"
-                build job: nextJobName, parameters: [text(name: 'IMAGE_TAG', value: BUILD_ID), text(name: 'ENV_LABEL', value: 'prod'), text(name: 'TASK_TYPE', value: 'deploy')], propagate: false, quietPeriod: 9, wait: false
-            } catch (exc) { print(exc.getMessage()) }
-        }
+        echo "pipeline completed"
+        // 环境晋级与生产审批仅按 operations-plan.md 中已确认的发布策略配置。
     }
 }
 ```
@@ -294,24 +280,28 @@ spec:
             periodSeconds: 10
 
 ---
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  annotations:
-    kubernetes.io/ingress.class: {Ingress类型}
   name: {服务名}
   namespace: {命名空间}
 spec:
+  ingressClassName: {Ingress类型}
   rules:
     - host: {域名}
       http:
         paths:
           - path: /
+            pathType: Prefix
             backend:
-              serviceName: {服务名}
-              servicePort: {端口名称}
+              service:
+                name: {服务名}
+                port:
+                  name: {端口名称}
   tls:
-    - secretName: {TLS证书密钥名}
+    - hosts:
+        - {域名}
+      secretName: {TLS证书密钥名}
 ```
 
 **test 与 prod 差异**：replicas、resources limits、namespace、环境变量（数据库地址等）。
@@ -398,7 +388,7 @@ node_modules/
 
 ### deployment-guide.md 模板
 
-参见 `operations-operations.md` 步骤 6 执行时生成，格式包含：
+参见 `operations-operations.md` O3 配置验证与部署文档 执行时生成，格式包含：
 - 项目信息
 - CI/CD 流程概览（build流程 + deploy流程 + 自动触发链）
 - 环境配置（test + prod）

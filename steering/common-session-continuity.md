@@ -208,7 +208,7 @@ B) 回顾之前的阶段（[显示可用阶段]）
 **规则参考**：页面级单一真相源的完整定义见 `common-page-source-of-truth.md`
 
 ## 错误处理
-如果在会话恢复期间产物缺失或损坏，请参阅 [error-handling.md](error-handling.md) 获取恢复流程指导。
+如果在会话恢复期间产物缺失或损坏，加载 `common-error-handling.md` 获取恢复流程指导。
 
 ## Session 交接
 

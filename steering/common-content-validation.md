@@ -38,7 +38,7 @@
 ```
 
 ### 实现模式
-```markdown
+````markdown
 ## 工作流可视化
 
 ### Mermaid 图表（语法有效时使用）
@@ -53,6 +53,7 @@ Phase 1: INCEPTION
 - Stage 2: Requirements Analysis (COMPLETED)
 [继续使用文本表示]
 ```
+````
 
 ## 通用内容验证
 

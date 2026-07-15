@@ -1,188 +1,35 @@
-# Compact 后自动恢复
+# Construction 上下文压缩恢复
 
-## 概述
+**职责**：定义 Construction 在上下文压缩或新会话后的断点恢复。统一入口和通用规则见 `common-session-continuity.md`。
 
-当 AI Agent 上下文被 compact（压缩/截断）后，需要自动恢复到正确的执行位置，避免重复执行已完成的工作或遗漏未完成的工作。
+## 唯一状态源
 
-**与其他 steering 的关系**：
-- `common-context-optimization.md` — 定义 progress.md 格式和恢复优先级
-- `common-session-continuity.md` — 定义 state.md 恢复流程
-- **本文件** — 定义各平台的 compact 检测和恢复触发机制
+`docs/aidlc/state.md` 是阶段、批次和单元进度的唯一事实来源。不得创建或优先读取独立 `progress.md`；单元级进度记录在 state.md 的“单元与批次进度”表中。
 
----
+## 恢复步骤
 
-## 恢复流程（通用）
-
-### 检测点
-
-在以下时机检测是否需要恢复：
-
-1. **Session 开始时** — 检查是否有未完成的 Construction 任务
-2. **Compact 后** — 检查 progress.md 确定恢复点
-3. **用户请求恢复时** — 明确的"继续"/"恢复"指令
-
-### 恢复步骤
-
-```
-1. 读取 docs/aidlc/construction/progress.md
-2. 找到第一个状态 ≠ complete 的单元
-3. 读取 docs/aidlc/state.md 确认当前阶段
-4. 如果阶段 = Construction：
-   a. 跳过所有 progress.md 中已 complete 的单元
-   b. 从未完成单元继续执行
-5. 如果阶段 ≠ Construction：
-   a. 按 common-session-continuity.md 恢复
-```
-
-### 恢复信任链
-
-```
-progress.md（单元级真实记录）
-    ↓ 优先
-state.md（阶段级状态）
-    ↓ 优先
-Agent 记忆（可能因 compact 丢失）
-```
-
----
+1. 读取 state.md，确认当前阶段、模块、批次、单元及活跃变更请求。
+2. 若当前阶段不是 Construction，返回 `common-session-continuity.md` 对应阶段路由。
+3. 重新加载当前单元的需求、故事、设计、共享接口和 Construction steering。
+4. 找到第一个状态不是 `complete` 的可执行单元。
+5. 对 `complete` 单元检查验证证据引用；证据缺失或产物不存在时标记 `blocked`，不得推断完成。
+6. 宣布恢复位置，从 `in_progress` 或首个 `pending` 单元继续。
 
 ## 平台适配
 
-### Claude Code
-
-在项目的 `CLAUDE.md` 中添加以下规则（compact 后会自动重读 CLAUDE.md）：
-
-```markdown
-## Construction 恢复规则
-
-当你被要求继续 Construction 任务，或检测到上下文可能被压缩时：
-
-1. **先读 progress.md**
-   - 路径：`docs/aidlc/construction/progress.md`
-   - 找到第一个状态不是 `complete` 的单元
-
-2. **不要重复执行**
-   - 所有标记 `complete` 的单元已经完成
-   - 产出文件已存在，不需要重新生成
-
-3. **从断点继续**
-   - 从第一个未完成单元开始
-   - 每个单元完成后更新 progress.md
-
-4. **如果 progress.md 不存在**
-   - 读取 state.md 确认是否在 Construction 阶段
-   - 如果是，创建 progress.md 并从第一个单元开始
-```
-
-### OpenCode
-
-在项目的 `AGENTS.md` 中添加以下规则：
-
-```markdown
-## Construction 恢复规则
-
-检测到上下文压缩或收到"继续"指令时：
-
-1. 读取 `docs/aidlc/construction/progress.md`
-2. 信任 progress.md 中的完成状态
-3. 跳过已完成单元，从未完成单元继续
-4. 每个单元完成后立即更新 progress.md
-
-### 恢复优先级
-
-1. progress.md 单元状态（最高）
-2. state.md 批次进度
-3. 自身记忆（最低，可能不准确）
-```
-
-### Kiro
-
-通过 SessionStart hook 注入恢复指令。
-
-**Hook 配置**（`.kiro/hooks/construction-recovery.json`）：
-
-```json
-{
-  "version": "v1",
-  "hooks": [{
-    "name": "Construction Recovery Check",
-    "trigger": "SessionStart",
-    "action": {
-      "type": "agent",
-      "prompt": "如果存在 docs/aidlc/construction/progress.md，先读取它确定 Construction 进度。所有标记 complete 的单元不需要重新执行。从第一个未完成单元继续。"
-    }
-  }]
-}
-```
-
-**创建方式**：
-
-```javascript
-// 使用 createHook 工具创建
-createHook({
-  id: "construction-recovery",
-  name: "Construction Recovery Check",
-  trigger: "SessionStart",
-  actionType: "agent",
-  prompt: "如果存在 docs/aidlc/construction/progress.md，先读取它确定 Construction 进度。所有标记 complete 的单元不需要重新执行。从第一个未完成单元继续。"
-})
-```
-
----
+Kiro、Claude Code 和 OpenCode 均执行同一恢复步骤。平台 Hook、Workflow 或启动指令只能触发读取 state.md，不得引入第二套状态文件或覆盖 state.md。
 
 ## 恢复输出
 
-恢复成功后输出：
-
-```
-🔄 检测到未完成的 Construction 任务
-📊 进度：X/Y 单元已完成
-⏭️ 从单元 [unit-id] 继续
-```
-
-恢复失败时输出：
-
-```
-⚠️ 无法确定恢复点
-📁 progress.md：[存在/不存在]
-📁 state.md：[存在/不存在]
-❓ 请确认：从头开始 / 指定恢复点？
+```text
+检测到未完成的 Construction 任务
+阶段/模块：{stage}/{module}
+进度：{completed}/{total} 单元
+恢复点：{unit-id} - {step}
 ```
 
----
+## 无法确定恢复点
 
-## 边界情况
-
-### progress.md 不存在但 state.md 显示在 Construction
-
-1. 读取 state.md 中的单元列表
-2. 检查每个单元的产出目录是否存在代码文件
-3. 根据文件存在情况推断进度
-4. 创建 progress.md 记录推断结果
-5. 向用户确认推断是否正确
-
-### progress.md 与实际文件不一致
-
-1. progress.md 标记 complete 但文件不存在 → 询问用户
-2. progress.md 标记 pending 但文件存在 → 更新 progress.md 为 complete
-
-### 跨模块任务
-
-1. 每个模块有独立的 progress.md 节（用 `## module-name` 分隔）
-2. 恢复时只恢复当前模块的进度
-3. 模块间不共享恢复状态
-
----
-
-## 与 state.md 的关系
-
-| 维度 | state.md | progress.md |
-|------|----------|-------------|
-| 粒度 | 阶段/批次 | 单元 |
-| 更新频率 | 阶段切换/批次完成 | 每个单元完成 |
-| 恢复用途 | 确定当前阶段 | 确定单元级进度 |
-| compact 敏感 | 中（批次级） | 低（单元级精确） |
-
-**恢复时两者配合**：
-1. state.md 确认当前在 Construction 阶段
-2. progress.md 确定具体从哪个单元继续
+- state.md 缺失：停止并询问用户是重建状态还是退出 AI-DLC。
+- state.md 与产物冲突：列出冲突，标记 blocked，等待用户确认；不得根据文件存在推断测试或审查已通过。
+- 活跃变更请求存在：优先恢复 CR 路由，不直接继续代码生成。

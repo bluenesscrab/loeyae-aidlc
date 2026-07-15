@@ -30,7 +30,7 @@
 - [ ] 生成 `docs/aidlc/inception/application-design/unit-of-work.md`，包含单元定义和职责
 - [ ] 生成 `docs/aidlc/inception/application-design/unit-of-work-dependency.md`，包含依赖矩阵
 - [ ] 生成 `docs/aidlc/inception/application-design/unit-of-work-story-map.md`，映射故事到单元
-- [ ] **仅全新项目**：在 `unit-of-work.md` 中记录代码组织策略（参见 code-generation.md 的结构模式）
+- [ ] **仅全新项目**：在 `unit-of-work.md` 中记录代码组织策略（沿用目标技术栈和项目现有约定；目录边界见 `common-directory-structure.md`）
 - [ ] 验证单元边界和依赖
 - [ ] 确保所有故事已分配到单元
 - [ ] **团队协作模式**：在 `unit-of-work.md` 中为每个单元添加认领状态表

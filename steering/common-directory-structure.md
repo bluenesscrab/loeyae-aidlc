@@ -1,129 +1,70 @@
 # 目录结构规范
 
-定义 AI-DLC 工作流的文档和代码组织规则。
+**职责**：定义 AI-DLC 过程产物的位置。应用代码结构由目标项目现有约定和技术栈决定，本流程不另建平行代码目录。
 
----
+## 通用规则
 
-## 关键规则
+- 应用代码、测试和部署配置位于工作区正常项目结构中，不放入 `docs/aidlc/`。
+- AI-DLC 需求、设计、计划、审计和报告仅放入 `docs/aidlc/`。
+- `docs/aidlc/state.md` 是三平台唯一恢复状态源。
+- 未执行的条件步骤不创建空目录或占位文件。
+- 多模块项目只加载当前模块产物和产品级契约，不加载无关模块。
 
-- **应用代码**：工作区根目录（绝不放在 docs/ 中）
-- **AIDLC 过程文档**：仅放在 docs/aidlc/
-- **设计文档**：docs/specs/（与 cc-aidlc、oc-aidlc 共享）
-- **实现计划**：docs/plans/（superpowers 写入）或 .sisyphus/plans/（Sisyphus 写入）
-- **项目结构**：参见 `construction-code-generation.md` 了解各项目类型的模式
-- **审计日志**：分段存储，audit-summary.md 为必加载的极简摘要
-- **文档切片**：多单元项目在单元生成后按单元拆分产出物（参见 `common-token-management.md` 策略 E）
-
----
-
-## 单模块模式
+## 单模块结构
 
 ```text
-<工作区根目录>/                      # ⚠️ 应用代码在这里
-├── [项目特定结构]                   # 因项目而异（参见 code-generation.md）
-│
-├── docs/                           # 📄 文档根目录（三版本共享）
-│   ├── specs/                      # 设计文档（cc-aidlc/oc-aidlc 共享）
-│   │   └── YYYY-MM-DD-<topic>-design.md
-│   ├── plans/                      # 实现计划（superpowers 写入）
-│   │   └── YYYY-MM-DD-<feature>.md
-│   └── aidlc/                      # AIDLC 过程文档
-│       ├── inception/              # 🔵 INCEPTION 阶段
-│       │   ├── plans/
-│       │   ├── audit-inception.md
-│       │   ├── reverse-engineering/
-│       │   │   └── decision-summary.md
-│       │   ├── requirements/
-│       │   │   ├── index.md
-│       │   │   ├── shared-requirements.md
-│       │   │   ├── unit-{name}-requirements.md
-│       │   │   └── decision-summary.md
-│       │   ├── user-stories/
-│       │   │   ├── index.md
-│       │   │   ├── unit-{name}-stories.md
-│       │   │   └── decision-summary.md
-│       │   ├── ui-mock/
-│       │   │   ├── platform-admin.html          # 标准模式（≤10 页面）
-│       │   │   ├── merchant-pc.html
-│       │   │   ├── merchant-app.html
-│       │   │   ├── user-app.html
-│       │   │   └── {端名称}/                    # 大型模式（>10 页面）
-│       │   │       ├── index.html               # 导航页
-│       │   │       └── {模块名}.html            # 按功能模块拆分
-│       │   └── application-design/
-│       │       ├── index.md
-│       │       ├── shared-interfaces.md
-│       │       ├── unit-{name}-design.md
-│       │       ├── unit-of-work.md
-│       │       ├── unit-of-work-dependency.md
-│       │       ├── unit-of-work-story-map.md
-│       │       └── decision-summary.md
-│       ├── construction/           # 🟢 CONSTRUCTION 阶段
-│       │   ├── plans/
-│       │   ├── implementation-report.md
-│       │   ├── audit-construction-{unit-name}.md
-│       │   ├── {unit-name}/
-│       │   │   ├── implementation-summary.md
-│       │   │   ├── functional-design/
-│       │   │   ├── nfr-requirements/
-│       │   │   ├── nfr-design/
-│       │   │   ├── infrastructure-design/
-│       │   │   └── code/
-│       │   └── build-and-test/
-│       ├── operations/             # 🟠 OPERATIONS 阶段（条件）
-│       │   ├── plans/
-│       │   │   └── operations-plan.md
-│       │   ├── audit-operations.md
-│       │   ├── deployment-guide.md
-│       │   └── operations-summary.md
-│       ├── state.md
-│       └── audit-summary.md
+<workspace>/
+├── <project source and tests>
+└── docs/aidlc/
+    ├── state.md
+    ├── audit-summary.md
+    ├── inception/
+    │   ├── plans/
+    │   ├── reverse-engineering/
+    │   ├── requirements/
+    │   ├── user-stories/
+    │   ├── ui-mock/
+    │   └── application-design/
+    │       ├── test-cases/
+    │       ├── unit-of-work.md
+    │       ├── unit-of-work-dependency.md
+    │       └── unit-of-work-story-map.md
+    ├── construction/
+    │   ├── plans/
+    │   ├── <unit-name>/
+    │   ├── build-and-test/
+    │   └── implementation-report.md
+    └── operations/
+        ├── plans/operations-plan.md
+        ├── deployment-guide.md
+        └── operations-summary.md
 ```
 
----
+步骤的实际文件名由对应 steering 定义；本图只规定目录职责。
 
-## 多模块模式
+## 多模块结构
 
 ```text
-<工作区根目录>/                      # ⚠️ 应用代码在这里
-├── [项目特定结构]                   # 因项目而异
-│
-├── docs/                           # 📄 文档根目录
-│   ├── specs/                      # 设计文档（共享）
-│   ├── plans/                      # 实现计划（共享）
-│   └── aidlc/                      # AIDLC 过程文档
-│       ├── product/                # 🟣 产品级 Inception 产出物
-│       │   ├── product-overview.md
-│       │   ├── modules.md
-│       │   ├── contracts.md
-│       │   ├── decision-summary.md
-│       │   └── audit-product.md
-│       │
-│       ├── modules/                # 各模块独立目录
-│       │   ├── {module-name}/
-│       │   │   ├── inception/      # 模块级 Inception（结构同单模块）
-│       │   │   ├── construction/   # 模块级 Construction（结构同单模块）
-│       │   │   └── audit-module.md
-│       │   ├── base-infrastructure/
-│       │   └── user-management/
-│       │
-│       ├── operations/             # 🟠 OPERATIONS（全局）
-│       │   ├── plans/
-│       │   │   └── operations-plan.md
-│       │   ├── audit-operations.md
-│       │   ├── deployment-guide.md
-│       │   └── operations-summary.md
-│       │
-│       ├── state.md
-│       └── audit-summary.md
+<workspace>/
+├── <project source and tests>
+└── docs/aidlc/
+    ├── state.md
+    ├── audit-summary.md
+    ├── product/
+    │   ├── product-overview.md
+    │   ├── modules.md
+    │   ├── contracts.md
+    │   └── decision-summary.md
+    ├── modules/
+    │   └── <module-name>/
+    │       ├── inception/
+    │       └── construction/
+    └── operations/
 ```
 
----
+## 多模块规则
 
-## 多模块模式规则
-
-- 产品级产出物放在 `docs/aidlc/product/`
-- 各模块产出物放在 `docs/aidlc/modules/{module-name}/`
-- 模块间只通过 `contracts.md` 交互，不直接引用其他模块的产出物
-- 模块级的 inception/ 和 construction/ 结构与单模块模式完全一致
-- 单模块模式自动退化：不创建 product/ 和 modules/ 目录
+- 产品边界和跨模块接口只在 `product/contracts.md` 定义。
+- 模块级 Inception/Construction 结构与单模块对应阶段一致。
+- Operations 是项目级部署准备；只有独立部署模块明确需要单独交付时，才在其模块目录生成部署补充说明。
+- 切换模块前先更新 state.md 的活跃模块、当前步骤和下一步交接。

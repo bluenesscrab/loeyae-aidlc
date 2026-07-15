@@ -1,188 +1,104 @@
-# 运维阶段（Operations）
+# Operations：部署准备
 
-**目的**：为项目生成 CI/CD 配置文件和部署文档，覆盖容器化、持续集成、持续部署的完整流程
+**目的**：为需要部署的项目生成与目标环境匹配的交付配置和可执行部署说明。
 
-**聚焦**：如何运行和维护（HOW to operate）
+**边界**：本阶段止于部署准备与配置验证，不覆盖部署后的监控、告警、事故响应、运营反馈或系统退役。
 
 ## 前置条件
-- Construction 阶段的"构建和测试"必须通过
-- 项目需要部署到服务器/集群环境
-- state.md 中已记录项目类型和技术栈信息
 
-## 执行条件与跳过条件
+- Construction 的实际构建和测试已通过并有证据
+- state.md 已记录技术栈、构建方式和项目类型
+- 项目是可部署服务，或用户明确要求部署准备
 
-**执行条件**（满足任一即执行）：
-- 项目需要部署到测试/生产环境
-- 项目是可独立运行的服务（Web 服务、API 服务、MCP 服务等）
-- 用户明确要求生成部署配置
-
-**跳过条件**（满足任一即跳过）：
-- 纯本地工具/CLI 工具
-- 纯库项目（供其他项目引用，自身不独立部署）
-- 用户明确表示不需要部署
-
----
+纯库、纯本地工具或用户明确不需要部署时跳过，并在 state.md 记录理由。
 
 ## 步骤 1：分析部署需求
 
-- [ ] 从 `state.md` 读取项目类型、技术栈、后端框架
-- [ ] 从 Construction 产物中读取构建方式（Maven/pnpm/pip 等）
-- [ ] 识别项目的运行方式（JAR/Node.js/Python/静态资源等）
-- [ ] 识别项目依赖的外部服务（数据库、Redis、消息队列等）
-- [ ] 确定项目部署类型（参见下方部署类型表）
+读取 state.md、构建配置和 Construction 证据，识别：
 
-| 项目类型 | 构建工具 | 运行时 | 容器基础镜像 |
-|---------|----------|--------|-------------|
-| Spring Boot | Maven | JDK 17+ | eclipse-temurin:17-jre-alpine |
-| Node.js 服务 | npm/pnpm | Node.js 18+ | node:18-alpine |
-| Python 服务 | pip/poetry | Python 3.11+ | python:3.11-slim |
-| Vue 3 前端 | pnpm | Nginx | nginx:alpine |
-| UniApp 前端 | pnpm | Nginx | nginx:alpine |
-| Go 服务 | go build | 静态二进制 | alpine:latest |
+- 运行制品及启动方式
+- 外部依赖、端口、健康检查和数据迁移
+- 现有部署/CI 配置（存量配置优先，不得无依据替换）
+- 待确认的部署目标、环境、镜像仓库、资源和发布策略
 
----
+## 步骤 2：确认部署决策
 
-## 步骤 2：生成部署规划问题
+只询问当前项目需要的关键决策，每次一个问题并给出 2-3 个选项。至少确认：
 
-根据步骤 1 的分析结果，生成与项目相关的部署问题。仅生成需要用户决策的问题。
+1. 目标：Kubernetes、Docker Compose、裸机/平台托管或其他。
+2. 环境：需要哪些 dev/test/staging/prod 环境。
+3. CI/CD：沿用现有工具、Jenkins、其他工具或只生成手动步骤。
+4. 容器：是否需要镜像、仓库和标签策略。
+5. 网络与运行参数：端口、域名、健康检查、资源、Secret 来源。
 
-**问题类别**（按需选择，不强制全部）：
-- 部署环境（Kubernetes / Docker Compose / 裸机）
-- 环境分级（dev/test/staging/prod）
-- 私有镜像仓库地址
-- 服务端口、健康检查端点
-- 资源限制（CPU/内存）、副本数
-- CI/CD 工具和构建触发方式
-- 域名与 Ingress 配置
-- 部署策略（滚动/蓝绿/金丝雀）
+将确认结果保存到 `docs/aidlc/operations/plans/operations-plan.md`，经用户确认后再生成配置。
 
-使用 [回答]: 标签格式，每个问题提供 2-3 个选项。
+## 步骤 3：生成目标相关配置
 
----
+仅生成用户已选择且项目实际需要的文件；不得固定生成 Jenkins 或 Kubernetes 文件。
 
-## 步骤 3：保存部署规划
+| 目标/能力 | 可能产物 | 生成条件 |
+|-----------|----------|----------|
+| 容器镜像 | `Dockerfile`、`.dockerignore` | 用户选择容器化 |
+| Jenkins | `Jenkinsfile` | 用户确认使用 Jenkins |
+| Kubernetes | 用户确认命名的 manifest 或 Helm/Kustomize 文件 | 用户选择 Kubernetes |
+| Docker Compose | `compose.yml` | 用户选择 Compose |
+| 前端 Nginx | `nginx.conf` | 静态前端且选择 Nginx |
+| 数据迁移 | 迁移执行/回滚说明或现有工具配置 | 存在数据库结构变更 |
+| 手动部署 | 命令说明 | 用户不使用自动化流水线 |
 
-- [ ] 将规划保存为 `docs/aidlc/operations/plans/operations-plan.md`
-- [ ] 包含所有 [回答]: 标签供用户输入
-- [ ] 等待用户回答所有问题
+生成规则：
 
----
+- 优先复用项目现有结构、版本和工具；模板只作为起点。
+- 仅在需要 Docker/Jenkins/Kubernetes/Nginx 时加载 `operations-templates.md` 的对应章节。
+- 模板中的所有占位符必须在交付前替换或明确列入部署时参数；不得保留环境专属硬编码路径。
+- 密钥、Token、密码和 kubeconfig 使用 Secret、凭据系统或环境变量引用。
+- 生产发布不得默认自动触发；是否需要审批、分阶段或自动发布以用户确认结果为准。
 
-## 步骤 4：收集和分析答案
+## 步骤 4：验证配置
 
-- [ ] 等待用户完成所有 [回答]: 标签
-- [ ] 审查模糊或含糊的回复
-- [ ] 如需要则添加后续问题
-- [ ] 确认所有部署决策已明确
+对实际生成的文件执行适用验证：
 
----
+| 文件类型 | 最低验证 |
+|----------|----------|
+| Dockerfile | 构建命令或可用的 Dockerfile 静态检查 |
+| Jenkinsfile | Jenkins 语法检查或项目现有验证方式 |
+| Kubernetes | 客户端 dry-run、schema/模板渲染验证 |
+| Compose | `docker compose config` |
+| Nginx | `nginx -t` 或容器内等价检查 |
+| Shell/部署命令 | shell 语法检查和参数完整性检查 |
 
-## 步骤 5：生成 CI/CD 配置文件
+工具不可用时必须标记“未验证”，提供精确验证命令，不能声明门禁通过。验证失败时最小修复并重跑。
 
-> **⚠️ 进入此步骤时，加载 `operations-templates.md` 获取各项目类型的完整模板。**
+## 步骤 5：生成部署文档
 
-根据用户回答和项目类型，生成实际的配置文件。所有配置文件写入**工作区根目录**。
+在 `docs/aidlc/operations/` 生成：
 
-需要生成的文件清单：
+### `deployment-guide.md`
 
-| 文件 | 位置 | 条件 |
-|------|------|------|
-| Dockerfile | 工作区根目录 | 始终 |
-| Jenkinsfile | 工作区根目录 | 始终 |
-| deployment-test.yml | 工作区根目录 | 始终 |
-| deployment-prod.yml | 工作区根目录 | 始终 |
-| .dockerignore | 工作区根目录 | 始终 |
-| nginx.conf | 工作区根目录 | 仅前端项目 |
+- 制品、环境和依赖前置条件
+- 配置/Secret 清单及来源
+- 构建、发布、迁移、验证和回滚步骤
+- 健康检查和最小 smoke test
+- 每条命令的工作目录、参数和预期结果
 
-**生成规则**：
-- 从 `operations-templates.md` 加载对应项目类型的模板
-- 将模板中的 `{占位符}` 替换为步骤 2-4 中确认的实际值
-- Spring Boot 项目：在 Jenkinsfile Package 阶段前增加 Maven Build 阶段
-- 前端项目：在 Jenkinsfile Package 阶段前增加 pnpm Build 阶段
-- test 与 prod 部署清单的差异：replicas、resources、namespace、环境变量
+### `operations-summary.md`
 
----
+- 实际生成文件及用途
+- 已确认的部署决策
+- 每项配置验证的命令、结果和限制
+- 未生成项及原因
 
-## 步骤 6：生成部署文档
+## 步骤 6：质量门禁与完成
 
-生成以下文档到 `docs/aidlc/operations/`：
+仅对实际选择的部署目标应用 `common-quality-gates.md` 对应检查项：
 
-### deployment-guide.md
-- 项目信息（名称、类型、镜像名称、环境）
-- CI/CD 流程概览（build 流程 + deploy 流程 + 自动触发链）
-- 环境配置（test + prod 的集群、命名空间、域名、副本数）
-- 手动操作指南（构建、部署、回滚）
-- 健康检查配置
-- 资源配置表
-- 故障排除（镜像拉取失败、Pod 启动失败、健康检查失败）
+- [ ] 产物与已确认目标一致，无多余平台配置
+- [ ] 无硬编码敏感信息或环境专属私有路径
+- [ ] 健康检查、资源和回滚策略按需求配置
+- [ ] 所有占位符已替换或登记为部署参数
+- [ ] 适用语法/静态验证已实际执行并记录证据
+- [ ] 部署指南可从已通过构建的制品开始执行
+- [ ] state.md、审计和下一步交接已更新
 
-### operations-summary.md
-- 生成的配置文件清单（文件 + 路径 + 说明）
-- 部署架构概要（CI/CD 工具、容器化、编排、Ingress、镜像仓库）
-- 自动触发链（build → deploy test → deploy prod）
-- 状态确认
-
----
-
-## 步骤 7：质量门禁检查
-
-- [ ] Dockerfile 遵循最佳实践（非 root 用户、层缓存优化、最小基础镜像）
-- [ ] Jenkinsfile 包含完整的 build/deploy 流程
-- [ ] Kubernetes 部署清单包含 Service + Deployment + Ingress
-- [ ] 健康检查已配置（liveness + readiness）
-- [ ] 资源限制已设置（requests + limits）
-- [ ] 环境变量已配置（时区、项目特定变量）
-- [ ] imagePullSecrets 已配置
-- [ ] test 和 prod 部署清单均已生成
-- [ ] .dockerignore 已生成
-- [ ] 部署文档完整（流程说明 + 手动操作 + 故障排除）
-- [ ] 配置文件中无硬编码密码或密钥
-- [ ] {TAG} 占位符在部署清单中正确使用
-
----
-
-## 步骤 8：展示完成消息
-
-```markdown
-# 🚀 Operations 阶段完成
-
-[AI 摘要：配置文件清单 + CI/CD 流程 + 关键参数]
-
-> **📋 需要审查：**
-> - CI/CD 配置：`Dockerfile`、`Jenkinsfile`
-> - 部署清单：`deployment-test.yml`、`deployment-prod.yml`
-> - 部署文档：`docs/aidlc/operations/`
-
-> **🚀 下一步？**
-> 🔧 请求修改 | ✅ 确认完成 | 📋 新 Session 继续
-```
-
----
-
-## 步骤 9：等待审批并更新进度
-
-- 🔴 **强制审批** — 任何模式下都必须等待
-- 审批通过后：更新 state.md 标记 Operations 完成 + 记录审计
-
----
-
-## 配置文件生成规则
-
-### 通用规则
-- 所有配置文件写入工作区根目录
-- 文档写入 `docs/aidlc/operations/`
-- 禁止硬编码密码、密钥、Token — 使用环境变量或 K8s Secret
-- 镜像标签使用 `{TAG}` 占位符
-
-### Jenkins Pipeline 标准
-- 参数化构建：IMAGE_HUB、IMAGE_NAME、IMAGE_TAG、TASK_TYPE、ENV_LABEL、BRANCH
-- build：构建 → Docker build → 推送镜像
-- deploy：拉取 → 重标记 → 推送 → sed 替换 → kubectl apply
-- Post 自动触发链：build → deploy test → deploy prod
-- test 用默认 kubeconfig，prod 用 `/home/bys/.kube/hq.config`
-
-### Kubernetes 部署标准
-- 每个清单：Service + Deployment + Ingress
-- imagePullSecrets + liveness/readiness 探针 + resources limits
-- 时区 `Asia/Shanghai`
-- Ingress 配 TLS
+本阶段为🔴强制审批。存在未验证项时必须明确展示，由用户决定补齐环境后继续或接受“部署准备未验证”状态；后者不得标记为完全通过。

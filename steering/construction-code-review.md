@@ -136,7 +136,7 @@
 - [ ] 接口契约中定义的每个端点/方法都已实现
 - [ ] 错误处理覆盖了规格中定义的所有异常场景
 - [ ] **测试用例点覆盖**：本单元涉及的每个 UC-D-xxx（来自 `inception/application-design/test-cases/`）都有对应的 @TestCaseId 测试
-- [ ] **用例点状态**：所有涉及的 UC-D 的 `status` 非 `blocked`（blocked 的须已在步骤 6.5 列入待产品决策清单）
+- [ ] **用例点状态**：所有涉及的 UC-D 的 `status` 非 `blocked`（blocked 的须已在 I13 列入待产品决策清单）
 
 ### 准确性（偏差检查）
 - [ ] 实现的行为与规格描述一致
@@ -292,7 +292,7 @@
 ### 用例点对账（强制门禁，未通过 = Construction 未完成）
 
 #### 对账① 设计覆盖（每个单元功能设计阶段执行，此处全局复核）
-- [ ] 步骤 6.5 产出的每个 UC-D-xxx，都能在功能设计文档中找到对应的实现设计
+- [ ] I13 产出的每个 UC-D-xxx，都能在功能设计文档中找到对应的实现设计
 - [ ] 无 UC-D 处于 `blocked` 状态未裁决（blocked 须有产品决策记录）
 
 #### 对账② 测试映射（末尾强制）
@@ -303,7 +303,7 @@
 **对账未通过处理**：
 - 缺测试：回 TDD 补 RED 测试（带 @TestCaseId）
 - 测试失败：修复实现，不是改测试期望
-- 用例点 blocked：回步骤 6.5 待产品决策清单，不得绕过
+- 用例点 blocked：回 I13 待产品决策清单，不得绕过
 
 **对账产物**：生成 `docs/aidlc/construction/audit/test-case-reconciliation.md`，列出每个 UC-D 的覆盖状态（已覆盖/缺测试/测试失败/blocked），作为 Construction 完成证据。
 

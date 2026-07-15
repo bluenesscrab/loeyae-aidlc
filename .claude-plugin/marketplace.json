@@ -9,7 +9,7 @@
   "plugins": [
     {
       "name": "loeyae-aidlc",
-      "description": "AI-DLC development workflow with complete closed-loop execution",
+      "description": "Complete AI-DLC lifecycle with planning, implementation, validation, and conditional deployment preparation; excludes post-deployment production operations.",
       "version": "1.19.0",
       "source": {
         "source": "url",

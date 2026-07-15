@@ -4,10 +4,10 @@
 
 ## Kiro
 
-将 `kiro-batch-progress.json` 复制到目标项目的 `.kiro/hooks/` 目录：
+将 `hooks/kiro/kiro-batch-progress.json` 复制到目标项目的 `.kiro/hooks/` 目录：
 
 ```bash
-cp hooks/kiro-batch-progress.json <your-project>/.kiro/hooks/
+cp hooks/kiro/kiro-batch-progress.json <your-project>/.kiro/hooks/
 ```
 
 **功能**：每个 Spec task 完成后（PostTaskExec），自动检查并更新 state.md 中的批次进度。

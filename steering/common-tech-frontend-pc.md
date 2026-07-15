@@ -213,19 +213,19 @@ import request from '@/config/axios'
 import type { UserVO, UserCreate, UserPageQuery } from './types'
 
 export const UserApi = {
-  getPage: (params: UserPageQuery) => 
+  getPage: (params: UserPageQuery) =>
     request.get({ url: '/system/user/page', params }),
-  
-  get: (id: number) => 
+
+  get: (id: number) =>
     request.get({ url: `/system/user/${id}` }),
-  
-  create: (data: UserCreate) => 
+
+  create: (data: UserCreate) =>
     request.post({ url: '/system/user/', data }),
-  
-  update: (data: UserCreate) => 
+
+  update: (data: UserCreate) =>
     request.put({ url: '/system/user/', data }),
-  
-  delete: (id: number) => 
+
+  delete: (id: number) =>
     request.delete({ url: `/system/user/${id}` })
 }
 ```
@@ -262,29 +262,29 @@ export const useUserStore = defineStore('user', {
     userInfo: null as UserVO | null,
     token: ''
   }),
-  
+
   getters: {
     isLoggedIn: (state) => !!state.token,
     userName: (state) => state.userInfo?.name ?? ''
   },
-  
+
   actions: {
     setUserInfo(info: UserVO) {
       this.userInfo = info
     },
-    
+
     async login(credentials: LoginParams) {
       const data = await AuthApi.login(credentials)
       this.token = data.token
       this.userInfo = data.user
     },
-    
+
     logout() {
       this.token = ''
       this.userInfo = null
     }
   },
-  
+
   persist: true // 持久化
 })
 ```
@@ -346,7 +346,7 @@ const systemRoutes: AppRouteRecordRaw[] = [
 ```typescript
 // router/index.ts
 import { createRouter, createWebHistory } from 'vue-router'
-import { AppRouteRecordRaw } from '@/router/types'
+import type { AppRouteRecordRaw } from '@/router/types'
 import { constantRoutes } from '@/router/routes'
 import { asyncRoutes } from '@/router/modules'
 
@@ -357,21 +357,8 @@ const router = createRouter({
   routes
 })
 
----
-
-## 路由配置
-
-### 路由配置
-
-```typescript
-// router/index.ts
-import { createRouter, createWebHistory } from 'vue-router'
-
-### 路由注册
-
-```typescript
-// router/index.ts
-
+export default router
+```
 
 ### 路由跳转
 
@@ -508,7 +495,7 @@ const { register, formRef, methods } = useForm()
 - [ ] views 中 所有script必有类型定义  `<script setup lang="ts">`
 - [ ] 优先使用 `@/components` 中现有组件
 - [ ] 使用 windicss 规范
-- [ ] 遵循命名规范 
+- [ ] 遵循命名规范
 - [ ] 使用 TypeScript 类型
 - [ ] 正确处理错误
 - [ ] 国际化文本使用 `t()`
