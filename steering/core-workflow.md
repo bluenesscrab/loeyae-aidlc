@@ -32,6 +32,8 @@
 | 创建文件 | `common-content-validation.md` |
 | 执行门禁 | `common-quality-gates.md` |
 | TDD、构建测试 | `common-test-execution-strategy.md` |
+| 存量分布式系统 | 按需加载 `common-runtime-dependency-analysis.md`、`common-contract-governance.md`、`common-configuration-governance.md`、`common-distributed-consistency.md` |
+| 检测到技术栈证据 | 按 state.md 加载对应的 `common-tech-*` 条件适配 |
 
 禁止启动时预加载全部规则。目录、审计、协作、提问和交接分别按 `common-directory-structure.md`、`common-audit-logging.md`、`common-team-collaboration.md`、`common-question-format-guide.md`、`common-session-handoff.md` 按需加载。
 
@@ -63,15 +65,15 @@
 | I9 | UI Mock | 用户选择且存在界面需求 | 🔴 | `inception-ui-mock.md` |
 | I10 | UI Mock 审查 | I9 已执行 | 🔴 | `inception-cross-validation.md`（e） |
 | I11 | 工作流规划 | 标准/完整流程 | 🔴 | `inception-workflow-planning.md` |
-| I12 | 应用设计 | 新接口、跨模块、多端或复杂业务规则 | 🟡 | `inception-application-design.md` |
-| I13 | 测试用例派生 | I7、I12 已完成且存在可执行场景 | 🟡 | `test-case-derivation.md` |
+| I12 | 应用设计 | 新接口、跨模块/服务、多端、复杂业务规则，或契约/共享配置/迁移/一致性/外部故障行为变化 | 🟡 | `inception-application-design.md` |
+| I13 | 测试用例派生 | 产品用例具备 I7+I12；或技术用例具备已批准风险来源与可执行锚点 | 🟡 | `test-case-derivation.md` |
 | I14 | 单元生成 | 需拆分多个工作单元 | 🟡 | `inception-units-generation.md` |
 
 快速通道的最小需求确认和跳过条件以 `common-complexity-assessment.md` 为准。多模块的模块级产物路径以 `common-directory-structure.md` 为准。
 
 ## Construction 入场门禁
 
-若存在新接口、跨模块/服务调用、多端改动或复杂业务规则，I12 必须完成；若工作量超出单次执行范围或需多个工作单元，I14 必须完成。缺失时阻断并返回对应 Inception 步骤。
+若存在新接口、跨模块/服务调用、多端改动、复杂业务规则，或契约、共享配置、数据迁移、一致性、外部故障行为变化，I12 必须完成；若工作量超出单次执行范围、需多个工作单元或跨服务协调，I14 必须完成。缺失时阻断并返回对应 Inception 步骤。
 
 ## Construction 路由
 

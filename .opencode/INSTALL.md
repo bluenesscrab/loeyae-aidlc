@@ -72,7 +72,7 @@ npx loeyae-aidlc
 
 ```json
 {
-  "plugin": ["loeyae-aidlc@git+https://github.com/loeyae/loeyae-aidlc.git#v1.19.1"]
+  "plugin": ["loeyae-aidlc@git+https://github.com/loeyae/loeyae-aidlc.git#v1.20.0"]
 }
 ```
 
@@ -105,7 +105,7 @@ rmdir /s /q "%APPDATA%\opencode\.cache\plugins\loeyae-aidlc"
 
 ```json
 {
-  "plugin": ["loeyae-aidlc@git+https://github.com/loeyae/loeyae-aidlc.git#v1.19.1"]
+  "plugin": ["loeyae-aidlc@git+https://github.com/loeyae/loeyae-aidlc.git#v1.20.0"]
 }
 ```
 

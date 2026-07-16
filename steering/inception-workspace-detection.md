@@ -5,7 +5,8 @@
 ## 步骤 1：检查现有 AI-DLC 项目
 
 检查 `docs/aidlc/state.md` 是否存在：
-- **存在**：执行**意图路由**（参见 `core-workflow.md` 的"意图路由"章节）
+- **存在**：先检查 `状态模式版本` 和分布式治理字段。版本缺失/低于 2，或缺少 `分布式系统`、`系统基线`、`代码版本标识` 时，保存原阶段位置并执行定向 I1 检测；若发现分布式能力，再执行 I4 的系统级基线回填。迁移成功后必须原位补齐全部字段、写入 `状态模式版本: 2` 和迁移证据，再解除“阻塞恢复”并返回原路由；写回失败时不得继续。
+- **存在且模式有效**：执行**意图路由**（参见 `core-workflow.md` 的“意图路由”章节）
   - **继续开发** → 判断架构模式和协作模式并恢复（下方逻辑）
   - **变更已有功能** → 进入 CHANGE REQUEST 流程（`core-workflow.md` 的 CR1-CR5）
   - **新增功能** → 进入新增功能追加流程（`core-workflow.md` 的"新增功能追加流程"）
@@ -85,7 +86,19 @@
 
 **影响**：
 - `loeyaeBootFramework = true` → Construction 阶段代码生成时加载 Loeyae Boot 编码规范和 MCP Skill
-- `loeyaeBootFramework = false` → Construction 阶段按通用 Spring Boot / 项目自身规范生成代码，不调用 `loeyae-*` MCP Skill
+- `loeyaeBootFramework = false` → Construction 阶段按项目自身规范和适用的通用 steering 生成代码，不调用 `loeyae-*` MCP Skill
+
+### 分布式架构能力检测（条件）
+
+从代码、配置、部署描述和机器契约识别以下能力，不因框架依赖存在而假设已启用：
+- 可独立部署单元、服务发现或网关入口；
+- 跨进程同步调用与异步消息；
+- 远程/共享配置及其消费者；
+- 多数据所有权边界和外部系统接入。
+
+发现任一能力时，在 state.md 记录 `分布式系统: 是`、检测证据和待确认项，并按需加载 `common-runtime-dependency-analysis.md`。检测到契约、配置或跨边界写入时，再分别加载对应通用治理规则。
+
+检测到 Spring Cloud 或 Nacos 的可靠工作区证据时，记录 `技术适配: Spring Cloud/Nacos` 并加载 `common-tech-spring-cloud-nacos.md`；未检测到则不得套用。构建工具只记录实际入口，不预设 Maven 或 Gradle。
 
 ### 前端代码扫描
 - **源代码文件**：扫描前端源代码文件（.vue, .tsx, .jsx, .ts, .js, .css, .scss, .less）

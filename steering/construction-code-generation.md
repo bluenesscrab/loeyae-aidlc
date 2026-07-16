@@ -61,11 +61,11 @@
 - 文件存在但章节不完整：列出缺失项，要求补充
 - 补充完成后重新验证，通过后继续
 
-## 步骤 2：MCP Skill 加载策略
+## 步骤 2：技术规范与 MCP Skill 加载策略
 
-> ⚠️ **强制 — 不可跳过**（仅 Loeyae Boot 项目需要 MCP Skill，非 Loeyae Boot 项目见下方分支）
->
-> 详细的加载要求、渐进式披露策略、验证检查点和 Fallback 策略见 `construction-loeyae-compliance.md` 第一部分。
+先读取 state.md 的技术适配标志。仅在工作区检测已有可靠证据时加载对应 `common-tech-*` 规则；检测到 Spring Cloud/Nacos 时加载 `common-tech-spring-cloud-nacos.md`，用于事实映射与真实命令发现，不替代项目规范。未检测到时不得套用。
+
+> ⚠️ **Loeyae Boot 项目强制**：加载 `construction-loeyae-compliance.md` 并按其规则调用 MCP Skill。非 Loeyae Boot 项目不得调用 `loeyae-*` MCP Skill。
 
 ### 渐进式披露原则
 

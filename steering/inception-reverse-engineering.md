@@ -323,6 +323,19 @@
 - **反模式**：[列表及位置]
 ```
 
+## 步骤 10.5：建立系统级基线（条件）
+
+检测到分布式架构能力时执行；单进程且无外部运行时依赖时跳过并记录依据。
+
+1. 加载 `common-runtime-dependency-analysis.md`，在 `<system-baseline-root>/` 生成服务目录、运行时依赖和外部系统目录。
+2. 存在跨边界接口或事件时加载 `common-contract-governance.md`，将机器契约位置、消费者和兼容状态写入产品级契约索引。
+3. 存在共享/远程配置时加载 `common-configuration-governance.md`，生成配置清单与消费者反向索引。
+4. 存在跨数据所有权写入时加载 `common-distributed-consistency.md`，生成一致性场景基线。
+5. 记录存量定制边界：上游/原始版本标识、已知定制区域、禁止覆盖区域及升级证据；未知项标记待确认，不得猜测。
+6. 检测到技术适配标志时加载对应适配规则，仅用于提取事实，不改变上述通用产物结构。
+
+多模块/多服务项目的系统级基线只在产品级维护；模块级逆向仅引用与当前模块相关的切片。实际路径以 `common-directory-structure.md` 为准。
+
 ## 步骤 11：创建时间戳文件
 
 创建 `docs/aidlc/inception/reverse-engineering/reverse-engineering-timestamp.md`：
