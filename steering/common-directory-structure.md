@@ -11,6 +11,22 @@
 - 系统基线只保存索引、关系和证据引用，不复制 Secret、完整机器契约或外部平台数据。
 - 多模块项目只加载当前模块产物、产品级契约和相关系统基线切片。
 
+## 五类角色核心正式文档目录
+
+以下映射冻结“正式研发文档写到哪里”，不创建按角色划分的平行目录，也不表示已存在独立角色模板：
+
+| 角色 | 核心正式文档 | 既有目录 |
+|------|--------------|----------|
+| 产品经理 | PRD、产品/业务蓝图、画像与用户故事 | `<inception-root>/requirements/`、`<inception-root>/user-stories/` |
+| 架构师 | 技术架构、关键技术说明与应用设计 | `<inception-root>/application-design/` |
+| 项目经理 | 评估、计划、排期与风险建议 | `<inception-root>/plans/`、`<construction-root>/plans/` |
+| 开发人员 | 开发设计、对接说明、逆向工程说明与单元实施记录 | `<inception-root>/reverse-engineering/`、`<inception-root>/application-design/`、`<construction-root>/<unit-name>/` |
+| 测试人员 | 测试计划、用例与报告框架 | `<inception-root>/application-design/test-cases/`、`<construction-root>/build-and-test/` |
+
+单模块的 `<inception-root>` 为 `docs/aidlc/inception`，多模块为 `docs/aidlc/modules/<module-name>/inception`；`<construction-root>` 同理。调研、会议和对接沟通等过程资料可由已配置 SSOT 权威管理，但正式文档正文和批准版本仍位于业务项目工作区/Git 或既有文档库。任务、人力、实际进度、测试执行、制品和部署结果仍以外部专业平台为准。
+
+使用 SSOT 资料生成或修改正式文档时，文档必须记录实际资料修订/片段引用，并提供“资料版本/片段 → 正式文档章节”血缘入口；未配置 SSOT 的 Legacy 流程不产生额外远程调用。模板只在对应步骤实际执行时创建，当前目录映射不得表述为独立角色模板已存在或已验证。
+
 ## 系统基线根目录
 
 | 架构 | `<system-baseline-root>` |

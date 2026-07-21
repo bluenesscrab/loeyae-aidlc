@@ -23,6 +23,9 @@
 - 读取 `docs/aidlc/inception/requirements/requirements.md` 和 `docs/aidlc/inception/user-stories/stories.md`
 - 识别关键业务能力和功能领域
 - 确定设计范围和复杂度
+- 配置 SSOT 时，读取经批准资料选择形成的 ContextBundle、具体修订/片段引用和降级状态；未配置时保持 Legacy 本地流程
+- 将资料引用作为设计输入证据，不替代需求、故事、代码或现有机器事实；设计章节必须保留引用并提供章节血缘入口
+- 涉及跨进程资料契约时，仅引用产品级契约 ID；字段级 Schema、鉴权、项目隔离、幂等、版本并存和错误语义由 I12 冻结，冻结前保持未验证
 
 ### 2. 创建应用设计计划
 - 生成包含复选框 [] 的应用设计计划
