@@ -5,7 +5,7 @@
 ## 下一步交接
 | 范围 | 更新时间 | 提示词 |
 |------|----------|--------|
-| 单元级 | 2026-07-21T01:38:19Z | `使用 AI-DLC，继续 U-P01-API-PROJECT-MATERIAL 的 Construction 功能设计` |
+| 单元级 | 2026-07-21T02:27:41Z | `使用 AI-DLC，继续 U-P01-API-PROJECT-MATERIAL 的 Construction 功能设计` |
 
 ## 项目信息
 - **项目类型**：存量项目（AI-DLC 1.20.0）
@@ -38,7 +38,7 @@
 - **designStyleRef**：SSOT 权威 `designStyle.name=notion`，`tokenName=Notion-design-analysis`，来源为 awesome-design MCP；已记录 `colors`、`typography`、`spacing`、`rounded`、`components`。
 - **应用状态**：SSOT 已将 tokens 应用于静态 `docs/aidlc/modules/federated-ssot/inception/ui-mock/pc.html`，051=A 已批准产物，I10 已完成 6/6 交叉复验和 4 项同范围修正；本仓不创建 UI Mock，该产物不证明 Consumer 或三平台运行能力。
 - **pageListRef**：`approved`（SSOT 权威 `CR4-B5-I9-PC-PAGE-LIST-APPROVAL-050=A`）；采用项目资料工作台、上传资料/创建修订模式化抽屉、资料详情页，即“2 个页面 + 1 个抽屉”。
-- **当前门禁**：I12/I14 Construction 入场门禁已满足；Provider 单元 `U-P01-API-PROJECT-MATERIAL` 已由 `loeyae` 自主认领，规划分支为 `feat/api-project-material`，其余 11/12 单元待认领。057 继续保持 0/12，`blocked_by_057` 只阻断 `execution_ready`、实际运行、C8 和运行能力声明；本次认领仅同步流程文档，尚未创建分支、提交、推送、修改 Core、配置或平台适配，未构建、未测试。
+- **当前门禁**：I12/I14 Construction 入场门禁已满足；Provider 单元 `U-P01-API-PROJECT-MATERIAL` 已由 `loeyae` 自主认领，认领基线已在双仓 `main` 提交并推送：Provider `fe8f7c150c57e64469b11031e4d30079b630b89f`、Consumer `096321da1dd8459108e4540d6150e0761d25aef0`，Git 先到先得已生效。后续 Provider Construction 使用规划分支 `feat/api-project-material`；其余 11/12 单元待认领。057 继续保持 0/12，`blocked_by_057` 只阻断 `execution_ready`、实际运行、C8 和运行能力声明；本次回写仅同步认领发布事实，尚未修改 Core、配置或平台适配，未构建、未测试。
 
 ## 工作区状态
 - **工作区根目录**：`/Users/andy/work/src/loeyae-framework/loeyae-aidlc`
@@ -57,7 +57,7 @@
 - **基线路径**：`docs/aidlc/product/system-baseline/` 已建立 I12 Consumer 设计候选；运行时实现与证据仍未建立
 - **代码版本标识**：`fac8fcff89e42f9ba09ee7f2bc08a45340b1c85e`
 - **制品标识/摘要**：npm 包版本 1.20.0；本次尚未构建
-- **基线新鲜度**：SSOT Provider 权威 `CR4-B5-I14-UNIT-ARTIFACT-APPROVAL-060=A` 已于 2026-07-21T01:04:16Z 关闭双仓 I14；CR4 B6 文档一致性、负向范围与非破坏性回滚演练通过，CR5 初步文档检查后因实现/运行证据缺失返回 CR4 Construction 入场。代码回滚起点仍为 AI-DLC `fac8fcff89e42f9ba09ee7f2bc08a45340b1c85e`（npm 1.20.0）、SSOT `1431c6bde7c0f91243566d62e75bfac4a999fa4a`；U-P01 已认领但未实施，其余 11/12 单元待认领，057=0/12，Provider/Core/三平台实现、配置、构建、测试、C8 和运行验证均未开始
+- **基线新鲜度**：SSOT Provider 权威 `CR4-B5-I14-UNIT-ARTIFACT-APPROVAL-060=A` 已于 2026-07-21T01:04:16Z 关闭双仓 I14；CR4 B6 文档一致性、负向范围与非破坏性回滚演练通过，CR5 初步文档检查后因实现/运行证据缺失返回 CR4 Construction 入场。认领发布基线为 Provider `fe8f7c150c57e64469b11031e4d30079b630b89f`、Consumer `096321da1dd8459108e4540d6150e0761d25aef0`，均已推送 `main`；代码回滚起点仍为 AI-DLC `fac8fcff89e42f9ba09ee7f2bc08a45340b1c85e`（npm 1.20.0）、SSOT `1431c6bde7c0f91243566d62e75bfac4a999fa4a`。U-P01 已认领但未实施，其余 11/12 单元待认领，057=0/12，Provider/Core/三平台实现、配置、构建、测试、C8 和运行验证均未开始
 - **CR3 计划**：本仓消费侧计划 `docs/aidlc/modules/federated-integration/inception/plans/cr-i5-scope-001-change-plan.md`；共同权威计划 `../loeyae-ssot-server/docs/aidlc/modules/federated-ssot/inception/plans/cr-i5-scope-001-change-plan.md`
 - **CR4 计划批次**：B0 状态/历史保护 → B1 双仓产品基线 → B2 双仓 I5 回写与 I6 复审 → B3 SSOT Provider 契约后 AI-DLC Consumer 契约 → B4 通用流程/角色目录与 I7 重规划 → B5 I9— I14 → B6 文档一致性验收
 - **计划依赖与受影响节点**：`ssot-api` → `ssot-worker` → `ssot-web` 与 `loeyae-aidlc` → `kiro-power`/`claude-plugin`/`opencode-plugin` → `test-suite`；本仓不直接依赖 Worker 或数据库
@@ -99,6 +99,7 @@
 | 产品级 | loeyae-aidlc | CR4-B5/I14 | 双仓工作单元产物 | completed | 2026-07-21T01:04:16Z | Provider 060=A；25/68/85 主归属完整唯一，12/12 单元待认领 | Kiro |
 | 产品级 | loeyae-aidlc | CR4-B6 | 双仓文档一致性验收 | completed | 2026-07-21T01:04:16Z | 五角色、资料选择、固定引用/血缘、三平台薄适配、state v2、运行未验证矩阵和非破坏性回滚演练通过；CR5 初检返回 CR4 Construction | Kiro |
 | federated-ssot | ssot-api | Construction-CLAIM | U-P01-API-PROJECT-MATERIAL | claimed | 2026-07-21T01:38:19Z | loeyae 明确认领；规划分支 `feat/api-project-material`；尚未创建分支、提交或推送 | loeyae |
+| federated-ssot | ssot-api | Construction-CLAIM-PUBLISH | U-P01-API-PROJECT-MATERIAL | completed | 2026-07-21T02:27:41Z | Provider `fe8f7c1` 与 Consumer `096321d` 均已推送 `main`；Git 先到先得生效；Consumer 仅同步 Provider 认领 | loeyae |
 
 ## 团队单元认领状态
 | unit_id | 仓库 | service_id | 状态 | 认领人 | 分支 |
