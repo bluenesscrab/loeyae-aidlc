@@ -1,5 +1,11 @@
 # AI-DLC 状态跟踪
 
+> ## ⚠️ 重新定位声明(2026-07-26)
+> 本状态文件记录的 federated-integration Consumer 侧双仓规划已判定偏离用户目标,相关产物已删除,git 历史 `chore/ssot-realignment` 分支可查。
+> **新基线**:以 `../loeyae-ssot-server/docs/aidlc/product/realignment-plan.md` 与 `../loeyae-ssot-server/docs/aidlc/modules/ssot/inception/` 为准;本仓(ai-dlc)作为 MCP 消费方按新基线对接。
+> **CR 链已冻结**:不再推进原 federated-integration 相关 CR。
+> 以下历史状态内容保留为参考,不再具有现行效力。
+
 - **状态模式版本**：2
 
 ## 下一步交接
