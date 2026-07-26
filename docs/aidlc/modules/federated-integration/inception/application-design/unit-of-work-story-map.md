@@ -21,9 +21,9 @@
 | `U-C01-CORE-PROVIDER-CLIENT` | `ADLC-US-010` | `S01`、`S02` | `TC-C-010-S01`、`TC-C-010-S02` |
 | `U-C01-CORE-PROVIDER-CLIENT` | `ADLC-US-011` | `S01`、`S02`、`S03` | `TC-C-011-S01`、`TC-C-011-S02`、`TC-C-011-S03` |
 | `U-C02-CORE-CONTEXT-DOCUMENT` | `ADLC-US-012` | `S01`、`S02`、`S03` | `TC-C-012-S01`、`TC-C-012-S02`、`TC-C-012-S03` |
-| `U-C06-CROSS-SERVICE-TESTS` | `ADLC-US-013` | `S01`、`S02`、`S03` | `TC-C-013-S01`、`TC-C-013-S02`、`TC-C-013-S03` |
+| `U-C06-CROSS-SERVICE-TESTS` | `ADLC-US-013` | `S01`、`S02`、`S03`、`S04` | `TC-C-013-S01`、`TC-C-013-S02`、`TC-C-013-S03`、`TC-C-013-S04` |
 
-统计：主故事 `13/13`，产品 Scenario `34/34`，产品 UC-D `34/34`。每个 Scenario 与对应产品 UC-D 跟随同一主单元。
+统计：主故事 `13/13`，产品 Scenario `35/35`，产品 UC-D `35/35`。每个 Scenario 与对应产品 UC-D 跟随同一主单元。
 
 ## 技术 UC-D 唯一主归属
 
@@ -40,7 +40,7 @@
 | `U-C06-CROSS-SERVICE-TESTS` | `TC-C-TECH-009` | Kiro/Claude/OpenCode Core conformance |
 | `U-C06-CROSS-SERVICE-TESTS` | `TC-C-TECH-010` | 双项目真实 E2E 证据完整性 |
 
-统计：技术 UC-D `10/10`；与产品 UC-D 合计 `44/44`，主归属完整且唯一。
+统计：技术 UC-D `10/10`；与产品 UC-D 合计 `45/45`，主归属完整且唯一。
 
 ## 次要协作关系
 
@@ -55,5 +55,5 @@
 ## 追踪状态边界
 
 - 本映射只建立 I14 主归属，不修改 I13 `test-cases/_index.md` 的权威 `source_ref`。
-- 所有 44 个 UC-D 仍为 `design_status=ready`、`execution_status=blocked`、`status=blocked`。
+- 所有 45 个 UC-D 仍为 `design_status=ready`、`execution_status=blocked`、`status=blocked`。
 - 12 个运行锚点仍为 `0/12`；静态映射不能替代实际命令、报告或稳定运行标识。

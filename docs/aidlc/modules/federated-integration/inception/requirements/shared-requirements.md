@@ -10,8 +10,8 @@
 |------|----------|---------------|
 | `ADLC-NFR-001` 平台中立 | Kiro、Claude Code、OpenCode 对相同 state v2、角色、目标、显式选择和 Provider 响应产生的 RoleIntent、资料选择、引用、错误决策与下一流程状态语义差异数必须为 0；平台名称不得成为项目事实。 | U-C02-CORE-CONTEXT-DOCUMENT 冻结 Core 语义，U-C03-KIRO-ADAPTER 主适配，U-C04-CLAUDE-ADAPTER/U-C05-OPENCODE-ADAPTER 协作，U-C06-CROSS-SERVICE-TESTS 汇总 conformance；未验证。 |
 | `ADLC-NFR-002` Legacy 兼容 | 未配置 SSOT 的黄金场景通过率必须为 100%，八项在线契约远程调用数必须为 0，不得新增远端字段门禁。 | U-C01-CORE-PROVIDER-CLIENT 实现边界，U-C06-CROSS-SERVICE-TESTS 验证；未验证。 |
-| `ADLC-NFR-003` 安全 | Secret、委托令牌和敏感原文不得进入 Git、state、提示词正文或普通日志；项目越权负向用例必须全部拒绝，平台适配只注入短时凭据。 | U-C01-CORE-PROVIDER-CLIENT/U-C02-CORE-CONTEXT-DOCUMENT/U-C03-KIRO-ADAPTER—U-C05-OPENCODE-ADAPTER，U-C06-CROSS-SERVICE-TESTS 验证；未验证。 |
-| `ADLC-NFR-004` 引用完整性 | 所有由资料支撑的章节必须 100% 具有可解析的固定资料修订/片段引用；无来源推断必须 100% 明确标识，未确认讨论不得写成批准事实。 | U-C02-CORE-CONTEXT-DOCUMENT，U-C06-CROSS-SERVICE-TESTS 证据聚合；未验证。 |
+| `ADLC-NFR-003` 安全 | Secret、委托令牌和敏感原文不得进入 Git、state、提示词正文或普通日志；所有读取与派生能力继续按目标项目授权隔离。Provider 三类写入例外不得在 Consumer 侧产生读取权，成功、失败、冲突、重复或状态转换结果不得泄露目标项目既有资料、成员、内容或派生事实。 | U-C01-CORE-PROVIDER-CLIENT/U-C02-CORE-CONTEXT-DOCUMENT/U-C03-KIRO-ADAPTER—U-C05-OPENCODE-ADAPTER，U-C06-CROSS-SERVICE-TESTS 验证；未验证。 |
+| `ADLC-NFR-004` 引用完整性 | 所有由资料支撑的章节必须 100% 具有可解析的固定资料修订/片段引用；无来源推断必须 100% 明确标识，且不得写成资料事实。 | U-C02-CORE-CONTEXT-DOCUMENT，U-C06-CROSS-SERVICE-TESTS 证据聚合；未验证。 |
 | `ADLC-NFR-005` 可恢复 | Provider/索引失败不得推进错误 state v2；恢复后从同一步骤重试，不重复创建逻辑血缘，不用缓存伪造远端读取或同步成功。 | U-C01-CORE-PROVIDER-CLIENT 错误/重试，U-C02-CORE-CONTEXT-DOCUMENT Pending/对账，U-C06-CROSS-SERVICE-TESTS 验证；未验证。 |
 | `ADLC-NFR-006` 数据最小化 | ContextBundle 只包含当前目标文档需要内容；显式排除资料命中数必须为 0；Consumer 不保存 SSOT 原件、完整片段库、向量或图关系副本。 | U-C02-CORE-CONTEXT-DOCUMENT，U-C06-CROSS-SERVICE-TESTS 验证；未验证。 |
 | `ADLC-NFR-007` 分发隔离 | 三平台发布物和安装结果中本仓自举 `docs/aidlc/` 文件数必须为 0；平台不得维护第二份业务状态。 | U-C01-CORE-PROVIDER-CLIENT/U-C02-CORE-CONTEXT-DOCUMENT/U-C03-KIRO-ADAPTER—U-C05-OPENCODE-ADAPTER，U-C06-CROSS-SERVICE-TESTS 验证；未验证。 |
@@ -25,6 +25,10 @@
 4. 正式文档正文及批准版本归业务工作区/Git或既有文档库；Provider 只接收固定引用、章节定位/摘要和血缘索引。
 5. 任务、人力、工时、实际进度、CI/测试执行、制品和部署结果由各自专业平台权威管理；无稳定证据时只能标记未验证。
 6. state v3、Manifest、事件游标、远端 CR、impact 控制面、Portal 审批交接、完整 Trace 和跨项目共享不在首期范围。
+7. Consumer 首期不创建、不读取、不缓存、不推断讨论线程、参与人、评论、待确认/冲突项、Conclusion、Superseded 链或讨论摘要；机器契约适配仍由后续批次处理。
+8. Provider 三类写入例外不授权 Consumer 新增独立业务项目写入逻辑。U-C01 只保留未来 Provider 新主版本适配意图；U-C02 继续执行目标项目读取授权并固定修订/片段。
+9. 导入可选状态、双向状态转换和历史内容恢复由 Provider 权威管理；Consumer 只能消费经目标项目授权可读的结果，既有固定引用与血缘不得因恢复而漂移。
+10. U-C06 必须覆盖双项目、滥用、配额/成本/风险/通知/申诉/隔离处置/审计、Provider/Consumer 版本组合；Kiro、Claude Code、OpenCode 仅经 Core，任何平台直连 Provider 都判定失败。
 
 ## 共享运行门禁
 

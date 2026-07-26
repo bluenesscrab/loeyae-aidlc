@@ -7,7 +7,7 @@
 
 ## ADLC-FR-003 Provider-first 项目解析（主归属，Must）
 
-已配置 SSOT 的项目必须经 Provider API/MCP 解析唯一项目身份与访问上下文。Consumer 只提交用户已配置的项目候选和短时访问上下文，不按仓库名或目录名猜测项目，不直连 Worker、数据库或缓存绕过 Provider。配置与 Provider 返回结果冲突、项目歧义/不存在或权限拒绝时，必须停止资料读取，保持当前 state v2 步骤，并要求修复或显式选择。
+已配置 SSOT 的项目必须经 Provider API/MCP 解析唯一项目身份与访问上下文。Consumer 只提交用户已配置的项目候选和短时访问上下文，不按仓库名或目录名猜测项目，不直连 Worker、数据库或缓存绕过 Provider。配置与 Provider 返回结果冲突、项目歧义/不存在或读取权限拒绝时，必须停止资料读取，保持当前 state v2 步骤，并要求修复或显式选择。Provider 已稳定的导入、归档与恢复写入例外不得被解释为读取权；U-C01 仅保留未来 Provider 新主版本适配意图，并保证所有读取及派生能力的目标项目隔离不退化。
 
 ```gherkin
 Given 本地配置与 Provider 返回的项目身份冲突
@@ -42,4 +42,5 @@ Then state v2 的当前步骤保持不变，输出明确未取得远端资料，
 - `ADLC-NFR-005`：失败不推进 state v2，恢复不重复逻辑血缘。
 - `ADLC-NFR-007`：发布物不携带本仓自举文档。
 - `ADLC-NFR-008`：超时/重试和版本组合必须有实际证据；当前未验证。
-- Provider OpenAPI `1.0.0-candidate.1` 是字段级唯一事实；Consumer 不手写第二套 DTO Schema。
+- U-C01 不实现跨项目导入、归档或恢复业务规则；机器契约和兼容治理细节留待 B2。
+- Kiro、Claude Code、OpenCode 只能经 Core 使用 U-C01，不得直连 Provider。

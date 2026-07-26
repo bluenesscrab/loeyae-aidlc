@@ -2,7 +2,7 @@
 
 - **基线**：`CR-I5-SCOPE-001 / CR4 B4 / CR4-B4-I7-PLAN-APPROVAL-044=A`
 - **形成时间**：2026-07-18T07:11:16Z
-- **状态**：`approved`
+- **状态**：`CR-U-P01-CROSS-PROJECT-IMPORT-001 / CR4 B1 Consumer` 故事候选已回写；Provider-first 已稳定，等待后续独立严格门禁
 - **审批证据**：SSOT 权威 `CR4-B4-I7-STORY-APPROVAL-045=A`
 - **深度与拆分**：全面深度；以资料闭环旅程为主、角色目标文档为辅，每个故事对应一个可观察 Consumer 业务结果。
 - **实现状态**：未实施、未运行验证；本文只建立 AI-DLC Consumer 用户故事、Gherkin 和追踪基线。
@@ -14,6 +14,8 @@
 3. Kiro、Claude Code、OpenCode 是同一 Core 语义的薄适配，不形成独立业务项目属性、故事主线或审批门禁。
 4. 未配置 SSOT 的 Legacy 项目保持 state v2 和零远程调用；失败不得伪造远端读取、引用、血缘或同步成功。
 5. Manifest、事件、远端 CR/impact、完整 Trace 和 state v3 不属于现行故事。
+6. Provider 已稳定的跨项目导入、归档与恢复只改变服务端三类写入边界；Consumer 不新增独立业务项目写入故事。U-C01 仅承接未来 Provider 新主版本适配意图，U-C02 的目标项目读取授权和固定修订/片段保持不变。
+7. Kiro、Claude Code、OpenCode 只能经 Core 使用 Provider，不得形成平台直连或平台独立写入逻辑。
 
 ## 2. 用户故事
 
@@ -127,9 +129,9 @@ Scenario: 排除资料重新出现时阻止生成
 
 ```gherkin
 Scenario: Consumer 保持上下文中的固定来源状态
-  Given Provider 返回固定资料、修订、片段、讨论状态、检索路径和预算的 ContextBundle
+  Given Provider 返回固定资料、修订、片段、来源、检索路径和预算的 ContextBundle
   When AI-DLC 接收该上下文包
-  Then AI-DLC 原样保留来源与状态并仅将包内片段用于当前目标文档
+  Then AI-DLC 原样保留固定来源、索引与降级状态，并仅将包内片段用于当前目标文档
 
 Scenario: GraphRAG 不可用时展示实际降级
   Given Provider 标明 GraphRAG 不可用并降级到向量和全文
@@ -145,23 +147,23 @@ Scenario: 固定修订缺失或跨项目内容时拒绝生成
 ### ADLC-US-006 正式文档生成与事实分层
 
 - **作为**：五类角色中的文档负责人
-- **我希望**：在业务项目工作区生成区分资料状态的正式研发文档
-- **以便**：已确认资料、未确认讨论、显式结论和模型推断不会相互冒充
+- **我希望**：在业务项目工作区生成区分资料证据与模型推断的正式研发文档
+- **以便**：有固定资料引用支撑的内容与无来源模型推断不会相互冒充
 - **追踪**：`ADLC-FR-006`；`ADLC-NFR-003`、`ADLC-NFR-004`、`ADLC-NFR-006`
 - **契约**：`SSOT-MATERIAL-001`、`SSOT-CONTEXT-001`、`SSOT-LINEAGE-001`、`SSOT-FAILURE-001`
 - **画像**：`ADLC-PER-001`—`ADLC-PER-005`
 - **优先级**：Must
 
 ```gherkin
-Scenario: 生成文档明确区分四类事实状态
-  Given 上下文包含已确认资料、未确认评论、显式结论和模型推断
+Scenario: 生成文档区分资料证据与模型推断
+  Given 上下文包含两项具有固定资料修订/片段引用的内容和一项无来源模型推断
   When AI-DLC 在目标阶段目录生成正式文档
-  Then 四类内容具有可辨识的来源状态，正文保存在业务项目工作区并可由 Git 管理
+  Then 有来源内容保留各自固定引用，无来源内容明确标识为模型推断，正文保存在业务项目工作区并可由 Git 管理
 
-Scenario: 未确认内容不得写成批准事实
-  Given 生成草稿把未确认评论或模型推断表达为已批准结论
+Scenario: 无来源推断不得写成资料事实
+  Given 生成草稿把无来源模型推断表达为有资料支撑的事实
   When AI-DLC 执行内容校验
-  Then 校验阻止该草稿进入待审批正式基线，并指出需要纠正的来源状态
+  Then 校验阻止该草稿进入待审批正式基线，并指出缺失的固定资料修订/片段引用
 ```
 
 ### ADLC-US-007 片段引用与章节血缘回写
@@ -316,26 +318,31 @@ Scenario: 事实分层校验阻止虚假通过
   Then 草稿不能进入待审批基线，并指出缺失的外部权威证据
 ```
 
-### ADLC-US-013 真实项目跨平台资料闭环验收
+### ADLC-US-013 双项目跨平台资料闭环验收
 
 - **作为**：五类角色和产品验收负责人
-- **我希望**：在一个真实项目中复现资料选择、正式文档和血缘闭环
-- **以便**：只在 Provider 和三平台都有稳定证据时确认首期 Consumer 能力
+- **我希望**：在两个真实项目中复现读取隔离、固定引用、写入零泄露、治理和三平台 Core 闭环
+- **以便**：只在 Provider/Consumer 组合、双项目安全与三平台调用边界都有稳定证据时确认首期 Consumer 能力
 - **追踪**：`ADLC-FR-013`；`ADLC-NFR-001`—`ADLC-NFR-008`
 - **契约**：八项现行契约
 - **画像**：`ADLC-PER-001`—`ADLC-PER-005`
 - **优先级**：Must
 
 ```gherkin
-Scenario: 真实项目闭环在三平台保持业务语义一致
-  Given 一个真实项目包含至少三类资料、两个以上修订并已配置 SSOT
-  When 分别通过受支持客户端执行资料选择、上下文、正式文档生成和血缘回写
-  Then 实际选择和固定引用可复现，平台差异不改变角色、资料、引用或流程状态语义
+Scenario: 双项目闭环在三平台保持业务语义一致
+  Given 两个真实项目包含代表性资料和多个不可变修订，且已准备批准的 Provider/Consumer 组合
+  When Kiro、Claude Code、OpenCode 分别只经 Core 执行目标项目读取、上下文、正式文档和血缘闭环
+  Then 读取与派生结果保持目标项目隔离，固定修订和片段可复现，且不存在平台直连 Provider
 
 Scenario: 显式选择和降级在闭环中可复现
   Given 验收包含资料排除、指定旧版及一次图索引降级
   When 三个平台执行相同业务输入
   Then 每个平台得到相同的最终选择和固定引用，并记录相同的业务降级含义
+
+Scenario: 滥用治理和零泄露证据完整
+  Given 写入主体无目标项目读取权限，且验收覆盖配额、成本、风险提示、通知、申诉、隔离处置和审计
+  When 汇总成功、失败、冲突、重复、状态转换与历史内容恢复结果
+  Then 可见结果不泄露目标项目既有事实，恢复后的新修订不改变旧引用，且每项治理责任均有稳定证据
 
 Scenario: 缺少 Provider 或运行证据时整体保持未验证
   Given 闭环缺少稳定运行标识、Provider 证据、Legacy 零调用或三平台一致性证据中的任一项
@@ -379,7 +386,7 @@ Scenario: 缺少 Provider 或运行证据时整体保持未验证
 - `ADLC-FR-001`—`ADLC-FR-013`：13/13 均有唯一主故事和 Gherkin。
 - `ADLC-NFR-001`—`ADLC-NFR-008`：8/8 均映射；性能、质量、超时和重试阈值仍待 I12/I13 冻结。
 - 五类画像：5/5 均至少映射一个故事，角色目录保持通用阶段目录，不声称独立模板存在。
-- 引用/血缘：`ADLC-US-005` 固定上下文，`ADLC-US-006` 保持事实分层，`ADLC-US-007` 回写章节血缘，`ADLC-US-013` 验证闭环。
+- 引用/血缘：`ADLC-US-005` 固定资料修订/片段、来源、索引与降级状态，`ADLC-US-006` 区分资料证据与模型推断，`ADLC-US-007` 回写章节血缘，`ADLC-US-013` 验证闭环。
 - 八项契约：8/8 均有 Consumer 故事映射；当前只是 `candidate-v0` 文档契约，未建立机器 Schema、适配或运行证据。
 
 ## 4. INVEST 检查
@@ -400,4 +407,8 @@ Scenario: 缺少 Provider 或运行证据时整体保持未验证
 
 ## 6. 审批状态
 
-本故事集已按 `CR4-B4-I7-PLAN-APPROVAL-044=A` 生成，并由 SSOT 权威 `CR4-B4-I7-STORY-APPROVAL-045=A` 批准。I7 已完成，下一步仅进入 I8 用户故事交叉验证；不得进入 B5 或实施代码。
+本故事集已按 `CR4-B4-I7-PLAN-APPROVAL-044=A` 生成，并由 SSOT 权威 `CR4-B4-I7-STORY-APPROVAL-045=A` 批准。该批准基线与既有讨论域候选保留为历史；当前叠加 `CR-U-P01-CROSS-PROJECT-IMPORT-001` B1 Consumer 候选，Provider-first 已稳定，后续严格门禁批准前不得进入 B2 或实施代码。
+
+## 7. CR-U-P01-CROSS-PROJECT-IMPORT-001 B1 Consumer 故事候选边界
+
+`ADLC-US-003` 只增加未来 Provider 新主版本适配意图并保护读取项目隔离；`ADLC-US-004`—`008` 继续要求目标项目读取授权和固定修订/片段；`ADLC-US-013` 扩展双项目、滥用治理、Provider/Consumer 组合及三平台经 Core 验证。Consumer 不新增独立业务项目写入逻辑；机器契约和兼容治理细节留待 B2，本批不修改 product contracts、I12/I13/I14、配置或实现。

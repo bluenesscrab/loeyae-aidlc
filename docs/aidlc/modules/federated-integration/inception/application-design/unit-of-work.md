@@ -14,12 +14,12 @@
 |------|------|
 | `unit_id` | `U-C01-CORE-PROVIDER-CLIENT` |
 | `service_id` | `loeyae-aidlc` |
-| 职责 | 建立 Provider 唯一客户端端口、项目解析、Online/Legacy 模式判定、配置与 Secret 注入边界、契约版本协商、稳定错误映射、有限重试和本地恢复决策；不承载文档生成语义。 |
+| 职责 | 建立 Provider 唯一客户端端口，适配 v3 八项读取/Context/血缘/逆向写能力、项目解析、Online/Legacy 模式判定、配置与 Secret 注入边界、契约版本协商、稳定错误映射、有限重试和本地恢复决策；不承载文档生成语义，不暴露 Provider `createMaterial`、`archiveMaterial`、`restoreMaterialStatus`、`restoreMaterialRevision` 四个生命周期写入口。 |
 | 需求来源 | 主归属 `ADLC-FR-003`、`ADLC-FR-010`、`ADLC-FR-011`；相关 `ADLC-NFR-002`、`003`、`005`、`007`、`008`。`source_ref`：`../requirements/requirements.full.md`。 |
 | 故事来源 | 主归属 `ADLC-US-003`、`ADLC-US-010`、`ADLC-US-011`。`source_ref`：`../user-stories/stories.full.md`。 |
 | UC-D 来源 | 产品：`TC-C-003-S01`—`S03`、`TC-C-010-S01`—`S02`、`TC-C-011-S01`—`S03`；技术：`TC-C-TECH-002`、`003`、`004`、`007`、`008`。 |
 | 允许修改范围 | 后续获批 Construction 中仅允许 `loeyae-aidlc` 共享 Core 的 Provider 客户端、配置解析、模式选择、错误映射、重试/恢复及其同服务测试。当前 I14 不授权任何代码或配置修改。 |
-| 契约依赖 | 八项 Provider 契约中的 PROJECT、MATERIAL、RETRIEVAL、CONTEXT、REVERSE-DOC、LINEAGE、INDEX-STATUS、FAILURE；字段由 Provider OpenAPI `1.0.0-candidate.1` 唯一定义。 |
+| 契约依赖 | 八项 Provider 契约中的 PROJECT、MATERIAL、RETRIEVAL、CONTEXT、REVERSE-DOC、LINEAGE、INDEX-STATUS、FAILURE；字段由 Provider v3 OpenAPI `3.0.0-candidate.1` 唯一定义。 |
 | 配置依赖 | endpoint 与 project candidate 同时存在才为 Online、同时缺失才为 Legacy、部分配置为 ConfigError；Bearer/Secret 仅由受控运行时注入。 |
 | 数据依赖 | state v2 中仅保存非敏感恢复位置、correlationId、固定引用和待恢复动作；不保存令牌、完整资料正文或 Provider 权威数据副本。 |
 | 外部依赖 | Provider `ssot-api`；不得直连 Worker、数据库、对象存储或索引实现。 |
@@ -43,7 +43,7 @@
 | 数据依赖 | 业务工作区 state v2、RoleIntent、TargetDocument、MaterialSelection、ValidatedBundle、GenerationArtifact、FragmentCitation、LineageRecord、ReverseDocUpload；正式正文归业务工作区/Git。 |
 | 外部依赖 | 业务工作区与 Git；Provider 仅经 U-C01-CORE-PROVIDER-CLIENT Gateway；任务/进度/CI/测试/制品/部署结果仍由各自权威平台提供。 |
 | 前置检查点 | U-C01-CORE-PROVIDER-CLIENT Core 端口稳定；Provider 检索、ContextBundle、血缘和逆向说明契约可消费；事实分层和固定引用规则已冻结。 |
-| 后置检查点 | 只读取当前业务工作区 state v2；排除项不回流；固定引用不漂移；未确认讨论/模型推断不冒充批准事实；本地文档提交与血缘发布分离；失败保持同一步骤并可恢复。 |
+| 后置检查点 | 只读取当前业务工作区 state v2；排除项不回流；固定引用不漂移；有来源内容保留固定引用，无来源模型推断不冒充资料事实；本地文档提交与血缘发布分离；失败保持同一步骤并可恢复。 |
 | 完成证据 | 后续由 Core 单元/集成、引用完整性、血缘幂等、Git 关联和外部事实边界报告证明；当前仅有设计映射，`execution_status=blocked`。 |
 
 ## U-C03-KIRO-ADAPTER / kiro-adapter
@@ -101,15 +101,17 @@
 | 职责 | 建立 Provider/Consumer 契约、Core、Legacy、三平台 conformance、失败恢复、权限隔离和真实项目 E2E 的跨服务验证资产与证据聚合；不得修改生产逻辑。 |
 | 需求来源 | 主归属 `ADLC-FR-013`；相关 `ADLC-NFR-001`—`008`。`source_ref`：`../requirements/requirements.full.md`。 |
 | 故事来源 | 唯一主归属 `ADLC-US-013`。`source_ref`：`../user-stories/stories.full.md`。 |
-| UC-D 来源 | 产品：`TC-C-013-S01`—`S03`；技术：`TC-C-TECH-009`、`TC-C-TECH-010`。 |
+| UC-D 来源 | 产品：`TC-C-013-S01`—`S04`；技术：`TC-C-TECH-009`、`TC-C-TECH-010`。 |
 | 允许修改范围 | 后续获批 Construction 中仅允许 test-suite 的夹具、runner、契约/conformance/Legacy/E2E 用例与报告适配；不得修改任一生产服务逻辑。当前不授权创建或修改测试代码。 |
 | 契约依赖 | Provider OpenAPI 固定版本、U-C01-CORE-PROVIDER-CLIENT Gateway、U-C02-CORE-CONTEXT-DOCUMENT Core 端口、三平台适配端口及 Provider 各生产单元的已冻结接口。 |
 | 配置依赖 | 12 个运行锚点：环境、API 别名、身份、Owner、运行依赖、两个真实项目、命令、报告位置、版本矩阵、阈值、Secret 注入；当前登记 `0/12`。 |
-| 数据依赖 | 至少一个包含三类资料和两个以上修订的真实脱敏项目；双项目用于隔离验证；运行证据必须有稳定标识。 |
+| 数据依赖 | 两个包含代表性资料和多个不可变修订的真实脱敏项目；用于隔离、滥用治理、状态/内容回滚、Provider/Consumer 版本组合与三平台一致性设计级场景；运行证据必须有稳定标识。 |
 | 外部依赖 | Provider 实现环境、Core、Kiro/Claude/OpenCode 运行环境、Git 与受控报告位置。 |
 | 前置检查点 | 所有生产单元接口和版本冻结；12 个运行锚点闭合；测试执行获得独立授权。 |
-| 后置检查点 | 13 故事、34 Scenario、44 UC-D 与稳定报告可追踪；缺任何 Provider、Legacy、conformance 或 E2E 证据时整体仍为未验证。 |
+| 后置检查点 | 13 故事、35 Scenario、45 UC-D 与稳定报告可追踪；缺任何 Provider、Legacy、conformance 或 E2E 证据时整体仍为未验证。 |
 | 完成证据 | 后续实际命令、稳定运行 ID、报告与版本矩阵；当前仅完成设计归属，`execution_status=blocked`。 |
+
+> CR4 B4 I14 复验结论：6 个 Consumer 单元的 `unit_id`、`service_id`、13 个故事/35 个 Scenario/45 个 UC-D 主归属与单元数量均不变；无需重生成工作单元，仅同步 v3、双项目/滥用/回滚/三平台一致性与 45 个 UC-D 计数。
 
 ## 单元认领状态
 

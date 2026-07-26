@@ -2,7 +2,7 @@
 
 - **现行基线**：CR-I5-SCOPE-001 / CR4 B2 候选
 - **形成时间**：2026-07-18T05:27:44Z
-- **状态**：Consumer 概念模型；字段级契约和持久化方式待 B3/I12
+- **状态**：Consumer 概念模型；叠加 `CR-U-P01-CROSS-PROJECT-IMPORT-001 / CR4 B1 Consumer` 候选，Provider-first 已稳定；机器契约和持久化方式仍留后续批次
 - **原则**：state v2 仍是业务工作区恢复事实；Consumer 只保存消费意图、选择、引用和本地文档产物，不复制 SSOT 权威资料
 
 ## 1. 对象分层与 Owner
@@ -161,3 +161,11 @@ stateDiagram-v2
 - 上下文预算、检索质量、引用完整性和三平台 conformance 阈值。
 - ReverseDocUpload 大小、格式、敏感信息过滤和提交校验。
 - Legacy 黄金样本与三平台可复现测试夹具。
+
+## 10. 跨项目写入变更下的 Consumer 模型边界
+
+1. Provider 的导入、归档与恢复写入例外不产生新的 Consumer 业务对象；Consumer 不复制目标项目写入授权、状态转换、重复判定或恢复规则。
+2. `ProviderProjectBinding` 仅承载未来 Provider 新主版本适配意图和读取项目绑定；读取、列表、检索、Context、血缘、逆向、解析与索引继续受目标项目授权隔离。
+3. `SelectedMaterial`、`ContextBundleReference`、`FragmentCitation` 与 `LineageRecord` 继续固定具体修订和片段。Provider 历史内容恢复形成新修订后，既有 Consumer 选择、引用与血缘不得漂移。
+4. U-C06 的验证模型覆盖双项目、写入滥用与治理责任、Provider/Consumer 版本组合，以及三平台只经 Core 的调用拓扑；不增加平台直连 Provider 或平台独立业务状态。
+5. 机器契约和兼容治理细节留待 B2；本节不改变现有对象属性、持久化方式或状态图。

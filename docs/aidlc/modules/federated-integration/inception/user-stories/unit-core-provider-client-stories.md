@@ -8,8 +8,8 @@
 ## ADLC-US-003 Provider-first 项目解析（主归属）
 
 - **作为**：已配置 SSOT 的业务项目用户
-- **我希望**：通过 Provider 解析唯一项目和访问上下文
-- **以便**：资料消费建立在正确的项目隔离边界上
+- **我希望**：通过 Provider 解析唯一项目和访问上下文，并为未来 Provider 新主版本保留 Core 适配意图
+- **以便**：资料消费建立在正确的目标项目读取隔离边界上，三类写入例外不会扩散为读取权
 - **追踪**：`ADLC-FR-003`；`ADLC-NFR-003`、`ADLC-NFR-005`
 - **契约**：`SSOT-PROJECT-001`、`SSOT-FAILURE-001`
 - **画像**：`ADLC-PER-001`—`ADLC-PER-005`
@@ -25,6 +25,11 @@ Scenario: 本地配置与 Provider 项目冲突时阻断
   Given 本地配置与 Provider 返回的项目身份冲突
   When AI-DLC 解析项目
   Then 流程停止资料读取并要求修复或显式选择，不按仓库名或目录名静默猜测项目
+
+Scenario: Provider 写入例外不得削弱读取隔离
+  Given Provider 允许已认证主体向无读取权限的有效目标项目导入、归档或恢复
+  When AI-DLC Core 处理后续项目解析或资料读取
+  Then U-C01 仍要求目标项目读取授权，且不把写入成功解释为可读取、可检索或可派生
 
 Scenario: 权限拒绝不得降级绕过
   Given Provider 拒绝当前用户访问目标项目
@@ -80,3 +85,7 @@ Scenario: 权限或固定修订失败不得静默降级
   When AI-DLC 处理该失败
   Then AI-DLC 阻止生成和血缘写回，不使用缓存伪造读取、引用或同步成功
 ```
+
+## CR-U-P01-CROSS-PROJECT-IMPORT-001 B1 边界说明
+
+U-C01 本轮不新增跨项目写入故事，也不实现导入、归档、恢复或状态转换业务规则。这里只记录未来 Provider 新主版本适配意图，并冻结读取、列表、检索、Context、血缘、逆向、解析与索引隔离不得退化；机器契约和兼容治理细节留待 B2。Kiro、Claude Code、OpenCode 只能经 Core 调用 U-C01，不得直连 Provider。

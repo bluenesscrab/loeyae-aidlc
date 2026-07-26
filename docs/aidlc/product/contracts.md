@@ -1,10 +1,65 @@
 # 产品级契约索引（AI-DLC Consumer 侧）
 
-- **现行基线**：`CR-I5-SCOPE-001 / CR4 B3 已批准文档契约基线`
-- **形成时间**：2026-07-18T05:45:03Z
-- **批准依据**：SSOT 权威 `CR4-B2-I5-I6-APPROVAL-042=A`、`CR4-B3-CONTRACT-APPROVAL-043=A`
-- **当前状态**：SSOT 权威 `054=A` 已建立 OpenAPI 3.1 单一机器事实，版本为 `1.0.0-candidate.1`；本仓仅建立 Consumer 映射设计并等待 I12 严格审批
-- **事实状态**：Provider OpenAPI 静态结构检查通过；Consumer 类型/客户端、代码适配、契约测试、Legacy 零调用和三平台运行能力均未实现或未验证
+- **当前评估候选**：`CR-U-P01-IDENTITY-001 / CR4 B4 Consumer 同步`（前一轮为 `CR-U-P01-CROSS-PROJECT-IMPORT-001 / CR4 B2 Consumer`）
+- **形成时间**：2026-07-26
+- **Provider 唯一机器事实**：SSOT Provider 仓 `contracts/ssot-api-v3.openapi.json` / `3.1.0-candidate.1`
+- **当前状态**：v3 Consumer 已评估/待适配，运行未验证；本次仅同步契约版本与令牌获取/携带描述，不修改 Core 实现、三平台、需求、故事、state、配置值或任何 Schema
+- **事实边界**：本仓只保存 Provider 契约的索引、Consumer 状态、适配约束和证据入口，不复制 Schema；当前无 GA、Provider/Consumer 实现、生成客户端、数据库、运行数据或运行窗口。身份设施已确定为 OpenLDAP、令牌由 Provider 自签，但目录、密钥与运行行为均未验证
+
+## CR-U-P01-IDENTITY-001 CR4 B4：认证机制变更的 Consumer 同步
+
+> Provider 侧已由 `CR4-U-P01-IDENTITY-MECHANISM-APPROVAL-093=A` 与 `CR4-U-P01-IDENTITY-REWRITE-APPROVAL-094=A` 冻结机制并生成 `3.1.0-candidate.1`。本节只登记 Consumer 侧受影响事实与待适配状态，不修改 Core 实现或设计方法表。
+
+| 项 | 结论 |
+|----|------|
+| Provider 契约版本 | `3.0.0-candidate.1` → `3.1.0-candidate.1`；19 paths、20 个唯一 operationId、64 个 schemas；新增 `issueAccessToken`（`POST /v3/auth/tokens`） |
+| 兼容性分类 | 结构兼容新增（既有 19 个 operationId 与 `bearerAuth` 结构不变）；**消费者条件兼容**——令牌签发方由外部 OIDC 改为 Provider 自签，令牌获取路径必须改写 |
+| 版本头 | 在线请求的 `X-SSOT-Contract-Version` 必须改为 `3.1.0-candidate.1` |
+| 令牌语义 | 分钟级、上限 1 小时的无状态令牌；**无刷新令牌**，到期重新获取；无令牌级即时吊销 |
+| 令牌获取失败映射 | `401` 凭据失败且不区分原因（不得据此推断主体是否存在）、`429` 双维限流、`503` 目录或签名材料不可用且零签发（不得降级为匿名或本地伪造令牌） |
+| 目录不可用期间 | 已签发未过期令牌继续可用；令牌获取失败不得使持有有效令牌的进行中流程整体失败 |
+| 错误码 | `SSOT-FAILURE-001` 未新增错误码，复用 `AUTHENTICATION_REQUIRED`/`RATE_LIMITED`/`PROVIDER_UNAVAILABLE` |
+| 逐 Consumer 状态 | `U-C01`、`U-C02` 标记为待适配；Kiro/Claude Code/OpenCode 仍只经 Core，零直连边界不变 |
+| **未闭合阻断项** | `issueAccessToken` 的调用方归属未确定。「三平台零直连 Provider」与「原始凭据只由平台凭据适配器保存、Core 只接收短时值且不保存 token」两条既有约束同时成立时，无一方可在不违反其一的前提下提交目录凭据。归属由 `CR4-U-P01-IDENTITY-CONSUMER-TOKEN-Q001` 决定；闭合前不新增 Core 方法、不实现令牌获取、Consumer 侧令牌获取 UC-D 不派生 |
+| Consumer UC-D | 本次未新增。`V-IDENT-08` 的 Provider 部分已由 `TC-T-IDENTITY-001`、`TC-T-IDENTITY-002` 关闭，Consumer 部分仍为已登记缺口 |
+
+## CR-U-P01-CROSS-PROJECT-IMPORT-001 CR4 B2：v3 Consumer 评估候选
+
+### CR-B2.1 权威来源与静态事实
+
+- 字段级唯一机器事实为 SSOT Provider 仓 `contracts/ssot-api-v3.openapi.json` / `3.0.0-candidate.1`；本文件不得形成第二套字段定义。v1/v2 仅作只读历史，不是当前前向 Consumer 契约。
+- v3 由 v2 完整派生，包含 18 paths、19 个唯一 operationId、62 个 schemas，并新增 `archiveMaterial`、`restoreMaterial`、`restoreMaterialRevision`。
+- 恰好 `createMaterial`、`archiveMaterial`、`restoreMaterial`、`restoreMaterialRevision` 四个 operation 仍要求 Bearer，但免目标项目成员资格和项目 scope；`createMaterialRevision` 不在例外内，仍要求目标项目 `material:write`。
+- `MaterialUploadRequest.status` 必填；archive、状态恢复、历史修订恢复使用独立 DTO，并按机器契约分别执行 If-Match、幂等和 ETag 约束。成功响应必须保持裁剪，错误必须保持目标项目事实零泄露。
+- 默认读取和自动选择仅包含 `active`；只有具备目标项目读取资格的显式请求可读取 `archived`。历史修订恢复为 append-only，不覆盖来源修订或既有历史。
+
+### CR-B2.2 Consumer 拓扑与状态
+
+| Consumer | Provider 调用边界 | v3 B2 状态 | 约束 |
+|----------|-------------------|------------|------|
+| loeyae-aidlc Core | 唯一直接 Consumer | 已评估/待适配，运行未验证 | 后续从 Provider v3 权威源适配；当前不修改 Core 设计或实现 |
+| Kiro Power | 仅经 Core，零直连 | 已评估/待适配，运行未验证 | 不协商 Provider 版本，不复制 Provider DTO |
+| Claude Code Plugin | 仅经 Core，零直连 | 已评估/待适配，运行未验证 | 不协商 Provider 版本，不复制 Provider DTO |
+| OpenCode Plugin | 仅经 Core，零直连 | 已评估/待适配，运行未验证 | 不协商 Provider 版本，不复制 Provider DTO |
+
+Core 是本仓唯一直接 Consumer；不得将 Kiro、Claude Code 或 OpenCode 记为 Provider 直接消费者，也不得声称 Core 或三平台已适配。
+
+### CR-B2.3 Consumer 未来适配约束
+
+1. 四个公开写适配必须覆盖显式目标项目确认、`MaterialUploadRequest.status` 必填、archive、状态恢复、历史修订恢复及零泄露错误映射；Bearer 仍为必需条件，不得把授权例外扩大到读取或其他写操作。
+2. `createMaterialRevision` 必须继续走目标项目授权并要求 `material:write`，不得复用四个公开写的成员资格/scope 例外。
+3. archive 与状态恢复不得改写修订历史；历史修订恢复必须 append-only 创建新修订，并保持 If-Match、幂等和 ETag 语义。
+4. 既有读取、检索、Context、固定 revision 引用、引用/章节血缘和项目硬隔离不得退化；默认/自动路径仅消费 `active`，授权后的显式读取才可消费 `archived`。
+5. Consumer 不得把裁剪成功响应补全为推测事实，也不得借错误、重试、日志或平台呈现泄露目标项目是否存在、成员关系、scope 或资源状态。
+
+### CR-B2.4 兼容、顺序与验证边界
+
+- 顺序固定为 Provider-first，Portal 后适配，Core 再适配；三平台只在 Core 稳定入口上验证，不执行 Provider 版本协商。
+- 若未来 v3 GA，兼容窗口结束时间取“v3 GA 后 90 个自然日”和“全部直接消费者完成 v3 验证后 30 个自然日观察期”两者较晚者。当前不存在 GA 或运行窗口，不得虚构起止日期。
+- 回滚必须非破坏：先停止 v3 新写入，保留脱敏审计、权威资料、状态、修订、固定引用和血缘，隔离受影响派生并仅重建派生；Consumer 仅可切回届时已验证的旧版本组合。当前 v1/v2 仅为只读历史，不构成已验证运行回滚目标。
+- 057 保持 `0/12`，运行未验证；本次不构建、不测试，不产生运行适配证据。
+
+> 以下第 1—11 节为既有 v1/B3 Consumer 历史正文，原文保留；其中“现行”“当前”“待适配”等表述只在历史上下文内成立，不覆盖上述 v3 B2 Consumer 评估候选。
 
 ## 1. 消费拓扑
 
@@ -185,3 +240,4 @@ OpenCode -------+          |                    |
 | 2026-07-17T09:40:34Z | SSOT-MCP-001 / SSOT-MANIFEST-001 / SSOT-EVENT-001 / SSOT-ERROR-001 | I6 闭合权威影响分析消费、Manifest 投影、基线四态、项目分区和失效游标恢复语义 | 文档级兼容补充 | AI-DLC Core | 历史记录 | `federated-integration/inception/requirements/cross-validation-report.md` |
 | 2026-07-18T05:45:03Z | SSOT-PROJECT-001 / SSOT-MATERIAL-001 / SSOT-RETRIEVAL-001 / SSOT-CONTEXT-001 / SSOT-REVERSE-DOC-001 / SSOT-LINEAGE-001 / SSOT-INDEX-STATUS-001 / SSOT-FAILURE-001 | 按 042=A 消费 Provider-first 最小在线文档契约，移除旧 Federated/state v3 强制依赖 | 新契约，兼容性未知 | AI-DLC Core 与三平台薄适配 | B3 候选，运行未验证 | `CR-I5-SCOPE-001` / SSOT 权威 `CR4-B2-I5-I6-APPROVAL-042=A` |
 | 2026-07-19T13:38:21Z | 全部八项 | 按 SSOT 权威 `054=A` 映射 OpenAPI 3.1 单一机器事实、系统基线和 Core 应用设计；不复制 Schema | 设计候选；运行兼容性未验证 | AI-DLC Core；三平台间接 | I12 待严格审批 | SSOT OpenAPI / 本仓 I12 应用设计 |
+| 2026-07-26 | SSOT-FAILURE-001（复用）+ 新增 `issueAccessToken` | 按 SSOT 权威 `093=A`/`094=A` 同步：令牌签发方由外部 OIDC 改为 Provider 自签，Provider 契约前推至 `3.1.0-candidate.1` 并新增 `POST /v3/auth/tokens`；既有 19 个 operationId 与 `bearerAuth` 结构不变 | 结构兼容新增；消费者条件兼容 | AI-DLC Core `U-C01`/`U-C02` 待适配；三平台仍只经 Core | 索引已同步；令牌获取调用方归属未闭合，Consumer UC-D 未派生，运行未验证 | SSOT `093=A`、`094=A` / 本文件 CR4 B4 章节 |

@@ -2,21 +2,22 @@
 
 - 生成时间：`2026-07-20T01:37:03Z`
 - 范围：Consumer I13，风险簇 B、E-J
-- 产品基线：`docs/aidlc/modules/federated-integration/inception/user-stories/stories.md`
+- 产品基线：`docs/aidlc/modules/federated-integration/inception/user-stories/stories.full.md`
 - 技术基线：`docs/aidlc/product/system-baseline/consistency-scenarios.md`
-- Provider 契约引用：`../loeyae-ssot-server/contracts/ssot-api-v1.openapi.json`，版本 `1.0.0-candidate.1`
+- Provider 契约引用：`../loeyae-ssot-server/contracts/ssot-api-v3.openapi.json`，OpenAPI 3.1，当前候选版本 `3.1.0-candidate.1`，路由前缀 `/v3`
+- 2026-07-26 复核（`CR-U-P01-IDENTITY-001` CR4 B4，授权依据 SSOT 权威 `094=A`）：Provider 令牌签发方改为自签且新增 `issueAccessToken`，契约版本前推至 `3.1.0-candidate.1`。既有 45 个 Consumer UC-D 的断言只依赖「已成功 Bearer 认证」「稳定错误类别驱动」「三平台零直连」，与令牌签发方无关，因此**数量与内容均不变**，仅同步版本边界表述。**未关闭缺口**：令牌获取路径（`401`/`429`/`503`、到期重新获取、目录不可用期间持有效令牌继续调用）的 Consumer UC-D 未派生，因为其执行锚点取决于尚未确定的调用方归属（见 `product/contracts.md` 的 CR4 B4 章节与 `CR4-U-P01-IDENTITY-CONSUMER-TOKEN-Q001`）。`V-IDENT-08` 的 Consumer 部分保持已登记缺口。
 - 执行状态说明：Consumer 当前无 test script、SSOT 适配或运行证据，Provider 当前无实现环境；因此所有用例均为 `status: blocked`、`design_status: ready`、`execution_status: blocked`。静态设计追踪不等于运行验证。
 
 ## 通用证据边界
 
-所有用例的未来运行证据必须包含稳定运行标识、不可变提交或制品摘要、适用范围、结果、受控位置、Owner 和 UTC 时间。当前这些运行锚点未登记，本文不提供示例别名、命令、URL、身份、Secret 或报告位置。I14 已生成并由 060=A 批准工作单元，但 12/12 均未认领，C8 尚未执行；本文只建立 I13 设计与追踪基线。
+所有用例的未来运行证据必须包含稳定运行标识、不可变提交或制品摘要、适用范围、结果、受控位置、Owner 和 UTC 时间。当前这些运行锚点未登记，本文不提供示例别名、命令、URL、身份、Secret 或报告位置。I14 已生成并由 060=A 批准工作单元；Consumer 6/6 单元仍未认领，Provider U-P01 的既有认领不解除本仓阻断；C8 尚未执行。本文只建立 I13 设计与追踪基线。
 
 <a id="tc-c-001-s01"></a>
 ## UC-D TC-C-001-S01 — 业务工作区 state v2 是唯一恢复源
 
 - id: `TC-C-001-S01`
 - title: `业务工作区 state v2 是唯一恢复源`
-- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.md#ADLC-US-001/S01`
+- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.full.md#ADLC-US-001/S01`
 - story_ref: `ADLC-US-001`
 - scenario_ref: `ADLC-US-001/S01`
 - type: `integration`
@@ -68,7 +69,7 @@ Scenario: 业务工作区 state v2 是唯一恢复源
 
 - id: `TC-C-001-S02`
 - title: `业务 state 缺失或无效时不借用插件状态`
-- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.md#ADLC-US-001/S02`
+- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.full.md#ADLC-US-001/S02`
 - story_ref: `ADLC-US-001`
 - scenario_ref: `ADLC-US-001/S02`
 - type: `resilience`
@@ -119,7 +120,7 @@ Scenario: 业务 state 缺失或无效时不借用插件状态
 
 - id: `TC-C-002-S01`
 - title: `测试人员形成测试计划资料意图`
-- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.md#ADLC-US-002/S01`
+- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.full.md#ADLC-US-002/S01`
 - story_ref: `ADLC-US-002`
 - scenario_ref: `ADLC-US-002/S01`
 - type: `unit`
@@ -171,7 +172,7 @@ Scenario: 测试人员形成测试计划资料意图
 
 - id: `TC-C-002-S02`
 - title: `角色或目标文档不明确时请求确认`
-- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.md#ADLC-US-002/S02`
+- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.full.md#ADLC-US-002/S02`
 - story_ref: `ADLC-US-002`
 - scenario_ref: `ADLC-US-002/S02`
 - type: `integration`
@@ -222,7 +223,7 @@ Scenario: 角色或目标文档不明确时请求确认
 
 - id: `TC-C-003-S01`
 - title: `Provider 返回唯一授权项目`
-- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.md#ADLC-US-003/S01`
+- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.full.md#ADLC-US-003/S01`
 - story_ref: `ADLC-US-003`
 - scenario_ref: `ADLC-US-003/S01`
 - type: `contract`
@@ -274,7 +275,7 @@ Scenario: Provider 返回唯一授权项目
 
 - id: `TC-C-003-S02`
 - title: `本地配置与 Provider 项目冲突时阻断`
-- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.md#ADLC-US-003/S02`
+- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.full.md#ADLC-US-003/S02`
 - story_ref: `ADLC-US-003`
 - scenario_ref: `ADLC-US-003/S02`
 - type: `contract`
@@ -326,7 +327,7 @@ Scenario: 本地配置与 Provider 项目冲突时阻断
 
 - id: `TC-C-003-S03`
 - title: `权限拒绝不得降级绕过`
-- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.md#ADLC-US-003/S03`
+- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.full.md#ADLC-US-003/S03`
 - story_ref: `ADLC-US-003`
 - scenario_ref: `ADLC-US-003/S03`
 - type: `resilience`
@@ -377,7 +378,7 @@ Scenario: 权限拒绝不得降级绕过
 
 - id: `TC-C-004-S01`
 - title: `自动选择叠加排除和指定旧版`
-- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.md#ADLC-US-004/S01`
+- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.full.md#ADLC-US-004/S01`
 - story_ref: `ADLC-US-004`
 - scenario_ref: `ADLC-US-004/S01`
 - type: `integration`
@@ -429,7 +430,7 @@ Scenario: 自动选择叠加排除和指定旧版
 
 - id: `TC-C-004-S02`
 - title: `低置信冲突或范围过大时请求确认`
-- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.md#ADLC-US-004/S02`
+- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.full.md#ADLC-US-004/S02`
 - story_ref: `ADLC-US-004`
 - scenario_ref: `ADLC-US-004/S02`
 - type: `integration`
@@ -481,7 +482,7 @@ Scenario: 低置信冲突或范围过大时请求确认
 
 - id: `TC-C-004-S03`
 - title: `排除资料重新出现时阻止生成`
-- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.md#ADLC-US-004/S03`
+- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.full.md#ADLC-US-004/S03`
 - story_ref: `ADLC-US-004`
 - scenario_ref: `ADLC-US-004/S03`
 - type: `integration`
@@ -532,7 +533,7 @@ Scenario: 排除资料重新出现时阻止生成
 
 - id: `TC-C-005-S01`
 - title: `Consumer 保持上下文中的固定来源状态`
-- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.md#ADLC-US-005/S01`
+- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.full.md#ADLC-US-005/S01`
 - story_ref: `ADLC-US-005`
 - scenario_ref: `ADLC-US-005/S01`
 - type: `contract`
@@ -548,30 +549,31 @@ Scenario: 排除资料重新出现时阻止生成
 
 ```gherkin
 Scenario: Consumer 保持上下文中的固定来源状态
-  Given Provider 返回固定资料、修订、片段、讨论状态、检索路径和预算的 ContextBundle
+  Given Provider 返回固定资料、修订、片段、来源、检索路径和预算的 ContextBundle
   When AI-DLC 接收该上下文包
-  Then AI-DLC 原样保留来源与状态并仅将包内片段用于当前目标文档
+  Then AI-DLC 原样保留固定来源、索引与降级状态，并仅将包内片段用于当前目标文档
 
 ```
 
 ### 执行锚点
 
-- 设计锚点：`ContextBundleValidator.validate(...)` 和 operationId `createContextBundle`。
+- 设计锚点：`ContextBundleValidator.validate(...)` 和 v3 operationId `createContextBundle`；Core 只读取固定来源、索引与降级状态。
+- 排除锚点：Core 不消费讨论摘要，也不公开讨论详情能力。
 - 运行锚点：Provider 环境、项目、阈值和 Consumer 报告引用未登记，执行阻断。
 
 ### 执行步骤与断言
 
 | # | 步骤 | 断言 |
 |---|------|------|
-| 1 | 校验固定 ContextBundle | 固定字段与状态原样保留，生成输入不包含包外片段 |
+| 1 | 校验固定 ContextBundle 的资料、修订、片段、来源、检索路径、预算、索引与降级状态 | 固定来源、索引与降级状态原样保留，生成输入不包含包外片段或讨论摘要 |
 
 ### 覆盖映射
 
-- 固定 bundle 与数据最小化 → 步骤 1 → 不漂移、不扩展。
+- 固定 bundle、来源状态消费与数据最小化 → 步骤 1 → 不漂移、不扩展、不消费讨论摘要。
 
 ### 证据要求
 
-- C8 应提供契约响应、校验结果和生成输入观测；当前未登记。
+- C8 应提供 v3 ContextBundle 契约响应、固定来源/索引/降级状态校验结果及生成输入；当前未登记。
 
 ### 派生日志
 
@@ -584,7 +586,7 @@ Scenario: Consumer 保持上下文中的固定来源状态
 
 - id: `TC-C-005-S02`
 - title: `GraphRAG 不可用时展示实际降级`
-- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.md#ADLC-US-005/S02`
+- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.full.md#ADLC-US-005/S02`
 - story_ref: `ADLC-US-005`
 - scenario_ref: `ADLC-US-005/S02`
 - type: `resilience`
@@ -636,7 +638,7 @@ Scenario: GraphRAG 不可用时展示实际降级
 
 - id: `TC-C-005-S03`
 - title: `固定修订缺失或跨项目内容时拒绝生成`
-- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.md#ADLC-US-005/S03`
+- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.full.md#ADLC-US-005/S03`
 - story_ref: `ADLC-US-005`
 - scenario_ref: `ADLC-US-005/S03`
 - type: `resilience`
@@ -683,11 +685,11 @@ Scenario: 固定修订缺失或跨项目内容时拒绝生成
 ---
 
 <a id="tc-c-006-s01"></a>
-## UC-D TC-C-006-S01 — 生成文档明确区分四类事实状态
+## UC-D TC-C-006-S01 — 生成文档区分资料证据与模型推断
 
 - id: `TC-C-006-S01`
-- title: `生成文档明确区分四类事实状态`
-- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.md#ADLC-US-006/S01`
+- title: `生成文档区分资料证据与模型推断`
+- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.full.md#ADLC-US-006/S01`
 - story_ref: `ADLC-US-006`
 - scenario_ref: `ADLC-US-006/S01`
 - type: `integration`
@@ -702,10 +704,10 @@ Scenario: 固定修订缺失或跨项目内容时拒绝生成
 ### 来源溯源
 
 ```gherkin
-Scenario: 生成文档明确区分四类事实状态
-  Given 上下文包含已确认资料、未确认评论、显式结论和模型推断
+Scenario: 生成文档区分资料证据与模型推断
+  Given 上下文包含两项具有固定资料修订/片段引用的内容和一项无来源模型推断
   When AI-DLC 在目标阶段目录生成正式文档
-  Then 四类内容具有可辨识的来源状态，正文保存在业务项目工作区并可由 Git 管理
+  Then 有来源内容保留各自固定引用，无来源内容明确标识为模型推断，正文保存在业务项目工作区并可由 Git 管理
 
 ```
 
@@ -718,11 +720,11 @@ Scenario: 生成文档明确区分四类事实状态
 
 | # | 步骤 | 断言 |
 |---|------|------|
-| 1 | 用四类事实生成并提交文档 | 四类状态可辨识，正文仅落业务工作区/Git |
+| 1 | 用两项固定资料证据和一项无来源模型推断生成并提交文档 | 有来源内容各自保留固定引用，无来源内容明确标识为模型推断，正文仅落业务工作区/Git |
 
 ### 覆盖映射
 
-- 事实分层/正文 Owner → 步骤 1 → 状态清晰且本地权威。
+- 资料证据/模型推断分层与正文 Owner → 步骤 1 → 固定引用清晰且无来源推断不冒充资料事实。
 
 ### 证据要求
 
@@ -735,11 +737,11 @@ Scenario: 生成文档明确区分四类事实状态
 ---
 
 <a id="tc-c-006-s02"></a>
-## UC-D TC-C-006-S02 — 未确认内容不得写成批准事实
+## UC-D TC-C-006-S02 — 无来源推断不得写成资料事实
 
 - id: `TC-C-006-S02`
-- title: `未确认内容不得写成批准事实`
-- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.md#ADLC-US-006/S02`
+- title: `无来源推断不得写成资料事实`
+- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.full.md#ADLC-US-006/S02`
 - story_ref: `ADLC-US-006`
 - scenario_ref: `ADLC-US-006/S02`
 - type: `unit`
@@ -754,10 +756,10 @@ Scenario: 生成文档明确区分四类事实状态
 ### 来源溯源
 
 ```gherkin
-Scenario: 未确认内容不得写成批准事实
-  Given 生成草稿把未确认评论或模型推断表达为已批准结论
+Scenario: 无来源推断不得写成资料事实
+  Given 生成草稿把无来源模型推断表达为有资料支撑的事实
   When AI-DLC 执行内容校验
-  Then 校验阻止该草稿进入待审批正式基线，并指出需要纠正的来源状态
+  Then 校验阻止该草稿进入待审批正式基线，并指出缺失的固定资料修订/片段引用
 ```
 
 ### 执行锚点
@@ -769,15 +771,15 @@ Scenario: 未确认内容不得写成批准事实
 
 | # | 步骤 | 断言 |
 |---|------|------|
-| 1 | 分别把评论和推断伪装为批准事实 | 两者均被阻止进入正式基线并定位来源状态错误 |
+| 1 | 把无来源模型推断伪装为有资料支撑的事实 | 草稿被阻止进入正式基线，并准确指出缺失的固定资料修订/片段引用 |
 
 ### 覆盖映射
 
-- 事实分层校验 → 步骤 1 → 未确认内容不得升级。
+- 资料证据/模型推断分层校验 → 步骤 1 → 无来源推断不得升级为资料事实。
 
 ### 证据要求
 
-- C8 应提供两类违规草稿和校验报告；当前未登记。
+- C8 应提供违规草稿和固定引用缺失校验报告；当前未登记。
 
 ### 派生日志
 
@@ -790,7 +792,7 @@ Scenario: 未确认内容不得写成批准事实
 
 - id: `TC-C-007-S01`
 - title: `有来源章节形成固定引用和血缘`
-- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.md#ADLC-US-007/S01`
+- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.full.md#ADLC-US-007/S01`
 - story_ref: `ADLC-US-007`
 - scenario_ref: `ADLC-US-007/S01`
 - type: `integration`
@@ -842,7 +844,7 @@ Scenario: 有来源章节形成固定引用和血缘
 
 - id: `TC-C-007-S02`
 - title: `源资料更新后历史引用保持原修订`
-- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.md#ADLC-US-007/S02`
+- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.full.md#ADLC-US-007/S02`
 - story_ref: `ADLC-US-007`
 - scenario_ref: `ADLC-US-007/S02`
 - type: `contract`
@@ -894,7 +896,7 @@ Scenario: 源资料更新后历史引用保持原修订
 
 - id: `TC-C-007-S03`
 - title: `血缘写回失败时不标记同步完成`
-- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.md#ADLC-US-007/S03`
+- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.full.md#ADLC-US-007/S03`
 - story_ref: `ADLC-US-007`
 - scenario_ref: `ADLC-US-007/S03`
 - type: `resilience`
@@ -945,7 +947,7 @@ Scenario: 血缘写回失败时不标记同步完成
 
 - id: `TC-C-008-S01`
 - title: `上传说明形成固定 Provider 修订引用`
-- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.md#ADLC-US-008/S01`
+- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.full.md#ADLC-US-008/S01`
 - story_ref: `ADLC-US-008`
 - scenario_ref: `ADLC-US-008/S01`
 - type: `contract`
@@ -997,7 +999,7 @@ Scenario: 上传说明形成固定 Provider 修订引用
 
 - id: `TC-C-008-S02`
 - title: `说明变化后上传新修订`
-- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.md#ADLC-US-008/S02`
+- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.full.md#ADLC-US-008/S02`
 - story_ref: `ADLC-US-008`
 - scenario_ref: `ADLC-US-008/S02`
 - type: `contract`
@@ -1049,7 +1051,7 @@ Scenario: 说明变化后上传新修订
 
 - id: `TC-C-008-S03`
 - title: `commit 或内容哈希错配时不得完成`
-- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.md#ADLC-US-008/S03`
+- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.full.md#ADLC-US-008/S03`
 - story_ref: `ADLC-US-008`
 - scenario_ref: `ADLC-US-008/S03`
 - type: `resilience`
@@ -1100,7 +1102,7 @@ Scenario: commit 或内容哈希错配时不得完成
 
 - id: `TC-C-009-S01`
 - title: `三个平台对相同输入产生一致业务语义`
-- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.md#ADLC-US-009/S01`
+- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.full.md#ADLC-US-009/S01`
 - story_ref: `ADLC-US-009`
 - scenario_ref: `ADLC-US-009/S01`
 - type: `integration`
@@ -1152,7 +1154,7 @@ Scenario: 三个平台对相同输入产生一致业务语义
 
 - id: `TC-C-009-S02`
 - title: `适配层差异不得改写 Core 决策`
-- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.md#ADLC-US-009/S02`
+- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.full.md#ADLC-US-009/S02`
 - story_ref: `ADLC-US-009`
 - scenario_ref: `ADLC-US-009/S02`
 - type: `integration`
@@ -1203,7 +1205,7 @@ Scenario: 适配层差异不得改写 Core 决策
 
 - id: `TC-C-010-S01`
 - title: `未配置项目保持本地流程`
-- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.md#ADLC-US-010/S01`
+- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.full.md#ADLC-US-010/S01`
 - story_ref: `ADLC-US-010`
 - scenario_ref: `ADLC-US-010/S01`
 - type: `integration`
@@ -1255,7 +1257,7 @@ Scenario: 未配置项目保持本地流程
 
 - id: `TC-C-010-S02`
 - title: `意外远程调用阻断兼容结论`
-- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.md#ADLC-US-010/S02`
+- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.full.md#ADLC-US-010/S02`
 - story_ref: `ADLC-US-010`
 - scenario_ref: `ADLC-US-010/S02`
 - type: `resilience`
@@ -1306,7 +1308,7 @@ Scenario: 意外远程调用阻断兼容结论
 
 - id: `TC-C-011-S01`
 - title: `Provider 不可用时保持当前步骤`
-- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.md#ADLC-US-011/S01`
+- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.full.md#ADLC-US-011/S01`
 - story_ref: `ADLC-US-011`
 - scenario_ref: `ADLC-US-011/S01`
 - type: `resilience`
@@ -1358,7 +1360,7 @@ Scenario: Provider 不可用时保持当前步骤
 
 - id: `TC-C-011-S02`
 - title: `部分索引失败时只使用明确降级路径`
-- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.md#ADLC-US-011/S02`
+- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.full.md#ADLC-US-011/S02`
 - story_ref: `ADLC-US-011`
 - scenario_ref: `ADLC-US-011/S02`
 - type: `resilience`
@@ -1410,7 +1412,7 @@ Scenario: 部分索引失败时只使用明确降级路径
 
 - id: `TC-C-011-S03`
 - title: `权限或固定修订失败不得静默降级`
-- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.md#ADLC-US-011/S03`
+- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.full.md#ADLC-US-011/S03`
 - story_ref: `ADLC-US-011`
 - scenario_ref: `ADLC-US-011/S03`
 - type: `resilience`
@@ -1461,7 +1463,7 @@ Scenario: 权限或固定修订失败不得静默降级
 
 - id: `TC-C-012-S01`
 - title: `稳定外部运行标识作为证据引用`
-- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.md#ADLC-US-012/S01`
+- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.full.md#ADLC-US-012/S01`
 - story_ref: `ADLC-US-012`
 - scenario_ref: `ADLC-US-012/S01`
 - type: `e2e`
@@ -1513,7 +1515,7 @@ Scenario: 稳定外部运行标识作为证据引用
 
 - id: `TC-C-012-S02`
 - title: `口头通过声明保持未验证`
-- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.md#ADLC-US-012/S02`
+- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.full.md#ADLC-US-012/S02`
 - story_ref: `ADLC-US-012`
 - scenario_ref: `ADLC-US-012/S02`
 - type: `unit`
@@ -1565,7 +1567,7 @@ Scenario: 口头通过声明保持未验证
 
 - id: `TC-C-012-S03`
 - title: `事实分层校验阻止虚假通过`
-- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.md#ADLC-US-012/S03`
+- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.full.md#ADLC-US-012/S03`
 - story_ref: `ADLC-US-012`
 - scenario_ref: `ADLC-US-012/S03`
 - type: `unit`
@@ -1612,11 +1614,11 @@ Scenario: 事实分层校验阻止虚假通过
 ---
 
 <a id="tc-c-013-s01"></a>
-## UC-D TC-C-013-S01 — 真实项目闭环在三平台保持业务语义一致
+## UC-D TC-C-013-S01 — 双项目闭环在三平台保持业务语义一致
 
 - id: `TC-C-013-S01`
-- title: `真实项目闭环在三平台保持业务语义一致`
-- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.md#ADLC-US-013/S01`
+- title: `双项目闭环在三平台保持业务语义一致`
+- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.full.md#ADLC-US-013/S01`
 - story_ref: `ADLC-US-013`
 - scenario_ref: `ADLC-US-013/S01`
 - type: `e2e`
@@ -1631,10 +1633,10 @@ Scenario: 事实分层校验阻止虚假通过
 ### 来源溯源
 
 ```gherkin
-Scenario: 真实项目闭环在三平台保持业务语义一致
-  Given 一个真实项目包含至少三类资料、两个以上修订并已配置 SSOT
-  When 分别通过受支持客户端执行资料选择、上下文、正式文档生成和血缘回写
-  Then 实际选择和固定引用可复现，平台差异不改变角色、资料、引用或流程状态语义
+Scenario: 双项目闭环在三平台保持业务语义一致
+  Given 两个真实项目包含代表性资料和多个不可变修订，且已准备批准的 Provider/Consumer 组合
+  When Kiro、Claude Code、OpenCode 分别只经 Core 执行目标项目读取、上下文、正式文档和血缘闭环
+  Then 读取与派生结果保持目标项目隔离，固定修订和片段可复现，且不存在平台直连 Provider
 
 ```
 
@@ -1647,11 +1649,11 @@ Scenario: 真实项目闭环在三平台保持业务语义一致
 
 | # | 步骤 | 断言 |
 |---|------|------|
-| 1 | 三平台经 Core 执行同一真实项目闭环 | 选择/固定引用可复现且角色、资料、引用、state 语义一致 |
+| 1 | 三平台只经 Core 对两个真实项目分别执行读取、上下文、正式文档和血缘闭环 | 两项目读取/派生隔离，固定修订/片段可复现，平台直连 Provider 为 0 |
 
 ### 覆盖映射
 
-- 真实闭环/三平台 → 步骤 1 → 单一业务语义而非三份业务复制。
+- 双项目隔离/三平台 Core 边界 → 步骤 1 → 单一业务语义、零平台直连。
 
 ### 证据要求
 
@@ -1668,7 +1670,7 @@ Scenario: 真实项目闭环在三平台保持业务语义一致
 
 - id: `TC-C-013-S02`
 - title: `显式选择和降级在闭环中可复现`
-- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.md#ADLC-US-013/S02`
+- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.full.md#ADLC-US-013/S02`
 - story_ref: `ADLC-US-013`
 - scenario_ref: `ADLC-US-013/S02`
 - type: `e2e`
@@ -1716,13 +1718,64 @@ Scenario: 显式选择和降级在闭环中可复现
 ---
 
 <a id="tc-c-013-s03"></a>
-## UC-D TC-C-013-S03 — 缺少 Provider 或运行证据时整体保持未验证
+## UC-D TC-C-013-S03 — 滥用治理和零泄露证据完整
 
 - id: `TC-C-013-S03`
-- title: `缺少 Provider 或运行证据时整体保持未验证`
-- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.md#ADLC-US-013/S03`
+- title: `滥用治理和零泄露证据完整`
+- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.full.md#ADLC-US-013/S03`
 - story_ref: `ADLC-US-013`
 - scenario_ref: `ADLC-US-013/S03`
+- type: `e2e`
+- priority: `P0`
+- status: `blocked`
+- design_status: `ready`
+- execution_status: `blocked`
+- service_ids: `[loeyae-aidlc, kiro-power, claude-plugin, opencode-plugin, ssot-api]`
+- risk_cluster: `J`
+- blocked_by: `[environment_ref, api_base_url_alias, identity_ref, owner_ref, runtime_dependencies_ref, project_ref_01, project_ref_02, test_command_ref, report_location_ref, version_matrix_ref, thresholds_ref, secret_injection_ref]`
+
+### 来源溯源
+
+```gherkin
+Scenario: 滥用治理和零泄露证据完整
+  Given 写入主体无目标项目读取权限，且验收覆盖配额、成本、风险提示、通知、申诉、隔离处置和审计
+  When 汇总成功、失败、冲突、重复、状态转换与历史内容恢复结果
+  Then 可见结果不泄露目标项目既有事实，恢复后的新修订不改变旧引用，且每项治理责任均有稳定证据
+```
+
+### 执行锚点
+
+- 设计锚点：Provider v3 跨项目写入治理、状态/修订恢复设计与 U-C06 证据聚合边界。
+- 运行锚点：滥用主体、双项目、配额/成本/通知/申诉/隔离/审计和恢复证据均未登记，执行阻断。
+
+### 执行步骤与断言
+
+| # | 步骤 | 断言 |
+|---|------|------|
+| 1 | 汇总成功、失败、冲突、重复、状态转换与历史内容恢复设计场景 | 对无读取权限主体零泄露；恢复创建新修订且旧引用不变；治理责任逐项可追踪 |
+
+### 覆盖映射
+
+- 滥用治理/零泄露/恢复 → 步骤 1 → 设计断言完整，运行仍 blocked。
+
+### 证据要求
+
+- C8 应提供治理、零泄露、状态恢复和内容恢复稳定证据；当前均未登记。
+
+### 派生日志
+
+- `2026-07-20T01:37:03Z`：Kiro 从最新故事重派生；无运行执行。
+
+---
+
+<a id="tc-c-013-s04"></a>
+## UC-D TC-C-013-S04 — 缺少 Provider 或运行证据时整体保持未验证
+
+- id: `TC-C-013-S04`
+- title: `缺少 Provider 或运行证据时整体保持未验证`
+- source_ref: `docs/aidlc/modules/federated-integration/inception/user-stories/stories.full.md#ADLC-US-013/S04`
+- story_ref: `ADLC-US-013`
+- scenario_ref: `ADLC-US-013/S04`
 - type: `e2e`
 - priority: `P0`
 - status: `blocked`
@@ -1743,8 +1796,8 @@ Scenario: 缺少 Provider 或运行证据时整体保持未验证
 
 ### 执行锚点
 
-- 设计锚点：`execution-plan.md#发布、回滚与停止条件` 第 7 项。
-- 运行锚点：12 项登记键当前均未登记，执行阻断。
+- 设计锚点：`execution-plan.md#发布、回滚与停止条件` 的证据完整性边界。
+- 运行锚点：12 项登记键当前 `0/12`，执行阻断。
 
 ### 执行步骤与断言
 
@@ -1762,7 +1815,7 @@ Scenario: 缺少 Provider 或运行证据时整体保持未验证
 
 ### 派生日志
 
-- `2026-07-20T01:37:03Z`：Kiro 从批准故事原样派生；无运行执行。
+- `2026-07-20T01:37:03Z`：Kiro 从最新故事新增派生；无运行执行。
 
 # 技术风险用例
 
@@ -1818,7 +1871,7 @@ Scenario: 缺少 Provider 或运行证据时整体保持未验证
 
 - id: `TC-C-TECH-002`
 - title: `PROJECT 契约解析与越权零泄露`
-- source_ref: `../loeyae-ssot-server/contracts/ssot-api-v1.openapi.json#/paths/~1v1~1projects:resolve/post`
+- source_ref: `../loeyae-ssot-server/contracts/ssot-api-v3.openapi.json#/paths/~1v3~1projects:resolve/post`
 - story_ref: `不适用`
 - scenario_ref: `SSOT-PROJECT-001/resolveProject`
 - type: `contract`
@@ -1864,7 +1917,7 @@ Scenario: 缺少 Provider 或运行证据时整体保持未验证
 
 - id: `TC-C-TECH-003`
 - title: `MATERIAL 与 RETRIEVAL 固定选择映射`
-- source_ref: `../loeyae-ssot-server/contracts/ssot-api-v1.openapi.json#/paths/~1v1~1projects~1{projectId}~1retrieval:search/post;../loeyae-ssot-server/contracts/ssot-api-v1.openapi.json#/paths/~1v1~1projects~1{projectId}~1materials~1{materialId}~1revisions~1{revisionId}/get`
+- source_ref: `../loeyae-ssot-server/contracts/ssot-api-v3.openapi.json#/paths/~1v3~1projects~1{projectId}~1retrieval:search/post;../loeyae-ssot-server/contracts/ssot-api-v3.openapi.json#/paths/~1v3~1projects~1{projectId}~1materials~1{materialId}~1revisions~1{revisionId}/get`
 - story_ref: `不适用`
 - scenario_ref: `SSOT-RETRIEVAL-001/searchProjectMaterials+SSOT-MATERIAL-001/getMaterialRevision`
 - type: `contract`
@@ -1911,7 +1964,7 @@ Scenario: 缺少 Provider 或运行证据时整体保持未验证
 
 - id: `TC-C-TECH-004`
 - title: `CONTEXT 与 INDEX-STATUS 预算和显式降级映射`
-- source_ref: `../loeyae-ssot-server/contracts/ssot-api-v1.openapi.json#/paths/~1v1~1projects~1{projectId}~1context-bundles/post;../loeyae-ssot-server/contracts/ssot-api-v1.openapi.json#/paths/~1v1~1projects~1{projectId}~1materials~1{materialId}~1revisions~1{revisionId}~1index-status/get`
+- source_ref: `../loeyae-ssot-server/contracts/ssot-api-v3.openapi.json#/paths/~1v3~1projects~1{projectId}~1context-bundles/post;../loeyae-ssot-server/contracts/ssot-api-v3.openapi.json#/paths/~1v3~1projects~1{projectId}~1materials~1{materialId}~1revisions~1{revisionId}~1index-status/get`
 - story_ref: `不适用`
 - scenario_ref: `SSOT-CONTEXT-001/createContextBundle+SSOT-INDEX-STATUS-001/getRevisionIndexStatus`
 - type: `contract`
@@ -1958,7 +2011,7 @@ Scenario: 缺少 Provider 或运行证据时整体保持未验证
 
 - id: `TC-C-TECH-005`
 - title: `LINEAGE 幂等、超时未知与 partial 对账`
-- source_ref: `docs/aidlc/product/system-baseline/consistency-scenarios.md#CONS-ADLC-LINEAGE-001;../loeyae-ssot-server/contracts/ssot-api-v1.openapi.json#/paths/~1v1~1projects~1{projectId}~1lineage-records:publish/post;../loeyae-ssot-server/contracts/ssot-api-v1.openapi.json#/paths/~1v1~1projects~1{projectId}~1lineage-records:query/post`
+- source_ref: `docs/aidlc/product/system-baseline/consistency-scenarios.md#CONS-ADLC-LINEAGE-001;../loeyae-ssot-server/contracts/ssot-api-v3.openapi.json#/paths/~1v3~1projects~1{projectId}~1lineage-records:publish/post;../loeyae-ssot-server/contracts/ssot-api-v3.openapi.json#/paths/~1v3~1projects~1{projectId}~1lineage-records:query/post`
 - story_ref: `不适用`
 - scenario_ref: `CONS-ADLC-LINEAGE-001+SSOT-LINEAGE-001/publishLineageRecords+queryLineageRecords`
 - type: `resilience`
@@ -2005,7 +2058,7 @@ Scenario: 缺少 Provider 或运行证据时整体保持未验证
 
 - id: `TC-C-TECH-006`
 - title: `REVERSE-DOC Git 关联、幂等与修订并存`
-- source_ref: `docs/aidlc/product/system-baseline/consistency-scenarios.md#CONS-ADLC-REVERSE-001;../loeyae-ssot-server/contracts/ssot-api-v1.openapi.json#/paths/~1v1~1projects~1{projectId}~1reverse-documents~1{reverseDocumentId}~1revisions/post`
+- source_ref: `docs/aidlc/product/system-baseline/consistency-scenarios.md#CONS-ADLC-REVERSE-001;../loeyae-ssot-server/contracts/ssot-api-v3.openapi.json#/paths/~1v3~1projects~1{projectId}~1reverse-documents~1{reverseDocumentId}~1revisions/post`
 - story_ref: `不适用`
 - scenario_ref: `CONS-ADLC-REVERSE-001+SSOT-REVERSE-DOC-001/createReverseDocumentRevision`
 - type: `contract`
@@ -2052,7 +2105,7 @@ Scenario: 缺少 Provider 或运行证据时整体保持未验证
 
 - id: `TC-C-TECH-007`
 - title: `FAILURE 有限重试、重启恢复与版本边界`
-- source_ref: `docs/aidlc/product/system-baseline/consistency-scenarios.md#CONS-ADLC-RECOVERY-001;../loeyae-ssot-server/contracts/ssot-api-v1.openapi.json#/components/schemas/SsotError`
+- source_ref: `docs/aidlc/product/system-baseline/consistency-scenarios.md#CONS-ADLC-RECOVERY-001;../loeyae-ssot-server/contracts/ssot-api-v3.openapi.json#/components/schemas/SsotError`
 - story_ref: `不适用`
 - scenario_ref: `CONS-ADLC-RECOVERY-001+SSOT-FAILURE-001`
 - type: `resilience`
@@ -2066,7 +2119,8 @@ Scenario: 缺少 Provider 或运行证据时整体保持未验证
 
 ### 来源溯源
 
-- 不可变预期：只有 `retryable=true` 或 HTTP 429/503 自动重试，最多 3 次、退避 1/2/4 秒；权限、冲突、固定修订缺失和版本冲突不自动推进；重启只从业务 state v2 恢复；仅使用已验证版本组合。
+- 不可变预期：只有 `retryable=true` 或 HTTP 429/503 自动重试，最多 3 次、退避 1/2/4 秒；权限、冲突、固定修订缺失和版本冲突不自动推进；重启只从业务 state v2 恢复。
+- 版本边界：仅接受 Provider v3 `3.1.0-candidate.1`；其他版本（含已被取代的 `3.0.0-candidate.1`）均返回或映射为 `CONTRACT_VERSION_UNSUPPORTED` 并阻断，不消费讨论摘要，也不得通过忽略未知字段或猜测枚举推进。
 
 ### 执行锚点
 
@@ -2078,15 +2132,16 @@ Scenario: 缺少 Provider 或运行证据时整体保持未验证
 | # | 步骤 | 断言 |
 |---|------|------|
 | 1 | 参数化 retryable、429、503 与不可重试错误 | 前三类按批准阈值有限重试；不可重试错误立即阻断 |
-| 2 | 在待恢复动作后重启并测试兼容/不兼容版本组合 | 从同一 state v2 和幂等键恢复；未验证或冲突组合不执行/不推进 |
+| 2 | 在待恢复动作后重启并验证 Provider v3 `3.1.0-candidate.1` | 从同一 state v2 和幂等键恢复；仅该版本可继续，且不消费讨论摘要 |
+| 3 | 注入其他版本、`CONTRACT_VERSION_UNSUPPORTED` 和未知字段/枚举 | 流程阻断且状态不推进，不忽略或猜测未知语义 |
 
 ### 覆盖映射
 
-- `SSOT-FAILURE-001` → 步骤 1；`CONS-ADLC-RECOVERY-001` 与版本/恢复边界 → 步骤 2。
+- `SSOT-FAILURE-001` → 步骤 1、3；`CONS-ADLC-RECOVERY-001` 与 v3 单版本恢复边界 → 步骤 2—3。
 
 ### 证据要求
 
-- C8 应提供错误类别、尝试次数/时间线、重启前后 state、幂等键和版本组合报告；当前未登记。
+- C8 应提供错误类别、尝试次数/时间线、重启前后 state、幂等键、Provider/Core `3.1.0-candidate.1` 版本组合和不支持版本阻断报告；当前未登记。
 
 ### 派生日志
 
@@ -2113,7 +2168,7 @@ Scenario: 缺少 Provider 或运行证据时整体保持未验证
 
 ### 来源溯源
 
-- 不可变预期：endpoint 与 project candidate 均缺失才为 Legacy；Gateway 不创建，八项在线契约调用数为 0；在线失败不改变 Online 模式；Secret、令牌和完整资料正文不进入 state v2 或普通日志，三平台仅通过适配边界注入凭据。
+- 不可变预期：endpoint 与 project candidate 均缺失才为 Legacy；Gateway 不创建，v3 八项读取契约及四个生命周期写入口（`createMaterial`、`archiveMaterial`、`restoreMaterialStatus`、`restoreMaterialRevision`）调用数均为 0；在线失败不改变 Online 模式；Secret、令牌和完整资料正文不进入 state v2 或普通日志，三平台仅通过适配边界注入凭据。
 
 ### 执行锚点
 
@@ -2160,7 +2215,8 @@ Scenario: 缺少 Provider 或运行证据时整体保持未验证
 
 ### 来源溯源
 
-- 不可变预期：三平台只调用同一 Core 端口；同一 state v2 和输入得到等价选择、引用、错误决策与下一状态；平台接力不创建第二份 state，不按平台复制业务语义。
+- 不可变预期：Kiro、Claude Code、OpenCode 只调用同一 Core 端口；同一 state v2 和输入得到等价选择、引用、错误决策与下一状态；平台接力不创建第二份 state，不按平台复制业务语义。
+- 排除边界：三平台均只经 Core 且不直连 Provider，Provider 直连调用数为 0；三平台不暴露 `createMaterial`、`archiveMaterial`、`restoreMaterialStatus`、`restoreMaterialRevision` 四个生命周期写入口。
 
 ### 执行锚点
 
@@ -2171,16 +2227,16 @@ Scenario: 缺少 Provider 或运行证据时整体保持未验证
 
 | # | 步骤 | 断言 |
 |---|------|------|
-| 1 | 单一参数集驱动三适配器调用同一 Core | 规范化业务输出等价且无平台特有业务分支 |
+| 1 | 单一参数集驱动三适配器调用同一 Core，并输入相同固定来源上下文 | 规范化业务输出等价，无平台特有业务分支、Provider 直连或讨论摘要消费 |
 | 2 | 在平台间接力恢复同一工作区 | 仅一份 state v2，恢复步骤与固定引用不变 |
 
 ### 覆盖映射
 
-- 三平台 Core conformance → 步骤 1；平台无关恢复 → 步骤 2。
+- 三平台共享 Core conformance → 步骤 1；平台无关恢复 → 步骤 2；Provider 零直连且无讨论摘要。
 
 ### 证据要求
 
-- C8 应提供单一参数集、三端运行 ID、规范化差异和 state 来源观测；当前未登记。
+- C8 应提供单一参数集、三端运行 ID、规范化差异、state 来源、Provider 零直连及无讨论摘要观测；当前未登记。
 
 ### 派生日志
 
@@ -2207,7 +2263,7 @@ Scenario: 缺少 Provider 或运行证据时整体保持未验证
 
 ### 来源溯源
 
-- 不可变预期：两个真实脱敏项目分别完成可复现闭环且项目事实零串扰；缺少 Provider、Legacy、三平台或稳定运行证据中的任一项，C8 结论保持未验证。
+- 不可变预期：两个真实脱敏项目分别完成可复现闭环且项目事实零串扰；覆盖滥用治理、状态回滚、历史内容恢复创建新修订、Provider/Consumer 版本组合及三平台一致性；缺少 Provider、Legacy、三平台或稳定运行证据中的任一项，C8 结论保持未验证。
 
 ### 执行锚点
 
@@ -2219,7 +2275,7 @@ Scenario: 缺少 Provider 或运行证据时整体保持未验证
 | # | 步骤 | 断言 |
 |---|------|------|
 | 1 | 对两个脱敏项目执行 Provider-first/Core/三平台闭环 | 各自引用可复现且跨项目资料、引用、state 串扰为 0 |
-| 2 | 汇总 Provider、Legacy、conformance、E2E 和版本证据 | 缺任一证据均保持未验证并列出阻断范围 |
+| 2 | 汇总滥用治理、状态/内容回滚、Provider/Consumer 版本组合、Legacy、conformance、E2E 和三平台一致性证据 | 缺任一证据均保持未验证并列出阻断范围 |
 
 ### 覆盖映射
 

@@ -1,68 +1,66 @@
 # AI-DLC Consumer 组件方法
 
-- **范围**：进程内端口与高层用途，不是实现代码
-- **Provider 类型权威**：SSOT `contracts/ssot-api-v1.openapi.json#/components/schemas/*`
-- **状态**：设计候选，未实现或运行验证
+- **范围**：`CR-U-P01-CROSS-PROJECT-IMPORT-001 / CR4 B3` Consumer I12 进程内端口与高层用途，不是实现代码
+- **Provider 类型权威**：SSOT `contracts/ssot-api-v3.openapi.json#/components/schemas/*`，`3.0.0-candidate.1`
+- **状态**：Provider/Portal 已稳定；Core v3 设计候选，未实现或运行验证
 
 ## WorkspaceStateRepository / IntegrationModeResolver
 
 | 方法签名 | 高层用途 | 边界 |
 |----------|----------|------|
-| `load(workspaceRoot): AidlcStateV2` | 从当前业务工作区恢复唯一 state v2 | 缺失/无效时阻断；不借用插件 state |
+| `load(workspaceRoot): AidlcStateV2` | 从当前业务工作区恢复唯一 state v2 | 缺失/无效时阻断；不借用插件 state，不迁移 state v3 |
 | `saveRecovery(state, action: RecoveryAction): AidlcStateV2` | 保存非敏感失败位置与恢复动作 | 不保存 Secret、token 或完整资料正文 |
-| `resolve(config: SsotBindingConfig): Legacy / Online / ConfigError` | 两项核心配置均缺失为 Legacy；均存在为 Online；部分配置为错误 | Provider 运行失败不改变 Online 模式 |
+| `resolve(config: SsotBindingConfig): Legacy / Online / ConfigError` | 双缺失 Legacy、双存在 Online、部分配置 ConfigError | Provider 运行失败不改变 Online 模式 |
 
 ## RoleIntentBuilder / ProjectBindingService
 
 | 方法签名 | 高层用途 | 边界 |
 |----------|----------|------|
-| `build(role?, targetDocument?, prompt): RoleIntentResult` | 形成角色与目标文档意图 | 不明确时返回 NeedsUserInput，不调用 Provider 扩大检索 |
-| `resolveProject(intent, config, credentials): ProviderProjectBinding` | 经 Gateway 调用 `resolveProject` | 只传候选和短时 Bearer；不猜项目 |
-| `assertBinding(binding, state): AuthorizedBinding` | 校验 Provider project 与业务工作区绑定一致 | 冲突时保持当前 state v2 |
+| `build(role?, targetDocument?, prompt): RoleIntentResult` | 形成角色与目标文档意图 | 不明确时返回 NeedsUserInput，不扩大检索 |
+| `resolveProject(intent, config, credentials): ProviderProjectBinding` | 解析调用方工作区项目 | 只传候选和短时凭据，不猜项目 |
+| `authorizeTargetProject(binding, targetProjectId, credentials): AuthorizedProjectBinding` | 对每个读取、列表、检索、Context、血缘、逆向、解析/索引目标项目取得并固定授权 | 不继承、合并或推导其他项目权限；未授权 Block |
 
 ## ProviderContractGateway
 
-以下方法的 Provider DTO 必须从 OpenAPI 生成或自动校验；不得复制字段定义。
+下列方法沿用 v3 OpenAPI 的既有 operationId；DTO 必须生成或自动校验，不复制字段定义。
 
-| 方法签名 | operationId | 契约 |
-|----------|-------------|------|
-| `resolveProject(request): Provider<ProjectResolutionResponse>` | `resolveProject` | PROJECT |
-| `search(projectId, request): Provider<RetrievalResponse>` | `searchProjectMaterials` | RETRIEVAL |
-| `createBundle(projectId, request, idempotencyKey): Provider<ContextBundleResponse>` | `createContextBundle` | CONTEXT |
-| `getRevision(projectId, materialId, revisionId): Provider<RevisionResponse>` | `getMaterialRevision` | MATERIAL |
-| `getIndexStatus(projectId, materialId, revisionId): Provider<IndexStatusResponse>` | `getRevisionIndexStatus` | INDEX-STATUS |
-| `publishLineage(projectId, request, idempotencyKey): Provider<LineagePublishResponse>` | `publishLineageRecords` | LINEAGE |
-| `queryLineage(projectId, request): Provider<LineageQueryResponse>` | `queryLineageRecords` | LINEAGE |
-| `uploadReverseRevision(projectId, reverseDocumentId, request, idempotencyKey, ifMatch?): Provider<ReverseDocumentRevisionResponse>` | `createReverseDocumentRevision` | REVERSE-DOC |
+| 方法签名 | operationId | 契约与边界 |
+|----------|-------------|------------|
+| `resolveProject(request)` | `resolveProject` | PROJECT；返回项目隔离结果 |
+| `search(projectId, request)` | `searchProjectMaterials` | RETRIEVAL；默认只检索 active，archived 自动命中 0 |
+| `createBundle(projectId, request, idempotencyKey)` | `createContextBundle` | CONTEXT；每个目标项目先授权 |
+| `getRevision(projectId, materialId, revisionId)` | `getMaterialRevision` | MATERIAL；显式固定旧 revision 在读取授权仍有效时不漂移 |
+| `getIndexStatus(projectId, materialId, revisionId)` | `getRevisionIndexStatus` | INDEX-STATUS；目标项目授权不可降级 |
+| `publishLineage(projectId, request, idempotencyKey)` | `publishLineageRecords` | LINEAGE；仅向授权目标项目写入既有血缘能力 |
+| `queryLineage(projectId, request)` | `queryLineageRecords` | LINEAGE；固定旧 revision 的血缘不漂移 |
+| `uploadReverseRevision(projectId, reverseDocumentId, request, idempotencyKey, ifMatch?)` | `createReverseDocumentRevision` | REVERSE-DOC；仅既有逆向写，不等同 `createMaterialRevision` |
 
-所有方法固定 header `X-SSOT-Contract-Version: 1.0.0-candidate.1`，接收/返回 correlationId；传输失败统一进入 RecoveryCoordinator。
+所有方法固定 header `X-SSOT-Contract-Version: 3.0.0-candidate.1` 并传播 correlationId；写调用使用稳定 idempotency key，条件写按契约使用 If-Match。Gateway 不提供 `createMaterial`、`archiveMaterial`、`restoreMaterialStatus`、`restoreMaterialRevision`、`createMaterialRevision` 或其他跨项目生命周期写方法。
 
 ## MaterialSelectionService / ContextBundleValidator
 
 | 方法签名 | 高层用途 | 边界 |
 |----------|----------|------|
-| `select(intent, retrieval, explicitRules): MaterialSelectionResult` | 自动结果叠加 include/exclude/old revision | exclude 优先；低置信/冲突/范围过大返回 NeedsConfirmation |
-| `confirm(selection, userDecision): ConfirmedSelection` | 固定用户接受的 revision/fragment 范围 | 取消或未确认不得构建 bundle |
-| `validate(bundle, binding, selection): ValidatedBundle` | 校验 project、固定引用、排除、source state、route、degradation、budget | 任一跨项目/漂移/排除命中阻断生成 |
+| `select(intent, retrievalByProject, explicitRules): MaterialSelectionResult` | 汇总已授权目标项目结果并应用 include/exclude/old revision | 默认自动选择只含 active；archived 自动命中 0；项目间结果保持隔离 |
+| `confirm(selection, userDecision): ConfirmedSelection` | 固定用户接受的 project/revision/fragment 范围 | 取消或未确认不得构建 bundle |
+| `validate(bundle, authorizedBindings, selection): ValidatedBundle` | 校验逐条目标授权、固定引用、排除、source state、route、degradation、budget | 未授权、跨项目串用、漂移或排除命中阻断 |
 
 ## FormalDocumentGenerator / CitationAssembler
 
 | 方法签名 | 高层用途 | 边界 |
 |----------|----------|------|
-| `generate(target, bundle, factPolicy): DraftArtifact` | 在既有阶段目录生成事实分层草稿 | 只使用 bundle 条目；推断必须标识 |
-| `commit(workspace, draft): GenerationArtifact` | 写入业务工作区并取得可引用 content hash/Git ref | 本地失败不准备远端血缘 |
-| `assemble(artifact, usedFragments): CitationSet` | 为每个有来源章节形成固定 citations | 必须包含 revisionId+fragmentId+locator+quoteHash |
-| `buildPublishRequest(artifact, citations): Provider:LineagePublishRequest` | 形成 OpenAPI 血缘请求 | 只发送引用/章节摘要，不发送正文权威 |
+| `generate(target, bundle, factPolicy): DraftArtifact` | 在既有阶段目录生成事实分层草稿 | 有来源内容保留 projectId/revisionId/fragmentId；历史恢复不改写既有引用 |
+| `commit(workspace, draft): GenerationArtifact` | 写入业务工作区并取得 content hash/Git ref | 本地失败不准备远端血缘 |
+| `assemble(artifact, usedFragments): CitationSet` | 形成固定 citations | 必含 projectId+revisionId+fragmentId+locator+quoteHash |
+| `buildPublishRequest(artifact, citations): Provider:LineagePublishRequest` | 形成 v3 血缘请求 | 只发送引用/章节摘要，不发送正文权威 |
 
 ## LineagePublicationQueue / ReverseDocumentUploader / RecoveryCoordinator
 
 | 方法签名 | 高层用途 | 边界 |
 |----------|----------|------|
-| `enqueue(generationId, request, idempotencyKey): PendingLineage` | 在远端调用前保存可恢复动作 | 只保存必要非敏感引用 |
-| `publish(pending): Published / Partial / PendingRetry / Rejected` | 调用 Provider 并逐项处理结果 | partial/失败不标记 synced |
-| `reconcile(generationId): ReconciliationResult` | 查询 Provider 并补发缺项 | 不重复创建逻辑血缘 |
-| `prepareReverse(document, git): ReverseDocUpload` | 校验路径、commit 和 content hash | 错配时 Rejected |
-| `uploadReverse(upload, credentials): Uploaded / PendingRetry / Rejected` | 幂等上传并保存远端 revision ref | 不修改 Git |
-| `decide(error: Provider:SsotError, operation): Block / Retry / Confirm / Degrade` | 稳定错误决策 | 仅 retryable/429/503 最多 3 次，退避 1/2/4 秒 |
-
-详细文档模板、事实分层算法、客户端生成工具、持久化格式和平台实现属于后续获批工作单元。
+| `enqueue(generationId, request, idempotencyKey): PendingLineage` | 远端调用前保存可恢复动作 | 保存目标 projectId 与固定引用，不保存敏感正文 |
+| `publish(pending): Published / Partial / PendingRetry / Rejected` | 向已授权目标项目发布并逐项处理 | partial/失败不标记 synced |
+| `reconcile(generationId): ReconciliationResult` | 按固定 project/revision 查询并补发缺项 | 不漂移到恢复后新 revision，不重复逻辑血缘 |
+| `prepareReverse(document, git, targetProject): ReverseDocUpload` | 校验说明、Git 与目标项目 | 目标项目未授权或错配时 Rejected |
+| `uploadReverse(upload, credentials): Uploaded / PendingRetry / Rejected` | 幂等上传逆向说明 | 不修改 Git，不开放资料 revision 创建 |
+| `decide(error: Provider:SsotError, operation): Block / Retry / Confirm / Degrade` | 按稳定 code/retryable/impact 决策 | 权限/隔离/固定引用失败 Block；不以 message 决策 |
