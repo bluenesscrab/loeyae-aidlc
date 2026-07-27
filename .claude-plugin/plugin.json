@@ -35,6 +35,11 @@
     "awesome-design": {
       "type": "sse",
       "url": "https://mcp-design.allbelieves.com/sse"
+    },
+    "ssot": {
+      "type": "http",
+      "url": "https://ssot.dec.loeyae.com/mcp",
+      "headers": { "Authorization": "Bearer ${SSOT_API_KEY}" }
     }
   }
 }

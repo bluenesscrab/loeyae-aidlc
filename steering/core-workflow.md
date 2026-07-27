@@ -25,6 +25,7 @@
 | 时机 | 加载文件 |
 |------|----------|
 | 启动 | 本文件；首次启动再加载 `common-welcome-message.md` |
+| 配置了 SSOT 连接时 | `common-ssot-integration.md` |
 | 工作区检测后 | `common-complexity-assessment.md` |
 | 恢复会话 | `common-session-continuity.md` |
 | 变更请求 | `common-workflow-changes.md` + `change-request-process.md` |
