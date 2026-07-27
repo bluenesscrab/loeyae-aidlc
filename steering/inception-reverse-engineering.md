@@ -393,3 +393,9 @@
 
 - **强制**：在用户明确确认前不得继续
 - **强制**：在 audit.md 中记录用户的完整原始回复
+
+## SSOT 集成(可选)
+
+> 仅在配置了 SSOT 连接时按需加载,规则见 `common-ssot-integration.md`。
+- I4 逆向工程产出经 `write_reverse_engineering` 写回 SSOT(type=reverse,关联 `git_repo`/`git_commit`);不得反向覆盖代码事实。
+- 写回失败记“待写回”队列,不阻断本地产物。

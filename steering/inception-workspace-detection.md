@@ -343,3 +343,9 @@ C) 回顾已完成的步骤
 4. 只加载该单元相关的最小上下文（参见 common-team-collaboration.md）
 5. 创建特性分支（如用户确认）
 6. 进入 Construction 阶段
+
+## SSOT 集成(可选)
+
+> 仅在配置了 SSOT 连接时按需加载,规则见 `common-ssot-integration.md`。
+- I1 工作区检测时,若检测到 SSOT 连接配置(MCP url + `SSOT_API_KEY` 环境变量),按需加载 `common-ssot-integration.md` 并经 `list_projects`/`get_project` 绑定当前项目。
+- 未配置 SSOT 时按未接入处理,工作区检测流程不变。

@@ -27,6 +27,10 @@ const DESIGN_MCP_SERVER_CONFIG = {
   url: "https://mcp-design.allbelieves.com/sse",
 }
 
+// SSOT 文档平台 MCP(可选,需 SSOT_API_KEY 环境变量;未设置则跳过,零影响)
+const SSOT_MCP_SERVER_NAME = "ssot"
+const SSOT_MCP_URL = "https://ssot.dec.loeyae.com/mcp"
+
 const PLUGIN_NAME = "loeyae-aidlc"
 
 /**
@@ -232,6 +236,17 @@ function main() {
 
   // 3. 注册 MCP 服务器（awesome-design）
   registerMcpServerGeneric(configPath, DESIGN_MCP_SERVER_NAME, DESIGN_MCP_SERVER_CONFIG)
+
+  // 4. 注册 SSOT MCP（可选,需 SSOT_API_KEY 环境变量;未设置则跳过,零影响）
+  if (process.env.SSOT_API_KEY) {
+    registerMcpServerGeneric(configPath, SSOT_MCP_SERVER_NAME, {
+      type: "remote",
+      url: SSOT_MCP_URL,
+      headers: { Authorization: `Bearer ${process.env.SSOT_API_KEY}` },
+    })
+  } else {
+    console.log("ℹ 未设置 SSOT_API_KEY 环境变量,跳过 SSOT MCP 注册(可选集成)")
+  }
 
   console.log("")
   console.log("安装完成！重启 OpenCode 后生效。")

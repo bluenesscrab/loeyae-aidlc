@@ -280,3 +280,9 @@
 | 所有 | 澄清问题记录 | `docs/aidlc/inception/requirements/requirement-verification-questions.md` |
 | 全面 | 数据模型 | `docs/aidlc/inception/requirements/data-model.md` |
 | 团队模式 | 决策摘要 | `docs/aidlc/inception/requirements/decision-summary.md` |
+
+## SSOT 集成(可选)
+
+> 仅在配置了 SSOT 连接时按需加载,规则见 `common-ssot-integration.md`。
+- I5 需求分析需要既有资料时,经 `search_documents` 取 Top-K 片段 + 来源(document_id/version);需要全文用 `get_document`。
+- 片段仅作参考,来源写入需求文档引用,不自动进入批准基线。

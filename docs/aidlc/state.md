@@ -9,7 +9,7 @@
 ## 下一步交接
 | 范围 | 更新时间 | 提示词 |
 |------|----------|--------|
-| SSOT 对接改造 | 2026-07-27T23:55:00Z | `使用 AI-DLC，继续 loeyae-aidlc SSOT 对接。B 范围完成:合并 chore 到 main + mcp.json/plugin.json(SSOT MCP,${SSOT_API_KEY}) + AU-01 common-ssot-integration.md + AU-03 SsotDocClient 语义。下一步:AU-02 连接绑定/AU-04 检索消费/AU-05 文档写回/AU-06 三平台适配。` |
+| SSOT 对接改造 | 2026-07-28T00:30:00Z | `使用 AI-DLC，继续 loeyae-aidlc SSOT 对接。AU-01~05 完成;AU-06 三平台 MCP 配置完成(mcp.json/plugin.json/setup.mjs,${SSOT_API_KEY})。待:AU-06 三平台回归 + 实际对接验证(设 SSOT_API_KEY 测试 search/write);SessionStart 探测 hook 可选。` |
 
 ## 项目信息
 - **项目类型**：存量项目(AI-DLC Power,npm 1.20.0)
@@ -19,12 +19,12 @@
 - **复杂度**：中等
 - **执行路径**：完整流程
 - **开始时间**：2026-07-17T05:44:43Z
-- **当前阶段**：Construction(AU-01/03 完成,AU-02/04/05/06 待实现)
-- **当前步骤**：AU-01+AU-03+mcp.json/plugin.json 已完成;待 AU-02/04/05/06
+- **当前阶段**：Construction(AU-01~05 完成,AU-06 MCP 配置完成,回归待执行)
+- **当前步骤**：AU-02/04/05 steering 集成 + AU-06 三平台 MCP 配置完成;待 AU-06 回归 + 实际对接验证
 - **当前层级**：模块级
 - **活跃模块**：ai-dlc(Power 本体)
 - **活跃服务**：loeyae-aidlc(含 kiro / claude / opencode 平台适配)
-- **活跃单元**：AU-02(连接与绑定,待实现)
+- **活跃单元**：AU-06(三平台回归,待执行)
 
 ## SSOT 对接决策(对齐 realignment)
 - **SSOT 定位**：项目文档统一管理平台;对 AI-DLC 是文档来源(检索上下文)与文档去处(写回正式/逆向文档),不是需求/CR 审批控制平面。
@@ -66,11 +66,11 @@
 | 模块 | 服务 | 批次 | 单元 | 状态 | 完成时间 | 验证证据 | 执行者 |
 |------|------|------|------|------|----------|----------|--------|
 | ai-dlc | loeyae-aidlc | Construction | AU-01 SSOT 共享规则 | completed | 2026-07-27 | `common-ssot-integration.md`(连接/鉴权/SsotDocClient 语义/检索写回/降级) | loeyae |
-| ai-dlc | loeyae-aidlc | Construction | AU-02 连接与绑定 | pending | - | I1/workspace-detection/state 可选小节 | loeyae |
+| ai-dlc | loeyae-aidlc | Construction | AU-02 连接与绑定 | completed | 2026-07-27 | inception-workspace-detection.md + common-session-continuity.md(连接检测/项目绑定/恢复探测可达性) | loeyae |
 | ai-dlc | loeyae-aidlc | Construction | AU-03 MCP 客户端封装 | completed | 2026-07-27 | SsotDocClient 语义在 common-ssot-integration.md;mcp.json/plugin.json 配置 SSOT MCP | loeyae |
-| ai-dlc | loeyae-aidlc | Construction | AU-04 检索消费 | pending | - | I5/I12 上下文加载与来源标注 | loeyae |
-| ai-dlc | loeyae-aidlc | Construction | AU-05 文档写回 | pending | - | 正式/逆向文档写回 + 待写回队列 | loeyae |
-| ai-dlc | loeyae-aidlc | Construction | AU-06 平台适配与回归 | pending | - | 三平台 MCP 配置 + 未接入回归 | loeyae |
+| ai-dlc | loeyae-aidlc | Construction | AU-04 检索消费 | completed | 2026-07-27 | inception-requirements-analysis.md + inception-application-design.md(search_documents 取上下文+来源标注) | loeyae |
+| ai-dlc | loeyae-aidlc | Construction | AU-05 文档写回 | completed | 2026-07-27 | inception-reverse-engineering.md + change-request-process.md(write_reverse/write_formal 写回+待写回) | loeyae |
+| ai-dlc | loeyae-aidlc | Construction | AU-06 平台适配与回归 | partial | 2026-07-27 | 三平台 MCP 配置完成(mcp.json/plugin.json/setup.mjs);SessionStart 探测可选未做;三平台回归待执行 | loeyae |
 
 ## 技术用例执行映射
 | UC-D | 来源 | 执行范围 | 服务 | C8 证据 | 状态 |
