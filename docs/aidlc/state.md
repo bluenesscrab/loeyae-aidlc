@@ -1,11 +1,17 @@
 # AI-DLC 状态跟踪
 
+> ## ⚠️ 重新定位声明(2026-07-26)
+> 本状态文件记录的 federated-integration Consumer 侧双仓规划已判定偏离用户目标,相关产物已删除,git 历史 `chore/ssot-realignment` 分支可查。
+> **新基线**:以 `../loeyae-ssot-server/docs/aidlc/product/realignment-plan.md` 与 `../loeyae-ssot-server/docs/aidlc/modules/ssot/inception/` 为准;本仓(ai-dlc)作为 MCP 消费方按新基线对接。
+> **CR 链已冻结**:不再推进原 federated-integration 相关 CR。
+> 以下历史状态内容保留为参考,不再具有现行效力。
+
 - **状态模式版本**：2
 
 ## 下一步交接
 | 范围 | 更新时间 | 提示词 |
 |------|----------|--------|
-| 单元级 | 2026-07-21T02:27:41Z | `使用 AI-DLC，继续 U-P01-API-PROJECT-MATERIAL 的 Construction 功能设计` |
+| 单元级 | 2026-07-24T13:37:05Z | `已填写 CR5-U-P01-CROSS-PROJECT-IMPORT-CLOSE-APPROVAL-086，请继续 AI-DLC 变更请求流程。` |
 
 ## 项目信息
 - **项目类型**：存量项目（AI-DLC 1.20.0）
@@ -15,9 +21,9 @@
 - **复杂度**：复杂
 - **执行路径**：完整流程
 - **开始时间**：2026-07-17T05:44:43Z
-- **当前阶段**：Construction
-- **当前步骤**：CR4 Construction / U-P01-API-PROJECT-MATERIAL 已认领（待进入 C1 功能设计）
-- **当前活动计划文件**：`docs/aidlc/modules/federated-integration/inception/plans/cr-i5-scope-001-change-plan.md`、`docs/aidlc/modules/federated-integration/inception/plans/unit-of-work-plan.md` 与 Provider 权威计划（I14、CR4 B6 `completed`；CR5 仅完成文档初检并因实现/运行证据缺失返回 CR4；U-P01 已由 loeyae 认领，11/12 单元待认领；057=0/12）
+- **当前阶段**：Change Request
+- **当前步骤**：Provider 权威 `CR-U-P01-CROSS-PROJECT-IMPORT-001` / CR5=`pending_approval`；U-P01 C1=`suspended_by_change_request`。085=A 已消费，B4/B5 静态候选完成，等待唯一空答案 086
+- **当前活动计划文件**：Provider 权威 `../loeyae-ssot-server/docs/aidlc/modules/federated-ssot/inception/plans/cr-u-p01-cross-project-import-001-change-plan.md`。当前统计为 Provider 11/37/43、Consumer 13/35/45、双仓 24/72/88；全部 UC-D 保持 `blocked/ready/blocked`，057=0/12。Consumer 六个单元均未认领；Provider U-P01 已认领。B4/B5 仅为静态候选，运行未验证
 - **当前层级**：模块级
 - **活跃模块**：federated-integration
 - **活跃服务**：loeyae-aidlc、kiro-power、claude-plugin、opencode-plugin、test-suite
@@ -30,7 +36,7 @@
 - **跨仓治理**：仅用于 `loeyae-ssot-server` 与 `loeyae-aidlc` 两个产品的联合研发；两仓独立状态、严格审批、契约版本同步；Provider 是 060 的唯一答案源，磁盘已确认 `060=A`，Consumer 只引用该结果
 - **业务项目使用拓扑**：业务项目只在自身工作区维护一套 AI-DLC 状态和过程产物，通过 AI-DLC 访问远端 SSOT；不采用 SSOT/AI-DLC 双仓或双重流程
 - **自举文档分发边界**：本仓 `docs/aidlc/` 仅用于开发 AI-DLC 自身，必须排除在 Kiro、Claude Code、OpenCode 的运行时分发物之外；部署后只读取当前业务工作区的 `docs/aidlc/`
-- **本仓职责**：AI-DLC 核心流程、state/session、角色化资料消费与正式文档产出、平台无关适配；I12 已建立 Core Consumer 设计并仅引用 SSOT Provider OpenAPI 3.1 候选 `1.0.0-candidate.1`，未复制 Schema；旧 Federated/state v3/Manifest/事件/远端 CR/完整 Trace 仅保留历史
+- **本仓职责**：AI-DLC 核心流程、state/session、角色化资料消费与正式文档产出、平台无关适配；当前 Consumer I12 统一引用 SSOT Provider OpenAPI 3.1 v3 `3.0.0-candidate.1`，不复制 Schema；Core 当前不暴露 `createMaterial`、`archiveMaterial`、`restoreMaterialStatus`、`restoreMaterialRevision` 四个生命周期写能力；旧 Federated/state v3/Manifest/事件/远端 CR/完整 Trace 仅保留历史
 - **对端仓库**：`../loeyae-ssot-server`
 - **目标状态模式**：保持 2；原 v3 迁移方案仅作为历史候选，不进入本次首期基线
 
@@ -38,7 +44,7 @@
 - **designStyleRef**：SSOT 权威 `designStyle.name=notion`，`tokenName=Notion-design-analysis`，来源为 awesome-design MCP；已记录 `colors`、`typography`、`spacing`、`rounded`、`components`。
 - **应用状态**：SSOT 已将 tokens 应用于静态 `docs/aidlc/modules/federated-ssot/inception/ui-mock/pc.html`，051=A 已批准产物，I10 已完成 6/6 交叉复验和 4 项同范围修正；本仓不创建 UI Mock，该产物不证明 Consumer 或三平台运行能力。
 - **pageListRef**：`approved`（SSOT 权威 `CR4-B5-I9-PC-PAGE-LIST-APPROVAL-050=A`）；采用项目资料工作台、上传资料/创建修订模式化抽屉、资料详情页，即“2 个页面 + 1 个抽屉”。
-- **当前门禁**：I12/I14 Construction 入场门禁已满足；Provider 单元 `U-P01-API-PROJECT-MATERIAL` 已由 `loeyae` 自主认领，认领基线已在双仓 `main` 提交并推送：Provider `fe8f7c150c57e64469b11031e4d30079b630b89f`、Consumer `096321da1dd8459108e4540d6150e0761d25aef0`，Git 先到先得已生效。后续 Provider Construction 使用规划分支 `feat/api-project-material`；其余 11/12 单元待认领。057 继续保持 0/12，`blocked_by_057` 只阻断 `execution_ready`、实际运行、C8 和运行能力声明；本次回写仅同步认领发布事实，尚未修改 Core、配置或平台适配，未构建、未测试。
+- **当前门禁**：Provider 权威 085=A 已消费；B4=4/4、B5=5/5 静态候选完成。Provider 43、Consumer 45 个 UC-D 均保持 `blocked/ready/blocked`；I14 双仓各 6 单元且结构、`service_id`、主归属不变。当前唯一空答案为 086；086=A 前不关闭子 CR、不恢复 C1、不冻结 Q014/Q014-R1。Consumer 6/6 单元仍未认领，Provider U-P01 已认领；057=0/12，运行未验证。
 
 ## 工作区状态
 - **工作区根目录**：`/Users/andy/work/src/loeyae-framework/loeyae-aidlc`
@@ -64,9 +70,9 @@
 - **CR3 验证矩阵**：`V-DOC-01`、`V-SCOPE-02`、`V-CONTRACT-03`、`V-ROLE-04`、`V-CONTEXT-05`、`V-LINEAGE-06`、`V-REVERSE-07`、`V-PLATFORM-08`、`V-E2E-09`、`V-LEGACY-10`、`V-SEC-11`、`V-ROLLBACK-12`；仅文档批次可执行项已规划，其余运行时项均未验证
 - **成对回滚条件**：本仓 B1 与 SSOT B1 为最小成对回滚单位；B2 只能整体回到已批准 B1；B3 只消费 Provider 已声明兼容版本且 Consumer 不得超前；若发现 state 迁移、权威边界/Owner/消费者/字段/回滚条件不确定或任一必需验证失败，立即停止并重新严格审批
 - **服务与运行时依赖**：I12 设计候选见 `docs/aidlc/product/system-baseline/runtime-dependencies.md`；运行未验证
-- **契约索引**：`docs/aidlc/product/contracts.md`（引用 Provider OpenAPI 3.1 候选 `1.0.0-candidate.1`；I12 已由权威 055=A 批准，Consumer 仍待适配，运行未验证）
+- **契约索引**：`docs/aidlc/product/contracts.md`（引用 Provider OpenAPI 3.1 v3 候选 `3.0.0-candidate.1`；v1/v2 为只读历史候选；均未实现、未发布、运行未验证）
 - **配置清单**：I12 设计候选见 `docs/aidlc/product/system-baseline/configuration-inventory.md`；实际 SSOT MCP 配置、Secret 与运行绑定未实施
-- **一致性场景**：I12 设计候选与权威 058=A 批准的 I13 设计用例仍是 Construction 输入；Provider 060=A 已关闭 I14，B6 文档检查通过。当前 U-P01 已认领但未实施，其余 11/12 单元待认领，057=0/12 且运行证据继续为 `blocked_by_057`；CR5 不得据此关闭
+- **一致性场景**：085=A 授权下已完成当前 I13 重派生与 I14 复验；Provider 43、Consumer 45、双仓 88 个 UC-D 均保持 `blocked/ready/blocked`，双仓各 6 单元结构不变。V-XPIMPORT-01—12 仅静态候选 PASS，运行未验证；057=0/12，CR5 等待 086，不得据此关闭。
 - **本次受影响节点**：SSOT/AI-DLC 产品定位、角色化资料选择与上下文构建、正式文档类型/模板、资料版本到正式文档章节的血缘、逆向说明上传与 Git 提交关联、项目管理辅助边界、最小在线契约、state v2 恢复与平台无关适配；原完整 Federated、state v3、跨项目共享、复杂恢复和重型发布门禁均已判定为后置、失效或仅保留历史
 
 ## 阶段进度
@@ -83,8 +89,8 @@
 | I10 | UI Mock 审查 | not_applicable | 2026-07-18T10:17:15Z | 本仓无产品 UI；SSOT I10 已由权威 `CR4-B5-I10-CROSS-VALIDATION-APPROVAL-052=A` 关闭 |
 | I11 | 工作流规划 | completed | 2026-07-19T10:51:43Z | SSOT 权威 `CR4-B5-I11-WORKFLOW-PLAN-APPROVAL-053=A` 已批准双仓模块级 `execution-plan.md` |
 | I12 | 应用设计 | completed | 2026-07-19T14:36:22Z | SSOT 权威 `CR4-B5-I12-APPLICATION-DESIGN-APPROVAL-055=A` 已批准 OpenAPI 3.1、双仓系统基线和 Provider/Consumer 应用设计；运行能力仍未验证 |
-| I13 | 测试用例派生 | completed | 2026-07-20T08:30:01Z | SSOT 权威 `CR4-B5-I13-TEST-CASE-APPROVAL-058=A` 已批准双仓 85 个设计级 UC-D；057 仍以 0/12 阻断运行 |
-| I14 | 单元生成 | completed | 2026-07-21T01:04:16Z | Provider 权威 `CR4-B5-I14-UNIT-ARTIFACT-APPROVAL-060=A`；双仓 12 个单元、三份强制产物、团队认领表和多单元切片获批，12/12 仍待认领 |
+| I13 | 测试用例派生 | completed | 2026-07-24T13:37:05Z | Provider 权威 085=A 授权下完成重派生：Consumer 13/35/45、Provider 11/37/43，合计 24/72/88；全部 `blocked/ready/blocked`，057=0/12 |
+| I14 | 单元生成 | completed | 2026-07-24T13:37:05Z | 双仓各 6 单元复验通过；正式 `unit_id`、`service_id`、故事映射和主归属不变，无需重生成 |
 
 ## 单元与批次进度
 | 模块 | 服务 | 批次 | 单元 | 状态 | 完成时间 | 验证证据 | 执行者 |
@@ -95,8 +101,8 @@
 | 产品级 | loeyae-aidlc | CR4-B3 | 双仓 Provider/Consumer 文档契约 | completed | 2026-07-18T06:35:31Z | SSOT 权威 `CR4-B3-CONTRACT-APPROVAL-043=A`；8 项契约、Consumer 矩阵、历史处置获批，运行未验证 | Kiro |
 | 产品级 | loeyae-aidlc | CR4-B4 | 通用流程、角色目录与双仓 I7 重规划 | completed | 2026-07-18T08:50:18Z | SSOT 权威 `044=A`、`045=A`；9 个通用规则文件、双仓 assessment/plan、5+5 画像及 12+13 故事内容验证通过 | Kiro |
 | 产品级 | loeyae-aidlc | CR4-B5/I12 | 双仓 Provider/Consumer 应用设计 | completed | 2026-07-19T14:36:22Z | 权威 `055=A`；OpenAPI 3.1、双仓系统基线和设计已批准，运行未验证 | Kiro |
-| 产品级 | loeyae-aidlc | CR4-B5/I13 | 双仓设计级测试用例派生 | completed | 2026-07-20T08:30:01Z | 权威 058=A；Provider 41 个、Consumer 44 个 UC-D 获批；057=0/12 继续阻断运行 | Kiro |
-| 产品级 | loeyae-aidlc | CR4-B5/I14 | 双仓工作单元产物 | completed | 2026-07-21T01:04:16Z | Provider 060=A；25/68/85 主归属完整唯一，12/12 单元待认领 | Kiro |
+| 产品级 | loeyae-aidlc | CR4-B5/I13 | 双仓设计级测试用例派生 | completed | 2026-07-24T13:37:05Z | 085=A 授权；Provider 43、Consumer 45、双仓 88 个当前 UC-D，全部 `blocked/ready/blocked`，057=0/12 | Kiro |
+| 产品级 | loeyae-aidlc | CR4-B5/I14 | 双仓工作单元产物 | completed | 2026-07-24T13:37:05Z | 双仓各 6 单元；`unit_id`、`service_id`、故事映射及主归属不变，无需重生成 | Kiro |
 | 产品级 | loeyae-aidlc | CR4-B6 | 双仓文档一致性验收 | completed | 2026-07-21T01:04:16Z | 五角色、资料选择、固定引用/血缘、三平台薄适配、state v2、运行未验证矩阵和非破坏性回滚演练通过；CR5 初检返回 CR4 Construction | Kiro |
 | federated-ssot | ssot-api | Construction-CLAIM | U-P01-API-PROJECT-MATERIAL | claimed | 2026-07-21T01:38:19Z | loeyae 明确认领；规划分支 `feat/api-project-material`；尚未创建分支、提交或推送 | loeyae |
 | federated-ssot | ssot-api | Construction-CLAIM-PUBLISH | U-P01-API-PROJECT-MATERIAL | completed | 2026-07-21T02:27:41Z | Provider `fe8f7c1` 与 Consumer `096321d` 均已推送 `main`；Git 先到先得生效；Consumer 仅同步 Provider 认领 | loeyae |
@@ -120,7 +126,7 @@
 ## 技术用例执行映射
 | UC-D | 来源 | 执行范围 | 服务 | C8 证据 | 状态 |
 |------|------|----------|------|---------|------|
-| Provider 41 个 / Consumer 44 个 UC-D | 产品场景、契约、迁移、Legacy、平台一致性和故障风险 | 跨仓 | ssot-server/AI-DLC | 权威 057 的 12 个运行锚点均缺失（0/12） | blocked_by_057 |
+| Provider 当前 43 个 / Consumer 当前 45 个 UC-D | 产品场景、契约、跨项目写入、滥用、回滚、平台一致性和故障风险 | 跨仓 | ssot-server/AI-DLC | 权威 057 的 12 个运行锚点均缺失（0/12） | blocked_by_057 |
 
 - **057 阻断边界**：`blocked_by_057` 只阻断 `execution_ready`、实际运行、C8 和运行能力声明；现有技术用例表保持该状态，不影响 I14 静态产物审批。
 
@@ -156,11 +162,13 @@
 | I14 工作单元产物严格审批 | 2026-07-21T01:04:16Z | 通过 | Provider 权威 `CR4-B5-I14-UNIT-ARTIFACT-APPROVAL-060=A`；I14 关闭，12/12 单元继续待认领，不代表实施或运行通过 |
 | CR4 B6 文档一致性验收 | 2026-07-21T01:04:16Z | 通过 | 五类角色、资料选择、固定引用/章节血缘、三平台薄适配、state v2、负向范围、运行未验证矩阵及非破坏性回滚演练通过 |
 | CR5 一致性初步检查 | 2026-07-21T01:04:16Z | 文档通过，CR 保持活跃 | Core/三平台实现、契约测试、Legacy、E2E、C8 与运行影响域未验证；返回 CR4 Construction 入场/团队单元认领 |
+| 跨项目导入 CR4 085 / B4-B5 静态候选同步 | 2026-07-24T13:37:05Z | 静态候选通过，等待 086 | Provider 权威确认 085=A；Provider 11/37/43、Consumer 13/35/45、双仓 24/72/88，全部 `blocked/ready/blocked`；I14 双仓各 6 单元结构不变；V-XPIMPORT-01—12 静态候选 PASS、运行未验证。C1 继续暂停，057=0/12，未实施、配置、构建、测试、C8、提交或推送。 |
 
 ## 活跃变更请求
 | CR ID | 当前环节 | 初步风险 | 目标 | 必须修改/验证范围 | 当前阻断 |
 |-------|----------|----------|------|-------------------|----------|
-| CR-I5-SCOPE-001 | CR4 in_progress（B0—B6 completed；CR5 文档初检后返回 Construction；U-P01 已认领，待进入 C1 功能设计） | L4 | 按“沟通/过程资料 SSOT + AI-DLC 正式文档产出出口”重定双产品范围，并重验既有决策 | 双仓文档基线已通过 B6；后续按 I14 单元实施并验证资料选择、ContextBundle、引用/血缘、Provider 契约、Legacy、三平台一致性及真实项目闭环 | U-P01 已认领但未实施，其余 11/12 单元未认领；057=0/12；Core/平台实现、配置、构建、测试、契约兼容、C8 和运行影响域均未验证，CR 不得关闭 |
+| CR-I5-SCOPE-001 | CR4 in_progress（B0—B6 completed；CR5 文档初检后返回 Construction；U-P01 C1=`suspended_by_change_request`） | L4 | 按“沟通/过程资料 SSOT + AI-DLC 正式文档产出出口”重定双产品范围，并重验既有决策 | 双仓文档基线已通过 B6；后续按 I14 单元实施并验证资料选择、ContextBundle、引用/血缘、Provider 契约、Legacy、三平台一致性及真实项目闭环 | Provider U-P01 已认领但因跨项目导入子 CR 的 086 门禁继续暂停；其余 11/12 单元未认领；057=0/12；Core/平台实现、配置、构建、测试、契约兼容、C8 和运行影响域均未验证，父 CR 不得关闭 |
+| CR-U-P01-CROSS-PROJECT-IMPORT-001 | Provider 权威 CR5 pending_approval | L5 | 任意认证主体无需目标项目成员/scope 即可跨项目导入、选择状态、归档与恢复 | B4=4/4、B5=5/5；Consumer 45、Provider 43 个 UC-D；双仓各 6 单元结构不变；V-XPIMPORT-01—12 静态候选 | 唯一门禁 086；086=A 前不得关闭子 CR、恢复 C1 或冻结 Q014/Q014-R1；运行未验证 |
 
 ## 待优化项
 无；未决产品决策在 `docs/aidlc/product/decision-summary.md` 集中管理。
