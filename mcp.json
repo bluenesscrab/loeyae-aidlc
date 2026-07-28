@@ -22,7 +22,7 @@
     },
     "ssot": {
       "type": "http",
-      "url": "https://ssot.dec.loeyae.com/mcp",
+      "url": "https://ssot.dev.loeyae.com/mcp/",
       "headers": { "Authorization": "Bearer ${SSOT_API_KEY}" },
       "disabled": false,
       "autoApprove": [

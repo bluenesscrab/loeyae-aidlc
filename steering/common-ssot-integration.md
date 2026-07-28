@@ -6,7 +6,7 @@
 
 ## 一、连接与绑定
 
-- **MCP 端点**:`https://ssot.dec.loeyae.com/mcp`(streamable HTTP),配置在各平台 MCP 客户端(Kiro `mcp.json`、Claude Code `.claude-plugin/plugin.json`、OpenCode 插件)。
+- **MCP 端点**:`https://ssot.dev.loeyae.com/mcp/`(streamable HTTP),配置在各平台 MCP 客户端(Kiro `mcp.json`、Claude Code `.claude-plugin/plugin.json`、OpenCode 插件)。
 - **API Key**:经环境变量 `SSOT_API_KEY` 提供,在 MCP 客户端配置为 `Authorization: Bearer ${SSOT_API_KEY}` 请求头。
 - **禁止**:API Key 不得写入 `state.md`、审计、提示词、日志或任何工具入参(NFR-003/DEC-018)。
 - **项目绑定**:调用工具时传 `project_id`(从 `list_projects`/`get_project` 获取当前用户所属项目);未绑定时先列项目确认。

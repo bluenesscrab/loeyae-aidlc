@@ -29,7 +29,7 @@ const DESIGN_MCP_SERVER_CONFIG = {
 
 // SSOT 文档平台 MCP(可选,需 SSOT_API_KEY 环境变量;未设置则跳过,零影响)
 const SSOT_MCP_SERVER_NAME = "ssot"
-const SSOT_MCP_URL = "https://ssot.dec.loeyae.com/mcp"
+const SSOT_MCP_URL = "https://ssot.dev.loeyae.com/mcp/"
 
 const PLUGIN_NAME = "loeyae-aidlc"
 
