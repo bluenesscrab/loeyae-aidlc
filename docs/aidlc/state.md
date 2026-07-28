@@ -12,7 +12,7 @@
 | SSOT 对接改造 | 2026-07-28T00:30:00Z | `使用 AI-DLC，继续 loeyae-aidlc SSOT 对接。AU-01~05 完成;AU-06 三平台 MCP 配置完成(mcp.json/plugin.json/setup.mjs,${SSOT_API_KEY})。待:AU-06 三平台回归 + 实际对接验证(设 SSOT_API_KEY 测试 search/write);SessionStart 探测 hook 可选。` |
 
 ## 项目信息
-- **项目类型**：存量项目(AI-DLC Power,npm 1.20.0)
+- **项目类型**：存量项目(AI-DLC Power,npm 1.21.1)
 - **协作模式**：单人开发(loeyae)
 - **架构模式**：单仓、单模块(AI-DLC Power + Kiro/Claude/OpenCode 平台适配)
 - **审批模式**：标准(SSOT 侧轻量变更记录)
@@ -36,7 +36,7 @@
 
 ## 工作区状态
 - **工作区根目录**：`/Users/andy/work/src/loeyae-framework/loeyae-aidlc`
-- **现有代码**：是(`POWER.md`、`CLAUDE.md`、`skills/`、`steering/`、`agents/`、`hooks/`、`src/`、`.opencode/`;npm 1.20.0)
+- **现有代码**：是(`POWER.md`、`CLAUDE.md`、`skills/`、`steering/`、`agents/`、`hooks/`、`src/`、`.opencode/`;npm 1.21.1)
 - **需要逆向工程**：否
 - **后端语言/框架**：Node.js ≥20 / JavaScript、TypeScript;Kiro Power + 多平台插件
 - **Loeyae Boot 版本与 Starter**：不适用
@@ -50,7 +50,7 @@
 ## 系统基线
 - **基线路径**：不适用(单仓;旧双仓 `docs/aidlc/product/system-baseline/` 已随重定位删除)
 - **代码版本标识**：分支 `chore/ssot-realignment`(HEAD `14cd47d`);main 停在 `9bafda1`(旧基线,待推进)
-- **制品标识/摘要**：npm 1.20.0;本次未构建
+- **制品标识/摘要**：npm 1.21.1;本次未构建
 - **基线新鲜度**：改造规划已对齐 realignment;实现未开始,运行未验证
 - **契约索引**：SSOT `../../../loeyae-ssot-server/docs/aidlc/modules/ssot/inception/mcp-contract.md`(14 工具,单一契约版本)
 - **本次受影响节点**：AI-DLC 共享 steering、workspace-detection/state、Inception 检索与写回、平台 MCP 客户端适配
@@ -80,14 +80,14 @@
 ## 外部证据
 | 证据 ID | 类型 | 运行标识 | 代码提交 | 制品标识/摘要 | 范围 | 结果 | 位置 | 时间 |
 |---------|------|----------|----------|---------------|------|------|------|------|
-| EVD-REALIGN-001 | 重定位盘点 | local-20260727 | `14cd47d` | npm 1.20.0 | docs/SSOT-AI-DLC + docs/aidlc/state.md | 消费侧 federated 产物已删除;改造规划与 state 已按 realignment 重定位;实现未开始 | 本状态文件 | 2026-07-27 |
+| EVD-REALIGN-001 | 重定位盘点 | local-20260727 | `14cd47d` | npm 1.21.1 | docs/SSOT-AI-DLC + docs/aidlc/state.md | 消费侧 federated 产物已删除;改造规划与 state 已按 realignment 重定位;实现未开始 | 本状态文件 | 2026-07-27 |
 
 ## 质量门禁状态
 | 阶段/步骤 | 时间 | 结果 | 证据/阻断原因 |
 |-----------|------|------|---------------|
 | 消费侧重定位清理 | 2026-07-27 | 通过 | 删除 federated-integration 需求/故事/计划/契约/system-baseline(~7400 行) |
 | 改造文档重定位 | 2026-07-27 | 通过(静态) | 01/02/03 重写为 SSOT=文档平台 + 单仓 MCP 直连消费 + 保持 state v2;过时引用改指 realignment-plan/modules/ssot |
-| 通用 steering 去污染 | 2026-07-27 | 通过(静态) | `096321d` 曾向 9 个通用 steering 注入旧 SSOT 愿景(正式文档不进 SSOT/双仓 Provider-first/ContextBundle/章节血缘/Legacy 多模式),与 realignment 相反;已 `git checkout fac8fcf --` 将 9 文件回退到 v1.20.0,旧愿景关键词清零,制表符 0、git diff --check 通过 |
+| 通用 steering 去污染 | 2026-07-27 | 通过(静态) | `096321d` 曾向 9 个通用 steering 注入旧 SSOT 愿景(正式文档不进 SSOT/双仓 Provider-first/ContextBundle/章节血缘/Legacy 多模式),与 realignment 相反;已 `git checkout fac8fcf --` 将 9 文件回退到 v1.21.1,旧愿景关键词清零,制表符 0、git diff --check 通过 |
 | 改造实现(AU-01–AU-06) | - | 未执行 | 待进入 Construction |
 
 ## 活跃变更请求
