@@ -9,7 +9,12 @@
 - **MCP 端点**:`https://ssot.dev.loeyae.com/mcp/`(streamable HTTP),配置在各平台 MCP 客户端(Kiro `mcp.json`、Claude Code `.claude-plugin/plugin.json`、OpenCode 插件)。
 - **API Key**:经环境变量 `SSOT_API_KEY` 提供,在 MCP 客户端配置为 `Authorization: Bearer ${SSOT_API_KEY}` 请求头。
 - **禁止**:API Key 不得写入 `state.md`、审计、提示词、日志或任何工具入参(NFR-003/DEC-018)。
-- **项目绑定**:调用工具时传 `project_id`(从 `list_projects`/`get_project` 获取当前用户所属项目);未绑定时先列项目确认。
+- **项目绑定(单项目锁定)**:
+  - 每个业务项目的 `state.md` 必须在 `## SSOT 连接` 小节写明 `绑定项目: <project_id>`。
+  - **Session 内所有 SSOT 工具调用(search_documents、retrieve_context、write_* 等)只允许使用 state.md 中绑定的 project_id**,禁止对其他项目发起检索或写入。
+  - 未绑定时(state.md 缺少绑定项目或值为"不适用"):先调 `list_projects` 展示列表,**请用户选择一个项目**,确认后写入 state.md,后续锁定该项目。
+  - 切换项目:用户显式要求时才可更改 state.md 中的绑定项目;agent 不得自行切换。
+  - **禁止**:同一 session 内对多个 project_id 做 search/retrieve/write。
 - **未配置 SSOT**:不加载本文件,流程与改造前完全一致(零影响)。
 
 ## 二、SsotDocClient 语义(AU-03,平台无关封装)
@@ -58,7 +63,7 @@ AI-DLC 经 MCP 调用 SSOT 14 工具,按以下语义分组(实际调用由平台
     ## SSOT 连接(可选)
     - SSOT 启用:是/否
     - base URL 引用:配置键名(不写明文密钥)
-    - 绑定项目:<project slug 或 id>/不适用
+    - 绑定项目:<project_id 整数>(必填;session 内所有 SSOT 调用锁定此值)
     - 最近检索:ISO 时间/未使用
     - 最近写回:ISO 时间/未使用
     - 待写回:无/文档标题列表
