@@ -20,7 +20,7 @@
 
 ## MCP 服务器配置（首次安装需要）
 
-插件会尝试通过 config hook 自动注册 `loeyae-skills` MCP 服务器。如果 MCP 工具不可用，需要手动注册：
+插件会尝试通过 config hook 自动注册 MCP 服务器。如果 MCP 工具不可用，需要手动注册：
 
 **方式 1：运行 setup 脚本（推荐）**
 
@@ -30,7 +30,7 @@ bunx loeyae-aidlc
 npx loeyae-aidlc
 ```
 
-脚本会自动将 `loeyae-skills` MCP 服务器写入全局配置。
+脚本会自动将 MCP 服务器写入全局配置。
 
 **方式 2：手动添加**
 
@@ -41,11 +41,16 @@ npx loeyae-aidlc
   "mcp": {
     "loeyae-skills": {
       "type": "remote",
-      "url": "https://mcp-skills.allbelieves.com/sse"
+      "url": "https://mcp-skills.allbelieves.com/mcp"
     },
     "awesome-design": {
       "type": "remote",
-      "url": "https://mcp-design.allbelieves.com/sse"
+      "url": "https://mcp-design.allbelieves.com/mcp"
+    },
+    "ssot": {
+      "type": "remote",
+      "url": "https://ssot.dev.loeyae.com/mcp/",
+      "headers": { "Authorization": "Bearer ${SSOT_API_KEY}" }
     }
   }
 }
@@ -72,7 +77,7 @@ npx loeyae-aidlc
 
 ```json
 {
-  "plugin": ["loeyae-aidlc@git+https://github.com/loeyae/loeyae-aidlc.git#v1.21.1"]
+  "plugin": ["loeyae-aidlc@git+https://github.com/loeyae/loeyae-aidlc.git#v1.21.2"]
 }
 ```
 
@@ -105,7 +110,7 @@ rmdir /s /q "%APPDATA%\opencode\.cache\plugins\loeyae-aidlc"
 
 ```json
 {
-  "plugin": ["loeyae-aidlc@git+https://github.com/loeyae/loeyae-aidlc.git#v1.21.1"]
+  "plugin": ["loeyae-aidlc@git+https://github.com/loeyae/loeyae-aidlc.git#v1.21.2"]
 }
 ```
 
@@ -139,7 +144,7 @@ npm install loeyae-aidlc@git+https://github.com/loeyae/loeyae-aidlc.git --prefix
 ### MCP 工具不可用
 
 1. 运行 `bunx loeyae-aidlc` 注册 MCP 服务器
-2. 确认网络可达：`https://mcp-skills.allbelieves.com/sse`
+2. 确认网络可达：`https://mcp-skills.allbelieves.com/mcp`
 3. 重启 OpenCode
 
 ### Windows 安装问题

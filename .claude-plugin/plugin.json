@@ -1,7 +1,7 @@
 {
   "name": "loeyae-aidlc",
   "description": "Complete AI-DLC development lifecycle: Inception planning, Construction implementation and validation, and conditional Operations deployment preparation; excludes post-deployment production operations.",
-  "version": "1.21.1",
+  "version": "1.21.2",
   "author": {
     "name": "Loeyae Team",
     "email": "dev@loeyae.com"
@@ -29,17 +29,36 @@
   ],
   "mcpServers": {
     "loeyae-skills": {
-      "type": "sse",
-      "url": "https://mcp-skills.allbelieves.com/sse"
+      "type": "http",
+      "url": "https://mcp-skills.allbelieves.com/mcp",
+      "autoApprove": [
+        "get_skill_outline",
+        "get_skill_section",
+        "get_skill_summary",
+        "get_skill_content",
+        "search_skill"
+      ]
     },
     "awesome-design": {
-      "type": "sse",
-      "url": "https://mcp-design.allbelieves.com/sse"
+      "type": "http",
+      "url": "https://mcp-design.allbelieves.com/mcp",
+      "autoApprove": [
+        "list_design_styles",
+        "get_design_style",
+        "get_design_tokens"
+      ]
     },
     "ssot": {
       "type": "http",
       "url": "https://ssot.dev.loeyae.com/mcp/",
-      "headers": { "Authorization": "Bearer ${SSOT_API_KEY}" }
+      "headers": { "Authorization": "Bearer ${SSOT_API_KEY}" },
+      "autoApprove": [
+        "list_projects", "get_project", "list_documents", "get_document",
+        "search_documents", "retrieve_context", "get_revision_file",
+        "create_document", "upload_revision", "activate_revision",
+        "archive_document", "restore_document",
+        "write_formal_document", "write_reverse_engineering"
+      ]
     }
   }
 }

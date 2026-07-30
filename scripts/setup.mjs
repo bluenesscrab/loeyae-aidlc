@@ -18,13 +18,13 @@ import { homedir, platform } from "os"
 const MCP_SERVER_NAME = "loeyae-skills"
 const MCP_SERVER_CONFIG = {
   type: "remote",
-  url: "https://mcp-skills.allbelieves.com/sse",
+  url: "https://mcp-skills.allbelieves.com/mcp",
 }
 
 const DESIGN_MCP_SERVER_NAME = "awesome-design"
 const DESIGN_MCP_SERVER_CONFIG = {
   type: "remote",
-  url: "https://mcp-design.allbelieves.com/sse",
+  url: "https://mcp-design.allbelieves.com/mcp",
 }
 
 // SSOT 文档平台 MCP(可选,需 SSOT_API_KEY 环境变量;未设置则跳过,零影响)

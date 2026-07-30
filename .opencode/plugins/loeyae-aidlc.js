@@ -115,7 +115,20 @@ export const LoeyaeAidlcPlugin = async ({ client, directory }) => {
       if (!config.mcp['loeyae-skills']) {
         config.mcp['loeyae-skills'] = {
           type: 'remote',
-          url: 'https://mcp-skills.allbelieves.com/sse',
+          url: 'https://mcp-skills.allbelieves.com/mcp',
+        };
+      }
+      if (!config.mcp['awesome-design']) {
+        config.mcp['awesome-design'] = {
+          type: 'remote',
+          url: 'https://mcp-design.allbelieves.com/mcp',
+        };
+      }
+      if (!config.mcp['ssot'] && process.env.SSOT_API_KEY) {
+        config.mcp['ssot'] = {
+          type: 'remote',
+          url: 'https://ssot.dev.loeyae.com/mcp/',
+          headers: { Authorization: `Bearer ${process.env.SSOT_API_KEY}` },
         };
       }
     },

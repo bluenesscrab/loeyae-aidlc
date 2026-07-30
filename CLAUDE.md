@@ -39,12 +39,14 @@ Windows 可将相同 `.sh` 文件复制到 `.claude\hooks\`，并合并 `setting
 
 - `loeyae-skills`：仅在 Java + Loeyae Boot Framework 项目的 Construction 阶段按需加载框架编码规范。
 - `awesome-design`：仅在 UI Mock 场景且用户选择设计风格时使用。
+- `ssot`：SSOT 文档管理服务，用于文档创建、检索、版本管理和向量搜索；需设置 `SSOT_API_KEY` 环境变量。
 
 自动注册失败时可手动执行：
 
 ```bash
-claude mcp add --transport sse loeyae-skills https://mcp-skills.allbelieves.com/sse
-claude mcp add --transport sse awesome-design https://mcp-design.allbelieves.com/sse
+claude mcp add --transport http loeyae-skills https://mcp-skills.allbelieves.com/mcp
+claude mcp add --transport http awesome-design https://mcp-design.allbelieves.com/mcp
+claude mcp add --transport http ssot https://ssot.dev.loeyae.com/mcp/ --header "Authorization: Bearer $SSOT_API_KEY"
 ```
 
 使用 `/mcp` 查看服务状态。MCP 不可用时，应明确告知用户，并仅依赖仓库内已有通用规则继续可执行部分。
