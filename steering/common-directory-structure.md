@@ -11,6 +11,14 @@
 - 系统基线只保存索引、关系和证据引用，不复制 Secret、完整机器契约或外部平台数据。
 - 多模块项目只加载当前模块产物、产品级契约和相关系统基线切片。
 
+## CR 与变更文档约束
+
+- `construction/` 仅存实现计划、审查记录、构建测试和实施报告；禁止创建 `CR-*`、`change-*`、`bug-*` 变更档案。
+- L1/L2 变更和缺陷修复不创建独立文件；通过 state.md 活跃行和 Git commit 记录。
+- L3+ 的 CR 暂态文件仅位于 `docs/aidlc/change-requests/`（单模块）或 `docs/aidlc/modules/<module>/change-requests/`（多模块）。
+- CR 完成后暂态文件必须删除；Git 历史是唯一长期档案。
+- 禁止创建 `{artifact}.backup.{timestamp}` 时间戳备份副本；Git 历史保留所有旧版本。
+
 ## 系统基线根目录
 
 | 架构 | `<system-baseline-root>` |
@@ -28,6 +36,7 @@
 └── docs/aidlc/
     ├── state.md
     ├── audit-summary.md
+    ├── change-requests/               # 仅 L3+ CR 暂态文件；完成后删除
     ├── inception/
     │   ├── plans/
     │   ├── reverse-engineering/
@@ -42,6 +51,7 @@
     │       └── unit-of-work-story-map.md
     ├── construction/
     │   ├── plans/
+    │   ├── audit/
     │   ├── <unit-name>/
     │   ├── build-and-test/
     │   └── implementation-report.md

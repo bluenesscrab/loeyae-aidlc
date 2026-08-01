@@ -45,7 +45,9 @@
 | 意图 | 判定 | 路由 |
 |------|------|------|
 | 继续开发 | 继续、恢复、接着做 | `common-session-continuity.md` |
-| 变更已有功能 | 修改、调整、重构现有功能 | CR1-CR5 |
+| 缺陷修复 | 修复已批准需求/故事/契约中的错误实现，不改变产品语义 | 受影响 Construction 步骤（不进入 CR） |
+| 无行为重构 | 不改变外部行为，仅改善内部结构 | 受影响 Construction 步骤 + 影响域验证（不进入 CR） |
+| 需求/契约变更 | 改变已批准的行为、验收标准、接口契约或数据语义 | CR1-CR5（PR 模型） |
 | 新增功能 | 新功能且现有产物中不存在 | Inception 追加模式 |
 | 新项目 | 无 state.md | Inception |
 
@@ -109,15 +111,17 @@ C5 条件前置：存在 `contract` 类型跨单元依赖时，先加载并完�
 
 ## Change Request 路由
 
+> CR 是暂态差异，不是永久档案。正式基线就地更新，Git 历史为唯一长期档案。CR 完成 = 基线已更新 + 暂态文件已删除。变更分流详见 `change-request-process.md`。
+
 | # | 步骤 | 条件 | 审批 | 加载文件 |
 |---|------|------|------|----------|
 | CR1 | 变更范围定位 | 始终 | 🟢 | `change-request-process.md` |
 | CR2 | 影响评估 | 始终 | 🔴 | `change-request-process.md` |
 | CR3 | 变更计划 | CR2 已确认 | 🔴 | `change-request-process.md` |
-| CR4 | 执行变更与基准回写 | CR3 已确认 | 按受影响步骤 | 对应阶段 steering |
-| CR5 | 一致性验证 | CR4 完成 | 🟢 | `change-request-process.md` + `inception-cross-validation.md` |
+| CR4 | 执行变更与就地基线更新 | CR3 已确认 | 按受影响步骤 | 对应阶段 steering |
+| CR5 | 合并门禁与完成 | CR4 完成 | 🟢 | `change-request-process.md` + `inception-cross-validation.md` |
 
-新增功能采用追加模式，从 I5 开始，仅追加受影响产物并对新增/受影响单元执行 Construction。任何需求语义或接口契约变化必须走 CR，不得只改代码。
+新增功能采用追加模式，从 I5 开始，仅追加受影响产物并对新增/受影响单元执行 Construction。任何需求语义或接口契约变化必须走 CR，不得只改代码。缺陷修复和无行为重构不进入 CR，直接进入受影响 Construction 步骤。
 
 ## 完成标准
 
