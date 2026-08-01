@@ -30,7 +30,7 @@
 
 ### ② 记录审计（强制）
 
-在对应的分段审计文件中追加记录（格式见 `common-audit-logging.md`）。
+在单元审计文件中追加记录（路径：`docs/aidlc/construction/audit/{unit-id}.md`；格式见 `common-audit-logging.md`）。
 
 ### ③ 验证更新（强制，不可跳过）
 

@@ -70,7 +70,7 @@
 |------|------|------|----------|-----------|
 | I1 | 工作区检测 | completed | 2026-07-17 | 存量 AI-DLC Power 基线已识别 |
 | 改造规划 | SSOT 对接需求/设计/计划 | completed | 2026-07-27 | `docs/SSOT-AI-DLC/01-改造需求.md`/`02-改造设计.md`/`03-改造计划.md`(已按 realignment 重定位) |
-| C(AU) | 改造实现 | pending | - | AU-01–AU-06 未开始 |
+| C(AU) | 改造实现 | partial | 2026-07-27 | AU-01–05 完成；AU-06 待回归（详见单元表） |
 | CR-SCB-001 | 共享契约基线增强 | rules_implemented | 2026-08-01T03:50:01Z | 规则实施完成；静态验证通过；端到端试运行待完成。证据见 `docs/aidlc/shared-contract-baseline-implementation-plan.md` |
 
 ## 单元与批次进度

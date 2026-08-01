@@ -72,6 +72,10 @@ function isNonEmptyString(value) {
 }
 
 /**
+ * SYNC: 判定规则必须与 steering/common-context-optimization.md 和
+ * steering/construction-shared-contract-baseline.md 保持同步。
+ * 修改共享规则中的依赖类型、状态名或判定条件时，必须同步更新此函数。
+ *
  * 从批次初始化阶段已收集的 dependencyDetails 直接推导就绪结论。
  * 不做二次 agent 调用，不重复共享 steering 的判定逻辑。
  * 判定规则（与 common-context-optimization.md 一致）：

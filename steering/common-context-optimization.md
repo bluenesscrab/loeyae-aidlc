@@ -43,6 +43,8 @@
 
 `contract` 依赖的状态和重新验证要求以 `construction-shared-contract-baseline.md` 为准；缺少契约 ID、基线记录、Owner 或证据时标记相关单元 `blocked` 并返回 I14 或 CR 补齐事实。
 
+<!-- 实现副本：.claude/workflows/aidlc-construction-batch.js#deriveReadiness —— 修改上表判定规则时必须同步 -->
+
 ## 执行流程
 
 1. 按依赖关系排序单元并生成批次，写入 state.md。
