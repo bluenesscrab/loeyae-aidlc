@@ -10,7 +10,7 @@
 | 范围 | 更新时间 | 提示词 |
 |------|----------|--------|
 | SSOT 对接改造 | 2026-07-28T00:30:00Z | `使用 AI-DLC，继续 loeyae-aidlc SSOT 对接。AU-01~05 完成;AU-06 三平台 MCP 配置完成(mcp.json/plugin.json/setup.mjs,${SSOT_API_KEY})。待:AU-06 三平台回归 + 实际对接验证(设 SSOT_API_KEY 测试 search/write);SessionStart 探测 hook 可选。` |
-| CR-SCB-001 共享契约基线增强 | 2026-08-01T03:50:01Z | `使用 AI-DLC，继续 loeyae-aidlc 的 CR-SCB-001。规则已实施（rules_implemented）；待真实业务项目端到端试运行验证（基线物化 → verified → 消费者解锁），验证通过后升级为 completed 并创建 commit。不得重复执行已关闭的规则实施阶段。` |
+| CR-SCB-001 共享契约基线增强 | 2026-08-01T03:50:01Z | `使用 AI-DLC，继续 loeyae-aidlc 的 CR-SCB-001。CR4 就地基线更新已完成；待真实业务项目端到端试运行验证（基线物化 → verified → 消费者解锁）通过 CR5 合并门禁后关闭并创建 commit。不得重复执行已完成的 CR4 阶段。` |
 
 ## 项目信息
 - **项目类型**：存量项目(AI-DLC Power,npm 1.21.2 基线)
@@ -36,12 +36,12 @@
 - **对端仓库**：`../loeyae-ssot-server`(Provider 侧现行基线在 `docs/aidlc/modules/ssot/`)。
 
 ## CR-SCB-001 共享契约基线增强
-- **状态**：`rules_implemented`（规则已实施，端到端试运行验证待完成）
+- **CR 阶段**：CR4 就地基线更新已完成（阶段 1—7）；CR5 合并门禁待完成
 - **计划与完整证据**：`docs/aidlc/shared-contract-baseline-implementation-plan.md`
 - **风险级别**：L3
 - **批准基线**：`main@4d08c99`（`v1.21.2`，2026-08-01T02:21:42Z Boss 批准）
-- **关闭时间**：规则实施于 2026-08-01T03:50:01Z 完成阶段 1—7
-- **升级为 `completed` 的条件**：至少一个真实业务项目完成基线物化 → `verified` → 消费者解锁的端到端流程，并有对应不可变 commit/SHA
+- **CR4 完成时间**：规则实施于 2026-08-01T03:50:01Z 完成阶段 1—7
+- **CR5 关闭条件**：至少一个真实业务项目完成基线物化 → `verified` → 消费者解锁的端到端流程，并有对应不可变 commit/SHA，通过 `change-request-process.md` 的合并门禁后关闭
 - **后续变更**：共享契约签名、语义、路径或门禁规则变更须新建 CR1—CR5
 
 ## 工作区状态
@@ -61,7 +61,7 @@
 - **基线路径**：不适用(单仓;旧双仓 `docs/aidlc/product/system-baseline/` 已随重定位删除)
 - **代码版本标识**：`main@4d08c99f984fc37bfd573ae9d8284387a600b4a2`（标签 `v1.21.2`；2026-08-01T02:21:42Z 经 Boss 批准为 CR-SCB-001 新基线）
 - **制品标识/摘要**：npm 1.21.2;本次未构建
-- **基线新鲜度**：已核验提交、标签和 `package.json` 版本；CR-SCB-001 规则已实施（`rules_implemented`），端到端试运行验证待完成。详细实施证据见 `docs/aidlc/shared-contract-baseline-implementation-plan.md`。
+- **基线新鲜度**：已核验提交、标签和 `package.json` 版本；CR-SCB-001 的 CR4 就地基线更新已完成，CR5 合并门禁（端到端试运行验证）待完成。详细实施证据见 `docs/aidlc/shared-contract-baseline-implementation-plan.md`。
 - **契约索引**：SSOT `../../../loeyae-ssot-server/docs/aidlc/modules/ssot/inception/mcp-contract.md`(14 工具,单一契约版本)
 - **本次受影响节点**：AI-DLC 共享 steering、workspace-detection/state、Inception 检索与写回、平台 MCP 客户端适配
 
@@ -71,7 +71,7 @@
 | I1 | 工作区检测 | completed | 2026-07-17 | 存量 AI-DLC Power 基线已识别 |
 | 改造规划 | SSOT 对接需求/设计/计划 | completed | 2026-07-27 | `docs/SSOT-AI-DLC/01-改造需求.md`/`02-改造设计.md`/`03-改造计划.md`(已按 realignment 重定位) |
 | C(AU) | 改造实现 | partial | 2026-07-27 | AU-01–05 完成；AU-06 待回归（详见单元表） |
-| CR-SCB-001 | 共享契约基线增强 | rules_implemented | 2026-08-01T03:50:01Z | 规则实施完成；静态验证通过；端到端试运行待完成。证据见 `docs/aidlc/shared-contract-baseline-implementation-plan.md` |
+| CR-SCB-001 | 共享契约基线增强 | partial（CR4 完成，CR5 待完成） | 2026-08-01T03:50:01Z | 规则实施完成；静态验证通过；端到端试运行待完成。证据见 `docs/aidlc/shared-contract-baseline-implementation-plan.md` |
 
 ## 单元与批次进度
 | 模块 | 服务 | 批次 | 单元 | 状态 | 完成时间 | 验证证据 | 执行者 |
@@ -103,7 +103,7 @@
 | CR-SCB-001 规则实施（阶段 1—7） | 2026-08-01T03:50:01Z | 通过（静态/走查） | `node --check`、CRLF 感知 diff、`npm pack --dry-run`、六类场景走查和治理复核均通过；未运行构建或测试。逐阶段证据见 `docs/aidlc/shared-contract-baseline-implementation-plan.md` |
 
 ## 活跃变更请求
-- **CR-SCB-001 共享契约基线增强**：状态 `rules_implemented`；风险 L3；批准基线 `main@4d08c99`（`v1.21.2`）。规则实施和静态验证已完成；端到端试运行验证待完成（升级为 `completed` 需真实业务项目物化基线并有不可变 commit）。后续共享契约签名、语义、路径或门禁规则变更须走新的 CR1—CR5。
+- **CR-SCB-001 共享契约基线增强**：CR4 就地基线更新已完成；风险 L3；批准基线 `main@4d08c99`（`v1.21.2`）。规则实施和静态验证已完成；CR5 合并门禁（端到端试运行验证）待完成（需真实业务项目物化基线并有不可变 commit）。后续共享契约签名、语义、路径或门禁规则变更须走新的 CR1—CR5。
 - 旧 `CR-U-P01-CROSS-PROJECT-IMPORT-001`(跨项目导入)、`CR-I5-SCOPE-001`(双仓 federated 范围)已随重定位废弃删除。后续需求/契约语义变更走本地 CR1–CR5(轻量模式)。
 
 ## 待优化项
