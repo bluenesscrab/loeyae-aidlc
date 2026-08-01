@@ -49,6 +49,7 @@
 | 无行为重构 | 不改变外部行为，仅改善内部结构 | 受影响 Construction 步骤 + 影响域验证（不进入 CR） |
 | 需求/契约变更 | 改变已批准的行为、验收标准、接口契约或数据语义 | CR1-CR5（PR 模型） |
 | 合并历史 CR | 合并历史CR文档、清理遗留CR文件 | `change-request-process.md` §历史CR文档批量合并 |
+| 压缩 state | 压缩state、精简state | `inception-state-template.md` §state.md 压缩规则 |
 | 新增功能 | 新功能且现有产物中不存在 | Inception 追加模式 |
 | 新项目 | 无 state.md | Inception |
 
