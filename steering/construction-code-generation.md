@@ -45,6 +45,16 @@
 - [ ] 识别单元依赖和接口
 - [ ] 验证单元已准备好进行代码生成
 
+## 步骤 1.25：共享契约基线门禁（条件）
+
+**触发条件**：当前单元存在 `contract` 类型跨单元依赖。
+
+- [ ] 加载 `construction-shared-contract-baseline.md`，检查相关基线是否为 `verified`
+- [ ] 对 `contract` 依赖，确认契约 ID、Owner、目标代码路径和实际验证证据均可追溯
+- [ ] 基线未 `verified`、状态为 `blocked` 或 `change_requested` 时，阻断代码规划与生成；不得以接口设计、空实现或消费者私有副本替代
+- [ ] 当前单元是消费者时，只引用 Owner 路径的已验证声明；不得重定义同职责接口、DTO、枚举或 Schema
+- [ ] 单单元或不存在 `contract` 依赖时，记录跳过原因后继续；`implementation` 与 `runtime` 依赖仍按其各自所需状态处理
+
 ## 步骤 1.5：前端平台规范门禁（跨端项目）
 
 > **触发条件**：state.md 中 `前端类型` ∈ {跨端, 小程序, APP, 混合}（即非纯 Web）

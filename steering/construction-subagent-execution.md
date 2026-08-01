@@ -73,6 +73,12 @@
 └─────────────────────────────────────────────────────────────┘
 ```
 
+### 共享契约基线与带类型依赖上下文（条件）
+
+派发实现者前，主 Agent 必须读取 `unit-of-work-dependency.md`、`state.md` 和适用的 `construction-shared-contract-baseline.md`，并以 `common-context-optimization.md` 为带类型依赖就绪与调度处理的唯一详细规则来源。
+
+本文件只规定子 Agent 的上下文传递：调度方提供共享规则已判定的当前就绪结论、原因、下一调度动作及其适用证据；适用的共享契约还必须提供契约 ID、基线 ID、Owner 目标代码路径、代码版本和验证证据。实现者不得自行重述或改写依赖门禁；发现状态或证据变化时，返回 `NEEDS_CONTEXT` 或 `BLOCKED`，由调度方按共享规则重新取得结论后再决定后续动作。
+
 ### 实现者子 Agent 指令模板
 
 ```markdown
@@ -90,6 +96,8 @@
 - 项目结构：{PROJECT_STRUCTURE}
 - 相关文件：{RELATED_FILES}
 - 接口契约：{CONTRACTS}
+- 带类型依赖：{DEPENDENCY_CONTEXT}
+- 共享契约基线（适用时）：契约 ID、基线 ID、Owner 目标代码路径、状态、代码版本和验证证据
 
 ## TDD 要求
 
@@ -310,6 +318,8 @@ Construction 阶段：
 |------|------|
 | 任务完整文本 | 代码生成计划 |
 | 接口契约 | `docs/aidlc/product/contracts.md` 或应用设计 |
+| 带类型依赖与就绪结论 | `unit-of-work-dependency.md` + state.md |
+| 共享契约基线上下文（适用时） | state.md 的基线表 + `construction-shared-contract-baseline.md` |
 | 编码规范 | MCP Skill（如适用）或 steering 文件 |
 | 相关现有代码 | 工作区扫描结果 |
 | TDD 执行序列 | 代码生成计划中的 TDD 规划 |

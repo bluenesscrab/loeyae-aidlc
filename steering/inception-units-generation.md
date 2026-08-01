@@ -38,8 +38,9 @@
 ## 步骤 2：在计划中包含强制单元产物
 **始终**在单元计划中包含这些强制产物：
 - [ ] 生成 `docs/aidlc/inception/application-design/unit-of-work.md`，包含单元定义、职责、`service_id`、允许修改范围和验证检查点
-- [ ] 生成 `docs/aidlc/inception/application-design/unit-of-work-dependency.md`，包含依赖矩阵
+- [ ] 生成 `docs/aidlc/inception/application-design/unit-of-work-dependency.md`，包含带类型的依赖矩阵
 - [ ] 生成 `docs/aidlc/inception/application-design/unit-of-work-story-map.md`，映射故事到单元
+- [ ] **多单元且存在共享契约时**：在 `unit-of-work.md` 生成跨单元共享契约索引，并在 `shared-interfaces.md` 记录其完整设计；不适用时不得创建空表或空文件
 - [ ] **仅全新项目**：在 `unit-of-work.md` 中记录代码组织策略（沿用目标技术栈和项目现有约定；目录边界见 `common-directory-structure.md`）
 - [ ] 验证单元边界和依赖
 - [ ] 确保所有故事已分配到单元
@@ -52,17 +53,58 @@
 | 单元 | 状态 | 认领人 | 分支 | 前置依赖 | 可认领条件 |
 |------|------|--------|------|----------|-----------|
 | [unit-1] | 🔓 待认领 | - | - | 无 | 随时可认领 |
-| [unit-2] | 🔓 待认领 | - | - | [unit-1]（接口） | 接口已定义，可认领 |
+| [unit-2] | 🚫 已阻塞 | - | - | [unit-1]（`contract`，CT-001） | 相关基线为 `verified`，派生 `contract_ready` |
 | [unit-3] | 🔓 待认领 | - | - | 无 | 随时可认领 |
 ```
 
 **认领状态说明**：
 - 🔓 待认领：无人认领，可自由选择
 - ✅ 已认领：已有人认领，正在开发中
-- 🚫 已阻塞：前置依赖的接口契约未定义，暂不可认领
+- 🚫 已阻塞：前置依赖未满足其所需状态，暂不可认领
 - ✔️ 已完成：开发完成，已合并
 
-**注意**：由于接口契约在 Inception 阶段的应用设计中已经定义，大多数有依赖的单元仍然可以被认领。只有当接口契约本身未定义时，单元才标记为"已阻塞"。
+**注意**：I14 只建立契约与带类型依赖的设计事实；“接口已定义”不等于 `contract_ready`。团队认领时必须按依赖矩阵的所需状态判断；对 `contract` 依赖，相关基线在后续 Construction 验证为 `verified` 前保持“已阻塞”。
+
+### 跨单元共享契约与带类型依赖（条件）
+
+**触发条件**：存在两个或以上工作单元，且一个单元需要消费另一个单元提供的声明、实现或运行时能力时执行。本节不创建新的部署边界，也不要求单单元项目或无共享契约项目生成空产物。
+
+在 `unit-of-work.md` 中为每项跨单元共享契约建立索引：
+
+```markdown
+## 跨单元共享契约
+
+| 契约 ID | 类型 | 接口/类 | 边界 | 所在模块 | 权威来源 | Owner 单元 | 消费方单元 | 目标代码路径 | 状态 |
+|---------|------|---------|------|----------|----------|------------|------------|--------------|------|
+| CT-001 | interface | TransactionChannelAdapter | 进程内 | order-biz | shared-interfaces.md#CT-001 | BE-0 | BE-4c, APP-PAY | order-biz/src/main/java/.../TransactionChannelAdapter.java | approved |
+```
+
+索引规则：
+- 契约 ID 在当前项目稳定且唯一；同一契约只能有一个 Owner 单元。
+- 消费方单元必须明确；未知消费者不能标记为完整，须在计划文档中以 `[回答]:` 提出一个关键澄清问题。
+- 目标模块和目标代码路径均为必填；路径未确定时不得完成 I14。
+- `unit-of-work.md` 只保存索引，不复制完整方法签名、字段或 Schema。
+- `shared-interfaces.md` 保存进程内共享声明的完整设计、错误语义、兼容策略和验证要求；它不是跨进程接口的机器字段权威来源。
+
+`unit-of-work-dependency.md` 的依赖矩阵必须使用以下类型与所需状态：
+
+| 依赖类型 | 适用情况 | 所需状态 | 约束 |
+|----------|----------|----------|------|
+| `contract` | 消费方只依赖共享声明 | `contract_ready` | 必须填写契约 ID；仅在后续 Construction 基线验证为 `verified` 后满足 |
+| `implementation` | 消费方依赖提供方业务行为或内部实现 | `complete` | 不得因存在接口或 DTO 而提前满足 |
+| `runtime` | 依赖真实服务、数据或外部环境 | `runtime_ready` | 只允许进入相应集成验证，不替代实现完成 |
+| `none` | 无前置依赖 | 不适用 | 不得伪造依赖关系 |
+
+每条 `contract` 依赖都必须关联共享契约索引；`implementation` 和 `runtime` 不得被错误分类为 `contract` 以提前解锁消费者。
+
+事实来源按边界区分：
+
+| 信息 | 权威来源 |
+|------|----------|
+| 单元、Owner、消费者、依赖类型和目标路径 | `unit-of-work*.md` |
+| 进程内共享声明的完整设计 | `shared-interfaces.md`；基线物化后由目标代码声明反映实际状态 |
+| 跨进程 API、事件和 Schema 的完整字段定义 | 项目采用的 OpenAPI、Proto、AsyncAPI、Schema 或其他机器契约 |
+| 设计期索引、决策和兼容性结论 | AI-DLC Markdown 产物 |
 
 **前后端分离的单元拆分**（如项目包含前端）：
 - [ ] 后端单元按业务模块拆分：
@@ -192,14 +234,14 @@
 **应用设计切片**：
 - [ ] 根据 `unit-of-work.md` 中单元包含的组件/服务进行切片
 - [ ] 为每个单元生成 `unit-{name}-design.md`（该单元的组件、方法、业务规则）
-- [ ] 生成 `shared-interfaces.md`（跨单元接口契约）
+- [ ] 仅在跨单元共享契约索引非空时生成 `shared-interfaces.md`（进程内完整声明设计与跨进程机器契约索引）；无共享契约时不得生成空文件
 - [ ] 生成 `index.md`（设计索引，极简）
 - [ ] 保留 `unit-of-work.md`、`unit-of-work-dependency.md`、`unit-of-work-story-map.md` 不变
 
 **切片质量验证**：
 - [ ] 验证每个需求至少出现在一个单元切片或 shared 文件中（无遗漏）
 - [ ] 验证每个用户故事至少出现在一个单元切片中
-- [ ] 验证 shared-interfaces.md 包含所有跨单元调用的接口定义
+- [ ] 当共享契约索引非空时，验证 `shared-interfaces.md` 覆盖全部进程内共享声明，并仅索引跨进程机器契约
 
 **更新 state.md**：
 - [ ] 在 state.md 中记录"文档切片已完成"
@@ -295,9 +337,13 @@
 - **多单元项目额外要求**：
   - 文档切片已完成（需求、故事、设计按单元拆分）
   - 各索引文件已生成
-  - shared-*.md 文件已生成
+  - 所需的 shared-*.md 文件已生成；无共享契约时未创建空 shared-interfaces.md
   - 切片质量验证通过（无遗漏）
 - **团队协作模式额外要求**：
   - `unit-of-work.md` 包含认领状态表
   - state.md 中的"单元认领状态"已填充
   - 每个单元的可认领条件已明确标注
+- **多单元共享契约额外要求**：
+  - 每项共享契约均有稳定 ID、唯一 Owner、明确消费者、权威来源和目标代码路径
+  - 每条依赖均使用 `contract`、`implementation`、`runtime` 或 `none`，并填写对应所需状态
+  - 跨进程接口未把 Markdown 或进程内代码声明当作机器字段权威来源

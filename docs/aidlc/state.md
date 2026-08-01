@@ -10,9 +10,10 @@
 | 范围 | 更新时间 | 提示词 |
 |------|----------|--------|
 | SSOT 对接改造 | 2026-07-28T00:30:00Z | `使用 AI-DLC，继续 loeyae-aidlc SSOT 对接。AU-01~05 完成;AU-06 三平台 MCP 配置完成(mcp.json/plugin.json/setup.mjs,${SSOT_API_KEY})。待:AU-06 三平台回归 + 实际对接验证(设 SSOT_API_KEY 测试 search/write);SessionStart 探测 hook 可选。` |
+| CR-SCB-001 共享契约基线增强 | 2026-08-01T03:50:01Z | `使用 AI-DLC，继续 loeyae-aidlc 的 CR-SCB-001。规则已实施（rules_implemented）；待真实业务项目端到端试运行验证（基线物化 → verified → 消费者解锁），验证通过后升级为 completed 并创建 commit。不得重复执行已关闭的规则实施阶段。` |
 
 ## 项目信息
-- **项目类型**：存量项目(AI-DLC Power,npm 1.21.1)
+- **项目类型**：存量项目(AI-DLC Power,npm 1.21.2 基线)
 - **协作模式**：单人开发(loeyae)
 - **架构模式**：单仓、单模块(AI-DLC Power + Kiro/Claude/OpenCode 平台适配)
 - **审批模式**：标准(SSOT 侧轻量变更记录)
@@ -34,9 +35,18 @@
 - **state**：保持 v2,不升级 v3,不引入 Manifest/事件游标。
 - **对端仓库**：`../loeyae-ssot-server`(Provider 侧现行基线在 `docs/aidlc/modules/ssot/`)。
 
+## CR-SCB-001 共享契约基线增强
+- **状态**：`rules_implemented`（规则已实施，端到端试运行验证待完成）
+- **计划与完整证据**：`docs/aidlc/shared-contract-baseline-implementation-plan.md`
+- **风险级别**：L3
+- **批准基线**：`main@4d08c99`（`v1.21.2`，2026-08-01T02:21:42Z Boss 批准）
+- **关闭时间**：规则实施于 2026-08-01T03:50:01Z 完成阶段 1—7
+- **升级为 `completed` 的条件**：至少一个真实业务项目完成基线物化 → `verified` → 消费者解锁的端到端流程，并有对应不可变 commit/SHA
+- **后续变更**：共享契约签名、语义、路径或门禁规则变更须新建 CR1—CR5
+
 ## 工作区状态
 - **工作区根目录**：`/Users/andy/work/src/loeyae-framework/loeyae-aidlc`
-- **现有代码**：是(`POWER.md`、`CLAUDE.md`、`skills/`、`steering/`、`agents/`、`hooks/`、`src/`、`.opencode/`;npm 1.21.1)
+- **现有代码**：是(`POWER.md`、`CLAUDE.md`、`skills/`、`steering/`、`agents/`、`hooks/`、`src/`、`.opencode/`;npm 1.21.2 基线)
 - **需要逆向工程**：否
 - **后端语言/框架**：Node.js ≥20 / JavaScript、TypeScript;Kiro Power + 多平台插件
 - **Loeyae Boot 版本与 Starter**：不适用
@@ -49,9 +59,9 @@
 
 ## 系统基线
 - **基线路径**：不适用(单仓;旧双仓 `docs/aidlc/product/system-baseline/` 已随重定位删除)
-- **代码版本标识**：分支 `chore/ssot-realignment`(HEAD `14cd47d`);main 停在 `9bafda1`(旧基线,待推进)
-- **制品标识/摘要**：npm 1.21.1;本次未构建
-- **基线新鲜度**：改造规划已对齐 realignment;实现未开始,运行未验证
+- **代码版本标识**：`main@4d08c99f984fc37bfd573ae9d8284387a600b4a2`（标签 `v1.21.2`；2026-08-01T02:21:42Z 经 Boss 批准为 CR-SCB-001 新基线）
+- **制品标识/摘要**：npm 1.21.2;本次未构建
+- **基线新鲜度**：已核验提交、标签和 `package.json` 版本；CR-SCB-001 规则已实施（`rules_implemented`），端到端试运行验证待完成。详细实施证据见 `docs/aidlc/shared-contract-baseline-implementation-plan.md`。
 - **契约索引**：SSOT `../../../loeyae-ssot-server/docs/aidlc/modules/ssot/inception/mcp-contract.md`(14 工具,单一契约版本)
 - **本次受影响节点**：AI-DLC 共享 steering、workspace-detection/state、Inception 检索与写回、平台 MCP 客户端适配
 
@@ -61,6 +71,7 @@
 | I1 | 工作区检测 | completed | 2026-07-17 | 存量 AI-DLC Power 基线已识别 |
 | 改造规划 | SSOT 对接需求/设计/计划 | completed | 2026-07-27 | `docs/SSOT-AI-DLC/01-改造需求.md`/`02-改造设计.md`/`03-改造计划.md`(已按 realignment 重定位) |
 | C(AU) | 改造实现 | pending | - | AU-01–AU-06 未开始 |
+| CR-SCB-001 | 共享契约基线增强 | rules_implemented | 2026-08-01T03:50:01Z | 规则实施完成；静态验证通过；端到端试运行待完成。证据见 `docs/aidlc/shared-contract-baseline-implementation-plan.md` |
 
 ## 单元与批次进度
 | 模块 | 服务 | 批次 | 单元 | 状态 | 完成时间 | 验证证据 | 执行者 |
@@ -89,10 +100,12 @@
 | 改造文档重定位 | 2026-07-27 | 通过(静态) | 01/02/03 重写为 SSOT=文档平台 + 单仓 MCP 直连消费 + 保持 state v2;过时引用改指 realignment-plan/modules/ssot |
 | 通用 steering 去污染 | 2026-07-27 | 通过(静态) | `096321d` 曾向 9 个通用 steering 注入旧 SSOT 愿景(正式文档不进 SSOT/双仓 Provider-first/ContextBundle/章节血缘/Legacy 多模式),与 realignment 相反;已 `git checkout fac8fcf --` 将 9 文件回退到 v1.21.1,旧愿景关键词清零,制表符 0、git diff --check 通过 |
 | 改造实现(AU-01–AU-06) | - | 未执行 | 待进入 Construction |
+| CR-SCB-001 规则实施（阶段 1—7） | 2026-08-01T03:50:01Z | 通过（静态/走查） | `node --check`、CRLF 感知 diff、`npm pack --dry-run`、六类场景走查和治理复核均通过；未运行构建或测试。逐阶段证据见 `docs/aidlc/shared-contract-baseline-implementation-plan.md` |
 
 ## 活跃变更请求
-无。旧 `CR-U-P01-CROSS-PROJECT-IMPORT-001`(跨项目导入)、`CR-I5-SCOPE-001`(双仓 federated 范围)已随重定位废弃删除。后续需求/契约语义变更走本地 CR1–CR5(轻量模式)。
+- **CR-SCB-001 共享契约基线增强**：状态 `rules_implemented`；风险 L3；批准基线 `main@4d08c99`（`v1.21.2`）。规则实施和静态验证已完成；端到端试运行验证待完成（升级为 `completed` 需真实业务项目物化基线并有不可变 commit）。后续共享契约签名、语义、路径或门禁规则变更须走新的 CR1—CR5。
+- 旧 `CR-U-P01-CROSS-PROJECT-IMPORT-001`(跨项目导入)、`CR-I5-SCOPE-001`(双仓 federated 范围)已随重定位废弃删除。后续需求/契约语义变更走本地 CR1–CR5(轻量模式)。
 
 ## 待优化项
-- `chore/ssot-realignment` 分支的重定位改动待推进/合并到 `main`(main 仍停在旧基线 `9bafda1`)。
+- SSOT 对接改造仍待 AU-06 三平台回归与实际对接验证；其具体代码基线与合并范围须在该工作流中单独核验。
 - 未决产品决策以 SSOT 侧 `../../../loeyae-ssot-server/docs/aidlc/modules/ssot/inception/decision-summary.md` 为准。

@@ -30,6 +30,19 @@
 
 状态仅使用 `pending`、`in_progress`、`complete`、`blocked`。每个单元开始、完成或阻塞后立即更新对应行；批次状态由单元行汇总，不维护第二份账本。
 
+## 带类型依赖就绪判断（条件）
+
+生成批次和选择下一个单元时，读取 `unit-of-work-dependency.md`、`state.md` 及适用的共享契约基线记录；不得以接口文件存在、设计文档或推测代替实际状态。
+
+| 依赖类型 | 满足条件 | 调度处理 |
+|----------|----------|----------|
+| `contract` | 每个关联基线均为 `verified`，且验证证据完整 | 可调度消费者；`contract_ready` 仅为派生判断，不单独写入 state.md |
+| `implementation` | 提供方单元为 `complete`，且验证证据完整 | 提供方完成前保持消费者 `blocked` |
+| `runtime` | 真实服务、数据或环境已就绪 | 仅在就绪后执行相应集成验证；未就绪不得把该验证标记完成 |
+| `none` | 无前置依赖 | 可调度 |
+
+`contract` 依赖的状态和重新验证要求以 `construction-shared-contract-baseline.md` 为准；缺少契约 ID、基线记录、Owner 或证据时标记相关单元 `blocked` 并返回 I14 或 CR 补齐事实。
+
 ## 执行流程
 
 1. 按依赖关系排序单元并生成批次，写入 state.md。

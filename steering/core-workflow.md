@@ -86,12 +86,14 @@
 | C2 | NFR 需求 | 明确性能指标或新增安全机制 | 🟡 | `construction-nfr-requirements.md` |
 | C3 | NFR 设计 | C2 识别出特殊模式 | 🟡 | `construction-nfr-design.md` |
 | C4 | 基础设施设计 | 新基础设施组件或部署架构变更 | 🟡 | `construction-infrastructure-design.md` |
-| C5 | TDD 代码生成与两阶段审查 | 始终 | 🔴 | `construction-code-generation.md` + `construction-tdd.md` + `construction-code-review.md` |
+| C5 | TDD 代码生成与两阶段审查 | 始终 | 🔴 | `construction-shared-contract-baseline.md`（条件） + `construction-code-generation.md` + `construction-tdd.md` + `construction-code-review.md` |
 | C6 | 系统化调试 | 出现技术失败 | — | `common-systematic-debugging.md` |
 | C7 | 最终全局审查 | 所有单元完成 | 🟢 | `construction-code-review.md` |
 | C8 | 实际构建和测试 | 始终 | 🔴 | `construction-build-and-test.md` + `construction-implementation-report.md` |
 
 每个单元必须按“设计（条件）→ TDD → 规格合规审查 → 代码质量审查 → 影响域验证”闭环完成。C8 未取得实际命令证据时，Construction 不得标记完成。
+
+C5 条件前置：存在 `contract` 类型跨单元依赖时，先加载并完成 `construction-shared-contract-baseline.md`；相关基线未 `verified` 时阻断消费者代码生成。单单元或无 `contract` 依赖时记录跳过原因后继续 C5。
 
 ## Operations 路由（部署准备，条件）
 

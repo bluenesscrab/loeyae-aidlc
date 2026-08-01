@@ -11,13 +11,14 @@
 - 单元 ID、模块和 state.md 路径
 - 当前单元需求切片、故事切片、设计切片
 - `shared-interfaces.md`（如有）
+- 当前单元的带类型依赖上下文及由共享 steering 给出的就绪结论：每项包含依赖目标、类型和实际证据；适用的 `contract` 还包含契约 ID、基线 ID、Owner 目标代码路径、基线状态和代码版本
 - 需要按需加载的 steering 或 MCP Skill 名称
 
 缺少必要输入或存在冲突时返回 `NEEDS_CONTEXT`，不得猜测。
 
 ## 执行流程
 
-1. 读取 state.md 和当前单元全部输入，确认依赖单元已完成。
+1. 读取 state.md、当前单元全部输入及带类型依赖上下文；按需加载 `common-context-optimization.md`、`construction-shared-contract-baseline.md` 与 `construction-subagent-execution.md`，仅消费其中给出的就绪结论和处置要求。缺少必要输入或结论时返回 `NEEDS_CONTEXT`，门禁未满足时返回 `BLOCKED`，不得开始代码生成。
 2. 按 `construction-functional-design.md` 等路由执行适用的条件设计。
 3. 按 `construction-tdd.md` 完成 RED、GREEN、REFACTOR；每次状态必须来自实际命令。
 4. 重新读取规格，先执行规格合规审查，再执行代码质量审查；失败则修复并重审。
@@ -48,6 +49,8 @@ state.md 是唯一进度账本，不创建 `progress.md`。
 - TDD 证据：{命令与结果摘要}
 - 审查：规格 {结果}；质量 {结果}
 - 影响域验证：{范围、命令与结果}
+- 依赖门禁：{共享 steering 结论、适用依赖事实与证据}
+- 下一调度动作：CONTINUE | STOP（由共享 steering 结论给出）
 - state.md：{已更新/未更新及原因}
 ```
 

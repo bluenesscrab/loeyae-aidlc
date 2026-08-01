@@ -17,7 +17,7 @@ description: "AI-DLC Construction 阶段路由：条件设计、TDD、两阶段�
 | C2 NFR 需求 | `construction-nfr-requirements.md` |
 | C3 NFR 设计 | `construction-nfr-design.md` |
 | C4 基础设施设计 | `construction-infrastructure-design.md` |
-| C5 TDD 与审查 | `construction-code-generation.md` + `construction-tdd.md` + `construction-code-review.md` |
+| C5 TDD 与审查 | `construction-shared-contract-baseline.md`（条件） + `construction-code-generation.md` + `construction-tdd.md` + `construction-code-review.md` |
 | C6 调试 | `common-systematic-debugging.md` |
 | C7 全局审查 | `construction-code-review.md` |
 | C8 实际构建测试与报告 | `construction-build-and-test.md` + `construction-implementation-report.md` |

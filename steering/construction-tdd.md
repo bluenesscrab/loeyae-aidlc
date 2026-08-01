@@ -67,6 +67,12 @@ describe('UC-D-003 超出配额拒绝请求', () => {
 
 ## 适用时机
 
+### 共享契约基线的声明型物化（条件）
+
+`construction-shared-contract-baseline.md` 允许的纯声明型物化（接口、抽象成员、DTO、枚举、机器契约生成类型及必要元数据）不单独要求 RED 测试，但必须完成该规则要求的实际编译、结构、序列化、Schema 或兼容性验证及双轴审查。
+
+一旦声明包含默认方法、构造器或静态方法中的业务逻辑，或涉及数据访问、网络调用、状态转换等可执行行为，即不再属于声明型物化，必须按本文件完整执行 RED-GREEN-REFACTOR。该条件不构成对任何业务代码的 TDD 豁免。
+
 **始终适用：**
 - 新功能
 - Bug 修复
@@ -114,7 +120,7 @@ describe('UC-D-003 超出配额拒绝请求', () => {
 @Test
 void shouldRejectEmptyEmail() {
     var request = new CreateUserRequest("", "password123");
-    
+
     var result = userService.createUser(request);
     
     assertThat(result.getErrors()).contains("邮箱不能为空");

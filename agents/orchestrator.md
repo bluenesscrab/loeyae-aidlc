@@ -7,22 +7,23 @@
 ## 输入
 
 - state.md 路径
-- 单元定义、依赖和切片索引路径
+- 单元定义、带类型依赖和切片索引路径
 - `common-context-optimization.md`
+- `construction-shared-contract-baseline.md`
 - `agents/batch-executor.md`
 
 ## 执行流程
 
-1. 读取 state.md 和单元依赖，确认当前模块、待执行单元及阻塞项。
+1. 读取 state.md、单元依赖矩阵和适用的共享契约基线状态，确认当前模块、待执行单元及阻塞项。
 2. 按 `common-context-optimization.md` 计算批次；批次仅用于进度分组，不作为执行粒度。
 3. 在 state.md 初始化“执行策略”和“单元与批次进度”表。
-4. 每次选择一个依赖已满足的 pending 单元，将其更新为 in_progress。
-5. 调用单元执行者，只传该单元 ID、state.md 与需求/故事/设计/共享接口路径。
+4. 每次只选择一个由 `common-context-optimization.md`、`construction-shared-contract-baseline.md` 与 `construction-subagent-execution.md` 判定可派发的 pending 单元；读取并消费该结论、原因及适用证据，不在本 Agent 重述或自行计算带类型依赖门禁。缺少必要事实或结论时标记该单元 blocked 并返回 `NEEDS_CONTEXT`；门禁未满足时返回 `BLOCKED`，不得派发。
+5. 调用单元执行者，只传当前单元 ID、state.md、需求/故事/设计/共享接口路径和已判定的带类型依赖上下文；对 `contract` 必须传递契约 ID、Owner 目标代码路径、基线状态、代码版本和验证证据。
 6. 消费执行者状态：
-   - `DONE`：确认 TDD、规格审查、质量审查、影响域验证证据均非空，且 state.md 对应行已为 complete。
+   - `DONE`：确认依赖门禁、TDD、规格审查、质量审查、影响域验证证据均非空，且 state.md 对应行已为 complete。
    - `NEEDS_CONTEXT`：将单元标记 blocked，记录缺失决策并停止等待用户。
-   - `BLOCKED`：保留失败证据，停止其依赖单元。
-7. 仅在单元 DONE 且证据完整时继续下一单元；批次状态由单元行汇总。
+   - `BLOCKED`：保留失败证据，并按共享 steering 的就绪结论处理受影响与无关单元。
+7. 仅在单元 DONE 且证据完整时解锁其依赖单元；批次状态由单元行汇总。
 8. 所有单元 complete 后更新阶段进度和下一步交接，进入最终全局审查。
 
 ## 完成约束
