@@ -1,6 +1,6 @@
 ---
 name: aidlc-construction
-description: "AI-DLC Construction 阶段路由：条件设计、TDD、两阶段审查、实际构建和测试。"
+description: "AI-DLC Construction 阶段路由：条件设计、TDD、自适应双轴审查、实际构建和测试。"
 ---
 
 # Construction 阶段
@@ -26,7 +26,7 @@ description: "AI-DLC Construction 阶段路由：条件设计、TDD、两阶段�
 
 ## 平台适配
 
-加载 `construction-subagent-execution.md` 检测平台能力。支持子 Agent 时按单元派发，不支持时在当前上下文串行执行；两种方式都必须完成 TDD、规格审查、质量审查和实际验证。
+加载 `construction-subagent-execution.md` 检测平台能力，并按 `construction-code-review.md` 选择审查模式。支持子 Agent 时按单元派发，不支持时在当前上下文串行执行；两种方式都必须完成 TDD、Spec/Standards 双轴检查和实际验证。
 
 每个单元完成后执行 `common-step-completion-protocol.md`，只更新 `docs/aidlc/state.md` 作为恢复状态源。C8 未取得实际命令证据时不得完成 Construction。
 

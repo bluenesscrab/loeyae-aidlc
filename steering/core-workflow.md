@@ -90,12 +90,12 @@
 | C2 | NFR 需求 | 明确性能指标或新增安全机制 | 🟡 | `construction-nfr-requirements.md` |
 | C3 | NFR 设计 | C2 识别出特殊模式 | 🟡 | `construction-nfr-design.md` |
 | C4 | 基础设施设计 | 新基础设施组件或部署架构变更 | 🟡 | `construction-infrastructure-design.md` |
-| C5 | TDD 代码生成与两阶段审查 | 始终 | 🔴 | `construction-shared-contract-baseline.md`（条件） + `construction-code-generation.md` + `construction-tdd.md` + `construction-code-review.md` |
+| C5 | TDD 代码生成与自适应审查 | 始终 | 🔴 | `construction-shared-contract-baseline.md`（条件） + `construction-code-generation.md` + `construction-tdd.md` + `construction-code-review.md` |
 | C6 | 系统化调试 | 出现技术失败 | — | `common-systematic-debugging.md` |
-| C7 | 最终全局审查 | 所有单元完成 | 🟢 | `construction-code-review.md` |
+| C7 | 最终全局审查 | 多单元、复杂/高风险，或跨组件/服务、契约、共享配置、数据所有权、安全边界 | 🟢 | `construction-code-review.md` |
 | C8 | 实际构建和测试 | 始终 | 🔴 | `construction-build-and-test.md` + `construction-implementation-report.md` |
 
-每个单元必须按“设计（条件）→ TDD → 规格合规审查 → 代码质量审查 → 影响域验证”闭环完成。C8 未取得实际命令证据时，Construction 不得标记完成。
+每个单元必须完成“设计（条件）→ TDD → Spec/Standards 双轴检查 → 影响域验证”；快速通道可在一次集成审查中完成双轴检查，其他路径独立执行两轴审查。C8 未取得实际命令证据时，Construction 不得标记完成。
 
 C5 条件前置：存在 `contract` 类型跨单元依赖时，先加载并完成 `construction-shared-contract-baseline.md`；相关基线未 `verified` 时阻断消费者代码生成。单单元或无 `contract` 依赖时记录跳过原因后继续 C5。
 
@@ -130,6 +130,6 @@ C5 条件前置：存在 `contract` 类型跨单元依赖时，先加载并完�
 | 范围 | 完成条件 |
 |------|----------|
 | Inception | 必需产物经用户确认，交叉审查通过，执行/跳过决定写入 state.md |
-| Construction | TDD、两阶段审查、全局审查、实际构建和测试均有证据且通过 |
+| Construction | TDD、适用审查、实际构建和测试均有证据且通过；触发 C7 时全局审查通过 |
 | Operations | 仅生成选定部署目标需要的文件，配置语法/静态验证通过，部署说明可执行 |
 | 会话连续性 | state.md、审计与下一步交接一致，可在三平台恢复 |

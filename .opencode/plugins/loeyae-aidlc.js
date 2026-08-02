@@ -17,26 +17,6 @@ const aidlcSkillsDir = path.resolve(__dirname, '../../skills');
 // Steering 目录
 const steeringDir = path.resolve(__dirname, '../../steering');
 
-/**
- * 简易 frontmatter 提取
- */
-const extractAndStripFrontmatter = (content) => {
-  const match = content.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
-  if (!match) return { frontmatter: {}, content };
-  const frontmatterStr = match[1];
-  const body = match[2];
-  const frontmatter = {};
-  for (const line of frontmatterStr.split('\n')) {
-    const colonIdx = line.indexOf(':');
-    if (colonIdx > 0) {
-      const key = line.slice(0, colonIdx).trim();
-      const value = line.slice(colonIdx + 1).trim().replace(/^["']|["']$/g, '');
-      frontmatter[key] = value;
-    }
-  }
-  return { frontmatter, content: body };
-};
-
 // Bootstrap 内容缓存
 let _bootstrapCache = undefined;
 
@@ -46,16 +26,7 @@ let _bootstrapCache = undefined;
 const getBootstrapContent = () => {
   if (_bootstrapCache !== undefined) return _bootstrapCache;
 
-  // 加载 using-aidlc skill 内容
-  const skillPath = path.join(aidlcSkillsDir, 'using-aidlc', 'SKILL.md');
-  if (!fs.existsSync(skillPath)) {
-    _bootstrapCache = null;
-    return null;
-  }
-
-  const fullContent = fs.readFileSync(skillPath, 'utf8');
-  const { content: skillBody } = extractAndStripFrontmatter(fullContent);
-
+  // 仅加载精简路由；阶段 Skill 和完整规则在触发后按需加载。
   // 加载 core-workflow-slim（精简版工作流）
   const slimPath = path.join(steeringDir, 'core-workflow-slim.md');
   let slimContent = '';
@@ -63,41 +34,16 @@ const getBootstrapContent = () => {
     slimContent = fs.readFileSync(slimPath, 'utf8');
   }
 
-  // 工具映射说明
-  const toolMapping = `
-**OpenCode 工具映射：**
-- \`skill\` 工具 → 使用 OpenCode 原生 \`skill\` 工具加载和列出 skills
-- 文件操作 → 使用 OpenCode 原生工具（read, write, edit, bash）
-- MCP 工具 → 使用 \`mcp__loeyae-skills__get_skill_outline\`、\`mcp__loeyae-skills__get_skill_section\`、\`mcp__loeyae-skills__search_skill\` 等
-
-**渐进式披露策略**：优先 \`outline\` → \`section\`，避免直接调用 \`get_skill_content\` 导致 token 浪费。
-
-**加载更多 steering 文件：**
-使用 OpenCode 原生 \`skill\` 工具加载 aidlc-inception、aidlc-construction、aidlc-operations 等 skill，或直接读取 steering/ 目录下的文件。
-`;
-
   _bootstrapCache = `<EXTREMELY_IMPORTANT>
-你已装载 Loeyae AI-DLC 工作流。
-
-**重要：using-aidlc skill 内容已包含在下方，无需再次使用 skill 工具加载 "using-aidlc"。**
-
-${skillBody}
-
----
-
-## 精简版工作流（core-workflow-slim）
+Loeyae AI-DLC 已可用。仅在下列路由触发时按需加载对应 Skill 和 steering，不要预加载完整工作流。
 
 ${slimContent}
-
----
-
-${toolMapping}
 </EXTREMELY_IMPORTANT>`;
 
   return _bootstrapCache;
 };
 
-export const LoeyaeAidlcPlugin = async ({ client, directory }) => {
+export const LoeyaeAidlcPlugin = async () => {
   return {
     /**
      * config hook: 注入 skills 路径 + 尝试注入 mcpServers
@@ -136,9 +82,8 @@ export const LoeyaeAidlcPlugin = async ({ client, directory }) => {
     /**
      * 注入 bootstrap 到首条用户消息
      *
-     * 使用 messages.transform 而非 system.transform，避免：
-     * 1. Token 膨胀（system messages 每轮重复）
-     * 2. 多条 system message 导致部分模型异常
+     * 使用 messages.transform 而非 system.transform，避免生成多条 system message。
+     * bootstrap 只保留精简路由，降低其随会话历史持续携带的 token 成本。
      */
     'experimental.chat.messages.transform': async (_input, output) => {
       const bootstrap = getBootstrapContent();
