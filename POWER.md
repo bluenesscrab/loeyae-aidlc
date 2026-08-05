@@ -31,7 +31,7 @@ author: "Loeyae Team"
 
 - `loeyae-skills`：仅在 Java + Loeyae Boot Framework 项目的 Construction 阶段按需加载框架编码规范；优先使用 outline 和 section 类工具。
 - `awesome-design`：仅在 UI Mock 场景且用户选择设计风格时使用。
-- `ssot`：SSOT 文档管理服务，用于文档创建、检索、版本管理和向量搜索；需设置 `SSOT_API_KEY` 环境变量。
+- `ssot`：SSOT 文档管理服务，仅用于只读检索项目文档作为上下文参考；AI-DLC 禁止调用写入/修改/归档类工具；需设置 `SSOT_API_KEY` 环境变量。
 - MCP 不可用时，应明确告知用户，并仅依赖仓库中已存在的通用规则继续可执行部分。
 
 ## 三阶段术语

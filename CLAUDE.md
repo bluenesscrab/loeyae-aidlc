@@ -39,7 +39,7 @@ Windows 可将相同 `.sh` 文件复制到 `.claude\hooks\`，并合并 `setting
 
 - `loeyae-skills`：仅在 Java + Loeyae Boot Framework 项目的 Construction 阶段按需加载框架编码规范。
 - `awesome-design`：仅在 UI Mock 场景且用户选择设计风格时使用。
-- `ssot`：SSOT 文档管理服务，用于文档创建、检索、版本管理和向量搜索；需设置 `SSOT_API_KEY` 环境变量。
+- `ssot`：SSOT 文档管理服务，仅用于只读检索项目文档作为上下文参考；AI-DLC 禁止调用写入/修改/归档类工具；需设置 `SSOT_API_KEY` 环境变量。
 
 自动注册失败时可手动执行：
 

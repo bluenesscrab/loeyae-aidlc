@@ -397,5 +397,5 @@
 ## SSOT 集成(可选)
 
 > 仅在配置了 SSOT 连接时按需加载,规则见 `common-ssot-integration.md`。
-- I4 逆向工程产出经 `write_reverse_engineering` 写回 SSOT(type=reverse,关联 `git_repo`/`git_commit`);不得反向覆盖代码事实。
-- 写回失败记“待写回”队列,不阻断本地产物。
+- I4 逆向工程阶段可通过 `search_documents`/`retrieve_context` 检索 SSOT 中的既有文档作为参考上下文。
+- AI-DLC 不直接写入 SSOT;逆向工程产物保留在本地,由用户自行决定是否上传至 SSOT。

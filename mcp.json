@@ -29,10 +29,7 @@
       "disabled": false,
       "autoApprove": [
         "list_projects", "get_project", "list_documents", "get_document",
-        "search_documents", "retrieve_context", "get_revision_file",
-        "create_document", "upload_revision", "activate_revision",
-        "archive_document", "restore_document",
-        "write_formal_document", "write_reverse_engineering"
+        "search_documents", "retrieve_context", "get_revision_file"
       ]
     }
   }
