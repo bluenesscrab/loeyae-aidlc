@@ -43,7 +43,7 @@
     │   ├── system-baseline/           # 条件
     │   ├── requirements/
     │   ├── user-stories/
-    │   ├── ui-mock/
+    │   ├── ui-mock/                  # HTML Mock 条件；每端必须含 {端}-page-specs.md + 对应 HTML
     │   └── application-design/
     │       ├── test-cases/
     │       ├── unit-of-work.md

@@ -21,4 +21,4 @@ description: "AI-DLC 工作流入口；用户明确提到 AI-DLC 或 aidlc 时�
 
 进入工作流后的阶段 Skill：`aidlc-inception` → `aidlc-construction` → `aidlc-operations`（仅需部署准备时）。恢复、变更请求和新增功能由 `core-workflow.md` 的意图路由决定，不强制从 Inception 重新开始。
 
-生成代码时，仅 Java + Loeyae Boot 项目按 `construction-loeyae-compliance.md` 调用 `loeyae-skills` MCP；优先 outline → section。UI Mock 设计风格仅在用户选择时调用 `awesome-design`。
+生成代码时，仅 Java + Loeyae Boot 项目按 `construction-loeyae-compliance.md` 调用 `loeyae-skills` MCP；优先 outline → section。HTML Mock 设计风格仅在用户选择时调用 `awesome-design`。state.md `UI 设计方式` 为 `figma` 时按 `common-figma-design-standards.md` 使用官方 Figma MCP；I9 首次进入 Figma 路径必须先执行 `whoami` 能力门禁。

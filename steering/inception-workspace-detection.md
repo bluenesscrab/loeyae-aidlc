@@ -150,7 +150,7 @@
 
 ```markdown
 • ⚠️ **前端平台规范缺失**：检测到跨端前端项目（{框架名}），但未找到 `docs/aidlc/frontend-platform-spec.md`。
-  此文档用于约束 UI Mock → 代码的翻译（组件选择、CSS 限制等），Construction 阶段代码生成前会强制检查。
+  此文档用于约束 UI 设计 → 代码的翻译（组件选择、CSS 限制等），Construction 阶段代码生成前会强制检查。
   建议在 Inception 的应用设计阶段创建，或现在就建立：
   A) 我来基于 package.json 和组件库文档生成初稿，你审核
   B) 稍后在应用设计阶段再创建

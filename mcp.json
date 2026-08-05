@@ -22,6 +22,21 @@
         "get_design_tokens"
       ]
     },
+    "figma": {
+      "type": "http",
+      "url": "https://mcp.figma.com/mcp",
+      "disabled": false,
+      "autoApprove": [
+        "whoami",
+        "get_metadata",
+        "get_design_context",
+        "get_variable_defs",
+        "get_screenshot",
+        "get_libraries",
+        "search_design_system",
+        "get_code_connect_map"
+      ]
+    },
     "ssot": {
       "type": "http",
       "url": "https://ssot.dev.loeyae.com/mcp/",

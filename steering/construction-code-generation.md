@@ -108,7 +108,7 @@ MCP Skill 服务采用**三层披露**：`outline`（大纲导航）→ `section
 
 **前端代码**：
 1. PC端 → `common-tech-frontend-pc.md`；小程序/APP → `common-tech-frontend-uniapp.md`
-2. 有 Figma → `common-figma-design-standards.md`
+2. state.md 的 `## UI 设计` 区块中 `UI 设计方式` 为 `figma` → `common-figma-design-standards.md`
 3. 读取项目 `.kiro/steering/structure.md`（如存在）
 4. 跨端项目 → 加载 `construction-ui-implementation-bridge.md` + 读取 `docs/aidlc/frontend-platform-spec.md`
 
@@ -139,7 +139,7 @@ MCP Skill 服务采用**三层披露**：`outline`（大纲导航）→ `section
 | 编译验证 | 跳过 = 可能交付无法运行的代码 |
 | 框架规范遵循 | 跳过 = 技术债累积，团队协作成本上升 |
 | 测试基类使用 | 跳过 = 框架升级时测试批量失效 |
-| UI Mock 加载（有 Mock 的前端项目） | 跳过 = 实现与设计脱节，页面偏离 Mock 定义 |
+| UI 设计加载（有 UI 设计的前端项目） | 跳过 = 实现与设计脱节，页面偏离设计定义 |
 
 ### 判断标准
 
@@ -200,8 +200,8 @@ MCP Skill 服务采用**三层披露**：`outline`（大纲导航）→ `section
   - 部署产物生成
 
 ### 前端单元步骤模板
-  - **页面对照表**（有 UI Mock 时必须，首步）— 建立 mock-box 与目标代码文件的映射关系（格式见下方「页面对照表规范」）
-  - **组件映射表**（跨端项目必须，紧随页面对照表）— 对照 Mock + frontend-platform-spec.md 生成本单元的组件映射（格式见 `construction-ui-implementation-bridge.md` 第二部分）
+  - **页面对照表**（有 UI 设计时必须，首步）— 建立设计单元（mock-box 或 Figma Frame）与目标代码文件的映射关系（格式见下方「页面对照表规范」）
+  - **组件映射表**（跨端项目必须，紧随页面对照表）— 对照 UI 设计 + frontend-platform-spec.md 生成本单元的组件映射（格式见 `construction-ui-implementation-bridge.md` 第二部分）
   - 类型定义（types/）— API 接口类型
   - API 接口定义（api/）— 调用后端接口
   - Store 定义（store/）— Pinia 状态管理
@@ -212,25 +212,34 @@ MCP Skill 服务采用**三层披露**：`outline`（大纲导航）→ `section
 
 - [ ] 按顺序编号每个步骤
 
-### 页面对照表规范（有 UI Mock 的前端项目）
+### 页面对照表规范（有 UI 设计的前端项目）
 
-**触发条件**：`docs/aidlc/inception/ui-mock/` 目录存在且包含 `{端}.html` + `{端}-page-specs.md`
+**触发条件**：state.md 的 `## UI 设计` 区块中 `UI 设计方式` 为 `html-mock` 或 `figma`（为"跳过"时不生成本表）。设计单元的定位方式按模式区分：
+
+| UI 设计方式 | 设计单元 | 来源 |
+|---------|---------|------|
+| `html-mock` | mock-box | `docs/aidlc/inception/ui-mock/{端}.html` + `{端}-page-specs.md` |
+| `figma` | Frame | state.md `产物位置` 中的唯一主文件链接；优先使用 `Figma 页面进度` 的 nodeId，缺失时通过 `get_metadata` 补齐 |
 
 **产出位置**：写入代码生成计划文档头部（与成功标准同级）
 
-**生成方式**：读取 `{端}-page-specs.md` 的页面清单表，补全其中"待 Construction 确定"的目标代码文件列，形成完整的页面对照表。
+**生成方式**：
+
+- **html-mock 模式**：读取 `{端}-page-specs.md` 的页面清单表，补全其中"待 Construction 确定"的目标代码文件列
+- **figma 模式**：读取 state.md 的唯一主文件链接和 `Figma 页面进度` 建立对照表；页面行缺少 nodeId 时才调用 `get_metadata` 补齐并回填 state。目标代码文件按项目路由规范推导
 
 **步骤**：
-1. 读取 `docs/aidlc/inception/ui-mock/{端}-page-specs.md` 的页面清单表
-2. 改造页面：目标代码文件已在 Inception 阶段填入（= 改造基础路径），直接引用
+1. 获取设计单元清单（html-mock 读 page-specs.md；figma 调 `get_metadata`）
+2. 改造页面：目标代码文件已在 Inception 阶段确定（= 改造基础路径），直接引用
 3. 新增页面：根据项目路由规范和目录结构推导目标文件路径，补全该列
-4. 将补全后的结果写入代码生成计划，并**回写更新** `{端}-page-specs.md` 中对应行的"目标代码文件"列
+4. 将结果写入代码生成计划；html-mock 模式需**回写更新** `{端}-page-specs.md` 中对应行的"目标代码文件"列
 
-**格式**：
+**格式 — html-mock 模式**：
 
 ```markdown
 ## 页面对照表
 
+> UI 设计方式: html-mock
 > Mock 来源: docs/aidlc/inception/ui-mock/{端}.html
 > page-specs: docs/aidlc/inception/ui-mock/{端}-page-specs.md
 
@@ -241,14 +250,31 @@ MCP Skill 服务采用**三层披露**：`outline`（大纲导航）→ `section
 | 3 | 规则详情 | #3 | US-07 | views/rule/detail.vue | /rule/:id | 新增页面 |
 ```
 
+**格式 — figma 模式**：
+
+```markdown
+## 页面对照表
+
+> UI 设计方式: figma
+> Figma 文件: [state.md UI 设计区块的产物位置]
+
+| # | Figma Page / Frame 名称 | nodeId | 关联 US | 目标代码文件 | 路由路径 | 类型 |
+|---|------------------------|--------|---------|-------------|---------|------|
+| 1 | 平台后台 / 规则列表 | 1:234 | US-03 | views/rule/list.vue | /rule/list | 局部改动 |
+| 2 | 平台后台 / 新增规则弹窗 | 1:256 | US-05 | views/rule/components/RuleDialog.vue | —（弹窗） | 新增 |
+| 3 | 平台后台 / 规则详情 | 1:278 | US-07 | views/rule/detail.vue | /rule/:id | 新增页面 |
+```
+
+**nodeId 必填**：figma 模式下 nodeId 是后续调用 `get_design_context` / `get_screenshot` 的唯一入参，缺失将导致无法还原设计。
+
 **填写规则**：
 
-1. **改造页面**：直接引用 page-specs.md 中已有的目标代码文件路径（Inception 阶段已确定）
-2. **新增页面**：根据项目路由规范和目录结构推导目标文件路径，补全后回写 page-specs.md
+1. **改造页面**：直接引用 Inception 阶段已确定的目标代码文件路径
+2. **新增页面**：根据项目路由规范和目录结构推导目标文件路径；html-mock 模式补全后回写 page-specs.md
 3. **弹窗/子组件**：标注其所属页面，路由路径填"—（弹窗）"或"—（组件）"
-4. **多端项目**：每端一张对照表，标注端名称
+4. **多端项目**：每端一张对照表，标注端名称（figma 模式下端对应 Figma Page）
 
-**阻断规则**：如果某个 mock-box 无法确定目标代码文件（新增页面且项目无明确目录规范），必须询问用户确认，不得跳过或猜测。补全后 page-specs.md 中不得残留"待 Construction 确定"。
+**阻断规则**：如果某个设计单元无法确定目标代码文件（新增页面且项目无明确目录规范），必须询问用户确认，不得跳过或猜测。html-mock 模式补全后 page-specs.md 中不得残留"待 Construction 确定"。
 - [ ] 包含故事映射引用
 - [ ] 为每个步骤添加复选框 [ ]
 
@@ -385,7 +411,7 @@ MCP Skill 服务采用**三层披露**：`outline`（大纲导航）→ `section
      3. **Mock 映射摘要**（条件：该单元涉及前端页面且存在页面对照表）：
 
 ```markdown
-> **🎨 <u>UI Mock 映射：</u>**
+> **🎨 <u>UI 设计映射：</u>**
 > | 代码文件 | Mock 来源 | Mock-box |
 > |---------|-----------|----------|
 > | `{目标代码文件1}` | {端}.html | #{序号} {标题} |

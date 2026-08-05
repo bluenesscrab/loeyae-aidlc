@@ -1,7 +1,7 @@
 ---
 name: "loeyae-aidlc"
 displayName: "Loeyae AI-DLC"
-version: "1.26.0"
+version: "1.27.0"
 description: "基于 AI-DLC 方法论的完整开发流程闭环。当用户消息中出现 AI-DLC 或 aidlc 时必须激活。覆盖 Inception 规划、Construction 实现与验证，以及按条件执行的 Operations 部署准备；不覆盖部署后的生产运维。"
 keywords: ["aidlc", "AI-DLC", "继续上次的工作", "认领单元", "团队协作模式", "loeyae", "功能设计", "用户故事", "架构设计", "单元生成", "代码审查", "逆向工程", "根因分析", "修改功能", "变更需求", "调整功能", "改动需求", "需求变更"]
 author: "Loeyae Team"
@@ -25,12 +25,13 @@ author: "Loeyae Team"
 - **会话延续**：工作流状态记录在业务项目的 `docs/aidlc/state.md`。
 - **子 Agent**：读取 `agents/` 中的平台无关指令，通过 Kiro `invoke_sub_agent` 能力执行；不可用时按共享规则降级。
 - **Hooks**：Kiro 模板位于 `hooks/kiro/`，复制与使用说明见 `hooks/README.md`。
-- **MCP**：`mcp.json` 声明 `loeyae-skills`、`awesome-design` 和 `ssot` 服务。
+- **MCP**：`mcp.json` 声明 `loeyae-skills`、`awesome-design`、`figma` 和 `ssot` 服务。该声明仅代表已配置；Figma 是否已认证、可读取、可写入必须分别通过 `whoami`、`get_metadata`、`create_new_file` + `use_figma` 运行时验证。
 
 ## MCP 使用边界
 
 - `loeyae-skills`：仅在 Java + Loeyae Boot Framework 项目的 Construction 阶段按需加载框架编码规范；优先使用 outline 和 section 类工具。
-- `awesome-design`：仅在 UI Mock 场景且用户选择设计风格时使用。
+- `awesome-design`：仅在 I9 选择 HTML Mock 模式且用户选择设计风格时使用。
+- `figma`：Figma 官方 Remote MCP。首次调用触发浏览器 OAuth 授权（不支持 PAT）。仅在 I9 选择 Figma 模式（写入设计，规则见 `inception-ui-figma.md`）或 Construction 阶段还原 Figma 设计稿（读取设计，规则见 `common-figma-design-standards.md`）时使用。写入类工具处于 Beta 且受 seat 类型限速，`whoami` 显示 seat 不满足时应回退 HTML Mock 模式。
 - `ssot`：SSOT 文档管理服务，仅用于只读检索项目文档作为上下文参考；AI-DLC 禁止调用写入/修改/归档类工具；需设置 `SSOT_API_KEY` 环境变量。
 - MCP 不可用时，应明确告知用户，并仅依赖仓库中已存在的通用规则继续可执行部分。
 

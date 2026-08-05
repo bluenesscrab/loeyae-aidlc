@@ -12,6 +12,10 @@
       "type": "remote",
       "url": "https://mcp-design.allbelieves.com/mcp"
     },
+    "figma": {
+      "type": "remote",
+      "url": "https://mcp.figma.com/mcp"
+    },
     "ssot": {
       "type": "remote",
       "url": "https://ssot.dev.loeyae.com/mcp/",

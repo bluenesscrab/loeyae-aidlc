@@ -18,7 +18,7 @@ description: "AI-DLC Inception 阶段路由：工作区、需求、故事、设�
 | I4 逆向工程 | `inception-reverse-engineering.md`；分布式存量项目按检测结果加载运行时依赖、契约、配置、一致性及技术适配规则 |
 | I5-I6 需求与审查 | `inception-requirements-analysis.md` + `inception-cross-validation.md` |
 | I7-I8 用户故事与审查 | `inception-user-stories.md` + `inception-cross-validation.md` |
-| I9-I10 UI Mock 与审查 | `inception-ui-mock.md` + `inception-cross-validation.md` |
+| I9-I10 UI 设计与审查 | `inception-ui-mock.md`（模式路由）+ Figma 条件加载 `inception-ui-figma.md` + `inception-cross-validation.md` |
 | I11 工作流规划 | `inception-workflow-planning.md` |
 | I12 应用设计 | `inception-application-design.md` |
 | I13 测试用例派生 | `test-case-derivation.md` |

@@ -1,8 +1,8 @@
-# UI Mock（询问用户选择）
+# UI 设计（询问用户选择模式）
 
 **角色**：产品经理 / UI 设计师
 
-**目的**：基于已完成的需求文档，生成 HTML 格式的页面原型，用于需求交接和多端开发对齐。
+**目的**：基于已完成的需求文档，通过选定模式生成页面设计，用于需求交接和多端开发对齐。
 
 ## 前置条件
 - 需求分析必须完成
@@ -15,27 +15,36 @@
 
 ## 执行条件（询问用户选择）
 
-**触发方式**：用户故事（及其交叉验证）完成后，主动询问 Boss 是否需要制作 UI Mock。
+**触发方式**：用户故事（及其交叉验证）完成后，主动询问 Boss 是否需要 UI 设计及选择模式。
 
 **询问模板**：
 ```markdown
 Boss，用户故事已完成并通过交叉验证。
 
-接下来是否需要制作 UI Mock（HTML 页面原型）？
+接下来请选择 UI 设计方式：
 
-- ✅ **需要 UI Mock** — 我将基于需求文档和用户故事生成页面原型
-- ⏭️ **跳过 UI Mock** — 直接进入工作流规划
+- 🆕 **创建 Figma 设计** — 通过 Figma MCP 创建新的原生设计稿（需 Figma 账号，实际能力以 `whoami` 验证为准）
+- 🔗 **使用已有 Figma 设计稿** — 提供 Figma 文件链接，我将验证并把它作为正式设计基准
+- 📄 **HTML Mock 模式** — 生成独立 HTML 页面原型（无外部依赖，浏览器即可查看）
+- ⏭️ **跳过 UI 设计** — 仅适用于无界面需求或用户明确不需要设计基准
 
-💡 **建议制作 UI Mock 的场景**：有前端页面需求、需交付外部团队、多端需统一展示
-💡 **建议跳过的场景**：纯后端/API 项目、有 Figma 设计稿、简单改动
+💡 **建议创建 Figma 设计**：团队使用 Figma 协作、需要高保真设计交付、需要 Dev Mode 标注
+💡 **建议使用已有 Figma**：设计师已交付 Figma 文件，需要直接进入设计审查和开发实现
+💡 **建议 HTML Mock 模式**：快速验证、无可用 Figma 客户端、纯内部开发、需要离线查看
+💡 **建议跳过的场景**：纯后端/API 项目、无任何界面改动
 ```
 
-- 用户选择"需要" → 执行 UI Mock 步骤
-- 用户选择"跳过" → 直接进入工作流规划
+**路由规则**：
+- 用户选择"创建 Figma 设计" → 加载 `inception-ui-figma.md`，按 `Figma 来源：流程创建` 执行完整设计流程
+- 用户选择"使用已有 Figma 设计稿" → 加载 `inception-ui-figma.md`，按 `Figma 来源：外部提供` 执行链接验证与页面登记，不创建新文件
+- 用户选择"HTML Mock 模式" → 执行本文件后续步骤
+- 用户选择"跳过 UI 设计" → 记录跳过原因后进入工作流规划
 
 ## 跳过条件
 
 - 用户明确选择跳过
+
+跳过时必须在 `state.md` 的 `## UI 设计（I9 条件）` 区块记录：`UI 设计方式：跳过`、`Figma 来源：不适用`、`设计状态：skipped`，并在 `下一操作` 中写明跳过原因；其余字段写“不适用”。Construction 阶段据此跳过页面对照表和组件映射表。已有外部 Figma 设计稿不属于跳过条件。
 
 ---
 
@@ -123,16 +132,16 @@ Boss，是否需要为 UI Mock 选择一个设计风格参考？
 | 操作权限（谁能看/谁能改） | 决定页面上有没有操作按钮 |
 | 字段在不同类型下是否相同 | 决定是否需要分开做多个页面 |
 
-4. **输出页面清单表格**：
+4. **生成并保存页面规格表（强制）**：每个端创建 `docs/aidlc/inception/ui-mock/{端}-page-specs.md`；多模块路径遵循本文件产出物规则。该文件是 I9 到 Construction 的页面追溯契约，不得只在对话或 HTML header 中保留清单。
 
 ```markdown
-## [端名称] 页面清单
+# [端名称] 页面规格
 
-| 序号 | 页面名称 | 类型 | 改造基础 | 说明 |
-|------|---------|------|---------|------|
-| 1 | 联票规则列表 | 新增页面 | — | 新建独立页面 |
-| 2 | 订单列表 | 局部改动 | `views/order/index.vue` | 增加门票类型筛选 |
-| 3 | 核销确认 | 新增弹窗 | — | 在订单详情中触发 |
+| 序号 | 页面名称 | 类型 | 关联 US | 改造基础 | 目标代码文件 | 说明 |
+|------|----------|------|---------|----------|--------------|------|
+| 1 | 联票规则列表 | 新增页面 | US-03 | — | 待 Construction 确定 | 新建独立页面 |
+| 2 | 订单列表 | 局部改动 | US-05 | `views/order/index.vue` | `views/order/index.vue` | 增加门票类型筛选 |
+| 3 | 核销确认 | 新增弹窗 | US-07 | — | 待 Construction 确定 | 在订单详情中触发 |
 ```
 
 5. **类型标签定义**：
@@ -140,7 +149,7 @@ Boss，是否需要为 UI Mock 选择一个设计风格参考？
    - `局部改动`：在现有页面基础上增加/修改部分内容
    - `新增弹窗`：新增的弹窗/对话框/抽屉
 
-6. **提交用户确认**：页面清单必须经用户确认后才能开始制作
+6. **提交用户确认**：页面清单和 page-specs 文件必须经用户确认后才能开始制作。确认后 HTML 中每个 mock-box 标题必须与 page-specs 的页面名称逐字一致
 
 ### 步骤 4：逐端制作 HTML
 
@@ -370,6 +379,7 @@ ui-mock/
 | D. 多端一致性 | 一端产生的数据另一端能看到吗？ | 跨端数据流追踪 |
 | E. 页面vs逻辑分离 | 页面只展示用户看到的，逻辑在业务说明中？ | 检查页面内容是否混入开发逻辑 |
 | F. 操作路径闭环 | 用户从入口到结束每步都有页面承接？ | 按用户操作路径走一遍 |
+| G. 页面规格一致性 | page-specs 每行是否有且仅有一个 mock-box，名称/类型/关联 US 是否一致？ | 逐端双向核对 page-specs 与 HTML |
 
 **审核结果处理**：
 - 发现问题 → 修正对应页面 → 更新业务说明
@@ -377,7 +387,22 @@ ui-mock/
 
 ### 步骤 9：更新状态跟踪
 
-更新 `docs/aidlc/state.md` 标记 UI Mock 完成。
+更新 `docs/aidlc/state.md` 的 `## UI 设计（I9 条件）` 区块（字段定义见 `inception-state-template.md`）：
+
+```markdown
+- **UI 设计方式**：html-mock
+- **Figma 来源**：不适用
+- **产物位置**：docs/aidlc/inception/ui-mock/
+- **设计状态**：review_pending
+- **当前批次**：不适用
+- **下一操作**：执行 I10 UI 设计交叉验证
+- **涉及端**：{端名称列表}
+- **页面数**：{数量}
+- **设计风格**：{风格名/默认}
+- **风格来源**：{awesome-design MCP/默认/不适用}
+```
+
+`UI 设计方式: html-mock` 是 Construction 阶段选择 HTML 版页面对照表格式的判定依据，必须写入。
 
 ### 步骤 10：展示完成消息
 
@@ -410,10 +435,11 @@ ui-mock/
 
 | 产出物 | 路径 | 说明 |
 |--------|------|------|
+| 页面规格表（强制） | `docs/aidlc/inception/ui-mock/[端名称]-page-specs.md` | 每端一份，是 Construction 页面映射的输入 |
 | UI Mock HTML 文件（标准） | `docs/aidlc/inception/ui-mock/[端名称].html` | 按端拆分，≤10 页面/端 |
 | UI Mock HTML 文件（大型） | `docs/aidlc/inception/ui-mock/[端名称]/[模块名].html` | 按端+模块拆分，>10 页面/端 |
 | 导航页（大型模式） | `docs/aidlc/inception/ui-mock/[端名称]/index.html` | 大型模式必需 |
-| 页面清单（嵌入 HTML header） | 每个 HTML 文件的 `<p>` 标签中 | 涉及页面列表 |
+| 页面清单摘要 | 每个 HTML 文件的 `<p>` 标签中 | 内容必须与 page-specs 一致 |
 
 **多模块模式路径**：`docs/aidlc/modules/{module-name}/inception/ui-mock/`
 
@@ -456,7 +482,7 @@ ui-mock/
 | `inception-ui-mock-styles.md` | 制作 HTML 时手动加载 | CSS 样式模板 |
 | `inception-ui-mock-design-spec.md` | fileMatch: `**/*.html` | 设计规范：条件表生成、交互模式映射、表单联动、空状态 |
 | `inception-ui-mock-reasoning-principles.md` | fileMatch: `**/*.html` | 推导原则：三层分离、内容决策、自检清单 |
-| `inception-ui-mock-workflow.md` | manual inclusion | 两阶段工作流：骨架确认 → 内容填充（复杂项目推荐） |
+| `inception-ui-mock-workflow.md` | HTML Mock 模式自动加载 | 两阶段工作流：强制先生成 page-specs + 骨架，再填充内容 |
 
 ---
 
@@ -529,12 +555,11 @@ ui-mock/
 
 ### state.md 记录
 
-选择设计风格后，在 `state.md` 中记录：
-```yaml
-designStyle:
-  name: "linear.app"
-  source: "awesome-design MCP"
-  appliedTokens: ["colors", "typography", "rounded"]
+选择设计风格后，在 `state.md` 的 `## UI 设计（I9 条件）` 区块记录（字段定义见 `inception-state-template.md`）：
+
+```markdown
+- **设计风格**：linear.app
+- **风格来源**：awesome-design MCP
 ```
 
 ---
@@ -548,7 +573,7 @@ designStyle:
 4. **AI 辅助开发的输入**：结构化的 HTML 比设计图更容易被 AI 解析
 
 ### 不适合的场景（应跳过 UI Mock，使用其他方式）
-1. **需要精确视觉还原**：应该用 Figma
-2. **复杂交互动效**：HTML Mock 无法展示动画、手势等
+1. **需要精确视觉还原**：应选择 Figma 模式
+2. **复杂交互动效**：HTML Mock 无法展示动画、手势等，应选择 Figma 模式
 3. **全新产品从 0 设计且无任何参考**：可通过 awesome-design MCP 选择一个品牌风格作为参考起点
-4. **用户测试/可用性验证**：需要可交互的高保真原型
+4. **用户测试/可用性验证**：需要可交互的高保真原型，应选择 Figma 模式

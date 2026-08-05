@@ -70,6 +70,13 @@ export const LoeyaeAidlcPlugin = async () => {
           url: 'https://mcp-design.allbelieves.com/mcp',
         };
       }
+      // 仅注入连接配置；OAuth 与写入能力必须在 I9 通过 whoami/最小写入验证确认。
+      if (!config.mcp.figma) {
+        config.mcp.figma = {
+          type: 'remote',
+          url: 'https://mcp.figma.com/mcp',
+        };
+      }
       if (!config.mcp['ssot'] && process.env.SSOT_API_KEY) {
         config.mcp['ssot'] = {
           type: 'remote',

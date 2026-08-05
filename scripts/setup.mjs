@@ -3,7 +3,7 @@
 /**
  * Loeyae AI-DLC Setup Script
  *
- * 安装时自动注册 loeyae-skills MCP 服务器到用户的全局 OpenCode 配置。
+ * 安装时自动注册 loeyae-skills、awesome-design、figma MCP 服务器，并在设置 SSOT_API_KEY 时注册 ssot，到用户的全局 OpenCode 配置。
  *
  * 用法:
  *   bunx loeyae-aidlc install
@@ -30,6 +30,13 @@ const DESIGN_MCP_SERVER_CONFIG = {
 // SSOT 文档平台 MCP(可选,需 SSOT_API_KEY 环境变量;未设置则跳过,零影响)
 const SSOT_MCP_SERVER_NAME = "ssot"
 const SSOT_MCP_URL = "https://ssot.dev.loeyae.com/mcp/"
+
+// Figma 官方 Remote MCP（首次调用触发浏览器 OAuth 授权，不支持 PAT）
+const FIGMA_MCP_SERVER_NAME = "figma"
+const FIGMA_MCP_SERVER_CONFIG = {
+  type: "remote",
+  url: "https://mcp.figma.com/mcp",
+}
 
 const PLUGIN_NAME = "loeyae-aidlc"
 
@@ -237,7 +244,10 @@ function main() {
   // 3. 注册 MCP 服务器（awesome-design）
   registerMcpServerGeneric(configPath, DESIGN_MCP_SERVER_NAME, DESIGN_MCP_SERVER_CONFIG)
 
-  // 4. 注册 SSOT MCP（可选,需 SSOT_API_KEY 环境变量;未设置则跳过,零影响）
+  // 4. 注册 MCP 服务器（figma，首次使用时需在浏览器完成 OAuth 授权）
+  registerMcpServerGeneric(configPath, FIGMA_MCP_SERVER_NAME, FIGMA_MCP_SERVER_CONFIG)
+
+  // 5. 注册 SSOT MCP（可选,需 SSOT_API_KEY 环境变量;未设置则跳过,零影响）
   if (process.env.SSOT_API_KEY) {
     registerMcpServerGeneric(configPath, SSOT_MCP_SERVER_NAME, {
       type: "remote",
@@ -263,6 +273,13 @@ function main() {
   console.log("  - list_design_styles(category?)  列出设计风格")
   console.log("  - get_design_style(name)         获取完整 DESIGN.md")
   console.log("  - get_design_tokens(name)        获取精简设计 tokens")
+  console.log("")
+  console.log("  figma（首次调用会在浏览器中要求 OAuth 授权）:")
+  console.log("  - whoami()                       确认账号与 seat 类型")
+  console.log("  - get_metadata(nodeId?)          获取页面/节点结构")
+  console.log("  - get_design_context(nodeId)     获取节点布局与样式")
+  console.log("  - get_variable_defs(nodeId)      获取设计变量")
+  console.log("  - use_figma(...)                 创建/编辑 Figma 内容（Beta）")
   console.log("")
 }
 

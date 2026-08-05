@@ -62,11 +62,11 @@ OpenCode 不使用根目录 `plugin.json`；`package.json` 及其 `main` 指向�
 
 ```json
 {
-  "plugin": ["loeyae-aidlc@git+https://github.com/loeyae/loeyae-aidlc.git#v1.26.0"]
+  "plugin": ["loeyae-aidlc@git+https://github.com/loeyae/loeyae-aidlc.git#v1.27.0"]
 }
 ```
 
-重启 OpenCode 后，插件会注册 skills、注入 AI-DLC bootstrap，并尝试注册 `loeyae-skills` MCP 服务。详细说明见 [.opencode/INSTALL.md](.opencode/INSTALL.md)。
+重启 OpenCode 后，插件会注册 skills、注入 AI-DLC bootstrap，并尝试注册 `loeyae-skills`、`awesome-design`、`figma` MCP 服务（`ssot` 需设置 `SSOT_API_KEY`）。详细说明见 [.opencode/INSTALL.md](.opencode/INSTALL.md)。
 
 MCP 自动注册未生效时，可运行：
 
@@ -117,11 +117,18 @@ Inception（规划） → Construction（实现与验证） → Operations（部
 ## 平台能力
 
 - **MCP 编码规范**：Java + Loeyae Boot Framework 项目可通过 `loeyae-skills` 按需加载框架规范。
-- **UI 设计风格**：UI Mock 场景可选用 `awesome-design`。
+- **UI 设计**：HTML Mock 可选用 `awesome-design`；Figma 路径通过官方 `figma` MCP 创建、审查或读取设计，具体能力必须运行时验证。
 - **子 Agent**：共享指令位于 `agents/`，各平台按自身能力适配执行。
 - **Hooks**：模板位于 `hooks/`，安装方式见 [hooks/README.md](hooks/README.md)。
 
-三个入口连接相同的远程 MCP 服务；具体注册格式由各平台入口文档定义。
+MCP 能力按以下四级状态判断，禁止把配置存在等同于可用：
+
+1. **已配置**：平台入口包含服务连接配置。
+2. **已认证**：`figma` 的 `whoami` 成功。
+3. **可读取**：`get_metadata` 可读取目标文件或节点。
+4. **可写入**：`create_new_file` + `use_figma` 最小写入验证成功。
+
+三个入口面向相同的远程 MCP 服务，但注册格式和实际支持能力由各平台入口决定；未完成对应级别验证时必须明确当前状态并按流程降级。
 
 ## OpenCode 故障排除
 
@@ -134,8 +141,10 @@ Inception（规划） → Construction（实现与验证） → Operations（部
 ### MCP 工具不可用
 
 1. 运行 `bunx loeyae-aidlc` 注册 MCP 服务。
-2. 确认 `https://mcp-skills.allbelieves.com/sse` 网络可达。
-3. 重启 OpenCode。
+2. 通用规范服务检查 `https://mcp-skills.allbelieves.com/mcp` 网络可达性。
+3. Figma 先确认配置，再执行 `whoami` 完成 OAuth，并分别验证 `get_metadata` 和最小写入。
+4. Figma 客户端不支持或验证失败时，切换受支持客户端；无法切换则由用户确认回退 HTML Mock。
+5. 重启 OpenCode。
 
 ### Windows 本地安装
 

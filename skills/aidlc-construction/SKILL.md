@@ -22,7 +22,7 @@ description: "AI-DLC Construction 阶段路由：条件设计、TDD、自适应�
 | C7 全局审查 | `construction-code-review.md` |
 | C8 实际构建测试与报告 | `construction-build-and-test.md` + `construction-implementation-report.md` |
 
-条件阈值加载 `common-complexity-assessment.md`，测试范围加载 `common-test-execution-strategy.md`。分布式项目按 state.md 的实际影响加载运行时依赖、契约、配置和一致性规则；检测到 Spring Cloud/Nacos 证据时才加载对应技术适配。Loeyae Boot 项目按 `construction-loeyae-compliance.md` 渐进加载 MCP 规范；其他技术栈沿用项目已有规范与通用 steering。
+条件阈值加载 `common-complexity-assessment.md`，测试范围加载 `common-test-execution-strategy.md`。state.md `UI 设计方式` 为 `figma` 时加载 `common-figma-design-standards.md`；非纯 Web 前端同时加载 `construction-ui-implementation-bridge.md`。分布式项目按 state.md 的实际影响加载运行时依赖、契约、配置和一致性规则；检测到 Spring Cloud/Nacos 证据时才加载对应技术适配。Loeyae Boot 项目按 `construction-loeyae-compliance.md` 渐进加载 MCP 规范；其他技术栈沿用项目已有规范与通用 steering。
 
 ## 平台适配
 

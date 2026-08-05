@@ -1,8 +1,8 @@
-# UI 实现桥接 — Mock 到平台代码的翻译流程
+# UI 实现桥接 — UI 设计到平台代码的翻译流程
 
 ## 目的
 
-定义从 UI Mock（HTML 原型）到目标平台代码的翻译流程。解决 Mock 使用 Web 语义而目标平台（Taro/RN/Flutter 等）语义不同导致的实现偏离问题。
+定义从 UI 设计产物（HTML Mock 或 Figma 设计稿）到目标平台代码的翻译流程。解决设计产物使用 Web 语义（HTML/CSS 或 Tailwind）而目标平台（Taro/RN/Flutter 等）语义不同导致的实现偏离问题。
 
 **本文件定义流程（做什么），不定义具体框架内容（用什么组件）。** 框架特定内容由项目级 `docs/aidlc/frontend-platform-spec.md` 提供。
 
@@ -14,9 +14,9 @@
 
 1. 项目包含前端代码生成
 2. 目标平台**非纯 Web**（即非 Vue3+ElementPlus 这类纯浏览器方案）
-3. 存在 UI Mock 产物（HTML 原型）
+3. 存在 UI 设计产物（state.md 的 `## UI 设计` 区块中 `UI 设计方式` 为 `html-mock` 或 `figma`）
 
-**纯 Web 项目**（PC 端 Vue3、React SPA 等）：CSS 语义与 Mock 一致，无需翻译层，跳过本流程。
+**纯 Web 项目**（PC 端 Vue3、React SPA 等）：CSS 语义与设计产物一致，无需翻译层，跳过本流程。
 
 ---
 
@@ -115,7 +115,7 @@ frontend-platform-spec.md **必须**包含以下四个章节，缺少任何一�
 
 ### 时机
 
-在代码生成计划的**第一步**（前端跨端项目），基于 Mock + frontend-platform-spec.md 生成本单元的具体组件映射表。
+在代码生成计划的**第一步**（前端跨端项目），基于 UI 设计产物 + frontend-platform-spec.md 生成本单元的具体组件映射表。
 
 ### 输出位置
 
@@ -127,27 +127,47 @@ docs/aidlc/construction/plans/{unit-name}-code-generation-plan.md
 
 ### 格式
 
+**html-mock 模式**：
+
 ```markdown
 ## 组件映射表
 
 > 依据: docs/aidlc/frontend-platform-spec.md
-> Mock 来源: docs/aidlc/inception/ui-mock/{端}.html
+> UI 设计方式: html-mock
+> 设计来源: docs/aidlc/inception/ui-mock/{端}.html
 
-| # | Mock 区域/元素 | Mock 表现 (HTML/CSS) | 目标组件 | Props/样式 | 可见性 |
-|---|---------------|---------------------|---------|-----------|--------|
+| # | 设计区域/元素 | 设计表现 (HTML/CSS) | 目标组件 | Props/样式 | 可见性 |
+|---|--------------|--------------------|---------|-----------|--------|
 | 1 | ... | ... | ... | ... | 始终可见 |
 | 2 | ... | ... | ... | ... | 条件: ... |
 ```
 
+**figma 模式**：
+
+```markdown
+## 组件映射表
+
+> 依据: docs/aidlc/frontend-platform-spec.md
+> UI 设计方式: figma
+> 设计来源: [Figma 文件链接] / Frame: [Frame 名称] (nodeId: x:xxx)
+
+| # | 设计区域/元素 | 设计表现 (get_design_context 输出) | 目标组件 | Props/样式 | 可见性 |
+|---|--------------|----------------------------------|---------|-----------|--------|
+| 1 | ... | ... | ... | ... | 始终可见 |
+| 2 | ... | ... | ... | ... | 条件: ... |
+```
+
+figma 模式下"设计表现"列填写从 `get_design_context` 返回的 Tailwind 类推导出的布局语义（如 `flex-row gap-2` → 横向排列间距 8px），不直接抄录 Tailwind 类。Tailwind 到目标平台的翻译依据 `common-figma-design-standards.md` §2.3。
+
 ### 映射规则
 
-1. **Mock 可见 = 默认始终渲染**：Mock 中出现的元素，实现中默认始终渲染。除非 Mock 显式标注了条件可见性规则（`【条件可见：...】`），否则禁止在代码中添加条件渲染逻辑。
+1. **设计中可见 = 默认始终渲染**：UI 设计中出现的元素，实现中默认始终渲染。除非设计中显式标注了条件可见性规则（html-mock 模式为 `【条件可见：...】`；figma 模式为 Frame 上的 Annotation），否则禁止在代码中添加条件渲染逻辑。
 
 2. **禁止多余元素**：代码中不得出现映射表未列出的 UI 元素（功能性非可视代码除外）。
 
 3. **组件选择依据 frontend-platform-spec.md**：映射表中的"目标组件"必须来自 spec 的"布局原语"或"组件映射参考"章节。如 spec 未覆盖，需先补充 spec 再映射。
 
-4. **CSS 约束强制执行**：映射时检查 Mock 中的样式写法是否命中 spec 的"CSS/样式约束"禁止列表，命中则必须使用替代方案。
+4. **CSS 约束强制执行**：映射时检查设计中的样式写法是否命中 spec 的"CSS/样式约束"禁止列表，命中则必须使用替代方案。
 
 ---
 
@@ -196,7 +216,7 @@ THEN:
 
 Construction 代码审查的**规格合规阶段**，对前端跨端项目增加以下检查项：
 
-### Mock 一致性检查清单
+### UI 设计一致性检查清单
 
 - [ ] 组件映射表中每个元素在代码中都有对应实现
 - [ ] 代码中不存在映射表未声明的额外 UI 元素
@@ -215,8 +235,9 @@ Construction 代码审查的**规格合规阶段**，对前端跨端项目增加
 
 | 已有文件 | 本文件的关系 |
 |---------|------------|
-| `inception-ui-mock.md` | Mock 产出 HTML → 本流程消费 HTML 做映射 |
-| `common-figma-design-standards.md` | Figma→ElementPlus 映射（纯 Web）→ 与本流程互斥 |
+| `inception-ui-mock.md` | 产出 HTML Mock → 本流程消费 mock-box 做映射 |
+| `inception-ui-figma.md` | 产出 Figma 设计稿 → 本流程消费 Frame 做映射 |
+| `common-figma-design-standards.md` | 提供 Figma MCP 读取契约和 Tailwind→CSS 映射 → figma 模式下本流程依赖它获取设计表现，两者串联而非互斥；该文件的 Element Plus 章节仅纯 Web 项目适用 |
 | `common-tech-frontend-uniapp.md` | UniApp 编码规范 → 可与本流程并行使用 |
 | `construction-code-generation.md` | 本流程嵌入其前端步骤模板第一步 |
 | `construction-code-review.md` | 本流程扩展其规格合规检查清单 |

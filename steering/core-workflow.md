@@ -26,6 +26,8 @@
 |------|----------|
 | 启动 | 本文件；首次启动再加载 `common-welcome-message.md` |
 | 配置了 SSOT 连接时 | `common-ssot-integration.md` |
+| I9 选择 Figma 模式 | `inception-ui-figma.md` |
+| state.md `UI 设计方式` 为 `figma` | `common-figma-design-standards.md` |
 | 工作区检测后 | `common-complexity-assessment.md` |
 | 恢复会话 | `common-session-continuity.md` |
 | 变更请求 | `common-workflow-changes.md` + `change-request-process.md` |
@@ -67,8 +69,8 @@
 | I6 | 需求审查 | I5 完成 | 🔴 | `inception-cross-validation.md`（a/b） |
 | I7 | 用户故事 | 已生成需求文档 | 🔴 | `inception-user-stories.md` |
 | I8 | 用户故事审查 | I7 完成 | 🔴 | `inception-cross-validation.md`（c/d） |
-| I9 | UI Mock | 用户选择且存在界面需求 | 🔴 | `inception-ui-mock.md` |
-| I10 | UI Mock 审查 | I9 已执行 | 🔴 | `inception-cross-validation.md`（e） |
+| I9 | UI 设计 | 用户选择且存在界面需求 | 🔴 | `inception-ui-mock.md`（路由入口）→ Figma 模式加载 `inception-ui-figma.md` |
+| I10 | UI 设计审查 | I9 已执行 | 🔴 | `inception-cross-validation.md`（e） |
 | I11 | 工作流规划 | 标准/完整流程 | 🔴 | `inception-workflow-planning.md` |
 | I12 | 应用设计 | 新接口、跨模块/服务、多端、复杂业务规则，或契约/共享配置/迁移/一致性/外部故障行为变化 | 🟡 | `inception-application-design.md` |
 | I13 | 测试用例派生 | 产品用例具备 I7+I12；或技术用例具备已批准风险来源与可执行锚点 | 🟡 | `test-case-derivation.md` |

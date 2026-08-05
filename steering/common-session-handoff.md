@@ -60,6 +60,21 @@
 请读取 state.md 恢复上下文，从「{下一步骤名}」开始。
 ```
 
+#### Figma I9 中途交接
+
+```text
+使用 AI-DLC，继续 {项目名} 的 Figma UI 设计。
+
+当前状态：
+- 阶段：INCEPTION / I9
+- 主文件：读取 state.md「UI 设计」区块的唯一链接
+- 设计状态：{file_created/designing/review_pending}
+- 当前批次：{N}
+- 下一操作：{state.md 中的下一操作}
+
+请读取 state.md 的 Figma 页面进度，从第一条 pending/in_progress 页面恢复；不得创建新主文件或重复 Frame。
+```
+
 #### Construction 单元完成 → 下一单元
 
 ```

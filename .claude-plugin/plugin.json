@@ -1,7 +1,7 @@
 {
   "name": "loeyae-aidlc",
   "description": "Complete AI-DLC development lifecycle: Inception planning, Construction implementation and validation, and conditional Operations deployment preparation; excludes post-deployment production operations.",
-  "version": "1.26.0",
+  "version": "1.27.0",
   "author": {
     "name": "Loeyae Team",
     "email": "dev@loeyae.com"
@@ -46,6 +46,20 @@
         "list_design_styles",
         "get_design_style",
         "get_design_tokens"
+      ]
+    },
+    "figma": {
+      "type": "http",
+      "url": "https://mcp.figma.com/mcp",
+      "autoApprove": [
+        "whoami",
+        "get_metadata",
+        "get_design_context",
+        "get_variable_defs",
+        "get_screenshot",
+        "get_libraries",
+        "search_design_system",
+        "get_code_connect_map"
       ]
     },
     "ssot": {

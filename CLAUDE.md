@@ -38,16 +38,22 @@ Windows 可将相同 `.sh` 文件复制到 `.claude\hooks\`，并合并 `setting
 插件清单声明以下远程服务：
 
 - `loeyae-skills`：仅在 Java + Loeyae Boot Framework 项目的 Construction 阶段按需加载框架编码规范。
-- `awesome-design`：仅在 UI Mock 场景且用户选择设计风格时使用。
+- `awesome-design`：仅在 I9 选择 HTML Mock 模式且用户选择设计风格时使用。
+- `figma`：Figma 官方 Remote MCP。首次调用触发浏览器 OAuth 授权（不支持 PAT）。仅在 I9 选择 Figma 模式（写入设计，规则见 `inception-ui-figma.md`）或 Construction 阶段还原 Figma 设计稿（读取设计，规则见 `common-figma-design-standards.md`）时使用。写入类工具处于 Beta 且受 seat 类型限速，`whoami` 显示 seat 不满足时应回退 HTML Mock 模式。
 - `ssot`：SSOT 文档管理服务，仅用于只读检索项目文档作为上下文参考；AI-DLC 禁止调用写入/修改/归档类工具；需设置 `SSOT_API_KEY` 环境变量。
+
+`figma` 出现在插件清单或 `/mcp` 中仅代表已配置，不代表已认证或具备读写能力。必须依次以 `whoami`、`get_metadata`、`create_new_file` + `use_figma` 区分已认证、可读取、可写入状态；仅使用外部 Figma 时无需验证写入。
 
 自动注册失败时可手动执行：
 
 ```bash
 claude mcp add --transport http loeyae-skills https://mcp-skills.allbelieves.com/mcp
 claude mcp add --transport http awesome-design https://mcp-design.allbelieves.com/mcp
+claude mcp add --transport http figma https://mcp.figma.com/mcp
 claude mcp add --transport http ssot https://ssot.dev.loeyae.com/mcp/ --header "Authorization: Bearer $SSOT_API_KEY"
 ```
+
+`figma` 注册后需执行 `/mcp` → 选择 `figma` → `Authenticate` 完成浏览器授权。
 
 使用 `/mcp` 查看服务状态。MCP 不可用时，应明确告知用户，并仅依赖仓库内已有通用规则继续可执行部分。
 

@@ -47,6 +47,10 @@ npx loeyae-aidlc
       "type": "remote",
       "url": "https://mcp-design.allbelieves.com/mcp"
     },
+    "figma": {
+      "type": "remote",
+      "url": "https://mcp.figma.com/mcp"
+    },
     "ssot": {
       "type": "remote",
       "url": "https://ssot.dev.loeyae.com/mcp/",
@@ -56,7 +60,16 @@ npx loeyae-aidlc
 }
 ```
 
-重启 OpenCode 后 MCP 工具即可使用。
+重启 OpenCode 后可看到 MCP 连接配置。`figma` 是否可实际调用取决于 Figma 官方客户端支持、OAuth 状态和 seat；配置存在不等于能力已验证。
+
+首次选择 Figma 模式时必须依次验证：
+
+1. MCP 列表中存在 `figma`
+2. `whoami` 成功（完成浏览器 OAuth）
+3. 读取路径：`get_metadata` 成功
+4. 流程创建路径：在正式设计前完成 `create_new_file` + `use_figma` 最小写入验证
+
+任一步失败时不得继续 Figma 写入；应切换到受支持客户端或由用户确认回退 HTML Mock。Figma 官方 Remote MCP 不支持 Personal Access Token。
 
 ## 使用
 
@@ -77,7 +90,7 @@ npx loeyae-aidlc
 
 ```json
 {
-  "plugin": ["loeyae-aidlc@git+https://github.com/loeyae/loeyae-aidlc.git#v1.21.2"]
+  "plugin": ["loeyae-aidlc@git+https://github.com/loeyae/loeyae-aidlc.git#v1.27.0"]
 }
 ```
 
@@ -110,7 +123,7 @@ rmdir /s /q "%APPDATA%\opencode\.cache\plugins\loeyae-aidlc"
 
 ```json
 {
-  "plugin": ["loeyae-aidlc@git+https://github.com/loeyae/loeyae-aidlc.git#v1.21.2"]
+  "plugin": ["loeyae-aidlc@git+https://github.com/loeyae/loeyae-aidlc.git#v1.27.0"]
 }
 ```
 
@@ -143,9 +156,11 @@ npm install loeyae-aidlc@git+https://github.com/loeyae/loeyae-aidlc.git --prefix
 
 ### MCP 工具不可用
 
-1. 运行 `bunx loeyae-aidlc` 注册 MCP 服务器
-2. 确认网络可达：`https://mcp-skills.allbelieves.com/mcp`
-3. 重启 OpenCode
+1. 确认插件 config hook 或 `bunx loeyae-aidlc` 已注册对应服务
+2. 通用规范服务检查 `https://mcp-skills.allbelieves.com/mcp` 网络可达性
+3. Figma 检查 MCP 列表、执行 `whoami` 完成 OAuth，再分别验证 `get_metadata` 和最小写入
+4. Figma 客户端不受支持或验证失败时，切换受支持客户端或回退 HTML Mock
+5. 重启 OpenCode
 
 ### Windows 安装问题
 
