@@ -62,7 +62,7 @@ OpenCode 不使用根目录 `plugin.json`；`package.json` 及其 `main` 指向�
 
 ```json
 {
-  "plugin": ["loeyae-aidlc@git+https://github.com/loeyae/loeyae-aidlc.git#v1.27.0"]
+  "plugin": ["loeyae-aidlc@git+https://github.com/loeyae/loeyae-aidlc.git#v1.28.0"]
 }
 ```
 
@@ -119,7 +119,7 @@ Inception（规划） → Construction（实现与验证） → Operations（部
 - **MCP 编码规范**：Java + Loeyae Boot Framework 项目可通过 `loeyae-skills` 按需加载框架规范。
 - **UI 设计**：HTML Mock 可选用 `awesome-design`；Figma 路径通过官方 `figma` MCP 创建、审查或读取设计，具体能力必须运行时验证。
 - **子 Agent**：共享指令位于 `agents/`，各平台按自身能力适配执行。
-- **Hooks**：模板位于 `hooks/`，安装方式见 [hooks/README.md](hooks/README.md)。
+- **Hooks**：可选模板位于 `hooks/`，只提供本地交互约束或提醒，不作为流程正确性或质量门禁证据；安装方式见 [hooks/README.md](hooks/README.md)。
 
 MCP 能力按以下四级状态判断，禁止把配置存在等同于可用：
 

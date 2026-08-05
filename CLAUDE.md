@@ -18,7 +18,7 @@ Claude Code 通过 `.claude-plugin/plugin.json` 和 `.claude-plugin/marketplace.
 
 - **Skills**：`skills/` 仅作为平台无关薄入口，负责加载与路由，不复制共享流程规则。
 - **子 Agent**：共享指令位于 `agents/`；Construction 分段执行可由 `.claude/workflows/aidlc-construction-batch.js` 适配 Claude Code。
-- **Hooks**：Claude Code Hook 模板位于 `hooks/claude-code/`，用于 UI Mock 质量保障。
+- **Hooks**：Claude Code Hook 模板位于 `hooks/claude-code/`，需手动安装，仅提供本地交互约束或提醒，不作为流程正确性或质量门禁证据。
 - **会话延续**：工作流状态记录在业务项目的 `docs/aidlc/state.md`。
 
 ## Hook 安装

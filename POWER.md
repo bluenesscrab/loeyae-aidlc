@@ -1,7 +1,7 @@
 ---
 name: "loeyae-aidlc"
 displayName: "Loeyae AI-DLC"
-version: "1.27.0"
+version: "1.28.0"
 description: "基于 AI-DLC 方法论的完整开发流程闭环。当用户消息中出现 AI-DLC 或 aidlc 时必须激活。覆盖 Inception 规划、Construction 实现与验证，以及按条件执行的 Operations 部署准备；不覆盖部署后的生产运维。"
 keywords: ["aidlc", "AI-DLC", "继续上次的工作", "认领单元", "团队协作模式", "loeyae", "功能设计", "用户故事", "架构设计", "单元生成", "代码审查", "逆向工程", "根因分析", "修改功能", "变更需求", "调整功能", "改动需求", "需求变更"]
 author: "Loeyae Team"
@@ -24,7 +24,7 @@ author: "Loeyae Team"
 - **工作流加载**：首先加载 `steering/core-workflow.md`，随后按其中路由按需读取规则，禁止预加载全部 steering。
 - **会话延续**：工作流状态记录在业务项目的 `docs/aidlc/state.md`。
 - **子 Agent**：读取 `agents/` 中的平台无关指令，通过 Kiro `invoke_sub_agent` 能力执行；不可用时按共享规则降级。
-- **Hooks**：Kiro 模板位于 `hooks/kiro/`，复制与使用说明见 `hooks/README.md`。
+- **Hooks**：Kiro 可选模板位于 `hooks/kiro/`，需手动安装，仅提供本地交互约束或提醒，不作为流程正确性或质量门禁证据；说明见 `hooks/README.md`。
 - **MCP**：`mcp.json` 声明 `loeyae-skills`、`awesome-design`、`figma` 和 `ssot` 服务。该声明仅代表已配置；Figma 是否已认证、可读取、可写入必须分别通过 `whoami`、`get_metadata`、`create_new_file` + `use_figma` 运行时验证。
 
 ## MCP 使用边界

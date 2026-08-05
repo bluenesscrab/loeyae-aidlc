@@ -7,14 +7,19 @@ const state = await agent(
   `读取 docs/aidlc/state.md、工作单元定义和依赖文件，返回待执行单元。
 每个单元必须包含 id、name、module、dependencies、dependencyDetails、requirementsPath、storiesPath、designPath；sharedInterfacesPath 无文件时可为空。dependencies 与 dependencyDetails 都必须显式返回数组；无依赖时均返回空数组。
 每个 dependencyDetails 项对应一个实际依赖目标和类型（contract/implementation/runtime/none），并提供实际证据；适用的 contract 项提供契约 ID、基线 ID、Owner 目标代码路径、契约—Owner 映射、基线状态、代码版本与验证证据。每个契约 ID 必须有映射，但多个契约可以位于同一 Owner 目标代码路径；多基线必须拆成多项。
-只返回状态不是 complete 的单元，并保留依赖顺序。依赖就绪结论由每个单元派发前按共享 steering 重新读取，不在本次批次清单中推导。`,
+只把状态为 pending 的单元放入 pendingUnits，并保留依赖顺序；blocked、in_progress 与 complete 不放入 pendingUnits，blocked 单元 ID 写入 blockedUnitIds，in_progress 单元 ID 写入 inProgressUnitIds。若存在 rework_required 单元，设置 hasReworkRequired=true 并在 reworkRequiredUnitIds 返回其 ID，不得把它们放入 pendingUnits或修改其状态。state.md 存在未决或协调中的“活跃产品协调”时设置 hasActiveProductCoordination=true。依赖就绪结论由每个单元派发前按共享 steering 重新读取，不在本次批次清单中推导。`,
   {
     label: '读取 Construction 状态',
     schema: {
       type: 'object',
-      required: ['taskName', 'pendingUnits'],
+      required: ['taskName', 'pendingUnits', 'blockedUnitIds', 'inProgressUnitIds', 'hasActiveProductCoordination', 'hasReworkRequired', 'reworkRequiredUnitIds'],
       properties: {
         taskName: { type: 'string' },
+        blockedUnitIds: { type: 'array', items: { type: 'string' } },
+        inProgressUnitIds: { type: 'array', items: { type: 'string' } },
+        hasActiveProductCoordination: { type: 'boolean' },
+        hasReworkRequired: { type: 'boolean' },
+        reworkRequiredUnitIds: { type: 'array', items: { type: 'string' } },
         pendingUnits: {
           type: 'array',
           items: {
@@ -69,6 +74,31 @@ const state = await agent(
 
 function isNonEmptyString(value) {
   return typeof value === 'string' && value.trim().length > 0
+}
+
+async function readUnitDispatchState(unitId, phase) {
+  return agent(
+    `重新读取 docs/aidlc/state.md 中单元 ${unitId} 的当前状态和“活跃产品协调”。返回该单元当前状态；若状态已是 rework_required，或活跃协调的影响范围包含该单元，则 requiresRework=true。不得修改 state.md。`,
+    {
+      label: `${phase}检查单元 ${unitId} 状态`,
+      schema: {
+        type: 'object',
+        required: ['status', 'requiresRework'],
+        properties: {
+          status: { type: 'string', enum: ['pending', 'in_progress', 'rework_required', 'complete', 'blocked'] },
+          requiresRework: { type: 'boolean' },
+        },
+      },
+    }
+  )
+}
+
+async function ensureReworkRequired(unitId, currentStatus) {
+  if (currentStatus === 'rework_required') return
+  await agent(
+    `活跃产品协调已影响单元 ${unitId}。将该单元状态更新为 rework_required，保留既有证据但明确标记失效；不得改为 pending、in_progress、complete 或 blocked，不得修改其他单元。`,
+    { label: `标记返工单元 ${unitId}` }
+  )
 }
 
 /**
@@ -136,23 +166,82 @@ for (let i = 0; i < unitCount; i += batchSize) {
   batches.push(state.pendingUnits.slice(i, i + batchSize))
 }
 
-await agent(
-  `更新 docs/aidlc/state.md：
-1. 写入执行模式、批次大小、总批次和当前批次。
-2. 在“单元与批次进度”表中逐单元写入 module、batch、unit、pending、完成时间、验证证据、执行者。
-3. 不创建“批次进度”或其他进度文件。`,
-  { label: '初始化逐单元进度' }
-)
-
 const results = []
 let terminalResult
 
-execution:
-for (let batchIndex = 0; batchIndex < batches.length; batchIndex++) {
-  const batch = batches[batchIndex]
+execution: {
+  if (state.hasActiveProductCoordination || state.hasReworkRequired || state.reworkRequiredUnitIds.length > 0) {
+    const coordinationReason = state.hasActiveProductCoordination
+      ? '存在活跃产品协调'
+      : `存在 rework_required 单元：${state.reworkRequiredUnitIds.join(', ')}`
+    await agent(
+      `检测到 ${coordinationReason}。保持相关协调、单元状态和旧证据失效标记不变，在 docs/aidlc/state.md 更新下一操作为：按 common-workflow-changes.md 完成产品产物协调、更新单元定义并清除旧证据；协调关闭且返工单元转为 pending 前禁止调度。不得初始化或执行任何单元。`,
+      { label: '阻断活跃产品协调' }
+    )
+    terminalResult = {
+      status: 'NEEDS_CONTEXT',
+      taskName: state.taskName,
+      totalUnits: unitCount + state.blockedUnitIds.length + state.inProgressUnitIds.length + state.reworkRequiredUnitIds.length,
+      totalBatches: batches.length,
+      completedUnits: 0,
+      incompleteUnits: [...new Set([...state.inProgressUnitIds, ...state.reworkRequiredUnitIds])],
+      reason: coordinationReason,
+      results,
+    }
+    break execution
+  }
 
-  for (const unit of batch) {
-    const readiness = deriveReadiness(unit)
+  if (state.inProgressUnitIds.length > 0) {
+    terminalResult = {
+      status: 'NEEDS_CONTEXT',
+      taskName: state.taskName,
+      totalUnits: unitCount + state.blockedUnitIds.length + state.inProgressUnitIds.length,
+      totalBatches: batches.length,
+      completedUnits: 0,
+      incompleteUnits: state.inProgressUnitIds,
+      reason: '存在 in_progress 单元，必须先按 state.md 恢复或确认其中断状态',
+      results,
+    }
+    break execution
+  }
+
+  await agent(
+    `更新 docs/aidlc/state.md：
+1. 写入执行模式、批次大小、总批次和当前批次。
+2. 在“单元与批次进度”表中仅为 pendingUnits 中尚无进度行的单元写入 module、batch、unit、pending、完成时间、验证证据、执行者；保留所有既有状态和证据，不得覆盖 blocked、rework_required 或 complete。
+3. 不创建“批次进度”或其他进度文件。`,
+    { label: '初始化逐单元进度' }
+  )
+
+  for (let batchIndex = 0; batchIndex < batches.length; batchIndex++) {
+    const batch = batches[batchIndex]
+
+    for (const unit of batch) {
+      const dispatchState = await readUnitDispatchState(unit.id, '派发前')
+      if (dispatchState.requiresRework) {
+        await ensureReworkRequired(unit.id, dispatchState.status)
+        terminalResult = {
+          status: 'NEEDS_CONTEXT',
+          completedUnits: results.filter(item => item.status === 'DONE').length,
+          blockedUnit: unit.id,
+          reason: `单元 ${unit.id} 受活跃产品协调影响，必须先完成返工准备`,
+          results,
+        }
+        break execution
+      }
+      if (dispatchState.status === 'complete') continue
+      if (dispatchState.status !== 'pending') {
+        terminalResult = {
+          status: 'BLOCKED',
+          completedUnits: results.filter(item => item.status === 'DONE').length,
+          blockedUnit: unit.id,
+          reason: `单元 ${unit.id} 当前状态为 ${dispatchState.status}，仅 pending 可派发`,
+          results,
+        }
+        break execution
+      }
+
+      const readiness = deriveReadiness(unit)
     if (readiness.status !== 'READY') {
       await agent(
         `将 docs/aidlc/state.md 中单元 ${unit.id} 更新为 blocked，并记录带类型依赖门禁结果：${readiness.status}；原因：${readiness.reason}。不得更新其他单元。`,
@@ -202,7 +291,7 @@ state：docs/aidlc/state.md
 带类型依赖上下文：${JSON.stringify(unit.dependencyDetails)}
 当前共享就绪结论：${JSON.stringify(readiness)}
 
-只处理该单元。派发前的就绪结论仅来自共享 steering；执行时若状态变化，按 common-context-optimization.md、construction-shared-contract-baseline.md 与 construction-subagent-execution.md 重新判定，不得重定义契约或绕过门禁。完成前必须把状态与验证证据写回 state.md；若不能完成，按共享结论返回相应状态、原因和下一调度动作。`,
+只处理该单元。派发前的就绪结论仅来自共享 steering；执行时若状态变化，按 common-context-optimization.md、construction-shared-contract-baseline.md 与 construction-subagent-execution.md 重新判定，不得重定义契约或绕过门禁。严格执行 batch-executor.md 的写回前门禁：重新检查当前单元状态和活跃产品协调，受影响时保持/标记 rework_required、使本次证据失效并返回 NEEDS_CONTEXT，不得写入 complete 或 blocked。`,
       {
         label: `执行单元 ${unit.id}`,
         schema: {
@@ -224,6 +313,23 @@ state：docs/aidlc/state.md
       }
     )
 
+      const postExecutionState = await readUnitDispatchState(unit.id, '证据回写前')
+      if (postExecutionState.requiresRework) {
+        await ensureReworkRequired(unit.id, postExecutionState.status)
+        result.status = 'NEEDS_CONTEXT'
+        result.nextAction = 'STOP'
+        result.reason = `单元 ${unit.id} 在执行期间受到产品协调影响，当前结果和证据已失效`
+        results.push(result)
+        terminalResult = {
+          status: result.status,
+          completedUnits: results.filter(item => item.status === 'DONE').length,
+          blockedUnit: unit.id,
+          reason: result.reason,
+          results,
+        }
+        break execution
+      }
+
     const evidenceComplete = [
       result.tddEvidence,
       result.specReviewEvidence,
@@ -237,7 +343,7 @@ state：docs/aidlc/state.md
       result.reason = '执行者返回 DONE，但验证或依赖门禁证据不完整'
     }
 
-    await agent(
+    const persistedState = await agent(
       `核对 docs/aidlc/state.md 中单元 ${unit.id}：
 - 返回状态：${result.status}
 - TDD：${result.tddEvidence}
@@ -246,9 +352,29 @@ state：docs/aidlc/state.md
 - 影响域验证：${result.impactValidationEvidence}
 - 依赖门禁：${result.dependencyEvidence}
 
-仅当状态为 DONE 且五类证据完整时，将该单元行更新为 complete；否则更新为 blocked 并记录原因：${result.reason || '需要处理'}。不得批量更新其他单元。`,
-      { label: `核对单元 ${unit.id} 证据` }
+更新前必须再次读取当前单元状态和“活跃产品协调”。若单元已为 rework_required，或协调影响范围包含当前单元，则保持/更新为 rework_required，标记本次结果与既有证据失效，不得写入 complete 或 blocked；否则，仅当返回状态为 DONE 且五类证据完整时将该单元行更新为 complete，其他情况更新为 blocked 并记录原因：${result.reason || '需要处理'}。不得批量更新其他单元。完成后返回实际持久化状态；requiresRework 仅在最终保持/写入 rework_required 时为 true。`,
+      {
+        label: `核对单元 ${unit.id} 证据`,
+        schema: {
+          type: 'object',
+          required: ['persistedStatus', 'requiresRework'],
+          properties: {
+            persistedStatus: { type: 'string', enum: ['complete', 'blocked', 'rework_required'] },
+            requiresRework: { type: 'boolean' },
+          },
+        },
+      }
     )
+
+    if (persistedState.requiresRework || persistedState.persistedStatus === 'rework_required') {
+      result.status = 'NEEDS_CONTEXT'
+      result.nextAction = 'STOP'
+      result.reason = `单元 ${unit.id} 在最终写回前受到产品协调影响，结果未持久化为完成`
+    } else if (result.status === 'DONE' && persistedState.persistedStatus !== 'complete') {
+      result.status = 'BLOCKED'
+      result.nextAction = 'STOP'
+      result.reason = `单元 ${unit.id} 返回 DONE，但 state.md 实际状态为 ${persistedState.persistedStatus}`
+    }
 
     results.push(result)
     if (result.status !== 'DONE') {
@@ -270,25 +396,38 @@ state：docs/aidlc/state.md
     `从 docs/aidlc/state.md 的单元行汇总批次 ${batchIndex + 1}。全部 complete 时将当前批次更新为 ${batchIndex + 2}；不要维护第二份批次表。`,
     { label: `完成批次 ${batchIndex + 1}` }
   )
+  }
 }
 
 const incompleteResults = results.filter(result => result.status !== 'DONE')
+const persistedBlockedUnitIds = state.blockedUnitIds || []
 
 export const result = terminalResult ?? (incompleteResults.length > 0
   ? {
       status: incompleteResults[0].status,
       taskName: state.taskName,
-      totalUnits: unitCount,
+      totalUnits: unitCount + persistedBlockedUnitIds.length,
       totalBatches: batches.length,
       completedUnits: results.filter(item => item.status === 'DONE').length,
-      incompleteUnits: incompleteResults.map(item => item.unitId),
+      incompleteUnits: [...new Set([...incompleteResults.map(item => item.unitId), ...persistedBlockedUnitIds])],
       reason: '存在尚未完成的单元',
       results,
     }
-  : {
-      status: 'DONE',
-      taskName: state.taskName,
-      totalUnits: unitCount,
-      totalBatches: batches.length,
-      results,
-    })
+  : persistedBlockedUnitIds.length > 0
+    ? {
+        status: 'BLOCKED',
+        taskName: state.taskName,
+        totalUnits: unitCount + persistedBlockedUnitIds.length,
+        totalBatches: batches.length,
+        completedUnits: results.filter(item => item.status === 'DONE').length,
+        incompleteUnits: persistedBlockedUnitIds,
+        reason: 'state.md 中仍有 blocked 单元',
+        results,
+      }
+    : {
+        status: 'DONE',
+        taskName: state.taskName,
+        totalUnits: unitCount,
+        totalBatches: batches.length,
+        results,
+      })

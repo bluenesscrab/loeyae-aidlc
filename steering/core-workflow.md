@@ -49,7 +49,8 @@
 | 继续开发 | 继续、恢复、接着做 | `common-session-continuity.md` |
 | 缺陷修复 | 修复已批准需求/故事/契约中的错误实现，不改变产品语义 | 受影响 Construction 步骤（不进入 CR） |
 | 无行为重构 | 不改变外部行为，仅改善内部结构 | 受影响 Construction 步骤 + 影响域验证（不进入 CR） |
-| 需求/契约变更 | 改变已批准的行为、验收标准、接口契约或数据语义 | CR1-CR5（PR 模型） |
+| 在途产品协调 | 需求、故事、UI 或设计存在差异，且受影响范围尚无代码基线 | `common-workflow-changes.md`（用户裁决、就地协调、受影响步骤重审） |
+| 需求/契约变更 | 改变已有代码基线的行为、验收标准、接口契约或数据语义 | CR1-CR5（PR 模型） |
 | 合并历史 CR | 合并历史CR文档、清理遗留CR文件 | `change-request-process.md` §历史CR文档批量合并 |
 | 压缩 state | 压缩state、精简state | `inception-state-template.md` §state.md 压缩规则 |
 | 新增功能 | 新功能且现有产物中不存在 | Inception 追加模式 |
@@ -125,7 +126,7 @@ C5 条件前置：存在 `contract` 类型跨单元依赖时，先加载并完�
 | CR4 | 执行变更与就地基线更新 | CR3 已确认 | 按受影响步骤 | 对应阶段 steering |
 | CR5 | 合并门禁与完成 | CR4 完成 | 🟢 | `change-request-process.md` + `inception-cross-validation.md` |
 
-新增功能采用追加模式，从 I5 开始，仅追加受影响产物并对新增/受影响单元执行 Construction。任何需求语义或接口契约变化必须走 CR，不得只改代码。缺陷修复和无行为重构不进入 CR，直接进入受影响 Construction 步骤。
+新增功能采用追加模式，从 I5 开始，仅追加受影响产物并对新增/受影响单元执行 Construction。已有代码基线的产品语义或接口契约变化进入 CR；尚无代码基线时就地协调并重审。代码基线与混合成熟度判定见 `change-request-process.md`，在途协调见 `common-workflow-changes.md`。
 
 ## 完成标准
 
