@@ -4,7 +4,7 @@
 
 ## Claude Code 接入
 
-Claude Code 通过 `.claude-plugin/plugin.json` 和 `.claude-plugin/marketplace.json` 发现插件，并按需读取共享的 `skills/`、`steering/` 与 `agents/`。平台安装总览见 `README.md`。
+Claude Code 通过 `.claude-plugin/plugin.json` 和 `.claude-plugin/marketplace.json` 发现插件。`plugin.json` 只声明 MCP 服务，`skills/`、`steering/` 与 `agents/` 依赖 Claude Code 的插件目录约定读取，本仓未实测该装载行为。平台安装总览见 `README.md`。
 
 激活示例：
 
@@ -16,22 +16,9 @@ Claude Code 通过 `.claude-plugin/plugin.json` 和 `.claude-plugin/marketplace.
 
 ## Claude Code 能力适配
 
-- **Skills**：`skills/` 仅作为平台无关薄入口，负责加载与路由，不复制共享流程规则。
+- **Skills**：`skills/` 仅作为平台无关薄入口，负责加载与路由，不复制共享流程规则。它是可选加速路径；未被装载时按 `steering/core-workflow.md` 的降级规则直接加载对应 steering，能力边界与质量门禁不变。
 - **子 Agent**：共享指令位于 `agents/`；Construction 分段执行可由 `.claude/workflows/aidlc-construction-batch.js` 适配 Claude Code。
-- **Hooks**：Claude Code Hook 模板位于 `hooks/claude-code/`，需手动安装，仅提供本地交互约束或提醒，不作为流程正确性或质量门禁证据。
 - **会话延续**：工作流状态记录在业务项目的 `docs/aidlc/state.md`。
-
-## Hook 安装
-
-```bash
-# macOS / Linux
-mkdir -p .claude/hooks
-cp <aidlc-repo>/hooks/claude-code/*.sh .claude/hooks/
-chmod +x .claude/hooks/*.sh
-# 将 hooks/claude-code/settings-hooks.jsonc 内容合并到 .claude/settings.local.json
-```
-
-Windows 可将相同 `.sh` 文件复制到 `.claude\hooks\`，并合并 `settings-hooks.jsonc`。模板详情见 `hooks/README.md`。
 
 ## MCP 集成
 

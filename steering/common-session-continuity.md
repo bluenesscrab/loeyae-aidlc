@@ -68,6 +68,8 @@
 └─────────────────────────────────────────────────────────────┘
 ```
 
+当 Step 1 判定当前阶段为 Construction 时，Step 2 激活 `aidlc-construction` 的同时加载 `construction-compact-recovery.md`，按其步骤定位批次、单元和验证证据；证据缺失时标记 `blocked`，不得按文件存在推断完成。
+
 ### Context Compact 恢复的额外纪律
 
 当检测到会话是从 context compact 恢复时（会话摘要中有 compact 标记，或 AI 检测到上下文窗口被压缩重建），除执行上述 4 步外，**额外遵守以下纪律**：

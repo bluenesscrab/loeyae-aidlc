@@ -1,6 +1,6 @@
 # UI Mock 样式模板
 
-> **加载时机**：仅在 `inception-ui-mock.md` 制作 HTML Mock 时加载。
+> **加载时机**：仅在 `inception-ui-mock-generation.md` 生成或修改 HTML Mock 时加载。
 
 ---
 

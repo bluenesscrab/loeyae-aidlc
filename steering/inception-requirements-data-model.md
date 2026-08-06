@@ -56,12 +56,16 @@ erDiagram
 
 ```mermaid
 stateDiagram-v2
-    [*] --> 草稿: 创建
-    草稿 --> 已提交: 提交
-    已提交 --> 已审批: 审批通过
-    已提交 --> 已拒绝: 审批拒绝
-    已拒绝 --> 草稿: 修改
-    已审批 --> [*]: 完成
+    state "草稿" as Draft
+    state "已提交" as Submitted
+    state "已审批" as Approved
+    state "已拒绝" as Rejected
+    [*] --> Draft: 创建
+    Draft --> Submitted: 提交
+    Submitted --> Approved: 审批通过
+    Submitted --> Rejected: 审批拒绝
+    Rejected --> Draft: 修改
+    Approved --> [*]: 完成
 ```
 
 **状态图要素**：

@@ -112,4 +112,4 @@ User Action Flow:
 
 ## 替代方案
 
-对于复杂图表，使用 Mermaid（参见 `content-validation.md`）
+对于复杂图表，使用 Mermaid（参见 `common-mermaid-diagram-standards.md`）

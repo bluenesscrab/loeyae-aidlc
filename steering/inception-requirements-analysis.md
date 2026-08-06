@@ -263,6 +263,8 @@
 
 ## 可视化标准
 
+生成或修改 Mermaid 图时加载 `common-mermaid-diagram-standards.md`；实际编写语法时再加载 `common-mermaid-syntax-rules.md`。下表只定义业务表达优先级，不定义 Mermaid 语法。
+
 | 表达方式 | 优先级 | 使用时机 |
 |----------|--------|----------|
 | **UML 图（Mermaid）** | 🥇 最高 | 流程、状态、关系的默认选择 |

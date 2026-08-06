@@ -2,6 +2,8 @@
 
 **目的**：分析现有代码库，生成全面的设计产物
 
+本文要求的所有 Mermaid 图均须加载 `common-mermaid-diagram-standards.md`；实际生成或修改语法时再加载 `common-mermaid-syntax-rules.md`。本文件只定义各产物需要表达的业务和架构关系。
+
 **执行条件**：检测到存量项目（工作区中发现现有代码）
 
 **跳过条件**：全新项目（无现有代码）

@@ -223,30 +223,13 @@
 
 ## 步骤 6：生成工作流可视化
 
-创建 Mermaid 流程图展示：
-- 所有阶段按顺序排列
-- 每个条件阶段的执行或跳过决策
-- 每个阶段状态的适当样式
+加载 `common-mermaid-diagram-standards.md`，并在实际生成语法时加载 `common-mermaid-syntax-rules.md`。创建 Mermaid 流程图展示：
 
-**样式规则**（添加在流程图之后）：
-```
-style WD fill:#4CAF50,stroke:#1B5E20,stroke-width:3px,color:#fff
-style CP fill:#4CAF50,stroke:#1B5E20,stroke-width:3px,color:#fff
-style CG fill:#4CAF50,stroke:#1B5E20,stroke-width:3px,color:#fff
-style BT fill:#4CAF50,stroke:#1B5E20,stroke-width:3px,color:#fff
-style US fill:#BDBDBD,stroke:#424242,stroke-width:2px,stroke-dasharray: 5 5,color:#000
-style Start fill:#CE93D8,stroke:#6A1B9A,stroke-width:3px,color:#000
-style End fill:#CE93D8,stroke:#6A1B9A,stroke-width:3px,color:#000
+- 所有阶段的执行顺序；
+- 条件阶段的执行或跳过决策；
+- 已完成、待执行和跳过状态的文字标签。
 
-linkStyle default stroke:#333,stroke-width:2px
-```
-
-**样式指南**：
-- 已完成/始终执行：`fill:#4CAF50,stroke:#1B5E20,stroke-width:3px,color:#fff`（Material 绿色白字）
-- 条件执行：`fill:#FFA726,stroke:#E65100,stroke-width:3px,stroke-dasharray: 5 5,color:#000`（Material 橙色黑字）
-- 条件跳过：`fill:#BDBDBD,stroke:#424242,stroke-width:2px,stroke-dasharray: 5 5,color:#000`（Material 灰色黑字）
-- 开始/结束：`fill:#CE93D8,stroke:#6A1B9A,stroke-width:3px,color:#000`（Material 紫色黑字）
-- 阶段容器：使用较浅的 Material 颜色（INCEPTION: #BBDEFB, CONSTRUCTION: #C8E6C9）
+本步骤只定义工作流语义。默认不使用 emoji、富 HTML 或硬编码色板；状态必须通过节点文字表达，样式不得成为唯一信息载体。
 
 ## 步骤 7：创建执行计划文档
 
@@ -281,41 +264,27 @@ linkStyle default stroke:#333,stroke-width:2px
 
 ```mermaid
 flowchart TD
-    Start(["用户请求"])
-    
-    subgraph INCEPTION["🔵 INCEPTION 阶段"]
-        WD["工作区检测<br/><b>状态</b>"]
-        RE["逆向工程<br/><b>状态</b>"]
-        RA["需求分析<br/><b>状态</b>"]
-        US["用户故事<br/><b>状态</b>"]
-        WP["工作流规划<br/><b>状态</b>"]
-        AD["应用设计<br/><b>状态</b>"]
-        UP["单元规划<br/><b>状态</b>"]
-        UG["单元生成<br/><b>状态</b>"]
+    Start["用户请求"] --> Workspace["工作区检测 - 已完成"]
+
+    subgraph Inception["Inception 阶段"]
+        Workspace --> Reverse["逆向工程 - 状态待填"]
+        Reverse --> Requirements["需求分析 - 状态待填"]
+        Requirements --> Stories["用户故事 - 状态待填"]
+        Stories --> Planning["工作流规划 - 进行中"]
+        Planning --> ApplicationDesign["应用设计 - 状态待填"]
+        ApplicationDesign --> UnitGeneration["单元生成 - 状态待填"]
     end
-    
-    subgraph CONSTRUCTION["🟢 CONSTRUCTION 阶段"]
-        FD["功能设计<br/><b>状态</b>"]
-        NFRA["NFR 需求<br/><b>状态</b>"]
-        NFRD["NFR 设计<br/><b>状态</b>"]
-        ID["基础设施设计<br/><b>状态</b>"]
-        CP["代码规划<br/><b>执行</b>"]
-        CG["代码生成<br/><b>执行</b>"]
-        BT["构建和测试<br/><b>执行</b>"]
+
+    subgraph Construction["Construction 阶段"]
+        FunctionalDesign["功能设计 - 状态待填"] --> Tdd["TDD 实现与审查 - 待执行"]
+        Tdd --> BuildTest["实际构建和测试 - 待执行"]
     end
-    
-    Start --> WD
-    WD --> RA
-    RA --> WP
-    WP --> CP
-    CP --> CG
-    CG --> BT
-    BT --> End(["完成"])
-    
-    %% 将"状态"替换为实际阶段状态（已完成/跳过/执行）并应用相应样式
+
+    UnitGeneration --> FunctionalDesign
+    BuildTest --> Done["完成"]
 ```
 
-**注意**：将"状态"占位符替换为实际阶段状态（已完成/跳过/执行）并应用相应样式
+**注意**：将“状态待填”替换为实际状态；阶段被跳过时必须在节点文字和正文理由中同时说明。
 
 ## 待执行阶段
 

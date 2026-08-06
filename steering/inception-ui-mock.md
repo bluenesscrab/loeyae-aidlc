@@ -1,579 +1,85 @@
-# UI 设计（询问用户选择模式）
+# UI 设计模式路由（I9）
 
-**角色**：产品经理 / UI 设计师
+## 目的
 
-**目的**：基于已完成的需求文档，通过选定模式生成页面设计，用于需求交接和多端开发对齐。
+在需求、故事和 I8 审查完成后，由用户选择 HTML Mock、创建 Figma、使用已有 Figma 或跳过，并协调页面计划确认、能力调用、用户审核和状态更新。
+
+本文件只负责 I9 编排。页面语义规划由 `inception-ui-page-planning.md` 定义；HTML 生成由 `aidlc-ui-mock-design` 加载 `inception-ui-mock-generation.md` 执行；Figma 路径由 `inception-ui-figma.md` 编排并调用 `aidlc-figma-design`；I10 放行只由 `inception-cross-validation.md` 决定。
 
 ## 前置条件
-- 需求分析必须完成
-- 需求文档已完成
-- 用户故事已完成
-- 用户故事交叉验证（I8）必须通过
-- 工作区检测已完成（已知涉及的端和现有代码位置）
 
----
+- 需求文档已完成；
+- 用户故事已完成；
+- I8 已通过；
+- 工作区检测已识别涉及端和现有代码位置。
 
-## 执行条件（询问用户选择）
+## 模式选择
 
-**触发方式**：用户故事（及其交叉验证）完成后，主动询问 Boss 是否需要 UI 设计及选择模式。
+向 Boss 提供以下选项，并等待明确选择：
 
-**询问模板**：
-```markdown
-Boss，用户故事已完成并通过交叉验证。
+- **创建 Figma 设计**：适合团队协作、高保真交付和 Dev Mode；
+- **使用已有 Figma 设计稿**：验证外部文件并登记为正式设计基准；
+- **HTML Mock 模式**：生成可离线浏览的结构化 HTML 原型；
+- **跳过 UI 设计**：仅适用于无界面需求或用户明确不需要设计基准。
 
-接下来请选择 UI 设计方式：
+路由：
 
-- 🆕 **创建 Figma 设计** — 通过 Figma MCP 创建新的原生设计稿（需 Figma 账号，实际能力以 `whoami` 验证为准）
-- 🔗 **使用已有 Figma 设计稿** — 提供 Figma 文件链接，我将验证并把它作为正式设计基准
-- 📄 **HTML Mock 模式** — 生成独立 HTML 页面原型（无外部依赖，浏览器即可查看）
-- ⏭️ **跳过 UI 设计** — 仅适用于无界面需求或用户明确不需要设计基准
+| 选择 | 路由 |
+|------|------|
+| 创建 Figma | 加载 `inception-ui-figma.md`，来源为 `流程创建` |
+| 已有 Figma | 加载 `inception-ui-figma.md`，来源为 `外部提供` |
+| HTML Mock | 执行本文件的 HTML Mock 编排 |
+| 跳过 | 记录原因并进入 I11 |
 
-💡 **建议创建 Figma 设计**：团队使用 Figma 协作、需要高保真设计交付、需要 Dev Mode 标注
-💡 **建议使用已有 Figma**：设计师已交付 Figma 文件，需要直接进入设计审查和开发实现
-💡 **建议 HTML Mock 模式**：快速验证、无可用 Figma 客户端、纯内部开发、需要离线查看
-💡 **建议跳过的场景**：纯后端/API 项目、无任何界面改动
-```
+## 跳过处理
 
-**路由规则**：
-- 用户选择"创建 Figma 设计" → 加载 `inception-ui-figma.md`，按 `Figma 来源：流程创建` 执行完整设计流程
-- 用户选择"使用已有 Figma 设计稿" → 加载 `inception-ui-figma.md`，按 `Figma 来源：外部提供` 执行链接验证与页面登记，不创建新文件
-- 用户选择"HTML Mock 模式" → 执行本文件后续步骤
-- 用户选择"跳过 UI 设计" → 记录跳过原因后进入工作流规划
+用户明确跳过时，在 state.md 的 `UI 设计（I9 条件）` 中记录：
 
-## 跳过条件
+- `UI 设计方式：跳过`；
+- `Figma 来源：不适用`；
+- `页面计划：不适用`；
+- `页面计划状态：不适用`；
+- `设计状态：skipped`；
+- 下一操作和跳过原因。
 
-- 用户明确选择跳过
+已有外部 Figma 文件不属于跳过。
 
-跳过时必须在 `state.md` 的 `## UI 设计（I9 条件）` 区块记录：`UI 设计方式：跳过`、`Figma 来源：不适用`、`设计状态：skipped`，并在 `下一操作` 中写明跳过原因；其余字段写“不适用”。Construction 阶段据此跳过页面对照表和组件映射表。已有外部 Figma 设计稿不属于跳过条件。
+## HTML Mock 编排
 
----
+### 1. 建立页面计划
 
-## 执行步骤
+加载 `inception-ui-page-planning.md`，生成跨模式唯一页面计划。将路径和 `draft` 状态写入 state.md，提交用户确认；确认后把 `页面计划状态` 更新为 `approved`。未确认前不得调用生成 Skill。
 
-### 步骤 1：加载规则与上下文
+### 2. 确定视觉来源
 
-1. 加载需求文档（`docs/aidlc/inception/requirements/requirements.md`）
-2. 加载用户故事（如存在：`docs/aidlc/inception/user-stories/`）
-3. 如为存量项目，加载逆向工程产物中的前端架构信息
-4. **询问用户是否选择设计风格**（可选，见下方子流程）
+- 存量项目读取实际 UI 框架和现有页面风格，不另选品牌风格；
+- 新项目由用户选择默认样式或可选设计风格；
+- 选择设计风格时可通过 `awesome-design` 获取 tokens；不可用时使用默认样式，不改变页面语义。
 
-**UI 风格确定规则**：
-- **存量项目**：读取现有前端代码，提取实际使用的 UI 框架和组件风格（如 Element UI、uView），以现有风格为准。不询问设计风格选择。
-- **新项目**：主动询问用户是否需要选择设计风格（见下方询问模板）。用户跳过则使用通用 UI 框架（Element UI / Ant Design）作为基准。
+### 3. 生成并审核骨架
 
-#### 设计风格选择（可选子流程）
+调用 `aidlc-ui-mock-design`，传入已批准页面计划和 `stage=skeleton`。具体生成规则由 `inception-ui-mock-generation.md` 及其引用文件定义。
 
-**触发条件**：新项目，且不是存量项目的局部改造。
+生成后按 `inception-ui-mock-workflow.md` 提交用户审核页面数量、改造基础和操作闭环。发现页面语义错误时回到页面计划就地修正并重新确认。
 
-**询问模板**：
-```markdown
-Boss，是否需要为 UI Mock 选择一个设计风格参考？
+### 4. 填充并审核内容
 
-- 🎨 **选择设计风格** — 我将展示可用的品牌设计风格供你选择，应用其配色和组件样式
-- ⏭️ **使用默认风格** — 使用通用 UI 框架样式（Element UI / Ant Design）
+骨架确认后再次调用 `aidlc-ui-mock-design`，传入 `stage=content`。提交用户审核字段、状态、权限和交互；反馈只修改受影响页面，涉及产品语义时按 `common-workflow-changes.md` 协调。
 
-💡 **选择设计风格的场景**：新产品需要统一视觉风格、希望参考知名产品的设计语言
-💡 **使用默认风格的场景**：内部系统、快速验证、已有设计规范
-```
+### 5. I9 状态交接
 
-**用户选择"选择设计风格"时的执行流程**：
+HTML Mock 用户审核完成后，在 state.md 中记录：
 
-1. 调用 MCP 工具 `list_design_styles` 获取风格列表，向用户展示：
-```markdown
-可用的设计风格分类：
+- `UI 设计方式：html-mock`；
+- `Figma 来源：不适用`；
+- 页面计划路径和 `approved`；
+- `产物位置`；
+- `设计状态：review_pending`；
+- 涉及端、页面数、设计风格和风格来源；
+- `下一操作：执行 I10 UI 设计交叉验证`。
 
-**后台/工具类（productivity）**：Linear、Notion、Superhuman、Miro、Zapier、Slack、Cal.com、Intercom
-**消费者端（consumer）**：Airbnb、Nike、Shopify、Starbucks、Uber、Spotify、Pinterest
-**金融类（fintech）**：Stripe、Wise、Revolut、Binance、Coinbase、Kraken、Mastercard
-**开发者工具（developer）**：Cursor、Vercel、Supabase、Warp、Expo、Raycast、Sentry、PostHog 等
-**AI 平台（ai）**：Claude、OpenCode、xAI、Cohere、Mistral、VoltAgent 等
-**设计工具（design）**：Figma、Framer、Webflow、Airtable、Clay
-**汽车品牌（automotive）**：BMW、Ferrari、Lamborghini、Tesla、Bugatti
-**媒体/消费电子（media）**：Apple、NVIDIA、SpaceX、PlayStation、The Verge
+执行 `common-step-completion-protocol.md`，然后进入 I10。不得在 I10 前写入 `approved`。
 
-请选择一个风格名称，或告诉我想要的视觉方向（如"暗色极简"、"温暖友好"），我来推荐。
-```
+## I10 边界
 
-2. 用户选定后，调用 MCP 工具 `get_design_tokens(name)` 获取精简设计 tokens
-3. 将 tokens 记录到 `state.md` 中（字段：`designStyle`）
-4. 后续步骤 4 制作 HTML 时，使用 tokens 中的配色、字体、圆角替代默认样式
-
-**用户选择"使用默认风格"或跳过时**：使用本文件中定义的默认样式模板，不调用 awesome-design MCP。
-
-### 步骤 2：确定涉及的端
-
-基于需求文档分析，确定本次需求涉及哪些端：
-- 平台运营后台（PC）
-- 商户 PC 后台
-- 商户 APP
-- 用户 APP / 小程序
-- 其他（根据项目实际情况）
-
-### 步骤 3：页面清单规划
-
-**对每个端**，列出需要制作的页面：
-
-1. **读取现有前端代码**（存量项目）：
-   - 扫描路由文件，了解现有页面结构
-   - 扫描相关组件，了解现有页面布局
-   - 判断每个需求功能点对应的页面是"完全新增"还是"在现有页面上局部改造"
-
-2. **新项目**：
-   - 不需要读取现有代码
-   - 所有页面都标记为"新增页面"
-   - 重点放在页面结构和字段完整性上
-
-3. **需要主动问用户的信息**（如果从需求文档中无法确定）：
-
-| 缺失信息 | 为什么需要问 |
-|---------|------------|
-| 现有页面的实际布局 | 决定是新增还是局部改造 |
-| 不同状态下的页面差异 | 决定需要做几个页面还是用条件表格 |
-| 操作权限（谁能看/谁能改） | 决定页面上有没有操作按钮 |
-| 字段在不同类型下是否相同 | 决定是否需要分开做多个页面 |
-
-4. **生成并保存页面规格表（强制）**：每个端创建 `docs/aidlc/inception/ui-mock/{端}-page-specs.md`；多模块路径遵循本文件产出物规则。该文件是 I9 到 Construction 的页面追溯契约，不得只在对话或 HTML header 中保留清单。
-
-```markdown
-# [端名称] 页面规格
-
-| 序号 | 页面名称 | 类型 | 关联 US | 改造基础 | 目标代码文件 | 说明 |
-|------|----------|------|---------|----------|--------------|------|
-| 1 | 联票规则列表 | 新增页面 | US-03 | — | 待 Construction 确定 | 新建独立页面 |
-| 2 | 订单列表 | 局部改动 | US-05 | `views/order/index.vue` | `views/order/index.vue` | 增加门票类型筛选 |
-| 3 | 核销确认 | 新增弹窗 | US-07 | — | 待 Construction 确定 | 在订单详情中触发 |
-```
-
-5. **类型标签定义**：
-   - `新增页面`：现有系统中不存在，完全新建
-   - `局部改动`：在现有页面基础上增加/修改部分内容
-   - `新增弹窗`：新增的弹窗/对话框/抽屉
-
-6. **提交用户确认**：页面清单和 page-specs 文件必须经用户确认后才能开始制作。确认后 HTML 中每个 mock-box 标题必须与 page-specs 的页面名称逐字一致
-
-### 步骤 4：逐端制作 HTML
-
-**按端拆分文件**，每端一个 HTML 文件。大型项目按功能模块进一步拆分。
-
-#### 文件组织策略
-
-**判断标准**：根据步骤 3 页面清单中某端的页面数量选择策略：
-
-| 项目规模 | 判断条件 | 文件策略 |
-|---------|---------|---------|
-| 标准 | 某端 ≤10 个页面 | 该端一个 HTML 文件 |
-| 大型 | 某端 >10 个页面 | 该端按功能模块拆分为多个 HTML 文件 |
-
-**注意**：判断粒度是**每个端独立判断**。同一项目中，平台后台可能需要拆分（30 页面），而用户 APP 可能不需要（8 页面）。
-
-#### 文件命名规范 — 标准模式（≤10 页面/端）
-```
-ui-mock/
-├── platform-admin.html    # 平台运营后台
-├── merchant-pc.html       # 商户PC后台
-├── merchant-app.html      # 商户APP
-├── user-app.html          # 用户APP/小程序
-└── [其他端].html          # 按实际情况
-```
-
-#### 文件命名规范 — 大型模式（>10 页面/端）
-```
-ui-mock/
-├── platform-admin/                # 平台运营后台（拆分）
-│   ├── index.html                 # 导航页：列出所有模块链接
-│   ├── order-management.html      # 订单管理模块
-│   ├── user-management.html       # 用户管理模块
-│   ├── ai-center.html             # AI 中心模块
-│   └── system-settings.html       # 系统设置模块
-├── user-app.html                  # 用户APP（标准模式，≤10 页面）
-└── merchant-pc.html               # 商户PC后台（标准模式）
-```
-
-**大型模式规则**：
-1. **模块划分**：按功能域拆分（如订单管理、用户管理、商品管理），同一功能域的页面放在同一个 HTML 文件中
-2. **index.html 必需**：每个拆分目录必须有 index.html，包含所有模块的链接和简述
-3. **每个模块文件独立完整**：每个 HTML 文件独立引入 CSS 和样式，可单独在浏览器打开
-4. **跨模块页面归属**：页面归属于其主要功能域。如果一个页面在多个模块中被引用，放在主导模块中，其他模块在业务说明中注明"参见 {模块名}.html"
-5. **单文件不超过 15 个 mock-box**：如果某个模块超过 15 个页面，继续按子功能拆分
-
-**index.html 模板**：
-```html
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-  <title>[端名称] UI Mock 导航</title>
-  <style>
-    body { font-family: -apple-system, sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; }
-    .module-list { list-style: none; padding: 0; }
-    .module-list li { padding: 12px 16px; border: 1px solid #eee; margin-bottom: 8px; border-radius: 6px; }
-    .module-list a { text-decoration: none; color: #333; font-weight: 500; }
-    .module-list .desc { color: #666; font-size: 14px; margin-top: 4px; }
-  </style>
-</head>
-<body>
-  <h1>📋 [端名称] UI Mock</h1>
-  <p>共 [N] 个功能模块，[M] 个页面</p>
-  <ul class="module-list">
-    <li><a href="order-management.html">订单管理</a><div class="desc">[页面数] 个页面：订单列表、订单详情、退款处理...</div></li>
-    <li><a href="user-management.html">用户管理</a><div class="desc">[页面数] 个页面：用户列表、用户详情...</div></li>
-  </ul>
-</body>
-</html>
-```
-
-#### HTML 整体结构
-```html
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>[功能名称] - [端名称] UI Mock</title>
-  <!-- PC端：引入实际使用的UI框架CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/element-ui@2.15.8/lib/theme-chalk/index.css">
-  <!-- Mock 专用样式：通用样式 + 对应端专用样式（见文末「样式模板」） -->
-  <style>/* 通用样式 + PC专用 或 APP专用，使用 mock-/phone- 前缀避免冲突 */</style>
-</head>
-<body>
-  <!-- 顶部标题栏（sticky固定） -->
-  <div class="mock-header">
-    <h1>📋 [端名称] — [功能名称] UI Mock</h1>
-    <p>涉及页面：[页面列表概要]</p>
-  </div>
-  <!-- 内容容器：flex-wrap 自动排列 -->
-  <div class="mock-container">
-    <!-- 页面卡片 -->
-  </div>
-</body>
-</html>
-```
-
-#### 页面卡片结构（mock-box）— PC 端
-```html
-<div class="mock-box">
-  <!-- 标题栏：页面名称 + 类型标签 -->
-  <div class="mock-box-title">
-    <span>页面名称</span>
-    <span class="tag">新增页面</span>
-  </div>
-  <!-- 页面内容区：使用实际UI框架的class模拟真实页面 -->
-  <div class="mock-box-body">
-    <!-- 模拟的页面内容 -->
-  </div>
-  <!-- 业务说明区：紧跟在页面内容下方 -->
-  <div class="mock-box-desc">
-    <h4>业务说明</h4>
-    <ul>
-      <li><b>改造基础</b>：<code>现有代码路径</code></li>
-      <li><b>改动点</b>：<span class="hl">高亮标注新增内容</span></li>
-      <li><b>关键规则</b>：<span class="dg">危险标注限制性规则</span></li>
-    </ul>
-  </div>
-</div>
-```
-
-#### 页面卡片结构 — APP 端（手机模拟器）
-```html
-<div class="mock-box">
-  <div class="mock-box-title">
-    <span>页面名称</span>
-    <span class="tag">新增页面</span>
-  </div>
-  <div class="mock-box-body">
-    <!-- 手机模拟器 -->
-    <div class="phone-bar"><span>9:41</span></div>
-    <div class="phone-nav"><span class="back">‹</span>导航标题</div>
-    <div class="phone-body">
-      <!-- 页面内容（高度约480px，overflow:auto） -->
-    </div>
-    <!-- 固定底部栏（如有）放在 phone-body 外面 -->
-  </div>
-  <div class="mock-box-desc">
-    <h4>业务说明</h4>
-    <ul>...</ul>
-  </div>
-</div>
-```
-
-#### 尺寸规范
-| 端 | mock-box 宽度 | 内容区高度 | 说明 |
-|----|--------------|-----------|------|
-| PC 后台 | `min-width:700px; flex:1` | 自适应 | 一排最多2个，自动换行 |
-| APP | `width:280px` 固定 | phone-body 约 480px | flex-wrap 自动排列 |
-
-#### 容器布局规则
-- 容器用 `display:flex; flex-wrap:wrap; gap:20px; align-items:flex-start`
-- 不固定一排几个，由浏览器窗口宽度决定
-- 全宽元素（如条件差异表格）用 `width:100%` 的 `mock-full` class
-
-### 步骤 5：内容制作规则
-
-#### 5.1 页面内容规则
-- **页面展示的是最终用户/运营看到的样子**，不是开发文档
-- 开发逻辑、校验规则、提示文字写在业务说明中，不出现在页面上
-- 示例数据要合理（金额、日期、名称都像真实数据）
-
-#### 5.2 局部改动的标记方式
-- 仅在"局部改动"类型的页面中使用
-- "新增页面"类型不需要内部标记（整个页面都是新的）
-- 新增字段/区块用橙色边框包裹 + 右上角"新增"小标签：
-```html
-<th style="border:2px solid #e6a23c;position:relative">
-  <span style="position:absolute;top:-9px;right:2px;background:#e6a23c;color:#fff;font-size:9px;padding:0 3px;border-radius:2px;line-height:14px">新增</span>
-  字段名
-</th>
-```
-
-#### 5.3 多状态/多类型页面的处理
-- **不要**为每种类型做独立的完整页面
-- **应该**做"组件库"（展示所有可能的 UI 区块样式）+ "条件差异表格"（标注每个状态/类型下使用哪些组件）
-- 条件差异表格用 `mock-full` class 占满一行：
-```html
-<div class="mock-full">
-  <h4>条件差异表</h4>
-  <table>
-    <tr><th>区块/字段</th><th>类型A</th><th>类型B</th><th>类型C</th></tr>
-    <tr><td>某字段</td><td>显示</td><td>不显示</td><td>显示（文案不同）</td></tr>
-  </table>
-</div>
-```
-
-#### 5.4 业务说明必须包含的信息
-| 信息 | 说明 | 何时必须 | 示例 |
-|------|------|---------|------|
-| 改造基础 | 现有代码文件路径 | 局部改动时必须 | `现有 PingTaiDuan/src/views/mall/order/index.vue` |
-| 改动点 | 具体新增/修改了什么 | 始终必须 | 搜索栏增加"门票类型"下拉 |
-| 关键规则 | 影响开发实现的业务规则 | 有规则时必须 | 规则使用后不可修改/删除 |
-| 与其他端的区别 | 同一功能在不同端的差异 | 多端时必须 | 平台端仅查看，商户端有操作按钮 |
-
-#### 5.5 高亮标记
-- `.hl`（橙色 #e6a23c）：标注新增的内容、需要注意的改动点
-- `.dg`（红色 #f56c6c）：标注限制性规则、不可操作的约束
-
-### 步骤 6：精简优化
-
-逐端制作完成后，执行精简优化：
-
-1. **识别重复页面**：检查是否有多个页面结构几乎一致、只有个别字段不同
-2. **合并为模板+条件表格**：保留1个模板页面，用 `mock-full` 条件差异表格标注差异
-3. **检查页面数量合理性**：如果某端页面超过 10 个，考虑是否有可以合并的
-
-### 步骤 7：用户审核
-
-制作完成后，提交用户逐页审核：
-1. 告知用户 HTML 文件已生成，可在浏览器中打开查看
-2. 等待用户反馈
-3. 根据反馈修正具体页面
-4. 修正后再次提交确认
-
-### 步骤 8：交叉审核（6 维度自检）
-
-所有页面制作完成并经用户初步确认后，执行交叉审核：
-
-| 维度 | 检查内容 | 检查方法 |
-|------|---------|---------|
-| A. 需求来源验证 | 每个页面/功能是否有需求文档中的明确来源？ | 逐页对照需求文档 FR 列表 |
-| B. 现有系统复用 | 是否应该复用现有页面而非新建？ | 对照逆向工程产物/现有代码 |
-| C. 状态完整性 | 所有业务状态是否都有 UI 展示？ | 检查状态机中每个状态的页面覆盖 |
-| D. 多端一致性 | 一端产生的数据另一端能看到吗？ | 跨端数据流追踪 |
-| E. 页面vs逻辑分离 | 页面只展示用户看到的，逻辑在业务说明中？ | 检查页面内容是否混入开发逻辑 |
-| F. 操作路径闭环 | 用户从入口到结束每步都有页面承接？ | 按用户操作路径走一遍 |
-| G. 页面规格一致性 | page-specs 每行是否有且仅有一个 mock-box，名称/类型/关联 US 是否一致？ | 逐端双向核对 page-specs 与 HTML |
-
-**审核结果处理**：
-- 发现问题 → 修正对应页面 → 更新业务说明
-- 所有维度通过后，标记 UI Mock 完成
-
-### 步骤 9：更新状态跟踪
-
-更新 `docs/aidlc/state.md` 的 `## UI 设计（I9 条件）` 区块（字段定义见 `inception-state-template.md`）：
-
-```markdown
-- **UI 设计方式**：html-mock
-- **Figma 来源**：不适用
-- **产物位置**：docs/aidlc/inception/ui-mock/
-- **设计状态**：review_pending
-- **当前批次**：不适用
-- **下一操作**：执行 I10 UI 设计交叉验证
-- **涉及端**：{端名称列表}
-- **页面数**：{数量}
-- **设计风格**：{风格名/默认}
-- **风格来源**：{awesome-design MCP/默认/不适用}
-```
-
-`UI 设计方式: html-mock` 是 Construction 阶段选择 HTML 版页面对照表格式的判定依据，必须写入。
-
-### 步骤 10：展示完成消息
-
-```markdown
-# 🎨 UI Mock 完成
-
-> **📋 <u>**需要审查：**</u>**
-> 请在浏览器中打开以下文件查看 UI Mock：
-> [列出生成的 HTML 文件路径]
-
-> **🚀 Boss，<u>**下一步？**</u>**
->
-> 🔧 **请求修改** - 指出需要修正的页面
-> ✅ **确认并继续** - 确认 UI Mock，进入**UI Mock 交叉验证**
-> 📋 **新 Session 继续** - 复制 `state.md` 中的交接提示词到新对话继续
-
----
-
-> **💡 下一步执行提示词**（可直接复制使用）：
-> ```
-> 确认 UI Mock，执行 UI Mock 交叉验证审查
-> ```
-```
-
-在用户明确确认前不得继续。
-
----
-
-## 产出物
-
-| 产出物 | 路径 | 说明 |
-|--------|------|------|
-| 页面规格表（强制） | `docs/aidlc/inception/ui-mock/[端名称]-page-specs.md` | 每端一份，是 Construction 页面映射的输入 |
-| UI Mock HTML 文件（标准） | `docs/aidlc/inception/ui-mock/[端名称].html` | 按端拆分，≤10 页面/端 |
-| UI Mock HTML 文件（大型） | `docs/aidlc/inception/ui-mock/[端名称]/[模块名].html` | 按端+模块拆分，>10 页面/端 |
-| 导航页（大型模式） | `docs/aidlc/inception/ui-mock/[端名称]/index.html` | 大型模式必需 |
-| 页面清单摘要 | 每个 HTML 文件的 `<p>` 标签中 | 内容必须与 page-specs 一致 |
-
-**多模块模式路径**：`docs/aidlc/modules/{module-name}/inception/ui-mock/`
-
----
-
-## 踩坑规避规则（强制）
-
-以下规则来自实践中的踩坑总结，必须遵守：
-
-### 结构与布局
-1. **页面和说明不分离**：每个 mock-box 内部包含 body + desc，形成自包含单元。禁止"页面一排、说明另一排"的布局。
-2. **flex-wrap 自动排列**：不固定一排几个，由浏览器窗口宽度决定。
-3. **引入实际 UI 框架 CSS**：PC 端引入 Element UI CDN CSS 使用真实 class name，不要用自定义 CSS 模拟。如选择了设计风格，可不引入 UI 框架 CSS，改用 design tokens 生成的自定义样式。
-4. **Mock 专用 class 加前缀**：使用 `mock-`、`phone-` 等前缀，避免与引入的 UI 框架 CSS class 冲突。
-5. **底部固定栏放在滚动容器外面**：APP 端的底部操作栏放在 phone-body 外面，避免跟随滚动。
-6. **手机框不加圆角**：标题栏和手机框之间不要有圆角间隙。
-
-### 内容准确性
-7. **先读代码再决定类型**：必须先读现有前端代码，确认页面结构后再决定是"新增"还是"局部改动"。不要假设。
-8. **多关联实体必须展示完整**：如联票=多景区，每个页面必须展示所有关联实体，不能只写1个。
-9. **权限核对**：每个页面画完后核对权限矩阵——这个端能操作吗？只能查看的端不要加操作按钮。
-10. **不重复做页面**：同一模板只有个别字段不同时，用1个模板+条件差异表格，不做多个独立页面。
-
-### 内容分离
-11. **页面只展示用户看到的**：开发逻辑（校验规则、触发条件、后端处理）写在业务说明中，不出现在页面 Mock 上。
-12. **"新增页面"内部不做新增标记**：只有"局部改动"才用橙色边框标记新增部分。
-
-### AI 执行层面
-13. **大文件分段处理**：HTML 文件内容较长时，不要一次性替换全部内容（会超出输出限制）。应分段制作，或使用子 Agent 处理单个端的文件。
-14. **先做结构再填内容**：先创建 HTML 骨架（所有 mock-box 的标题和空 body），确认结构正确后再逐个填充页面内容。
-
----
-
-## 关联规范文件
-
-> **按需加载**：以下文件提供 UI Mock 的细化规范，按场景自动或手动加载。
-
-| 文件 | 触发方式 | 职责 |
-|------|---------|------|
-| `inception-ui-mock-styles.md` | 制作 HTML 时手动加载 | CSS 样式模板 |
-| `inception-ui-mock-design-spec.md` | fileMatch: `**/*.html` | 设计规范：条件表生成、交互模式映射、表单联动、空状态 |
-| `inception-ui-mock-reasoning-principles.md` | fileMatch: `**/*.html` | 推导原则：三层分离、内容决策、自检清单 |
-| `inception-ui-mock-workflow.md` | HTML Mock 模式自动加载 | 两阶段工作流：强制先生成 page-specs + 骨架，再填充内容 |
-
----
-
-## 样式模板
-
-> **加载模板**：制作 HTML Mock 时，加载 `inception-ui-mock-styles.md` 获取完整的 CSS 样式模板。
-
-**使用规则**：
-- PC 端 HTML：引入**通用** + **PC 专用**样式
-- APP 端 HTML：引入**通用** + **APP 专用**样式
-- Mock 专用 class 加 `mock-`、`phone-` 前缀避免与 UI 框架冲突
-- PC 端额外引入 Element UI CDN CSS 使用真实 class name
-
----
-
-## 与 awesome-design MCP 的集成（设计风格应用）
-
-当用户在步骤 1 中选择了设计风格时，按以下规则应用到 HTML Mock：
-
-### 配色应用规则
-
-从 `get_design_tokens` 返回的 `colors` 对象中提取颜色，映射到 Mock CSS 变量：
-
-| Design Token | Mock 中的用途 |
-|-------------|--------------|
-| `colors.primary` | 主操作按钮背景、链接颜色、强调色 |
-| `colors.canvas` / `colors.background` | 页面背景色 |
-| `colors.surface-1` / `colors.surface` | 卡片和容器背景 |
-| `colors.ink` / `colors.text` | 正文文字颜色 |
-| `colors.ink-muted` / `colors.textSecondary` | 次要文字颜色 |
-| `colors.hairline` / `colors.border` | 边框和分割线 |
-
-### 字体应用规则
-
-- 优先使用 tokens 中的 `typography.fontFamilies`
-- 如果是私有字体（如 Linear Display），使用文档中建议的替代字体（如 Inter）
-- 字体权重和字号遵循 tokens 定义的层级
-
-### 圆角应用规则
-
-- 按钮圆角：使用 `rounded.md` 或 `rounded.sm`
-- 卡片圆角：使用 `rounded.lg`
-- 输入框圆角：使用 `rounded.md`
-
-### CSS 变量注入方式
-
-在 HTML `<style>` 的 `:root` 中定义变量，Mock 样式引用这些变量：
-
-```css
-:root {
-  /* 来自 awesome-design tokens */
-  --mock-primary: #5e6ad2;        /* colors.primary */
-  --mock-bg: #010102;             /* colors.canvas */
-  --mock-surface: #0f1011;        /* colors.surface-1 */
-  --mock-text: #f7f8f8;           /* colors.ink */
-  --mock-text-muted: #8a8f98;     /* colors.ink-subtle */
-  --mock-border: #23252a;         /* colors.hairline */
-  --mock-radius-sm: 6px;          /* rounded.sm */
-  --mock-radius-md: 8px;          /* rounded.md */
-  --mock-radius-lg: 12px;         /* rounded.lg */
-  --mock-font: Inter, -apple-system, sans-serif;
-}
-```
-
-### 降级规则
-
-- MCP 不可用时：使用 `inception-ui-mock-styles.md` 中的默认样式
-- tokens 字段缺失时：缺失的字段使用默认值（Element UI / Ant Design 配色）
-- 存量项目：始终以现有代码中的实际框架样式为准，不使用 design tokens
-
-### state.md 记录
-
-选择设计风格后，在 `state.md` 的 `## UI 设计（I9 条件）` 区块记录（字段定义见 `inception-state-template.md`）：
-
-```markdown
-- **设计风格**：linear.app
-- **风格来源**：awesome-design MCP
-```
-
----
-
-## 适用场景与局限
-
-### 适合的场景
-1. **外包项目的需求交接**：让开发团队快速理解要做什么
-2. **在现有系统上做增量功能**：能清晰标注"改哪里、改什么"
-3. **多端同步开发**：一次性展示所有端的页面，保持一致性
-4. **AI 辅助开发的输入**：结构化的 HTML 比设计图更容易被 AI 解析
-
-### 不适合的场景（应跳过 UI Mock，使用其他方式）
-1. **需要精确视觉还原**：应选择 Figma 模式
-2. **复杂交互动效**：HTML Mock 无法展示动画、手势等，应选择 Figma 模式
-3. **全新产品从 0 设计且无任何参考**：可通过 awesome-design MCP 选择一个品牌风格作为参考起点
-4. **用户测试/可用性验证**：需要可交互的高保真原型，应选择 Figma 模式
+I10 加载 `inception-cross-validation.md`（e），对需求、故事、页面计划和选定模式产物进行交叉验证。只有未决冲突为零且检查通过后，编排层才能把 `设计状态` 更新为 `approved`。

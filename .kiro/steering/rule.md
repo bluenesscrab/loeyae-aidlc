@@ -30,7 +30,6 @@ inclusion: always
 | Claude Code 接入与能力声明 | `CLAUDE.md`、`.claude-plugin/` |
 | OpenCode 接入、安装与发布配置 | `.opencode/`、`package.json` |
 | 平台无关子 Agent 指令 | `agents/` |
-| 平台 Hook 模板 | `hooks/` 中对应平台目录 |
 
 一个事实只在其事实来源中完整定义。其他文件只能保留当前职责所需的简述和引用，不得复制流程细节、安装步骤、版本号或完整能力矩阵。
 

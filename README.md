@@ -6,7 +6,7 @@
 
 ## 单仓库三入口
 
-`steering/` 是共享流程规则的唯一事实来源，主入口为 `steering/core-workflow.md`；`skills/` 仅提供平台无关的薄入口。平台入口只负责加载、路由和能力适配。
+`steering/` 是共享流程规则的唯一事实来源，主入口为 `steering/core-workflow.md`；`skills/` 仅提供平台无关的可选薄入口，不承载规则。平台入口只负责加载、路由和能力适配。
 
 ```text
 loeyae-aidlc/
@@ -22,10 +22,6 @@ loeyae-aidlc/
 ├── agents/                           # 平台无关子 Agent 指令
 │   ├── orchestrator.md
 │   └── batch-executor.md
-├── hooks/                            # 各平台 Hook 模板与说明
-│   ├── kiro/
-│   ├── claude-code/
-│   └── README.md
 ├── .opencode/
 │   ├── plugins/
 │   │   └── loeyae-aidlc.js           # OpenCode 真实插件入口
@@ -38,11 +34,13 @@ loeyae-aidlc/
 └── scripts/setup.mjs                 # OpenCode MCP 注册脚本
 ```
 
-| 平台 | 入口 | 共享资源加载方式 |
-|------|------|------------------|
-| Kiro | `POWER.md` + `mcp.json` | Power 按需读取 `steering/`、`skills/`、`agents/` 和 `hooks/kiro/` |
-| Claude Code | `CLAUDE.md` + `.claude-plugin/` | 插件入口按需读取共享资源，并适配 Claude Workflow/Hook |
-| OpenCode | `package.json` + `.opencode/plugins/loeyae-aidlc.js` | `main` 加载插件；插件注册 skills 并注入 bootstrap |
+| 平台 | 入口 | 共享资源加载方式 | `skills/` 是否自动装载 |
+|------|------|------------------|------------------------|
+| Kiro | `POWER.md` + `mcp.json` | Power 安装产物仅含 `POWER.md`、`mcp.json` 和 `steering/` | 否（已实测） |
+| Claude Code | `CLAUDE.md` + `.claude-plugin/` | 插件按目录约定读取 `steering/`、`skills/` 与 `agents/` | 依赖平台约定，未实测 |
+| OpenCode | `package.json` + `.opencode/plugins/loeyae-aidlc.js` | `main` 加载插件；插件注入 bootstrap | 是（插件写入 `config.skills.paths`） |
+
+`skills/` 是可选的能力入口，不是流程必需路径。所有规则以 `steering/` 为准；平台未装载 `skills/` 时，按 `steering/core-workflow.md` 的降级规则直接加载对应 steering 执行，输入要求、输出内容和质量门禁均不变。`agents/` 在所有平台都需手动使用。
 
 OpenCode 不使用根目录 `plugin.json`；`package.json` 及其 `main` 指向的 `.opencode/plugins/loeyae-aidlc.js` 是真实入口。
 
@@ -62,7 +60,7 @@ OpenCode 不使用根目录 `plugin.json`；`package.json` 及其 `main` 指向�
 
 ```json
 {
-  "plugin": ["loeyae-aidlc@git+https://github.com/loeyae/loeyae-aidlc.git#v1.28.0"]
+  "plugin": ["loeyae-aidlc@git+https://github.com/loeyae/loeyae-aidlc.git#v1.29.0"]
 }
 ```
 
@@ -119,7 +117,6 @@ Inception（规划） → Construction（实现与验证） → Operations（部
 - **MCP 编码规范**：Java + Loeyae Boot Framework 项目可通过 `loeyae-skills` 按需加载框架规范。
 - **UI 设计**：HTML Mock 可选用 `awesome-design`；Figma 路径通过官方 `figma` MCP 创建、审查或读取设计，具体能力必须运行时验证。
 - **子 Agent**：共享指令位于 `agents/`，各平台按自身能力适配执行。
-- **Hooks**：可选模板位于 `hooks/`，只提供本地交互约束或提醒，不作为流程正确性或质量门禁证据；安装方式见 [hooks/README.md](hooks/README.md)。
 
 MCP 能力按以下四级状态判断，禁止把配置存在等同于可用：
 

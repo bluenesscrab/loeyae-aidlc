@@ -17,15 +17,15 @@ AI-DLC 覆盖完整开发流程：需求与验收定义、设计与拆分、TDD 
 
 ```mermaid
 flowchart LR
-    Start[用户请求] --> Inception[Inception 需求与设计]
-    Inception --> Construction[Construction 实现与验证]
-    Construction --> NeedDeploy{需要部署准备}
-    NeedDeploy -->|是| Operations[Operations 部署准备]
-    NeedDeploy -->|否| Done[开发完成]
+    Start["用户请求"] --> Inception["Inception 需求与设计"]
+    Inception --> Construction["Construction 实现与验证"]
+    Construction --> NeedDeploy{"需要部署准备"}
+    NeedDeploy -->|"是"| Operations["Operations 部署准备"]
+    NeedDeploy -->|"否"| Done["开发完成"]
     Operations --> Done
-    Done --> Change{发生需求变更}
-    Change -->|是| CR[Change Request]
-    CR --> Inception
+    Done --> Change{"发生需求变更"}
+    Change -->|"是"| ChangeRequest["Change Request"]
+    ChangeRequest --> Inception
 ```
 
 ## 自适应原则

@@ -34,11 +34,16 @@
 | 进入步骤 | 路由表指定文件 |
 | 创建文件 | `common-content-validation.md` |
 | 执行门禁 | `common-quality-gates.md` |
+| 生成澄清问题或分析用户回答 | `common-overconfidence-prevention.md` |
+| 声明完成、验证结果，或出现跳步与合理化倾向 | `common-persuasion-defense.md` |
+| 多模块项目执行审计、自检、交叉验证或批量修复 | `common-module-scope-guard.md` |
 | TDD、构建测试 | `common-test-execution-strategy.md` |
 | 存量分布式系统 | 按需加载 `common-runtime-dependency-analysis.md`、`common-contract-governance.md`、`common-configuration-governance.md`、`common-distributed-consistency.md` |
 | 检测到技术栈证据 | 按 state.md 加载对应的 `common-tech-*` 条件适配 |
 
 禁止启动时预加载全部规则。目录、审计、协作、提问和交接分别按 `common-directory-structure.md`、`common-audit-logging.md`、`common-team-collaboration.md`、`common-question-format-guide.md`、`common-session-handoff.md` 按需加载。
+
+规则中出现的 `aidlc-*` 能力调用只是平台入口。当前平台不提供 Skill 发现能力时（例如 Kiro Power 形态只装载 `steering/`），直接加载该能力对应的 steering 执行，输入要求、输出内容和质量门禁均不变。能力入口缺失不构成跳过步骤的理由。
 
 ## 意图路由
 
@@ -93,7 +98,7 @@
 | C2 | NFR 需求 | 明确性能指标或新增安全机制 | 🟡 | `construction-nfr-requirements.md` |
 | C3 | NFR 设计 | C2 识别出特殊模式 | 🟡 | `construction-nfr-design.md` |
 | C4 | 基础设施设计 | 新基础设施组件或部署架构变更 | 🟡 | `construction-infrastructure-design.md` |
-| C5 | TDD 代码生成与自适应审查 | 始终 | 🔴 | `construction-shared-contract-baseline.md`（条件） + `construction-code-generation.md` + `construction-tdd.md` + `construction-code-review.md` |
+| C5 | TDD 代码生成与自适应审查 | 始终 | 🔴 | `construction-shared-contract-baseline.md`（条件） + `construction-code-generation.md` + `construction-tdd.md` + `construction-code-review.md` + `construction-subagent-execution.md` |
 | C6 | 系统化调试 | 出现技术失败 | — | `common-systematic-debugging.md` |
 | C7 | 最终全局审查 | 多单元、复杂/高风险，或跨组件/服务、契约、共享配置、数据所有权、安全边界 | 🟢 | `construction-code-review.md` |
 | C8 | 实际构建和测试 | 始终 | 🔴 | `construction-build-and-test.md` + `construction-implementation-report.md` |

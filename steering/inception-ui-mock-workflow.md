@@ -4,16 +4,16 @@ inclusion: manual
 
 # UI Mock 工作流（两阶段编排）
 
-核心思想：**先确认页面流程对不对，再往单个页面填充内容**。用户审两次：一次审流程骨架，一次审最终效果。
+核心思想：**先以已批准 `page-plan.md` 生成可视化骨架，再往同一骨架填充内容**。用户审两次：一次审模式产物是否忠实表达页面计划，一次审最终效果。
 
 ---
 
 ## 流程总览
 
 ```
-用户故事 + 需求文档
+已批准 page-plan.md
        ↓
-【阶段1：页面编排 + 骨架HTML】→ 产出 page-specs.md + 骨架HTML
+【阶段1：page-specs 投影 + 骨架HTML】→ 产出 page-specs.md + 骨架HTML
        ↓
 用户审核：页面数量对吗？流程跳转对吗？改造的页面对吗？
        ↓  确认
@@ -24,7 +24,7 @@ inclusion: manual
 
 ---
 
-## 阶段1：页面编排 + 骨架HTML
+## 阶段1：page-specs 投影 + 骨架HTML
 
 ### 目标
 
@@ -32,13 +32,13 @@ inclusion: manual
 
 ### 输入
 
-- 用户故事（stories.md）
-- 需求文档（requirements.md）
-- 现有代码（改造页面时读取）
+- 已批准的 `docs/aidlc/inception/ui-design/page-plan.md` 或模块级等价路径
+- 现有代码（局部改动页面必须读取）
+- 调用方已确定的视觉来源
 
 ### 产出
 
-1. `{端}-page-specs.md` — 精简清单表 + 操作闭环
+1. `{端}-page-specs.md` — 从 page-plan 投影的精简清单表 + 操作闭环，不得改写页面语义
 2. `{端}.html` — 骨架HTML（每个mock-box只有框架，不填内容）
 
 ### page-specs.md 格式

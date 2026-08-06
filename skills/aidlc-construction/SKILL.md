@@ -17,9 +17,9 @@ description: "AI-DLC Construction 阶段路由：条件设计、TDD、自适应�
 | C2 NFR 需求 | `construction-nfr-requirements.md` |
 | C3 NFR 设计 | `construction-nfr-design.md` |
 | C4 基础设施设计 | `construction-infrastructure-design.md` |
-| C5 TDD 与审查 | `construction-shared-contract-baseline.md`（条件） + `construction-code-generation.md` + `construction-tdd.md` + `construction-code-review.md` |
-| C6 调试 | `common-systematic-debugging.md` |
-| C7 全局审查 | `construction-code-review.md` |
+| C5 TDD 与审查 | `construction-shared-contract-baseline.md`（条件） + `construction-code-generation.md` + `construction-tdd.md`；TDD 后以单元双轴模式调用 `aidlc-code-review`，规则由 `construction-code-review.md` 定义 |
+| C6 调试 | 调用 `aidlc-systematic-debugging`；执行规则由 `common-systematic-debugging.md` 定义 |
+| C7 全局审查 | 以最终全局审查模式调用 `aidlc-code-review`；执行规则由 `construction-code-review.md` 定义 |
 | C8 实际构建测试与报告 | `construction-build-and-test.md` + `construction-implementation-report.md` |
 
 条件阈值加载 `common-complexity-assessment.md`，测试范围加载 `common-test-execution-strategy.md`。state.md `UI 设计方式` 为 `figma` 时加载 `common-figma-design-standards.md`；非纯 Web 前端同时加载 `construction-ui-implementation-bridge.md`。分布式项目按 state.md 的实际影响加载运行时依赖、契约、配置和一致性规则；检测到 Spring Cloud/Nacos 证据时才加载对应技术适配。Loeyae Boot 项目按 `construction-loeyae-compliance.md` 渐进加载 MCP 规范；其他技术栈沿用项目已有规范与通用 steering。

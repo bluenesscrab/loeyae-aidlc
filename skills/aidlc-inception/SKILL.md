@@ -18,10 +18,10 @@ description: "AI-DLC Inception 阶段路由：工作区、需求、故事、设�
 | I4 逆向工程 | `inception-reverse-engineering.md`；分布式存量项目按检测结果加载运行时依赖、契约、配置、一致性及技术适配规则 |
 | I5-I6 需求与审查 | `inception-requirements-analysis.md` + `inception-cross-validation.md` |
 | I7-I8 用户故事与审查 | `inception-user-stories.md` + `inception-cross-validation.md` |
-| I9-I10 UI 设计与审查 | `inception-ui-mock.md`（模式路由）+ Figma 条件加载 `inception-ui-figma.md` + `inception-cross-validation.md` |
+| I9-I10 UI 设计与审查 | `inception-ui-mock.md` 选择模式；HTML 使用 `aidlc-ui-mock-design`，Figma 使用 `aidlc-figma-design`；两者共享 `inception-ui-page-planning.md`，I10 加载 `inception-cross-validation.md` |
 | I11 工作流规划 | `inception-workflow-planning.md` |
 | I12 应用设计 | `inception-application-design.md` |
-| I13 测试用例派生 | `test-case-derivation.md` |
+| I13 测试用例派生 | 调用 `aidlc-test-case-derivation`；执行规则由 `test-case-derivation.md` 定义 |
 | I14 单元生成 | `inception-units-generation.md` |
 
 全面深度需求分析所需方法、排序、验证和数据模型文件，由 `inception-requirements-analysis.md` 决定并按需加载。
@@ -31,6 +31,7 @@ description: "AI-DLC Inception 阶段路由：工作区、需求、故事、设�
 - 每步完成执行 `common-step-completion-protocol.md`，只以 `docs/aidlc/state.md` 记录恢复状态。
 - 产物路径按 `common-directory-structure.md`，单模块与多模块不得混用。
 - 创建文件前加载 `common-content-validation.md`。
+- I9 的能力 Skill 只返回设计产物和证据；模式选择、用户审批、state/audit 和 I10 放行仍由本阶段编排。
 - Inception 完成后按 core 的 Construction 入场门禁判断，不自行跳过 I12 或 I14。
 
 **NEXT SKILL:** `aidlc-construction`
