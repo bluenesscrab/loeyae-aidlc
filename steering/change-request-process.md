@@ -215,4 +215,4 @@ CR4 完成权威来源和 Owner 范围内的实际修改后，按 `construction-
 
 > 仅在配置了 SSOT 连接时按需加载,规则见 `common-ssot-integration.md`。
 - CR 流程中可通过 `search_documents`/`retrieve_context` 检索 SSOT 文档作为变更影响分析的参考。
-- AI-DLC 不直接写入 SSOT;CR 产物更新保留在本地,由用户自行决定是否同步至 SSOT。
+- AI-DLC 不直接写入 SSOT;CR 产物更新保留在本地。
