@@ -13,6 +13,7 @@
 | CR-SCB-001 共享契约基线增强 | 2026-08-01T03:50:01Z | `使用 AI-DLC，继续 loeyae-aidlc 的 CR-SCB-001。CR4 就地基线更新已完成；待真实业务项目端到端试运行验证（基线物化 → verified → 消费者解锁）通过 CR5 合并门禁后关闭并创建 commit。不得重复执行已完成的 CR4 阶段。` |
 | UI 设计能力 Skill 化 | 2026-08-06T02:57:03Z | `使用 AI-DLC，继续验证 UI 设计能力 Skill 化。共享页面计划、HTML Mock/Figma 能力 Skill、I9/I10 路由和静态发布包验证已完成；如需发布前增强，仅执行 Kiro、Claude Code、OpenCode 的实际发现烟测。` |
 | P0/P1 Skill 提炼 | 2026-08-06T11:59:09Z | `使用 AI-DLC，继续 P1 Skill 评估。Mermaid 两层规范与五个 P0 能力 Skill 均已实施；三个新增 P0 Skill 已接入 I13/C5/C6/C7，语义复审及静态发布验证通过。待补充 E-001~E-005，或在具备客户端时执行 Kiro、Claude Code、OpenCode 实际发现烟测。` |
+| PRD 流程改造规格 | 2026-08-07 | `使用 AI-DLC，按 docs/aidlc-change-spec.md 实施 CH-01～CH-09。CF-01～CF-10 已全部采用方案 A，DR-01～DR-05 已闭合，规格语义复审判定可进入实施；steering 尚未修改，端到端验收尚未执行。` |
 
 ## 项目信息
 - **项目类型**：存量项目(AI-DLC Power,npm 1.21.2 基线)
@@ -76,6 +77,7 @@
 | CR-SCB-001 | 共享契约基线增强 | partial（CR4 完成，CR5 待完成） | 2026-08-01T03:50:01Z | 规则实施完成；静态验证通过；端到端试运行待完成。证据见 `docs/aidlc/shared-contract-baseline-implementation-plan.md` |
 | I9/I10 治理 | UI 设计能力 Skill 化 | completed | 2026-08-06T02:57:03Z | 两个薄 Skill、共享页面计划、模式 generation 规则及 I10 canonical 对账已完成；semantic_reviewer 复审无阻断项 |
 | I13/C5/C6/C7 治理 | P0 能力 Skill 化 | completed | 2026-08-06T11:59:09Z | 测试用例派生、代码审查、系统化调试薄 Skill 及阶段/子 Agent 接线完成；第三轮语义复审通过 |
+| Inception 流程治理 | PRD 流程改造规格修复与复评 | completed（仅规格） | 2026-08-07 | `docs/aidlc-change-spec.md`、冲突决策与评估报告一致；CF-01～CF-10、DR-01～DR-05 已闭合；steering 实施与端到端验收待执行 |
 
 ## 单元与批次进度
 | 模块 | 服务 | 批次 | 单元 | 状态 | 完成时间 | 验证证据 | 执行者 |
@@ -107,6 +109,7 @@
 | CR-SCB-001 规则实施（阶段 1—7） | 2026-08-01T03:50:01Z | 通过（静态/走查） | `node --check`、CRLF 感知 diff、`npm pack --dry-run`、六类场景走查和治理复核均通过；未运行构建或测试。逐阶段证据见 `docs/aidlc/shared-contract-baseline-implementation-plan.md` |
 | UI 设计能力 Skill 化 | 2026-08-06T02:57:03Z | 通过（静态/语义复审） | `git diff --check`、OpenCode 插件语法、Skill frontmatter/名称、Markdown 内部引用和 `npm pack --dry-run --json` 均通过；发布包 108 项且 5 个新增文件全部包含。未执行三平台实际发现烟测 |
 | Mermaid 规范与剩余 P0 Skill 化 | 2026-08-06T11:59:09Z | 通过（静态/语义复审） | 9 个 Mermaid 块静态风险为 0；10 个 Skill 的 frontmatter、目录名和名称唯一性通过；I13/C5/C6/C7 与子 Agent 接线检查通过；OpenCode 插件语法通过；发布包 113 项且 3 个新 Skill、2 个 Mermaid steering 全部包含。未固定 Mermaid parser，未执行三平台实际发现烟测 |
+| PRD 流程改造规格复评 | 2026-08-07 | 通过（规格语义复审） | CF-01～CF-10 均按方案 A 落地；DR-01～DR-05 闭合；最终 semantic_reviewer 未发现阻断级或高优先级问题并判定可进入实施。仅完成规格设计，steering 实施与端到端验收未执行 |
 
 ## 活跃变更请求
 - **CR-SCB-001 共享契约基线增强**：CR4 就地基线更新已完成；风险 L3；批准基线 `main@4d08c99`（`v1.21.2`）。规则实施和静态验证已完成；CR5 合并门禁（端到端试运行验证）待完成（需真实业务项目物化基线并有不可变 commit）。后续共享契约签名、语义、路径或门禁规则变更须走新的 CR1—CR5。

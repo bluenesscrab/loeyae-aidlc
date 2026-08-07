@@ -20,10 +20,12 @@
 | 2 | 分析用户请求（意图分析） | ✅ | ✅ | ✅ | — |
 | 3 | 确定需求深度 | ✅ | ✅ | ✅ | — |
 | 4 | 评估当前需求 | ✅ | ✅ | ✅ | — |
-| 5 | 专业方法论 | ❌ | ❌ | ✅ | `inception-requirements-methods.md` |
+| 5a | 业务流程图 | ✅ | ✅ | ✅ | `inception-requirements-methods.md` §业务流程图 |
+| 5b | 其他专业方法论（利益相关者/画像/竞品） | ❌ | ❌ | ✅ | `inception-requirements-methods.md` |
 | 6 | 多角色澄清 | ❌ | ✅(3轮) | ✅(5轮+) | — |
 | 7 | 优先级排序 | ❌ | ✅ | ✅ | `inception-requirements-prioritization.md` |
-| 8 | 数据建模 | ❌ | ❌ | ✅ | `inception-requirements-data-model.md` |
+| 8a | 状态流转建模 | 条件 | 条件 | 条件 | `inception-requirements-data-model.md` §状态流转 |
+| 8b | 完整数据建模（ER + 实体字段） | ❌ | ❌ | ✅ | `inception-requirements-data-model.md` |
 | 9 | 5 维度验证 | ❌ | ✅(简化) | ✅(完整) | `inception-requirements-validation.md` |
 | 10 | 迭代回退 | ❌ | ✅ | ✅ | `inception-requirements-validation.md` |
 | 11 | 生成需求文档 | ✅ | ✅ | ✅ | — |
@@ -31,9 +33,9 @@
 | 13 | 记录并继续 | ✅ | ✅ | ✅ | — |
 
 **按需加载规则**：
-- 进入步骤 5 时加载 `inception-requirements-methods.md`
+- 所有深度进入步骤 5a 时加载 `inception-requirements-methods.md` 的业务流程图章节；全面深度继续执行 5b
 - 进入步骤 7 时加载 `inception-requirements-prioritization.md`
-- 进入步骤 8 时加载 `inception-requirements-data-model.md`
+- 所有深度在步骤 8a 先加载 `inception-requirements-data-model.md` 判定状态流转；全面深度继续执行 8b
 - 进入步骤 9 时加载 `inception-requirements-validation.md`
 
 ---
@@ -67,8 +69,8 @@
 ## 步骤 3：确定需求深度
 
 **最小深度** — 请求清晰且简单：
-- 跳过多角色澄清、专业方法论、优先级排序、验证
-- 直接生成需求文档
+- 跳过多角色澄清、其他专业方法论、优先级排序和五维验证
+- 仍执行业务流程图与状态流转适用性判定，再生成需求文档
 
 **标准深度** — 正常复杂度：
 - 执行产品视角 + 用户视角 + 架构视角澄清（3轮）
@@ -76,11 +78,11 @@
 - 执行 5 维度验证（简化版：完整性 + 可验证性）
 
 **全面深度** — 复杂/高风险项目：
-- 执行专业方法论（利益相关者、画像、旅程图、竞品）
+- 执行业务流程图和其他专业方法论（利益相关者、画像、竞品）
 - 执行全部 5 轮+角色澄清（含基于画像的多用户角色视角）
 - 执行优先级排序（MoSCoW + RICE）
 - 执行 5 维度验证（完整版 + 量化评分）
-- 执行数据建模（ER 图 + 状态图）
+- 执行状态流转适用性判定和完整数据建模（ER 图 + 实体字段）
 
 ## 步骤 4：评估当前需求
 
@@ -89,13 +91,9 @@
 - 现有需求文档（如提及则搜索工作区）
 - 粘贴的内容或文件引用
 
-## 步骤 5：专业方法论（仅全面深度）
+## 步骤 5：业务流程图与专业方法论
 
-**加载** `inception-requirements-methods.md` 并执行：
-- 利益相关者分析（Power-Interest 矩阵）
-- 用户画像（3-5 个关键角色）
-- 用户旅程图（核心业务流程）
-- 竞品分析（1-3 个竞品）
+所有深度加载 `inception-requirements-methods.md` 并执行 5a 业务流程图，生成 `requirements/business-flows.md`。全面深度再执行 5b：利益相关者分析、用户画像、用户旅程图和竞品分析。
 
 ---
 
@@ -197,10 +195,9 @@
 - 标准深度：MoSCoW 分类
 - 全面深度：MoSCoW + RICE 评分
 
-## 步骤 8：数据建模（仅全面深度）
+## 步骤 8：状态流转与数据建模
 
-**加载** `inception-requirements-data-model.md` 并执行：
-- 实体识别、ER 图、状态图
+所有深度加载 `inception-requirements-data-model.md`，先执行状态流转触发判定：命中信号时必须生成状态图，未命中时在 `requirements.md` 记录“不涉及状态流转”及依据。全面深度继续执行实体识别、ER 图和实体字段建模。
 
 ## 步骤 9-10：5 维度验证 + 迭代回退（标准 + 全面深度）
 
@@ -215,6 +212,8 @@
 
 创建 `docs/aidlc/inception/requirements/requirements.md`，包含：
 - 意图分析摘要
+- 业务流程图引用：显式引用 `requirements/business-flows.md`，每个 FR 标注所属流程节点
+- 状态流转判定：记录触发及状态图引用，或“不涉及状态流转”及依据
 - 功能需求（按优先级排序，含 GWT 验收标准）
 - 非功能需求（含量化指标）
 - **数据源溯源表**（强制）：每个功能需求对应的数据来源清单
@@ -279,8 +278,9 @@
 | 深度 | 产出物 | 路径 |
 |------|--------|------|
 | 所有 | 需求文档 | `docs/aidlc/inception/requirements/requirements.md` |
+| 所有 | 业务流程图 | `docs/aidlc/inception/requirements/business-flows.md` |
 | 所有 | 澄清问题记录 | `docs/aidlc/inception/requirements/requirement-verification-questions.md` |
-| 全面 | 数据模型 | `docs/aidlc/inception/requirements/data-model.md` |
+| 条件（状态触发）/全面 | 状态模型或完整数据模型 | `docs/aidlc/inception/requirements/data-model.md` |
 | 团队模式 | 决策摘要 | `docs/aidlc/inception/requirements/decision-summary.md` |
 
 ## SSOT 集成(可选)

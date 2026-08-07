@@ -38,11 +38,15 @@
     ├── audit-summary.md
     ├── change-requests/               # 仅 L3+ CR 暂态文件；完成后删除
     ├── inception/
+    │   ├── scenario-manifest.md        # I3 产物
+    │   ├── prd.md                      # 条件，I15 产物
     │   ├── plans/
     │   ├── reverse-engineering/
-    │   ├── system-baseline/           # 条件
+    │   ├── system-baseline/            # 条件
     │   ├── requirements/
+    │   │   └── business-flows.md       # I5 强制产物
     │   ├── user-stories/
+    │   │   └── role-permission-matrix.md # I7 强制产物
     │   ├── ui-mock/                  # HTML Mock 条件；每端必须含 {端}-page-specs.md + 对应 HTML
     │   └── application-design/
     │       ├── test-cases/
@@ -76,7 +80,11 @@
     │   ├── modules.md
     │   ├── contracts.md
     │   ├── decision-summary.md
-    │   └── system-baseline/           # 条件，产品级唯一维护
+    │   ├── scenarios/
+    │   │   └── <scenario-id>/
+    │   │       ├── scenario-manifest.md
+    │   │       └── prd.md              # 条件，I15 产物
+    │   └── system-baseline/            # 条件，产品级唯一维护
     ├── modules/
     │   └── <module-name>/
     │       ├── inception/
@@ -86,6 +94,8 @@
 
 ## 多模块规则
 
+- 场景目录仅存放跨模块视图产物（`scenario-manifest.md`、`prd.md`）；I5-I10 产物一律按模块归档，禁止按场景归档。
+- PRD 是汇编视图而非基线；禁止在场景目录保存与模块级产物内容重复的需求、故事或页面规格文件。
 - 产品边界和跨边界契约索引只在 `product/contracts.md` 维护；完整机器契约留在项目既有事实来源。
 - 服务目录和运行时关系只在产品级系统基线维护，模块级产物引用相关切片。
 - 模块级 Inception/Construction 结构与单模块对应阶段一致，但不重复系统基线。
