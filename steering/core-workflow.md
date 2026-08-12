@@ -27,7 +27,7 @@
 | 启动 | 本文件；首次启动再加载 `common-welcome-message.md` |
 | 配置了 SSOT 连接时 | `common-ssot-integration.md` |
 | I3 场景分析与模块映射 | `product-scenario-module-mapping.md` |
-| 用户选择产出 PRD | `product-prd-assembly.md` |
+| 用户选择产出 PRD 或独立生成 PRD | `product-prd-generation.md` |
 | I9 选择 Figma 模式 | `inception-ui-figma.md` |
 | state.md `UI 设计方式` 为 `figma` | `common-figma-design-standards.md` |
 | 工作区检测后 | `common-complexity-assessment.md` |
@@ -57,11 +57,12 @@
 | 缺陷修复 | 修复已批准需求/故事/契约中的错误实现，不改变产品语义 | 受影响 Construction 步骤（不进入 CR） |
 | 无行为重构 | 不改变外部行为，仅改善内部结构 | 受影响 Construction 步骤 + 影响域验证（不进入 CR） |
 | 在途产品协调 | 需求、故事、UI 或设计存在差异，且受影响范围尚无代码基线 | `common-workflow-changes.md`（用户裁决、就地协调、受影响步骤重审） |
-| 业务方 PRD 评审意见回流 | PRD 已发出且业务方提出内容变更 | 无代码基线按 `common-workflow-changes.md` 回流 I5-I10；有代码基线按 CR1-CR5；两者均重新执行 I15/I16，禁止只改 PRD |
+| 业务方 PRD 评审意见回流 | PRD 已发出且业务方提出内容变更 | 无代码基线按 `common-workflow-changes.md` 协调后通过 `product-prd-generation.md` Patch 模式更新 PRD；有代码基线按 CR1-CR5 |
 | 需求/契约变更 | 改变已有代码基线的行为、验收标准、接口契约或数据语义 | CR1-CR5（PR 模型） |
 | 合并历史 CR | 合并历史CR文档、清理遗留CR文件 | `change-request-process.md` §历史CR文档批量合并 |
 | 压缩 state | 压缩state、精简state | `inception-state-template.md` §state.md 压缩规则 |
 | 新增功能 | 新功能且现有产物中不存在 | Inception 追加模式 |
+| 生成 PRD | 生成PRD、写PRD、产品需求文档 | `product-prd-generation.md` |
 | 新项目 | 无 state.md | Inception |
 
 ## Inception 路由
@@ -80,8 +81,8 @@
 | I8 | 用户故事审查 | I7 完成 | 🔴 | `inception-cross-validation.md`（c/d） |
 | I9 | UI 设计 | 用户选择且存在界面需求 | 🔴 | `inception-ui-mock.md`（路由入口）→ Figma 模式加载 `inception-ui-figma.md` |
 | I10 | UI 设计审查 | I9 已执行 | 🔴 | `inception-cross-validation.md`（e） |
-| I15 | PRD 汇编 | 用户选择产出 PRD，且主模块业务产物门禁已完成；次要模块未完成部分按 `product-prd-assembly.md` 显式标注 | 🔴 | `product-prd-assembly.md` |
-| I16 | PRD 一致性审查 | I15 已执行 | 🔴 | `inception-cross-validation.md`（g） |
+| I15 | PRD 生成 | 用户选择产出 PRD | 🔴 | `product-prd-generation.md` |
+| I16 | PRD 审查 | I15 已执行且用户要求审查 | 🔴 | `inception-cross-validation.md`（g） |
 | I11 | 工作流规划 | 标准/完整流程，且（未选择产出 PRD 或 I16 已通过） | 🔴 | `inception-workflow-planning.md` |
 | I12 | 应用设计 | 新接口、跨模块/服务、多端、复杂业务规则，或契约/共享配置/迁移/一致性/外部故障行为变化 | 🟡 | `inception-application-design.md` |
 | I13 | 测试用例派生 | 产品用例具备 I7+I12；或技术用例具备已批准风险来源与可执行锚点 | 🟡 | `test-case-derivation.md` |
@@ -89,13 +90,17 @@
 
 业务产物门禁完成后，无论此前是否提及 PRD，都必须先询问用户是否产出 PRD，并将“需要 / 不需要”写入 state.md。该决策检查点位于 I15 之外：选择“需要”才执行 I15/I16；选择“不需要”则记录跳过依据并直接继续 I11，不创建 PRD 文件或占位目录。
 
-I15/I16 的执行时机为业务产物门禁完成后、I11 之前，不按编号顺序执行。业务产物门禁完成 = I8 已通过，且执行了 I9 时 I10 也已通过；I9 不适用时记录不适用依据。若用户选择产出 PRD，则 I16 未通过时 I11 阻断。
+I15 采用独立生成流程（`product-prd-generation.md`），支持 SSOT 优先检索和已有 Inception 产物增强，无硬性前置步骤依赖。I16 为可选审查步骤：用户要求审查时执行。
+
+I15/I16 的执行时机为业务产物门禁完成后、I11 之前，不按编号顺序执行。业务产物门禁完成 = I8 已通过，且执行了 I9 时 I10 也已通过；I9 不适用时记录不适用依据。
+
+PRD 也可独立于 Inception 流程执行：用户直接要求"生成 PRD"时，通过意图路由进入 `product-prd-generation.md`，无需前置 I5-I10。
 
 快速通道的最小需求确认和跳过条件以 `common-complexity-assessment.md` 为准。多模块的模块级产物路径以 `common-directory-structure.md` 为准。
 
 ## Construction 入场门禁
 
-若存在新接口、跨模块/服务调用、多端改动、复杂业务规则，或契约、共享配置、数据迁移、一致性、外部故障行为变化，I12 必须完成；若工作量超出单次执行范围、需多个工作单元或跨服务协调，I14 必须完成。若已选择产出 PRD 且 I16 未通过，Construction 入场阻断并返回 I16。缺失时阻断并返回对应 Inception 步骤。
+若存在新接口、跨模块/服务调用、多端改动、复杂业务规则，或契约、共享配置、数据迁移、一致性、外部故障行为变化，I12 必须完成；若工作量超出单次执行范围、需多个工作单元或跨服务协调，I14 必须完成。缺失时阻断并返回对应 Inception 步骤。
 
 ## Construction 路由
 
