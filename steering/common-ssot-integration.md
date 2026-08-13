@@ -40,7 +40,17 @@ AI-DLC 仅允许调用以下只读工具:
 
 ### 读取(只读,成员即可)
 - `get_document(project_id, document_id, revision_id?, content_offset?, max_content_chars?)`:读文档。长正文必须分页;首次取得 `revision.id` 后,后续页固定该 `revision_id`,按 `next_offset` 继续,直到 `has_more=false`,避免当前版本切换导致漂移。
-- `list_documents(project_id, type?, status?, limit?, offset?)`:列文档;先检查 `parsed_status/parsed_error/attempt_count/chunk_count`,仅 `indexed` 且 `chunk_count>0` 可视为可检索。
+- `list_documents(project_id, type?, status?, title?, limit?, offset?)`:列文档;`title` 为标题模糊过滤（包含匹配，大小写不敏感）。先检查 `parsed_status/parsed_error/attempt_count/chunk_count`,仅 `indexed` 且 `chunk_count>0` 可视为可检索。
+
+  | 参数 | 类型 | 必填 | 说明 |
+  |------|------|:----:|------|
+  | project_id | int | ✅ | 项目 ID |
+  | type | string | ❌ | 文档类型过滤 |
+  | status | string | ❌ | 文档状态过滤 |
+  | title | string | ❌ | **标题模糊过滤**（包含匹配，大小写不敏感） |
+  | limit | int | ❌ | 分页大小，默认 20 |
+  | offset | int | ❌ | 分页偏移，默认 0 |
+
 - `get_revision_file(project_id, document_id, revision_id?)`:取原文(图片 base64 长边≤1568px / 文档中转下载 URL);viewer 拒绝(FR-015)。
 
 ### 禁止调用的工具
@@ -58,6 +68,30 @@ AI-DLC 仅允许调用以下只读工具:
 SSOT 文档的创建与维护由用户通过 Web Portal 或其他授权渠道完成,AI-DLC 不代替用户执行文档写入操作。
 
 ## 三、检索上下文规则
+
+### 文档定位策略
+
+| 场景 | 推荐工具 |
+|------|----------|
+| 知道文件名（完整或部分关键词） | `list_documents({ title: "关键词" })` |
+| 按内容/语义查找 | `search_documents` |
+| 浏览全部文档 | `list_documents`（不传 title） |
+| 已知 document_id | `get_document` 直接读取 |
+
+典型用法：
+
+```
+# 记得大概文件名
+list_documents({ project_id: 1, title: "SDK web" })
+→ 找到 document_id
+→ get_document({ project_id: 1, document_id: xxx })
+
+# 只记得关键词
+list_documents({ project_id: 1, title: "支付" })
+→ 返回所有标题含"支付"的文档，从中选择目标
+```
+
+### 检索规则
 
 1. **先定位再取文**:先用 `search_documents` 传入明确字符预算、`per_document_limit` 和可用的 `document_ids/folder_path` 收窄范围;只有命中片段不足以支撑结论时才调用 `get_document` 分页读取正文。
 2. **预算由消费方决定**:根据当前模型剩余上下文预留回答与工具开销,将可用 Token 保守换算为字符预算并传给服务端;不得通过提高默认返回量规避规划。若 `truncated=true`,应缩小检索范围、继续分页或分轮检索,不得静默当作完整资料。
