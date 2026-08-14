@@ -60,18 +60,31 @@
 
 基于表达目的选择图类型，不基于用户随意指定：
 
-| 表达目的 | 首选设计语义 | 当前 Mermaid 常用实现 | 适用示例 |
-|----------|------------|----------------------|----------|
-| 系统整体结构和边界 | Architecture | `flowchart` + subgraph | 系统上下文、容器架构 |
+| 表达目的 | 首选设计语义 | Mermaid 实现（按语义优先级） | 适用示例 |
+|----------|------------|------------------------------|----------|
+| 系统整体结构和边界 | Architecture | `C4Context` > `C4Container` > `flowchart` + subgraph | 系统上下文、容器架构 |
 | 业务步骤、决策、循环 | Flowchart | `flowchart` | 审批流程、数据处理管线 |
 | 按时间发生的多方交互 | Sequence | `sequenceDiagram` | API 调用链、消息流 |
 | 实体生命周期和状态迁移 | State | `stateDiagram-v2` | 订单状态、任务状态 |
 | 数据实体和基数关系 | ER | `erDiagram` | 数据模型、概念模型 |
-| 部署拓扑和运行时环境 | Deployment | `flowchart` + subgraph | 服务部署、网络拓扑 |
+| 部署拓扑和运行时环境 | Deployment | `C4Deployment` > `architecture-beta` > `flowchart` + subgraph | 服务部署、网络拓扑 |
 | 类型、接口和继承关系 | Class | `classDiagram` | 领域模型、组件接口 |
 | AI/RAG 数据处理链路 | Pipeline | `flowchart LR` | Embedding → Retrieval → Generation |
+| 容器内部组件结构 | Component | `C4Component` > `flowchart` + subgraph | 单服务模块划分 |
+| 云/基础设施资源关系 | Infrastructure | `architecture-beta` > `flowchart` + subgraph | 云架构、CI/CD |
 
-设计语义与 Mermaid 实现是分离的。例如 Architecture 是设计目的，不等同于 Mermaid `flowchart`；当 Mermaid 无法充分表达某设计语义时，应降级或拆图，而非强行塞入不合适的图类型。
+设计语义与 Mermaid 实现是分离的。表中的优先级符号 `>` 表示：左侧图类型语义能力更强，在目标环境验证可用时优先选择；如果目标环境不支持或渲染不可靠，则降级到右侧方案。
+
+### Architecture 图类型选择原则
+
+Architecture 图不等同于 `flowchart`。选择 Architecture 的 Mermaid 实现时：
+
+1. **首先判断语义**：这是"系统结构"还是"处理流程"？
+   - 系统结构（什么组件在这里、边界在哪里）→ Architecture 语义 → 优先 C4 图类型；
+   - 处理流程（数据怎么流动、经过哪些步骤）→ Pipeline/Flowchart 语义 → 使用 `flowchart`。
+2. **不因节点多就退化为流程图**：节点多时应拆图（Overview + Detail），而非把架构画成流水线。
+3. **同时存在 Architecture 和 Pipeline 两种语义时**：优先考虑 Overview + Detail 拆图——Overview 负责 Architecture，Detail 负责 Pipeline。
+4. **环境验证**：使用 C4 或 architecture-beta 前，确认目标环境支持（参见 `common-mermaid-diagram-standards.md` 的 Mermaid 能力验证章节）。
 
 当表达目的不明确时，先确认目的再选择图类型。用户指定的图类型与目的冲突时，说明推荐类型和理由，由用户决定。
 
@@ -225,7 +238,7 @@ subgraph 本身默认不是业务实体或组件。除非聚合后的职责域�
 - 主流程节点在图的主干线上，从入口到出口保持单一方向；
 - 辅助节点（错误处理、可选分支）偏离主干；
 - 外部系统和数据存储放在图的边缘或底部；
-- 使用 subgraph 分组稳定的职责边界，嵌套不超过两层。
+- 使用 subgraph 或 Boundary 分组稳定的职责边界，嵌套不超过两层。
 
 ### 节点密度
 
@@ -264,6 +277,21 @@ subgraph 本身默认不是业务实体或组件。除非聚合后的职责域�
 
 核心原则：**核心路径必须具有最高视觉优先级。** 辅助信息不得干扰对主干结构的理解。
 
+### Architecture 视觉质量要求
+
+对于 Architecture 图，优先考虑以下视觉质量目标：
+
+1. **清晰的系统边界**：系统内外必须有明确的视觉分隔（Boundary、subgraph 或分组）；
+2. **明确的层级**：组件之间的层次关系（调用方/被调用方、上下游）通过布局位置体现；
+3. **参与者区分**：外部参与者（Person、外部系统）与系统内部组件有视觉区分——C4 图类型天然支持，flowchart 中通过节点形状区分；
+4. **数据存储区分**：数据库/存储节点与服务节点有视觉区分——C4 使用 ContainerDb/ComponentDb，flowchart 使用圆柱形节点；
+5. **主次关系**：核心依赖使用实线，次要或可选依赖使用虚线或更细连线；
+6. **避免蜘蛛网**：当连线交叉超过 3 处时，优先拆图而非调整布局；
+7. **避免把 Architecture 画成 Pipeline**：Architecture 图展示"什么在这里"，不是"数据怎么流"——如果图看起来像流水线，检查是否应该拆分为 Architecture + Pipeline；
+8. **避免拥挤**：单个 subgraph/Boundary 内节点不超过 6 个；超过时考虑进一步拆分或抽象；
+9. **利用图类型能力**：C4 图类型本身提供 Person/System/Container/Component 等语义区分，应充分利用而非仅用标签文字区分；
+10. **架构可读性优先**：图表应优先追求"架构可读性"——即读者能快速理解系统结构——而不是单纯语法正确。
+
 ### Architecture Quick Scan
 
 架构图应能在约 3 秒内让读者识别：
@@ -286,6 +314,13 @@ subgraph 本身默认不是业务实体或组件。除非聚合后的职责域�
 - 一个 Markdown 文件可包含多张图，每张图有独立标题；
 - Kiro Markdown Mermaid Preview 为默认预览方式。
 
+### SVG 定位
+
+SVG 是渲染中间产物或交付产物，不是 Markdown 默认源文件格式：
+
+- 默认文档产物为 Markdown + Mermaid fenced code block；
+- 仅以下情况生成 SVG：用户明确要求、Mermaid CLI 验证、DOCX/PDF 导出流程、其他明确要求图片文件的交付流程。
+
 ### 禁止默认生成
 
 - 不得默认生成 SVG、PNG 或 PDF；
@@ -306,6 +341,7 @@ subgraph 本身默认不是业务实体或组件。除非聚合后的职责域�
 | 信息结构不适合任何图类型 | 分层表格 + 编号列表 |
 | 单图节点超过 25 且无法按业务边界拆分 | 多级表格 + 正文描述 |
 | Mermaid 语法无法表达目标关系 | 正文描述 + 参考外部工具建议 |
+| 高级图类型（C4、architecture-beta）在目标环境验证失败 | 降级为 `flowchart` + subgraph |
 
 降级后的内容必须保留完整的业务语义。
 
@@ -326,6 +362,7 @@ subgraph 本身默认不是业务实体或组件。除非聚合后的职责域�
    - 是否存在不同语义的连线交汇（Architecture 连线与 Pipeline 连线混在一起）？
    - 是否需要读者在不同区域之间来回跳跃才能理解主干？
    - 拆成多图是否能够明显提升理解效率？
+8. **语义混合检查**：Architecture 图是否混入了 Pipeline 语义？是否需要 Overview + Detail 拆分？
 
 自检未通过时修复后再输出。无法修复时说明原因并提供降级方案。
 
@@ -355,8 +392,15 @@ subgraph 本身默认不是业务实体或组件。除非聚合后的职责域�
 
 验证层级沿用 `common-mermaid-diagram-standards.md` 的定义：
 
-1. 静态结构检查 → 记录为"静态检查通过"；
-2. 固定版本 Mermaid 解析器验证 → 记录为"语法解析通过"；
-3. 目标平台实际渲染 → 记录为"目标渲染通过"。
+1. Level 1：静态结构检查 → 记录为"静态检查通过"；
+2. Level 2：Mermaid CLI 语法解析 → 记录为"CLI 语法解析通过"；
+3. Level 3：Mermaid CLI 实际 SVG 渲染 → 记录为"CLI 渲染通过"；
+4. Level 4：Kiro Markdown Mermaid Preview 实际视觉检查 → 记录为"Preview 渲染通过"。
 
-不为验证目的自动生成 SVG。仓库未固定解析器版本时必须明确"未执行真实语法解析"。
+验证环境优先级：
+
+- 最终目标为 DOCX/PDF 交付时：Level 3（Mermaid CLI SVG 渲染）必须通过；
+- Kiro 内部 Markdown 使用：至少完成 Level 1，条件允许时执行 Level 2；
+- 无法执行 Mermaid CLI 时必须明确标记"未执行真实渲染验证"。
+
+不为验证目的自动生成 SVG（除非是 Level 3 验证本身）。

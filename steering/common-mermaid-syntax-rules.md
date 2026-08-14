@@ -2,7 +2,7 @@
 
 ## 适用范围
 
-本文件定义 `common-mermaid-diagram-standards.md` 所要求的默认可移植语法子集。规则目标是降低 GitHub Markdown 与常见 IDE 渲染器之间的解析差异，不承诺所有 Mermaid 版本视觉完全一致。
+本文件定义 `common-mermaid-diagram-standards.md` 所要求的语法规则。规则目标是确保 Mermaid 代码在项目目标环境（Kiro Markdown Mermaid Preview + 项目 Mermaid CLI）中可靠解析和渲染，不承诺所有第三方平台视觉完全一致。
 
 ## 通用规则
 
@@ -37,7 +37,8 @@ flowchart TD
 - 子图内部方向仅作布局提示；存在跨子图连线时不得依赖其一定生效。
 - 默认只使用 `-->` 和带文本的 `-->|"标签"|`；虚线或粗线仅在正文定义了明确语义时使用。
 - 不使用隐形连线调整布局；布局不理想时拆图或简化关系。
-- 默认不使用 HTML 标签、Markdown Strings、新版 `@{ shape: ... }`、click、动画或外部资源。
+- 默认不使用 HTML 标签、click、动画或外部资源。
+- Mermaid frontmatter 和初始化 directive 可在目标 Mermaid 版本支持时使用。
 
 ## Sequence Diagram
 
@@ -118,6 +119,118 @@ classDiagram
 - 只表达已确认的继承、实现、组合或依赖，不从目录结构猜测关系。
 - 复杂签名、泛型和注解放入正文，避免解析器版本差异。
 
+## C4 Diagram
+
+C4 图类型（C4Context、C4Container、C4Component、C4Dynamic、C4Deployment）在目标环境验证可用后允许使用。语法兼容 C4-PlantUML。
+
+### C4Context 安全骨架
+
+```mermaid
+C4Context
+    title 系统上下文图
+
+    Person(user, "用户", "使用系统的最终用户")
+    System(system, "目标系统", "核心业务系统")
+    System_Ext(ext_system, "外部系统", "第三方服务")
+
+    Rel(user, system, "使用")
+    Rel(system, ext_system, "调用")
+```
+
+### C4Container 安全骨架
+
+```mermaid
+C4Container
+    title 容器图
+
+    Person(user, "用户", "使用系统的最终用户")
+
+    System_Boundary(system_boundary, "目标系统") {
+        Container(web_app, "Web 应用", "React", "提供用户界面")
+        Container(api, "API 服务", "Spring Boot", "提供业务 API")
+        ContainerDb(db, "数据库", "PostgreSQL", "存储业务数据")
+    }
+
+    Rel(user, web_app, "访问", "HTTPS")
+    Rel(web_app, api, "调用", "JSON/HTTPS")
+    Rel(api, db, "读写", "JDBC")
+```
+
+### C4Component 安全骨架
+
+```mermaid
+C4Component
+    title 组件图
+
+    Container_Boundary(api_boundary, "API 服务") {
+        Component(controller, "Controller", "Spring MVC", "处理 HTTP 请求")
+        Component(service, "Service", "Spring Bean", "业务逻辑")
+        Component(repo, "Repository", "Spring Data", "数据访问")
+    }
+
+    Rel(controller, service, "调用")
+    Rel(service, repo, "调用")
+```
+
+### C4Deployment 安全骨架
+
+```mermaid
+C4Deployment
+    title 部署图
+
+    Deployment_Node(prod, "生产环境", "Linux") {
+        Deployment_Node(k8s, "Kubernetes Cluster") {
+            Container(api, "API 服务", "Spring Boot")
+        }
+        Deployment_Node(db_server, "数据库服务器") {
+            ContainerDb(db, "PostgreSQL", "数据库")
+        }
+    }
+
+    Rel(api, db, "连接", "JDBC")
+```
+
+### C4 规则
+
+- 图类型声明使用 `C4Context`、`C4Container`、`C4Component`、`C4Dynamic` 或 `C4Deployment`，独占首行。
+- 使用 `title` 声明图标题。
+- Person/System/Container/Component 等元素的第一个参数为 alias（ASCII 标识符），后续参数为展示信息。
+- 中文展示文本使用双引号包裹。
+- 边界使用 `System_Boundary`、`Container_Boundary`、`Enterprise_Boundary` 或 `Deployment_Node`，以花括号包裹内部元素。
+- 关系使用 `Rel(from, to, label)` 或 `Rel(from, to, label, techn)` 格式。
+- 布局不使用 `Lay_*` 系列语句（Mermaid 不支持）；通过语句顺序调整位置。
+- 可使用 `UpdateLayoutConfig` 调整每行节点数和边界数。
+- 可使用 `UpdateRelStyle` 和 `UpdateElementStyle` 微调样式。
+- 不使用 sprite、tags、link 等 Mermaid 尚未支持的 C4-PlantUML 特性。
+
+## Architecture Diagram (architecture-beta)
+
+`architecture-beta` 在目标环境验证可用后允许使用。适用于云服务/CI-CD/基础设施资源关系。
+
+### architecture-beta 安全骨架
+
+```mermaid
+architecture-beta
+    group api(cloud)[API]
+
+    service db(database)[Database] in api
+    service server(server)[Server] in api
+
+    db:L -- R:server
+```
+
+### architecture-beta 规则
+
+- 图类型声明使用 `architecture-beta`，独占首行。
+- 使用 `group` 定义分组，`service` 定义服务节点，`junction` 定义连接分叉点。
+- 图标使用内置图标（cloud、database、disk、internet、server）；使用其他 Iconify 图标需确认项目已注册对应 icon pack。
+- 标签使用方括号 `[Label]` 包裹，图标使用圆括号 `(icon)` 包裹。
+- 边的方向使用 `:{T|B|L|R}` 指定出入端口。
+- 箭头使用 `<` 和 `>` 表示方向：`-->` 单向，`<-->` 双向，`--` 无方向。
+- group 内可嵌套 group，service 通过 `in group_id` 指定归属。
+- 不要将关系连接到 group 本身；使用 `{group}` 修饰符从 group 边缘出入。
+- 可使用 `%%{init: {"architecture": {...}}}%%` frontmatter 配置布局参数。
+
 ## 静态检查清单
 
 写入前至少检查：
@@ -126,17 +239,18 @@ classDiagram
 - [ ] 图类型和方向已显式声明；
 - [ ] ID 唯一并符合 ASCII 命名规则；
 - [ ] 展示标签中的中文、空格和特殊字符已安全包裹；
-- [ ] 连线只引用 ID；
-- [ ] 子图具有稳定 ID 且 `end` 配对；
+- [ ] 连线只引用 ID（flowchart）或 alias（C4）；
+- [ ] 子图/边界具有稳定 ID 且闭合配对（`end` 或 `}`）；
 - [ ] 注释使用 `%%`，无 `#` 伪注释；
 - [ ] 无小写 `end` 歧义、`数字. 空格` 标签或连接符后的 `o/x` 歧义；
-- [ ] 无默认禁用的 HTML、交互、新版专属或外部资源特性；
-- [ ] 图表语义与相邻正文一致，未引入未批准内容。
+- [ ] 无默认禁止的交互或外部资源特性；
+- [ ] 图表语义与相邻正文一致，未引入未批准内容；
+- [ ] C4/architecture-beta 图类型未使用目标 Mermaid 版本不支持的特性。
 
-静态检查不能替代 Mermaid parser。仓库未固定解析器版本时，必须明确记录“未执行真实语法解析”。
+静态检查不能替代 Mermaid parser。无法执行 Mermaid CLI 验证时，必须明确记录"未执行真实语法解析"。
 
 ## 技术依据
 
-- Mermaid 官方 Diagram Syntax 与各图类型文档；
-- GitHub “Creating diagrams” 对 Mermaid fenced code block 和版本差异的说明；
+- Mermaid 官方 Diagram Syntax 与各图类型文档（含 C4 和 Architecture Diagrams）；
+- Mermaid C4 语法兼容 C4-PlantUML 的已支持子集；
 - `axton-obsidian-visual-skills`（MIT）仅作为常见错误与可读性参考，未直接采用其相互冲突或平台专属规则。
