@@ -223,7 +223,19 @@
 
 ## 步骤 6：生成工作流可视化
 
-加载 `common-mermaid-diagram-standards.md`，并在实际生成语法时加载 `common-mermaid-syntax-rules.md`。创建 Mermaid 流程图展示：
+当执行计划存在多阶段、并行任务、条件分支、依赖或跨角色执行时，调用 `aidlc-diagram-design` 生成工作流图：
+
+- `source/context`：步骤 3-5 确定的阶段列表、条件和依赖关系；
+- `diagram intent`：展示执行计划的阶段顺序、依赖和关键分支；
+- `approved facts`：已确定的待执行阶段、跳过阶段及其原因、依赖关系；
+- `diagram_type`：Flowchart；
+- `target artifact`：`docs/aidlc/inception/plans/execution-plan.md`。
+
+Kiro Power 形态降级为直接加载 `common-diagram-design-standards.md` 执行。
+
+如果计划仅为简单线性顺序且无条件分支，可使用编号列表代替图表，不强制生成。
+
+图中展示：
 
 - 所有阶段的执行顺序；
 - 条件阶段的执行或跳过决策；

@@ -18,7 +18,7 @@ loeyae-aidlc/
 │   ├── inception-*.md
 │   ├── construction-*.md
 │   └── operations-*.md
-├── skills/                           # 平台无关薄入口
+├── skills/                           # 平台无关薄入口（含独立 Diagram Design 能力）
 ├── agents/                           # 平台无关子 Agent 指令
 │   ├── orchestrator.md
 │   └── batch-executor.md

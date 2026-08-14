@@ -41,11 +41,40 @@
 | 多模块项目执行审计、自检、交叉验证或批量修复 | `common-module-scope-guard.md` |
 | TDD、构建测试 | `common-test-execution-strategy.md` |
 | 存量分布式系统 | 按需加载 `common-runtime-dependency-analysis.md`、`common-contract-governance.md`、`common-configuration-governance.md`、`common-distributed-consistency.md` |
+| 需要图表设计时 | `common-diagram-design-standards.md` |
 | 检测到技术栈证据 | 按 state.md 加载对应的 `common-tech-*` 条件适配 |
 
 禁止启动时预加载全部规则。目录、审计、协作、提问和交接分别按 `common-directory-structure.md`、`common-audit-logging.md`、`common-team-collaboration.md`、`common-question-format-guide.md`、`common-session-handoff.md` 按需加载。
 
 规则中出现的 `aidlc-*` 能力调用只是平台入口。当前平台不提供 Skill 发现能力时（例如 Kiro Power 形态只装载 `steering/`），直接加载该能力对应的 steering 执行，输入要求、输出内容和质量门禁均不变。能力入口缺失不构成跳过步骤的理由。
+
+## Diagram Invocation Protocol
+
+Phase 产物需要图表时，按以下协议调用 `aidlc-diagram-design`（独立 Capability，不是 Phase）：
+
+1. Phase 判断当前产物是否需要图表——满足以下任一条件时考虑调用：
+   - 存在复杂系统结构或多组件依赖；
+   - 存在分支/循环流程；
+   - 存在多方时序交互；
+   - 存在状态迁移或生命周期；
+   - 图比文字/表格明显更容易理解；
+   - 用户明确要求图表。
+2. Phase 准备 Diagram Request：
+   - `source/context`：当前 Phase 已确认的语义上下文；
+   - `diagram intent`：这张图帮助读者理解什么（一句话）；
+   - `approved facts`：已确认的组件、实体、关系和规则——事实边界，Diagram Capability 不得自行创造业务事实；
+   - `target artifact`：图写入的目标产物路径；
+   - `diagram_type`（可选）：偏好类型，默认 `auto`；
+   - `constraints`（可选）：当前阶段特殊约束。
+3. 调用 `aidlc-diagram-design`，传入上述 Request。
+4. 接收 Diagram Result（Mermaid Markdown + Design Notes + Validation + Assumptions）。
+5. Phase 将 Mermaid 写入自己的目标产物，继续原有审批和流程。
+
+每张具有不同语义目的的图应单独调用，不要在一次调用中合并多个独立语义视角。
+
+不需要图表时（简单字段列表、两实体简单关系、纯线性步骤、事实不足）正常使用文字或表格，不强制调用。
+
+图类型选择、节点识别、语义拆分、粒度、布局、QA 和 Mermaid 语法由 Diagram Capability 及其加载的 steering 规则负责，Phase 不得重复定义。
 
 ## 意图路由
 

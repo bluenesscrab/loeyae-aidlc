@@ -18,7 +18,14 @@
 | C 端/最终用户流程图 | 存在最终用户交互 | 完整用户路径、反馈和异常 |
 | 跨系统端到端流程图 | 涉及外部系统 | 系统边界、调用方向和数据流向 |
 
-全部流程图使用 Mermaid；创建或修改时加载 `common-mermaid-diagram-standards.md` 和 `common-mermaid-syntax-rules.md`。禁止 ASCII 图和外部图片链接。
+全部流程图通过调用 `aidlc-diagram-design` 生成。每张流程图单独调用，Diagram Request 包含：
+- `source/context`：已确认的业务需求和业务规则；
+- `diagram intent`：明确希望读者理解的业务行为（如"展示运营端从入口到完成的操作流程"）；
+- `approved facts`：已确认的角色、步骤、系统、判定条件和异常路径；
+- `diagram_type`：Flowchart（默认）或 Sequence（跨系统时序场景）；
+- `target artifact`：`<inception-root>/requirements/business-flows.md`。
+
+Kiro Power 形态降级为直接加载 `common-diagram-design-standards.md` 执行。Phase 不重复定义图类型选择、Mermaid 语法或布局规则。
 
 内容约束：
 

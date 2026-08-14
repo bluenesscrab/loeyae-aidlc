@@ -113,6 +113,7 @@
 如果步骤 8 的分析发现任何含糊答案，必须：
 - 使用 [回答]: 标签在计划文档中添加具体的后续问题
 - 在所有歧义解决前不得继续审批
+- **需求歧义回退**：如果发现的歧义本质上是**业务需求不清晰**（如核心业务规则未定义、用户角色职责不明、验收标准缺失），而非设计方案的技术选型，必须告知用户"此问题属于需求层面歧义，建议回到需求文档补充澄清后再继续设计"，并标记为需求回退项。不得在设计阶段自行假设需求答案。
 - 需要后续问题的示例：
   - "你提到'混合 A 和 B' — 什么具体标准决定何时使用 A vs B？"
   - "你说'介于 A 和 B 之间' — 能定义确切的中间方式吗？"
@@ -135,14 +136,18 @@
   - 边界内编排职责
   - 组件交互和用例编排
 - 创建 `docs/aidlc/inception/application-design/component-dependency.md`，包含：
-  - 显示关系的依赖矩阵
+  - 显示关系的依赖矩阵（表格）
   - 组件间通信模式
-  - 数据流图
+  - 组件依赖图和数据流图——调用 `aidlc-diagram-design`：
+    - 依赖图：`intent` = 展示组件依赖方向和职责边界；`diagram_type` = auto
+    - 数据流图：`intent` = 展示数据在组件、服务和存储之间的流转；`diagram_type` = auto
+    - `approved facts` = 步骤 10 已生成的组件、方法和服务定义
+    - Kiro 降级：加载 `common-diagram-design-standards.md` 执行
 
 **前端设计产物**（如项目包含前端）：
 - 创建 `docs/aidlc/inception/application-design/frontend-components.md`，包含：
   - 页面组件拆分方案
-  - 组件层级关系图
+  - 组件层级关系图——调用 `aidlc-diagram-design`：`intent` = 展示前端组件层级和复用关系；`approved facts` = 已确认的页面和组件列表
   - 公共组件复用策略
 - 创建 `docs/aidlc/inception/application-design/frontend-routes.md`，包含：
   - 路由结构设计
