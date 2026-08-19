@@ -16,7 +16,13 @@
 2. 目标平台**非纯 Web**（即非 Vue3+ElementPlus 这类纯浏览器方案）
 3. 存在 UI 设计产物（state.md 的 `## UI 设计` 区块中 `UI 设计方式` 为 `html-mock` 或 `figma`）
 
-**纯 Web 项目**（PC 端 Vue3、React SPA 等）：CSS 语义与设计产物一致，无需翻译层，跳过本流程。
+**纯 Web 项目**（PC 端 Vue3、React SPA 等）：CSS 语义与设计产物一致，无需跨端翻译层（组件映射表 + frontend-platform-spec.md），跳过本流程的第一至第三部分。
+
+⚠️ **纯 Web ≠ 不对齐设计**：纯 Web 项目仍必须执行以下视觉还原约束（定义在 `construction-code-generation.md` 步骤 12 和 `construction-code-review.md` Spec Axis 中）：
+- Mock/设计稿中的样式值（色值、圆角、字号、间距、字体）是视觉实现的唯一权威来源
+- 项目存在全局设计 token 文件（如 `style-anchor.css`）时，组件样式必须引用对应 CSS 变量，禁止硬编码等效值
+- 禁止使用 UI 框架默认色值（如 Element Plus #409EFF、Material #1a73e8）替代设计稿定义的品牌色
+- 本文件第四部分「代码审查扩展 — Mock 一致性检查」对纯 Web 同样适用（跳过"布局原语组件"和"CSS 约束禁止列表"两项即可）
 
 ---
 

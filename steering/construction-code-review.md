@@ -231,6 +231,12 @@
 - [ ] 颜色、间距、字体使用项目 token，未直接硬编码 `get_design_context` 返回的 Tailwind 字面值
 - [ ] 尺寸行为映射符合 `common-figma-design-standards.md` §2.3（`flex-1` 已补 `min-width: 0`）
 
+**html-mock 模式附加检查**（条件：`UI 设计方式` = `html-mock`）：
+- [ ] 组件样式中的色值、圆角、字号、间距、字体值与 Mock HTML 的 `<style>` 区块或其引用的 CSS 文件中的定义一致
+- [ ] 项目存在全局设计 token 文件时，样式引用了对应的 CSS 变量（`var(--*)`），而非硬编码 Mock 中的字面值
+- [ ] 未使用 UI 框架默认色值（Element Plus / Material / Ant Design 等内置色系）替代 Mock 定义的品牌色
+- [ ] Mock 中定义的通用 class（如按钮/卡片/标签/布局容器）的属性值已在组件中逐项对齐
+
 ### 数据流完整性（强制）
 - [ ] 每个数据读取操作都有对应的真实写入来源（非 Mock/硬编码）
 - [ ] 依赖其他模块/单元的数据，该模块/单元已实现或在本次范围内

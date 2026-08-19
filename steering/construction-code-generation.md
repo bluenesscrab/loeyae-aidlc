@@ -363,6 +363,25 @@ MCP Skill 服务采用**三层披露**：`outline`（大纲导航）→ `section
 **4. 记录映射证据**：
 - 在审计日志中记录：`Mock 来源: {端}.html #{序号} "{mock-box标题}", 字段: X, 按钮: Y, 状态数: Z`
 
+**5. 样式值对齐（有 UI 设计的前端项目，无论纯 Web 或跨端）**：
+
+Mock HTML 中的 CSS 属性值是样式实现的唯一真相源。生成组件 scoped style 时：
+
+a) **Token 引用强制**：当项目存在全局设计 token 文件（`style-anchor.css` 或等效）时，组件样式中禁止硬编码以下属性值，必须引用对应 CSS 变量：
+   - 色值 → `var(--color-*)`
+   - 字号 → `var(--text-*)`
+   - 字重 → `var(--weight-*)`
+   - 圆角 → `var(--radius-*)`
+   - 间距 → `var(--space-*)`
+   - 边框 → `var(--border-*)`
+   - 字体族 → `var(--font-*)`
+
+b) **Class 复刻规则**：当 Mock 的 `<style>` 区块或引用的 CSS 文件中定义了特定 class（如 `.btn-order`, `.tabs`, `.order-card`, `.account-layout`）时，组件 scoped style 必须逐属性复刻该 class 的样式定义值，不得自创替代方案
+
+c) **品牌色守护**：禁止使用 UI 框架默认色值（如 Element Plus `#409EFF`/`#303133`、Material `#1a73e8`、Ant Design `#1890ff`）替代 Mock 中定义的品牌色
+
+d) **自检阻断**：生成代码过程中自检发现 3 个以上应使用 token 但硬编码了等效值的属性 → 停止生成，修正已产出代码再继续
+
 **阻断**：如果对照表中有对应条目但 Mock HTML 文件中找不到该 mock-box → 停止并报告，不得凭记忆或猜测生成。
 
 ---
