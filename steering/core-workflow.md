@@ -144,9 +144,11 @@ PRD 也可独立于 Inception 流程执行：用户直接要求"生成 PRD"时�
 | C5 | TDD 代码生成与自适应审查 | 始终 | 🔴 | `construction-shared-contract-baseline.md`（条件） + `construction-code-generation.md` + `construction-tdd.md` + `construction-code-review.md` + `construction-subagent-execution.md` |
 | C6 | 系统化调试 | 出现技术失败 | — | `common-systematic-debugging.md` |
 | C7 | 最终全局审查 | 多单元、复杂/高风险，或跨组件/服务、契约、共享配置、数据所有权、安全边界 | 🟢 | `construction-code-review.md` |
-| C8 | 实际构建和测试 | 始终 | 🔴 | `construction-build-and-test.md` + `construction-implementation-report.md` |
+| C8 | 实际构建和测试 | 始终；C5 审查通过 + C7 审查通过（触发时） | 🔴 | `construction-build-and-test.md` + `construction-implementation-report.md` |
 
 每个单元必须完成“设计（条件）→ TDD → Spec/Standards 双轴检查 → 影响域验证”；快速通道可在一次集成审查中完成双轴检查，其他路径独立执行两轴审查。C8 未取得实际命令证据时，Construction 不得标记完成。
+
+**C8 硬性前置依赖**：C8 开始前，编排方必须确认每单元审计文件中双轴审查记录存在且通过；C7 触发时还须确认最终全局审查记录通过。缺失审查证据时 C8 不得启动，返回 C5/C7 补齐。详见 `construction-build-and-test.md`“审查证据阻断”章节。
 
 C5 条件前置：存在 `contract` 类型跨单元依赖时，先加载并完成 `construction-shared-contract-baseline.md`；相关基线未 `verified` 时阻断消费者代码生成。单单元或无 `contract` 依赖时记录跳过原因后继续 C5。
 
