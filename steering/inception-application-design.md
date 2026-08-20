@@ -144,6 +144,26 @@
     - `approved facts` = 步骤 10 已生成的组件、方法和服务定义
     - Kiro 降级：加载 `common-diagram-design-standards.md` 执行
 
+**变更意图标记**（存量项目，按条件执行）：
+
+触发条件：项目为存量改造（逆向工程产物存在），且设计中存在对现有组件、方法或服务的结构性变更意图。
+
+在 `components.md`、`component-methods.md`、`component-dependency.md`、`application-services.md` 中，对每个涉及结构性变更的条目，在其名称后标注变更意图标签：
+
+| 标签 | 含义 | 示例 |
+|------|------|------|
+| `[意图:删除]` | 该条目将被完全移除 | `XxxController [意图:删除]` |
+| `[意图:局部重构]` | 保留条目但内部实现需重构 | `YyyService.processOrder [意图:局部重构]` |
+| `[意图:收敛]` | 多个条目合并为一个 | `AaaService [意图:收敛] → BbbService` |
+| `[意图:迁出]` | 迁移到其他模块或服务 | `CccHelper [意图:迁出] → common-module` |
+| `[意图:废弃]` | 标记为废弃，不再接受新调用 | `DddAdapter [意图:废弃]` |
+
+标记规则：
+- 仅标记结构性变更；新增组件和无变更的现有组件不标记
+- 收敛必须注明目标（`→ 目标名称`）；迁出必须注明去向
+- 前端产物（`frontend-components.md`、`frontend-routes.md`）适用同一标记规范
+- 标记用于 I14 设计意图覆盖检查的锚点；未标记的条目不纳入覆盖检查
+
 **前端设计产物**（如项目包含前端）：
 - 创建 `docs/aidlc/inception/application-design/frontend-components.md`，包含：
   - 页面组件拆分方案
